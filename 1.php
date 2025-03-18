@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>我們肯定不會被當</h1>
+    <h1>我們肯定不會被</h1>
 </body>
 </html>
