@@ -25,7 +25,7 @@
     <header>
         <div class="headergrid">
             <div style="margin-top: 15px; margin-left: 30px;">
-                <h1 style="color: black;">輔仁大學貴重儀器預約系統</h1>
+                <h1 style="color: black;">輔仁大學之救救我沒錢了系統</h1>
                 <!-- Nav Item - User Information -->
             </div>
             <div style="margin-top: 15px;">
