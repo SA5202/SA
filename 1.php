@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+// 判斷是否登入和是否為管理員
+$is_logged_in = isset($_SESSION['username']);
+$is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+?>
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -197,6 +204,17 @@
     </div>
     <div class="main-content">
         <h2 class="mb-4 text-primary">輔大愛校建言捐款系統</h2>
+        <!-- 顯示「設定」選項 -->
+        <?php if ($is_logged_in): ?>
+            <a href="<?= $is_admin ? '管理者設定.php' : '使用者設定.php' ?>" target="contentFrame"
+                style="text-decoration: none;">設定</a>
+        <?php endif; ?>
+        <!-- 顯示登入或登出按鈕 -->
+        <?php if ($is_logged_in): ?>
+            <a href="logout.php" target="contentFrame"><button type="button" class="btn btn-outline-danger" style="margin-left:950px;margin-top:10px;margin-bottom:10px;">登出</button></a>
+        <?php else: ?>
+            <a href="login.php" target="contentFrame"><button type="button" class="btn btn-outline-success" style="margin-left:950px;margin-top:10px;margin-bottom:10px;">登入</button></a>
+        <?php endif; ?>
         <div class="card">
             <div class="card-header">捐款進度</div>
             <div class="card-body">
