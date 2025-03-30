@@ -32,51 +32,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             font-family: "Noto Serif TC", serif;
         }
 
-        /* <uniquifier>: Use a unique and descriptive class name */
-        /* <weight>: Use a value from 200 to 900 */
-
-        .pt-serif-regular {
-            font-family: "PT Serif", serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        .pt-serif-bold {
-            font-family: "PT Serif", serif;
-            font-weight: 700;
-            font-style: normal;
-        }
-
-        .pt-serif-regular-italic {
-            font-family: "PT Serif", serif;
-            font-weight: 400;
-            font-style: italic;
-        }
-
-        .pt-serif-bold-italic {
-            font-family: "PT Serif", serif;
-            font-weight: 700;
-            font-style: italic;
-        }
-
-        @media (min-width: 768px) {
-
-            /*大於768px*/
-            .grid-containers {
-                display: grid;
-                grid-template-columns: 50% 50%;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            /*小於768px*/
-            .grid-containers {
-                display: grid;
-                grid-template-columns: 1fr;
-            }
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
@@ -88,7 +43,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .sidebar {
             width: 280px;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background: linear-gradient(135deg,rgb(165, 179, 109),rgb(116, 136, 66));
             color: white;
             padding: 30px;
             position: fixed;
@@ -134,7 +89,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .card-header {
-            background-color: #1a2a6c;
+            background-color:rgb(90, 108, 26);
             color: white;
             font-size: 1.5rem;
             font-weight: 500;
@@ -154,7 +109,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .footer {
             text-align: center;
             padding: 20px;
-            background: #1a2a6c;
+            background:rgb(90, 108, 26);
             color: white;
             position: fixed;
             bottom: 0;
@@ -162,7 +117,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .text-link {
-            color: #007bff;
+            color:rgb(1, 1, 1);
             text-decoration: none;
         }
 
@@ -189,12 +144,64 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             font-size: 1.1rem;
             line-height: 1.6;
         }
+
+        .btn-custom {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom:hover {
+            background-color: #6f8c3c;
+            transform: translateY(-5px);
+        }
+
+        .btn-custom-logout {
+            background-color: #d9534f;
+            border-color: #d43f00;
+        }
+
+        .btn-custom-logout:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        /* Align login/logout button to the top right */
+        .btn-position {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 200;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            border-radius: 50%;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 300;
+        }
+
+        .back-to-top:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: translateY(-5px);
+        }
     </style>
 </head>
 
 <body>
     <div class="sidebar">
-        <h3>輔大愛校建言</h3>
+        <h3>輔大愛校建言捐款系統</h3>
         <a href="1.php"><i class="icon fas fa-home"></i> 首頁</a>
         <a href="suggestions.php"><i class="icon fas fa-scroll"></i> 建言總覽</a>
         <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i> 捐款進度</a>
@@ -203,7 +210,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <a href="contact.php"><i class="icon fas fa-phone-alt"></i> 聯絡我們</a>
     </div>
     <div class="main-content">
-        <h2 class="mb-4 text-primary">輔大愛校建言捐款系統</h2>
+        <h2>輔大愛校建言捐款系統</h2>
         <!-- 顯示「設定」選項 -->
         <?php if ($is_logged_in): ?>
             <a href="<?= $is_admin ? '管理者設定.php' : '使用者設定.php' ?>" target="contentFrame"
@@ -211,9 +218,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <?php endif; ?>
         <!-- 顯示登入或登出按鈕 -->
         <?php if ($is_logged_in): ?>
-            <a href="logout.php" target="contentFrame"><button type="button" class="btn btn-outline-danger" style="margin-left:950px;margin-top:10px;margin-bottom:10px;">登出</button></a>
+            <a href="logout.php" target="contentFrame">
+                <button type="button" class="btn btn-custom btn-custom-logout btn-position">
+                    登出
+                </button>
+            </a>
         <?php else: ?>
-            <a href="login.php" target="contentFrame"><button type="button" class="btn btn-outline-success" style="margin-left:950px;margin-top:10px;margin-bottom:10px;">登入</button></a>
+            <a href="login.php" target="contentFrame">
+                <button type="button" class="btn btn-custom btn-outline-success btn-position">
+                    登入
+                </button>
+            </a>
         <?php endif; ?>
         <div class="card">
             <div class="card-header">捐款進度</div>
@@ -244,6 +259,11 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     </div>
     <div class="footer">
         2025 © 輔仁大學 愛校建言系統
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+        ↑
     </div>
 </body>
 
