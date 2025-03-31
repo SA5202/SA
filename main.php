@@ -11,7 +11,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>輔大愛校建言捐款系統</title>
+    <title>輔仁大學愛校建言捐款系統</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -201,16 +201,16 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 <body>
     <div class="sidebar">
-        <h3>輔大愛校建言捐款系統</h3>
-        <a href="1.php"><i class="icon fas fa-home"></i> 首頁</a>
-        <a href="suggestions.php"><i class="icon fas fa-scroll"></i> 建言總覽</a>
-        <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i> 捐款進度</a>
-        <a href="statement.php"><i class="icon fas fa-chart-pie"></i>捐款報表</a>
-        <a href="honor.php"><i class="icon fas fa-medal"></i>榮譽機制</a>
-        <a href="contact.php"><i class="icon fas fa-phone-alt"></i> 聯絡我們</a>
+        <h3>輔仁大學愛校建言捐款系統</h3>
+        <a href="1.php"><i class="icon fas fa-home"></i><b> 首頁</b></a>
+        <a href="suggestions.php"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
+        <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i><b> 捐款進度</b></a>
+        <a href="statement.php"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
+        <a href="honor.php"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
+        <a href="contact.php"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
     </div>
     <div class="main-content">
-        <h2>輔大愛校建言捐款系統</h2>
+        <h4>輔仁大學愛校建言捐款系統</h4>
         <!-- 顯示「設定」選項 -->
         <?php if ($is_logged_in): ?>
             <a href="<?= $is_admin ? '管理者設定.php' : '使用者設定.php' ?>" target="contentFrame"
@@ -231,7 +231,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             </a>
         <?php endif; ?>
         <div class="card">
-            <div class="card-header">捐款進度</div>
+            <div class="card-header"><b>捐款進度</b></div>
             <div class="card-body">
                 <div class="progress">
                     <div class="progress-bar" style="width: 60%;">60%</div>
@@ -241,7 +241,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">📜 最新建言</div>
+                    <div class="card-header">📜<b> 最新建言</b></div>
                     <div class="card-body">
                         <p>學生希望改善校內飲水機品質...</p>
                     </div>
@@ -249,7 +249,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">📊 捐款報表</div>
+                    <div class="card-header">📊<b> 捐款報表</b></div>
                     <div class="card-body">
                         <p><a href="#" class="text-link">下載最新捐款報表</a></p>
                     </div>
@@ -258,7 +258,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </div>
     </div>
     <div class="footer">
-        2025 © 輔仁大學 愛校建言系統
+        2025 © 天主教輔仁大學 愛校建言捐款系統
     </div>
 
     <!-- Back to Top Button -->
