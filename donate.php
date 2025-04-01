@@ -194,7 +194,7 @@
 
 <body>
     <div class="sidebar">
-        <h3>輔大愛校建言</h3>
+    <h3>輔仁大學愛校建言捐款系統</h3>
         <a href="main.php"><i class="icon fas fa-home"></i> 首頁</a>
         <a href="suggestions.php"><i class="icon fas fa-scroll"></i> 建言總覽</a>
         <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i> 捐款進度</a>
@@ -203,6 +203,20 @@
         <a href="contact.php"><i class="icon fas fa-phone-alt"></i> 聯絡我們</a>
     </div>
     <div class="main-content">
+        <!-- 顯示登入或登出按鈕 -->
+        <?php if ($is_logged_in): ?>
+            <a href="logout.php" target="contentFrame">
+                <button type="button" class="btn btn-custom btn-custom-logout btn-position">
+                    登出
+                </button>
+            </a>
+        <?php else: ?>
+            <a href="login.php" target="contentFrame">
+                <button type="button" class="btn btn-custom btn-outline-success btn-position">
+                    登入
+                </button>
+            </a>
+        <?php endif; ?>
         <h2 class="mb-4 text-primary">輔大愛校建言捐款系統</h2>
         <div class="card">
             <div class="card-header">捐款進度</div>
