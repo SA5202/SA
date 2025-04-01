@@ -201,6 +201,7 @@
         <a href="statement.php"><i class="icon fas fa-chart-pie"></i>捐款報表</a>
         <a href="honor.php"><i class="icon fas fa-medal"></i>榮譽機制</a>
         <a href="contact.php"><i class="icon fas fa-phone-alt"></i> 聯絡我們</a>
+        <a href="make_suggestions.php"><i class="icon fas fa-comment-dots"></i> 提出建言</a>
     </div>
     <div class="main-content">
         <h2 class="mb-4 text-primary">輔大愛校建言捐款系統</h2>

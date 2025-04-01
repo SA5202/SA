@@ -208,6 +208,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <a href="statement.php"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
         <a href="honor.php"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
         <a href="contact.php"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
+        <a href="make_suggestions.php"><i class="icon fas fa-comment-dots"></i> 提出建言</a>
     </div>
     <div class="main-content">
         <h4>輔仁大學愛校建言捐款系統</h4>
