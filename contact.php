@@ -25,51 +25,6 @@
             font-family: "Noto Serif TC", serif;
         }
 
-        /* <uniquifier>: Use a unique and descriptive class name */
-        /* <weight>: Use a value from 200 to 900 */
-
-        .pt-serif-regular {
-            font-family: "PT Serif", serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        .pt-serif-bold {
-            font-family: "PT Serif", serif;
-            font-weight: 700;
-            font-style: normal;
-        }
-
-        .pt-serif-regular-italic {
-            font-family: "PT Serif", serif;
-            font-weight: 400;
-            font-style: italic;
-        }
-
-        .pt-serif-bold-italic {
-            font-family: "PT Serif", serif;
-            font-weight: 700;
-            font-style: italic;
-        }
-
-        @media (min-width: 768px) {
-
-            /*大於768px*/
-            .grid-containers {
-                display: grid;
-                grid-template-columns: 50% 50%;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            /*小於768px*/
-            .grid-containers {
-                display: grid;
-                grid-template-columns: 1fr;
-            }
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
@@ -81,7 +36,7 @@
 
         .sidebar {
             width: 280px;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background: linear-gradient(135deg, rgb(165, 179, 109), rgb(116, 136, 66));
             color: white;
             padding: 30px;
             position: fixed;
@@ -127,7 +82,7 @@
         }
 
         .card-header {
-            background-color: #1a2a6c;
+            background-color: rgb(90, 108, 26);
             color: white;
             font-size: 1.5rem;
             font-weight: 500;
@@ -147,7 +102,7 @@
         .footer {
             text-align: center;
             padding: 20px;
-            background: #1a2a6c;
+            background: rgb(90, 108, 26);
             color: white;
             position: fixed;
             bottom: 0;
@@ -155,7 +110,7 @@
         }
 
         .text-link {
-            color: #007bff;
+            color: rgb(1, 1, 1);
             text-decoration: none;
         }
 
@@ -182,13 +137,65 @@
             font-size: 1.1rem;
             line-height: 1.6;
         }
+
+        .btn-custom {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom:hover {
+            background-color: #6f8c3c;
+            transform: translateY(-5px);
+        }
+
+        .btn-custom-logout {
+            background-color: #d9534f;
+            border-color: #d43f00;
+        }
+
+        .btn-custom-logout:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        /* Align login/logout button to the top right */
+        .btn-position {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 200;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            border-radius: 50%;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 300;
+        }
+
+        .back-to-top:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: translateY(-5px);
+        }
     </style>
 </head>
 
 <body>
     <div class="sidebar">
         <h3>輔大愛校建言</h3>
-        <a href="1.php"><i class="icon fas fa-home"></i> 首頁</a>
+        <a href="main.php"><i class="icon fas fa-home"></i> 首頁</a>
         <a href="suggestions.php"><i class="icon fas fa-scroll"></i> 建言總覽</a>
         <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i> 捐款進度</a>
         <a href="statement.php"><i class="icon fas fa-chart-pie"></i>捐款報表</a>
@@ -202,7 +209,8 @@
             <br><i class="fa-solid fa-phone"></i>生輔組電話：(02)2905-2264
             <br><i class="fa-solid fa-envelope"></i>生輔組服務信箱：<a
                 href="mailto:sld@mail.fju.edu.tw">sld@mail.fju.edu.tw</a>
-            <br><p>承辦人 邱小姐 電話 02-2905-3031</p>
+            <br>
+            <p>承辦人 邱小姐 電話 02-2905-3031</p>
             <p>日間部辦公室(于斌樓一樓YP104)</p>
             <p>學期中：週一至週五 08：00～16：30</p>
             <p>寒暑假：週一至週四 08：00～16：30</p>
