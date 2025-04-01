@@ -194,7 +194,7 @@
 
 <body>
     <div class="sidebar">
-        <h3>輔大愛校建言</h3>
+    <h3>輔仁大學愛校建言捐款系統</h3>
         <a href="main.php"><i class="icon fas fa-home"></i> 首頁</a>
         <a href="suggestions.php"><i class="icon fas fa-scroll"></i> 建言總覽</a>
         <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i> 捐款進度</a>
@@ -204,6 +204,20 @@
         <a href="make_suggestions.php"><i class="icon fas fa-comment-dots"></i> 提出建言</a>
     </div>
     <div class="main-content">
+        <!-- 顯示登入或登出按鈕 -->
+        <?php if ($is_logged_in): ?>
+            <a href="logout.php" target="contentFrame">
+                <button type="button" class="btn btn-custom btn-custom-logout btn-position">
+                    登出
+                </button>
+            </a>
+        <?php else: ?>
+            <a href="login.php" target="contentFrame">
+                <button type="button" class="btn btn-custom btn-outline-success btn-position">
+                    登入
+                </button>
+            </a>
+        <?php endif; ?>
         <h2 class="mb-4 text-primary">聯絡我們</h2>
         <div style="margin-left: 20px; margin-top: 40px; font-size: 18px;">
             <i class="fa-solid fa-location-dot"></i> 地址：242062 新北市新莊區中正路 510 號 天主教輔仁大學
