@@ -127,6 +127,7 @@
             <button type="submit" class="btn">登入</button>
             <div class="login-register">
                 <p>還沒有帳號? <a href="register.php">註冊</a></p>
+                <p>(請使用LDAP登入)</p>
             </div>
         </form>
     </div>

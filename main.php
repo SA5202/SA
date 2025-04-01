@@ -202,7 +202,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 <body>
     <div class="sidebar">
         <h3>輔仁大學愛校建言捐款系統</h3>
-        <a href="1.php"><i class="icon fas fa-home"></i><b> 首頁</b></a>
+        <a href="main.php"><i class="icon fas fa-home"></i><b> 首頁</b></a>
         <a href="suggestions.php"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
         <a href="donate.php"><i class="icon fas fa-money-bill-wave"></i><b> 捐款進度</b></a>
         <a href="statement.php"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
@@ -211,11 +211,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     </div>
     <div class="main-content">
         <h4>輔仁大學愛校建言捐款系統</h4>
-        <!-- 顯示「設定」選項 -->
-        <?php if ($is_logged_in): ?>
-            <a href="<?= $is_admin ? '管理者設定.php' : '使用者設定.php' ?>" target="contentFrame"
-                style="text-decoration: none;">設定</a>
-        <?php endif; ?>
         <!-- 顯示登入或登出按鈕 -->
         <?php if ($is_logged_in): ?>
             <a href="logout.php" target="contentFrame">
