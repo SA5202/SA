@@ -14,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
@@ -91,11 +92,11 @@
         }
 
         .progress-bar {
-            height: 30px;
+            height: 20px;
             background-color: #28a745;
             font-weight: bold;
             text-align: center;
-            line-height: 30px;
+            line-height: 20px;
             border-radius: 8px;
         }
 
@@ -189,6 +190,42 @@
             background-color: rgba(0, 0, 0, 0.7);
             transform: translateY(-5px);
         }
+        /*捐款卡片 */
+        .card-custom {
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body {
+            flex-grow: 1; 
+        }
+
+        .card-footer {
+            margin-top: auto; 
+        }
+
+        .row {
+            margin-top: 20px;
+        }
+
+        .col-md-6 {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .text-pink {
+            color: #ff69b4; /* 粉紅色 */
+        }
+
     </style>
 </head>
 
@@ -219,28 +256,81 @@
             </a>
         <?php endif; ?>
         <h2 class="mb-4 text-primary">輔大愛校建言捐款系統</h2>
-        <div class="card">
-            <div class="card-header">捐款進度</div>
-            <div class="card-body">
-                <div class="progress">
-                    <div class="progress-bar" style="width: 60%;">60%</div>
-                </div>
-            </div>
-        </div>
         <div class="row">
+            <!-- 建言 1 -->
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">📜 最新建言</div>
+                <div class="card card-custom">
+                    <div class="card-header">建言1</div>
                     <div class="card-body">
-                        <p>學生希望改善校內飲水機品質...</p>
+                        <p><strong>區域：</strong>學生希望改善校內飲水機品質</p>
+                        <p><strong>內容：</strong>學生表示校內飲水機水質不好，建議增設更多飲水機，並定期清潔。</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 60%;">已捐款 60%</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- 建言 2 -->
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">📊 捐款報表</div>
+                <div class="card card-custom">
+                    <div class="card-header">建言2</div>
                     <div class="card-body">
-                        <p><a href="#" class="text-link">下載最新捐款報表</a></p>
+                        <p><strong>區域：</strong>學校餐廳菜單多樣化</p>
+                        <p><strong>內容：</strong>學生建議學校餐廳增加素食選項並改善餐廳環境。</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 40%;">已捐款 40%</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 建言 3 -->
+            <div class="col-md-6">
+                <div class="card card-custom">
+                    <div class="card-header">建言3</div>
+                    <div class="card-body">
+                        <p><strong>區域：</strong>學校圖書館閱讀空間改善</p>
+                        <p><strong>內容：</strong>學生建議學校圖書館增加更多舒適的閱讀區，並提供更多安靜的學習空間。</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 30%;">已捐款 30%</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 建言 4 -->
+            <div class="col-md-6">
+                <div class="card card-custom">
+                    <div class="card-header">建言4</div>
+                    <div class="card-body">
+                        <p><strong>區域：</strong>改善校內電腦設備</p>
+                        <p><strong>內容：</strong>學生建議更新校內電腦設備，以提高學習效率和舒適度。</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="progress mb-3">
+                            <div class="progress-bar" style="width: 20%;">已捐款 20%</div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        </div>
                     </div>
                 </div>
             </div>
