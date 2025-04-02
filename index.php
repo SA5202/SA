@@ -43,7 +43,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .sidebar {
             width: 280px;
-            background: linear-gradient(135deg, rgb(165, 179, 109), rgb(116, 136, 66));
+            background: linear-gradient(135deg, rgb(160, 164, 138), rgb(15, 21, 24));
             color: white;
             padding: 30px;
             position: fixed;
@@ -79,8 +79,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         
         .footer {
             text-align: center;
+            background: linear-gradient(135deg, rgb(160, 164, 138), rgb(15, 21, 24));
             padding: 20px;
-            background: rgb(90, 108, 26);
             color: white;
             position: fixed;
             bottom: 0;
@@ -136,7 +136,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         /* Back to Top Button */
         .back-to-top {
             position: fixed;
-            bottom: 20px;
+            bottom: 80px;
             right: 20px;
             background-color: rgba(0, 0, 0, 0.5);
             color: white;
@@ -192,14 +192,14 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <!--導覽列-->
     <div class="header">
         <div class="sidebar">
-            <h3>輔仁大學愛校建言捐款系統</h3>
+            <h2>FJU I-Money</h2>
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
-            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
-            <a href="statement.php" target="contentFrame"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
-            <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
-            <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
             <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i> 提出建言</a>
+            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
+            <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
+            <a href="statement.php" target="contentFrame"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
+            <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
         </div>
         <div class="main-content">
             <!-- 顯示登入或登出按鈕 -->
