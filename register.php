@@ -22,12 +22,12 @@
         }
 
         .wrapper {
+            width: 400px;
             background: #fff;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 350px;
         }
 
         .wrapper h2 {
@@ -43,16 +43,16 @@
 
         .input-box input {
             width: 100%;
-            padding: 12px 40px;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 25px;
+            border-radius: 10px;
             outline: none;
-            font-size: 16px;
+            font-size: 14px;
             transition: 0.3s;
         }
 
         .input-box input:focus {
-            border-color: rgb(182, 206, 86);
+            border-color: rgb(160, 205, 86);
             box-shadow: 0 0 8px rgba(93, 101, 72, 0.88);
         }
 
@@ -68,17 +68,17 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background: rgb(188, 203, 90);
+            background: rgb(205, 204, 147);
             color: #fff;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
         }
 
         .btn:hover {
-            background: rgb(81, 107, 31);
+            background: rgb(180, 181, 134);
         }
 
         .remember-forgot {
@@ -113,20 +113,20 @@
             <form action="insert.php" method="POST">
                 <div class="input-box">
                     <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-                    <input type="text" name='username' placeholder="使用者名稱" required>
+                    <input type="text" name='username' placeholder="請輸入帳號" required>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
-                    <input type="email" name='email' placeholder="EMAIL" required>
+                    <input type="email" name='email' placeholder="請輸入 EMAIL" required>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                    <input type="password" name='password' placeholder="密碼" required>
+                    <input type="password" name='password' placeholder="請輸入密碼" required>
                 </div>
                 <button type="submit" class="btn">註冊</button>
 
                 <div class="login-register">
-                    <p>已經擁有帳號?<a href="login.php" class="regist-link">
+                    <p>已經擁有帳號 ?<a href="login.php" class="regist-link">
                             登入
                         </a></p>
                 </div>

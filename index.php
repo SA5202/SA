@@ -103,15 +103,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .btn-custom {
-            border-radius: 50px;
+            background-color: rgb(198, 225, 230, 0.7);
+            border-radius: 15px;
+            margin: 20px;
             padding: 4px 30px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: background-color 0.3s, transform 0.3s;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .btn-custom:hover {
-            background-color:rgb(51, 51, 50);
+            background-color: rgb(104, 105, 121);
             transform: translateY(-5px);
         }
       
@@ -129,10 +131,10 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             position: fixed;
             bottom: 80px;
             right: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.4);
             color: white;
-            font-size: 1.5rem;
-            padding: 10px 15px;
+            font-size: 2rem;
+            padding: 10px 20px;
             border-radius: 50%;
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -187,24 +189,20 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
             <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>
-            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
+            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b>捐款進度</b></a>
             <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
-            <a href="statement.php" target="contentFrame"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
+            <a href="statement.php" target="contentFrame"><i class="icon fas fa-chart-pie"></i><b>捐款報表</b></a>
             <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
         </div>
         <div class="main-content">
             <!-- 顯示登入或登出按鈕 -->
             <?php if ($is_logged_in): ?>
                 <a href="logout.php" target="contentFrame">
-                    <button type="button" class="btn btn-custom btn-custom-logout btn-position">
-                        登出
-                    </button>
+                    <button type="button" class="btn btn-custom btn-custom-logout btn-position"><b>登出</b></button>
                 </a>
             <?php else: ?>
                 <a href="login.php" target="contentFrame">
-                    <button type="button" class="btn btn-custom btn-outline-success btn-position">
-                        登入
-                    </button>
+                    <button type="button" class="btn btn-custom btn-outline-success btn-position"><b>登入</b></button>
                 </a>
             <?php endif; ?>
         </div>
@@ -215,7 +213,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         <!--footer-->
         <div class="footer">
-            2025 © 天主教輔仁大學 愛校建言捐款系統
+            <b>2025 © 天主教輔仁大學 愛校建言捐款系統</b>
         </div>
 
         <!-- Back to Top Button -->

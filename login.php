@@ -17,13 +17,14 @@
 
         .wrapper {
             background: #fff;
-            margin-left: 40%;
-            max-width: 800px;
+            width: 400px;
+            max-width: 700px;
+            margin-top: 60px;
+            margin-left: 30%;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 350px;
         }
 
         .wrapper h2 {
@@ -39,16 +40,16 @@
 
         .input-box input {
             width: 100%;
-            padding: 12px 40px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 25px;
+            border-radius: 10px;
             outline: none;
-            font-size: 16px;
+            font-size: 14px;
             transition: 0.3s;
         }
 
         .input-box input:focus {
-            border-color:rgb(162, 198, 105);
+            border-color:rgb(160, 205, 86);
             box-shadow: 0 0 8px rgba(93, 101, 72, 0.88);
         }
 
@@ -64,17 +65,17 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background:rgb(205, 204, 147);
+            background: rgb(205, 204, 147);
             color: #fff;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
         }
 
         .btn:hover {
-            background:rgb(180, 181, 134);
+            background: rgb(180, 181, 134);
         }
 
         .remember-forgot {
@@ -85,7 +86,7 @@
         }
 
         .remember-forgot a {
-            color:rgb(146, 49, 22);
+            color: rgb(146, 49, 22);
             text-decoration: none;
         }
 
@@ -95,7 +96,7 @@
         }
 
         .login-register a {
-            color:rgb(47, 158, 46);
+            color: rgb(47, 158, 46);
             text-decoration: none;
             font-weight: bold;
         }
@@ -116,12 +117,12 @@
             </div>
             <div class="remember-forgot">
                 <label><input type="checkbox" name="remember_me"> 記住我</label>
-                <a href="#">忘記密碼?</a>
+                <a href="#">忘記密碼 ?</a>
             </div>
             <button type="submit" class="btn">登入</button>
             <div class="login-register">
-                <p>還沒有帳號? <a href="register.php">註冊</a></p>
-                <p>(請使用LDAP登入)</p>
+                <p>沒有帳號 ? <a href="register.php">點擊註冊</a></p>
+                <p>( 請使用 LDAP 登入 )</p>
             </div>
         </form>
     </div>

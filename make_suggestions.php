@@ -26,9 +26,9 @@ if (!isset($_SESSION['username'])) {
         /*建言表格 */
         .suggestion-form {
             max-width: 700px;
-            margin-top: 20px;
+            margin-top: 15px;
             margin-left: 180px;
-            padding: 20px;
+            padding: 30px;
             background-color: #fff;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -57,27 +57,51 @@ if (!isset($_SESSION['username'])) {
 
         .form-control:focus, .form-select:focus, textarea:focus {
             outline: none;
-            border-color: #6f8c3c;
-            box-shadow: 0 0 8px rgba(111, 140, 60, 0.5);
+            border-color: rgb(109, 140, 60);
+            box-shadow: 0 0 5px rgba(111, 140, 60, 0.5);
         }
 
-        .btn-custom {
-            margin-left: 525px;  /* 將按鈕推到右邊 */
-            background-color: #6f8c3c;
+        .btn-submit {
+            background-color: #4C85B1;
             color: white;
-            padding: 5px 25px;
+            padding: 4px 30px;
             border: none;
-            border-radius: 50px;
+            border-radius: 10px;
             transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
         }
 
-        .btn-custom:hover {
-            background-color: #56752a;
+        .btn-submit:hover {
+            background-color: #0047AB;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .btn-reset {
+            background-color: #FF4C4C;
+            color: white;
+            padding: 4px 30px;
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 16px;
+        }
+
+        .btn-reset:hover {
+            background-color: #e60000;
+            color: white;
             transform: translateY(-3px);
         }
 
         .form-group:hover {
             transform: scale(1.02);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
         }
 
         label {
@@ -97,12 +121,12 @@ if (!isset($_SESSION['username'])) {
             </div>
 
             <div class="form-group">
-                <label for="facility">相關設施：</label>
+                <label for="facility">關聯設施：</label>
                 <input type="text" id="facility" name="facility" placeholder="請輸入設施" class="form-control" required>
             </div>
 
             <div class="form-group">
-                <label for="building">相關大樓：</label>
+                <label for="building">請選擇關聯樓棟：</label>
                 <select id="building" name="building" class="form-select">
                     <option value="">選擇大樓</option>
                     <option value="大樓A">利瑪竇</option>
@@ -116,7 +140,10 @@ if (!isset($_SESSION['username'])) {
                 <textarea id="description" name="description" rows="5" placeholder="請具體描述您的建言內容" class="form-control" required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-custom">提交建言</button>
+            <div class="button-container">
+                <button type="submit" class="btn btn-submit">確認提交</button>
+                <button type="reset" class="btn btn-reset">一鍵清空</button>
+            </div>
         </form>
     </div>
 </body>
