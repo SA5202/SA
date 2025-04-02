@@ -179,6 +179,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* 垂直置中 */
             padding: 20px;
             /* 增加內邊距避免貼邊 */
+            
         }
 
         iframe {
