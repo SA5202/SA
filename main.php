@@ -53,7 +53,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <div class="item">
         <marquee id="mqmain" scrollamount="10">4/5將進行系統維護，請使用者注意。</marquee>
     </div>
-    <h1 class="h3 mb-2 text-gray-800">建言一覽</h1>
+    <h3>建言一覽</h3>
     <div class="row">
         <div class="col-md-6">
             <div class="card">
@@ -71,6 +71,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 </div>
             </div>
         </div>
+        <h3>榮譽榜</h3>
     </div>
 
 </body>

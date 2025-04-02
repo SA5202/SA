@@ -17,34 +17,9 @@
 </head>
 
 <body>
-    <h2 class="mb-4 text-primary">榮譽機制</h2>
-    <div class="card">
-        <div class="card-header">捐款進度</div>
-        <div class="card-body">
-            <div class="progress">
-                <div class="progress-bar" style="width: 60%;">60%</div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">📜 最新建言</div>
-                <div class="card-body">
-                    <p>學生希望改善校內飲水機品質...</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">📊 捐款報表</div>
-                <div class="card-body">
-                    <p><a href="#" class="text-link">下載最新捐款報表</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+    <h2>榮譽機制</h2>
+   
+    <p>感謝您的支持與捐款，您的捐款將會帶來不同的榮譽，請查看您的榮譽等級。</p>
     
 </body>
 
