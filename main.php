@@ -25,7 +25,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 <style>
     /*跑馬燈*/
     #mqmain {
-        background: linear-gradient(45deg, rgb(227, 218, 139), rgb(206, 195, 68));
+        background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
         /* 渐变背景 */
         color: white;
         /* 白色文字 */
