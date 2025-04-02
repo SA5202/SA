@@ -202,7 +202,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .content iframe {
-            width: 900px;
+            width: 1100px;
             border: none;
             /* 移除邊框 */
             margin-left: 290px;
