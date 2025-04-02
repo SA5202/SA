@@ -111,7 +111,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .btn-custom:hover {
-            background-color: #6f8c3c;
+            background-color:rgb(51, 51, 50);
             transform: translateY(-5px);
         }
 

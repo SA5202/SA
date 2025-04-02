@@ -26,7 +26,7 @@
         }
 
         .card-header {
-            background-color: rgb(90, 108, 26);
+            background-color: rgb(160, 164, 138);
             color: white;
             font-size: 1.5rem;
             font-weight: 500;
@@ -166,14 +166,14 @@
             transform: translateY(-5px);
         }
         .text-pink {
-            color: #ff69b4; /* 粉紅色 */
+            color:rgb(225, 113, 171); /* 粉紅色 */
         }
 
     </style>
 </head>
 
 <body>
-    <h2 class="mb-4 text-primary">捐款進度</h2>
+    <h2>捐款進度</h2>
     <div class="row">
         <!-- 建言 1 -->
         <div class="col-md-6">
