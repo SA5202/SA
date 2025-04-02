@@ -22,17 +22,38 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
 </head>
+<style>
+    /*跑馬燈*/
+    #mqmain {
+        background: linear-gradient(45deg, rgb(227, 218, 139), rgb(206, 195, 68));
+        /* 渐变背景 */
+        color: white;
+        /* 白色文字 */
+        font-size: 1.2rem;
+        /* 字体大小 */
+        padding: 10px;
+        /* 内边距 */
+        border-radius: 10px;
+        /* 圆角 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        /* 阴影效果 */
+        font-weight: bold;
+        /* 加粗文字 */
+        overflow: hidden;
+        /* 确保内容不会溢出容器 */
+        position: relative;
+        /* 相对定位，为了调整子元素位置 */
+        width: 100%;
+        /* 确保容器宽度自适应 */
+    }
+</style>
 
 <body>
-    <h2 class="mb-4 text-primary">首頁</h2>
-    <div class="card">
-        <div class="card-header"><b>捐款進度</b></div>
-        <div class="card-body">
-            <div class="progress">
-                <div class="progress-bar" style="width: 60%;">60%</div>
-            </div>
-        </div>
+    <h3>重要資訊</h3>
+    <div class="item">
+        <marquee id="mqmain" scrollamount="10">4/5將進行系統維護，請使用者注意。</marquee>
     </div>
+    <h1 class="h3 mb-2 text-gray-800">建言一覽</h1>
     <div class="row">
         <div class="col-md-6">
             <div class="card">
@@ -44,9 +65,9 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </div>
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">📊<b> 捐款報表</b></div>
+                <div class="card-header">📊<b> 熱門建言</b></div>
                 <div class="card-body">
-                    <p><a href="#" class="text-link">下載最新捐款報表</a></p>
+                    <p>學生希望改善校內飲水機品質...</p>
                 </div>
             </div>
         </div>

@@ -158,16 +158,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             transform: translateY(-5px);
         }
 
-        .btn-custom-logout {
-            background-color: #d9534f;
-            border-color: #d43f00;
-        }
-
-        .btn-custom-logout:hover {
-            background-color: #c9302c;
-            border-color: #ac2925;
-        }
-
+        
         /* Align login/logout button to the top right */
         .btn-position {
             position: fixed;

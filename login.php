@@ -48,7 +48,7 @@
         }
 
         .input-box input:focus {
-            border-color:rgb(182, 206, 86);
+            border-color:rgb(162, 198, 105);
             box-shadow: 0 0 8px rgba(93, 101, 72, 0.88);
         }
 
@@ -64,7 +64,7 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background:rgb(188, 203, 90);
+            background:rgb(205, 204, 147);
             color: #fff;
             border: none;
             border-radius: 25px;
@@ -74,7 +74,7 @@
         }
 
         .btn:hover {
-            background:rgb(81, 107, 31);
+            background:rgb(180, 181, 134);
         }
 
         .remember-forgot {
