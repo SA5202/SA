@@ -21,9 +21,11 @@ if (!isset($_SESSION['username'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
+    
 </head>
 
 <body>
+
     <div class="main-content">
         <h2 class="content-title">提出建言</h2>
         <form action="submit_suggestion.php" method="POST" class="suggestion-form">

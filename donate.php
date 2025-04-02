@@ -16,6 +16,160 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+
+    <style>
+        .card {
+            margin-bottom: 30px;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: rgb(90, 108, 26);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 500;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #28a745;
+            font-weight: bold;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgb(90, 108, 26);
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .text-link {
+            color: rgb(1, 1, 1);
+            text-decoration: none;
+        }
+
+        .text-link:hover {
+            text-decoration: underline;
+        }
+
+        .row {
+            margin-top: 40px;
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-right: 10px;
+        }
+
+        .content-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .card-body p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .btn-custom {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-custom:hover {
+            background-color: #6f8c3c;
+            transform: translateY(-5px);
+        }
+
+        .btn-custom-logout {
+            background-color: #d9534f;
+            border-color: #d43f00;
+        }
+
+        .btn-custom-logout:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        /* Align login/logout button to the top right */
+        .btn-position {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 200;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            border-radius: 50%;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 300;
+        }
+
+        .back-to-top:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: translateY(-5px);
+        }
+        /*捐款卡片 */
+        .card-custom {
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body {
+            flex-grow: 1; 
+        }
+
+        .card-footer {
+            margin-top: auto; 
+        }
+
+        .row {
+            margin-top: 20px;
+        }
+
+        .col-md-6 {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .text-pink {
+            color: #ff69b4; /* 粉紅色 */
+        }
+
+    </style>
 </head>
 
 <body>

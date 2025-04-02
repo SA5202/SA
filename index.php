@@ -77,31 +77,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
 
-        .card {
-            margin-bottom: 30px;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: rgb(90, 108, 26);
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 500;
-            padding: 15px;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .progress-bar {
-            height: 30px;
-            background-color: #28a745;
-            font-weight: bold;
-            text-align: center;
-            line-height: 30px;
-            border-radius: 8px;
-        }
-
+        
         .footer {
             text-align: center;
             padding: 20px;
@@ -111,20 +87,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             bottom: 0;
             width: 100%;
         }
-
-        .text-link {
-            color: rgb(1, 1, 1);
-            text-decoration: none;
-        }
-
-        .text-link:hover {
-            text-decoration: underline;
-        }
-
-        .row {
-            margin-top: 40px;
-        }
-
         .icon {
             font-size: 2rem;
             margin-right: 10px;
@@ -199,15 +161,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* 水平置中 */
             align-items: center;
             /* 垂直置中 */
+
         }
 
         .content iframe {
-            width: 900px;
+            width: 1100px;
             border: none;
             /* 移除邊框 */
             margin-left: 290px;
             margin-top: 30px;
             margin-bottom: 30px;
+
         }
 
         .content {
@@ -222,6 +186,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         iframe {
             font-family: 'Noto Serif TC', serif;
+            background-color: #f5f5f5;
         }
     </style>
 </head>
