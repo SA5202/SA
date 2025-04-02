@@ -35,7 +35,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f5f5;
             margin: 0;
             display: flex;
             min-height: 100vh;
@@ -171,7 +170,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             margin-left: 290px;
             margin-top: 30px;
             margin-bottom: 30px;
-
+            
         }
 
         .content {
@@ -182,11 +181,12 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* 垂直置中 */
             padding: 20px;
             /* 增加內邊距避免貼邊 */
+            
         }
 
         iframe {
             font-family: 'Noto Serif TC', serif;
-            background-color: #f5f5f5;
+
         }
     </style>
 </head>
