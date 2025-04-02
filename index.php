@@ -35,7 +35,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f5f5;
             margin: 0;
             display: flex;
             min-height: 100vh;
@@ -161,7 +160,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* 水平置中 */
             align-items: center;
             /* 垂直置中 */
-
         }
 
         .content iframe {
@@ -171,7 +169,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             margin-left: 290px;
             margin-top: 30px;
             margin-bottom: 30px;
-
         }
 
         .content {
@@ -186,7 +183,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         iframe {
             font-family: 'Noto Serif TC', serif;
-            background-color: #f5f5f5;
         }
     </style>
 </head>
@@ -198,7 +194,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <h3>輔仁大學愛校建言捐款系統</h3>
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
-            <a href="donate.php" target="contentFrame"><i class="icon fas fa-money-bill-wave"></i><b> 捐款進度</b></a>
+            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
             <a href="statement.php" target="contentFrame"><i class="icon fas fa-chart-pie"></i><b> 捐款報表</b></a>
             <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
             <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>

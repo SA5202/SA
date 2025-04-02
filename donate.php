@@ -188,7 +188,7 @@
                         <div class="progress-bar" style="width: 60%;">已捐款 60%</div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">&nbsp;&nbsp;點我捐款</i></a>
                     </div>
                 </div>
             </div>
@@ -207,7 +207,7 @@
                         <div class="progress-bar" style="width: 40%;">已捐款 40%</div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">&nbsp;&nbsp;點我捐款</i></a>
                     </div>
                 </div>
             </div>
@@ -228,7 +228,7 @@
                         <div class="progress-bar" style="width: 30%;">已捐款 30%</div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">&nbsp;&nbsp;點我捐款</i></a>
                     </div>
                 </div>
             </div>
@@ -247,7 +247,7 @@
                         <div class="progress-bar" style="width: 20%;">已捐款 20%</div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">點我捐款</i></a>
+                        <a href="#"><i class="fa-solid fa-piggy-bank text-pink">&nbsp;&nbsp;點我捐款</i></a>
                     </div>
                 </div>
             </div>

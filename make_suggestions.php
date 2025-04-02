@@ -1,9 +1,10 @@
 <?php
+/* 
 session_start();
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
-}
+}*/
 ?>
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -21,7 +22,66 @@ if (!isset($_SESSION['username'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
-    
+    <style>
+        /*建言表格 */
+        .suggestion-form {
+            max-width: 800px;
+            margin-left: 50px;
+            margin-right: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .suggestion-form:hover {
+            transform: scale(1.02);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .form-control, .form-select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus, textarea:focus {
+            outline: none;
+            border-color: #6f8c3c;
+            box-shadow: 0 0 8px rgba(111, 140, 60, 0.5);
+        }
+
+        .btn-custom {
+            background-color: #6f8c3c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #56752a;
+            transform: translateY(-3px);
+        }
+
+        .form-group:hover {
+            transform: scale(1.02);
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 
 <body>
