@@ -43,7 +43,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .sidebar {
-            width: 280px;
+            width: 340px;
             background: linear-gradient(135deg, rgb(160, 164, 138), rgb(15, 21, 24));
             color: white;
             padding: 30px;
@@ -75,8 +75,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background: rgba(255, 255, 255, 0.2);
             transform: translateX(10px);
         }
-
-
         
         .footer {
             text-align: center;
@@ -87,6 +85,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             bottom: 0;
             width: 100%;
         }
+
         .icon {
             font-size: 2rem;
             margin-right: 10px;
@@ -105,7 +104,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .btn-custom {
             border-radius: 50px;
-            padding: 10px 30px;
+            padding: 4px 30px;
             font-size: 1.1rem;
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -115,7 +114,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color:rgb(51, 51, 50);
             transform: translateY(-5px);
         }
-
       
 
         /* Align login/logout button to the top right */
@@ -156,10 +154,10 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .content iframe {
-            width: 1100px;
+            width: 1000px;
             border: none;
             /* 移除邊框 */
-            margin-left: 290px;
+            margin-left: 400px;
             margin-top: 30px;
             margin-bottom: 30px;
         }
@@ -185,7 +183,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <!--導覽列-->
     <div class="header">
         <div class="sidebar">
-            <h2>FJU I-Money</h2>
+            <a href="main.php" target="contentFrame"><h1>FJU I-Money</h1></a>
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
             <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>

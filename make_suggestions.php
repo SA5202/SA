@@ -25,13 +25,13 @@ if (!isset($_SESSION['username'])) {
     <style>
         /*建言表格 */
         .suggestion-form {
-            max-width: 800px;
-            margin-left: 50px;
-            margin-right: 50px;
+            max-width: 700px;
+            margin-top: 20px;
+            margin-left: 180px;
             padding: 20px;
             background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
 
@@ -41,6 +41,8 @@ if (!isset($_SESSION['username'])) {
 
         .form-group {
             margin-bottom: 15px;
+            padding-left: 25px;
+            padding-right: 25px;
             position: relative;
         }
 
@@ -60,9 +62,10 @@ if (!isset($_SESSION['username'])) {
         }
 
         .btn-custom {
+            margin-left: 525px;  /* 將按鈕推到右邊 */
             background-color: #6f8c3c;
             color: white;
-            padding: 10px 20px;
+            padding: 5px 25px;
             border: none;
             border-radius: 50px;
             transition: background-color 0.3s, transform 0.3s;
@@ -87,7 +90,6 @@ if (!isset($_SESSION['username'])) {
 <body>
 
     <div class="main-content">
-        <h2 class="content-title">提出建言</h2>
         <form action="submit_suggestion.php" method="POST" class="suggestion-form">
             <div class="form-group">
                 <label for="suggestion-title">建言標題：</label>
@@ -100,7 +102,7 @@ if (!isset($_SESSION['username'])) {
             </div>
 
             <div class="form-group">
-                <label for="building">大樓：</label>
+                <label for="building">相關大樓：</label>
                 <select id="building" name="building" class="form-select">
                     <option value="">選擇大樓</option>
                     <option value="大樓A">利瑪竇</option>
