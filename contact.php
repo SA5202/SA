@@ -35,8 +35,8 @@
         .main-content {
             max-width: 800px;
             background: white;
-            padding: 40px;
-            border-radius: 15px;
+            padding: 50px;
+            border-radius: 25px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             margin: auto;
         }
@@ -44,11 +44,11 @@
         h2 {
             color:rgb(153, 151, 104);
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .contact-info {
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.8;
         }
 

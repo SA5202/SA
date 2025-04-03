@@ -104,9 +104,9 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .btn-custom {
             background-color: rgb(198, 225, 230, 0.7);
-            border-radius: 15px;
+            border-radius: 20px;
             margin: 20px;
-            padding: 4px 30px;
+            padding: 4px 20px;
             font-size: 1rem;
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);

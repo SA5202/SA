@@ -1,11 +1,38 @@
 <?php
-/* 
-session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}*/
+$success = null; // 預設設為null, 表示尚未提交過表單
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // 確保表單資料已經送出
+    $title = $_POST['title'];
+    $facility = $_POST['facility'];
+    $building = $_POST['building'];
+    $description = $_POST['description'];
+
+    // 建立資料庫連接
+    $link = mysqli_connect('localhost', 'root', '', 'sa');
+
+    // 檢查連接是否成功
+    if (!$link) {
+        die('資料庫連接失敗: ' . mysqli_connect_error());
+    }
+
+    // 使用準備好的語句來防止 SQL 注入
+    $stmt = $link->prepare("INSERT INTO suggestion (title, facility, building, description) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $title, $facility, $building, $description);
+
+    // 執行插入操作
+    if ($stmt->execute()) {
+        $success = true;
+    } else {
+        $success = false;
+    }
+
+    // 關閉資料庫連接
+    $stmt->close();
+    $link->close();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -16,21 +43,17 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
     <style>
-        /*建言表格 */
+        /* 建言表格 */
         .suggestion-form {
             max-width: 700px;
             margin-top: 15px;
             margin-left: 180px;
             padding: 30px;
             background-color: #fff;
-            border-radius: 15px;
+            border-radius: 25px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
@@ -46,7 +69,9 @@ if (!isset($_SESSION['username'])) {
             position: relative;
         }
 
-        .form-control, .form-select, textarea {
+        .form-control,
+        .form-select,
+        textarea {
             width: 100%;
             padding: 10px;
             margin: 5px 0;
@@ -55,7 +80,9 @@ if (!isset($_SESSION['username'])) {
             transition: all 0.3s ease;
         }
 
-        .form-control:focus, .form-select:focus, textarea:focus {
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
             outline: none;
             border-color: rgb(109, 140, 60);
             box-shadow: 0 0 5px rgba(111, 140, 60, 0.5);
@@ -108,10 +135,37 @@ if (!isset($_SESSION['username'])) {
             font-weight: bold;
             margin-bottom: 5px;
         }
+
+        .message {
+            text-align: center;
+            margin: 10px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
+    <!-- 只有當表單提交後才顯示成功或失敗訊息 -->
+    <?php if ($success !== null): ?>
+        <div class="message <?php echo ($success ? 'success' : 'error'); ?>">
+            <?php
+            if ($success) {
+                echo "發送成功";
+            } else {
+                echo "發送失敗";
+            }
+            ?>
+        </div>
+    <?php endif; ?>
 
     <div class="main-content">
         <form action="submit_suggestion.php" method="POST" class="suggestion-form">
@@ -141,7 +195,7 @@ if (!isset($_SESSION['username'])) {
             </div>
 
             <div class="button-container">
-                <button type="submit" class="btn btn-submit">確認提交</button>
+                <button type="submit" class="btn btn-submit">確認發佈</button>
                 <button type="reset" class="btn btn-reset">一鍵清空</button>
             </div>
         </form>
