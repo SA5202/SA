@@ -10,9 +10,9 @@
 
 <body>
     <?php
-    $username = $_POST['User_Name'];
-    $email = $_POST['Email'];
-    $password = $_POST['Password'];
+    $User_Name = $_POST['User_Name'];
+    $Email = $_POST['Email'];
+    $Password = $_POST['Password'];
 
     //step1
     $link = mysqli_connect('localhost', 'root', '', 'SA');

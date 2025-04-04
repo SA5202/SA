@@ -20,9 +20,9 @@
     }
     // 原來的帳號修改和刪除處理
     elseif ($method == 'delete') {
-        $username = $_GET['username'];
+        $User_Name = $_GET['User_Name'];
         $link = mysqli_connect('localhost', '', '', 'SA');
-        $sql = "DELETE FROM useraccount WHERE username='$username'";
+        $sql = "DELETE FROM useraccount WHERE User_Name='$User_Name'";
 
         if (mysqli_query($link, $sql)) {
             echo "刪除成功", "<br>";

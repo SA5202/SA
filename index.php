@@ -3,7 +3,7 @@
 session_start();
 
 // 判斷是否登入和是否為管理員
-$is_logged_in = isset($_SESSION['username']);
+$is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 ?>
 
