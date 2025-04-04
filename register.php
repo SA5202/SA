@@ -13,17 +13,13 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, rgb(203, 224, 159), rgb(80, 104, 35));
-        }
 
         .wrapper {
-            width: 400px;
             background: #fff;
+            width: 400px;
+            max-width: 700px;
+            margin-top: 60px;
+            margin-left: 30%;
             padding: 40px;
             border-radius: 25px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
