@@ -109,15 +109,11 @@
         <form action="logincheck.php" method="POST">
             <div class="input-box">
                 <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-                <input type="text" name="username" placeholder="使用者名稱" required>
+                <input type="text" name="User_Name" placeholder="使用者名稱" required>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                <input type="password" name="password" placeholder="密碼" required>
-            </div>
-            <div class="remember-forgot">
-                <label><input type="checkbox" name="remember_me"> 記住我</label>
-                <a href="#">忘記密碼 ?</a>
+                <input type="password" name="Password" placeholder="密碼" required>
             </div>
             <button type="submit" class="btn">登入</button>
             <div class="login-register">

@@ -113,15 +113,15 @@
             <form action="insert.php" method="POST">
                 <div class="input-box">
                     <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-                    <input type="text" name='username' placeholder="請輸入帳號" required>
+                    <input type="text" name='User_Name' placeholder="請輸入帳號" required>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
-                    <input type="email" name='email' placeholder="請輸入 EMAIL" required>
+                    <input type="email" name='Email' placeholder="請輸入 EMAIL" required>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                    <input type="password" name='password' placeholder="請輸入密碼" required>
+                    <input type="password" name='Password' placeholder="請輸入密碼" required>
                 </div>
                 <button type="submit" class="btn">註冊</button>
 

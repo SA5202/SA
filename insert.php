@@ -10,14 +10,14 @@
 
 <body>
     <?php
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $username = $_POST['User_Name'];
+    $email = $_POST['Email'];
+    $password = $_POST['Password'];
 
     //step1
-    $link = mysqli_connect('localhost', 'root', '12345678', 'users');
+    $link = mysqli_connect('localhost', 'root', '', 'SA');
     //step3
-    $sql = "insert into accounts(username,email,password,level) values('$username','$email','$password','user')";
+    $sql = "insert into useraccount(User_Name,Email,Password,User_Type) values('$User_Name','$Email','$Password','user')";
     if (mysqli_query($link, $sql)) {
         echo "新增成功", "<br>";
     } else {

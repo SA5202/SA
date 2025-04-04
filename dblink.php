@@ -13,7 +13,7 @@
     $method = $_GET['method'] ?? null;
 
     // 連接資料庫
-    $link = mysqli_connect('localhost', 'root', '12345678', 'users');
+    $link = mysqli_connect('localhost', 'root', '', 'SA');
 
     if (!$link) {
         die("Connection failed: " . mysqli_connect_error());
@@ -21,8 +21,8 @@
     // 原來的帳號修改和刪除處理
     elseif ($method == 'delete') {
         $username = $_GET['username'];
-        $link = mysqli_connect('localhost', 'root', '12345678', 'users');
-        $sql = "DELETE FROM accounts WHERE username='$username'";
+        $link = mysqli_connect('localhost', '', '', 'SA');
+        $sql = "DELETE FROM useraccount WHERE username='$username'";
 
         if (mysqli_query($link, $sql)) {
             echo "刪除成功", "<br>";
