@@ -8,28 +8,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $building = $_POST['building'];
     $description = $_POST['description'];
 
-    // 建立資料庫連接
-    $link = mysqli_connect('localhost', 'root', '', 'sa');
-
-    // 檢查連接是否成功
-    if (!$link) {
-        die('資料庫連接失敗: ' . mysqli_connect_error());
-    }
-
-    // 使用準備好的語句來防止 SQL 注入
-    $stmt = $link->prepare("INSERT INTO suggestion (title, facility, building, description) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $title, $facility, $building, $description);
-
-    // 執行插入操作
-    if ($stmt->execute()) {
-        $success = true;
-    } else {
+    // 檢查是否有空欄位
+    if (empty($title) || empty($facility) || empty($building) || empty($description)) {
         $success = false;
-    }
+    } else {
+        // 建立資料庫連接
+        $link = new mysqli('localhost', 'root', '', 'sa');
 
-    // 關閉資料庫連接
-    $stmt->close();
-    $link->close();
+        // 檢查連接是否成功
+        if ($link->connect_error) {
+            die('資料庫連接失敗: ' . $link->connect_error);
+        }
+
+        // 使用準備好的語句來防止 SQL 注入
+        $stmt = $link->prepare("INSERT INTO suggestion (title, facility, building, description) VALUES (?, ?, ?, ?)");
+
+        // 檢查準備語句是否成功
+        if ($stmt === false) {
+            die('準備語句失敗: ' . $link->error);
+        }
+
+        // 綁定參數
+        $stmt->bind_param("ssss", $title, $facility, $building, $description);
+
+        // 執行插入操作
+        if ($stmt->execute()) {
+            $success = true;
+        } else {
+            $success = false;
+        }
+
+        // 關閉資料庫連接
+        $stmt->close();
+        $link->close();
+    }
 }
 ?>
 
@@ -161,14 +173,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($success) {
                 echo "發送成功";
             } else {
-                echo "發送失敗";
+                echo "發送失敗，請確保所有欄位都有填寫";
             }
             ?>
         </div>
     <?php endif; ?>
 
     <div class="main-content">
-        <form action="submit_suggestion.php" method="POST" class="suggestion-form">
+        <form action="" method="POST" class="suggestion-form">
             <div class="form-group">
                 <label for="suggestion-title">建言標題：</label>
                 <input type="text" id="suggestion-title" name="title" placeholder="請輸入建言標題" class="form-control" required>
@@ -181,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             <div class="form-group">
                 <label for="building">請選擇關聯樓棟：</label>
-                <select id="building" name="building" class="form-select">
+                <select id="building" name="building" class="form-select" required>
                     <option value="">選擇大樓</option>
                     <option value="大樓A">利瑪竇</option>
                     <option value="大樓B">進修部</option>
