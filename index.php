@@ -49,8 +49,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .sidebar h1 {
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
+            font-size: 2.5rem;
             font-weight: 700;
         }
 
@@ -61,7 +60,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             padding: 15px;
             border-radius: 8px;
             margin: 10px 0;
-            font-size: 1.2rem;
+            font-size: 20px;
             transition: all 0.3s ease;
         }
 
@@ -71,8 +70,12 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .icon {
-            font-size: 1.5rem;
+            font-size: 1.5rem;  /* 設定圖示的基本大小 */
+            width: 1.5rem;      /* 設定寬度 */
+            height: 1.5rem;     /* 設定高度 */
             margin-right: 10px;
+            vertical-align: middle; /* 保證垂直居中 */
+            display: inline-block;   /* 確保圖示作為區塊顯示 */
         }
 
         /* 主內容區 iframe */
@@ -95,25 +98,28 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: transparent;
         }
 
-        /* 登入/登出按鈕 */
+        /* 登入-登出按鈕 */
         .btn-position {
             position: fixed;
-            top: 10px;
-            right: 10px;
+            top: 30px;
+            right: 40px;
             z-index: 200;
         }
 
         .btn-custom {
-            background-color: rgba(198, 225, 230, 0.7);
-            border-radius: 20px;
-            padding: 6px 20px;
+            background-color: rgba(198, 225, 230);
+            color: midnightblue;
+            border-radius: 25px;
+            padding: 5px 25px;
             font-size: 1rem;
             transition: 0.3s;
+            border: 1px solid rgba(104, 105, 121, 0.8);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .btn-custom:hover {
-            background-color: rgb(104, 105, 121);
+            background-color: rgb(104, 105, 121, 0.7);
+            color: #fff;
             transform: translateY(-3px);
         }
 
@@ -160,7 +166,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
         <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
         <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>
-        <a href="record.php" target="contentFrame"><i class="icon fas fa-clipboard-list"></i><b>建言紀錄</b></a>
+        <a href="record.php" target="contentFrame"><i class="icon fas fa-clipboard-list"></i><b> 建言紀錄</b></a>
         <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
         <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
         <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>

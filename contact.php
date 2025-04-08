@@ -29,27 +29,42 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .contact-card {
-            max-width: 1000px;
+            max-width: 75%;
             margin: 0 auto;
             background-color: rgba(255, 255, 255, 0.9); /* 白色半透明背景 */
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
         }
 
         .contact-title {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: #6c713d;
             margin-bottom: 30px;
         }
 
-        .contact-section i {
+        .contact-title i {
             color: #6c713d;
-            margin-right: 8px;
+            font-size: 1.8rem;  /* 設定圖示的基本大小 */
+            width: 1.5rem;      /* 設定寬度 */
+            height: 1.5rem;     /* 設定高度 */
+            margin-right: 20px;
+            display: inline-block;   /* 確保圖示作為區塊顯示 */
+        }
+
+        .icon {
+            color: #6c713d;
+            font-size: 1.3rem;  /* 設定圖示的基本大小 */
+            width: 1.5rem;      /* 設定寬度 */
+            height: 1.5rem;     /* 設定高度 */
+            margin-right: 10px;
+            vertical-align: middle; /* 保證垂直居中 */
+            display: inline-block;   /* 確保圖示作為區塊顯示 */
         }
 
         .contact-section p {
+            font-size: 1.05rem;
             margin-bottom: 10px;
         }
 
@@ -86,32 +101,32 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </div>
 
         <div class="contact-section">
-            <p><i class="fas fa-map-marker-alt"></i> 地址：242062 新北市新莊區中正路 510 號 天主教輔仁大學</p>
-            <p><i class="fas fa-phone"></i> 生輔組電話：<a href="tel:(02)2905-2264">(02) 2905-2264</a></p>
-            <p><i class="fas fa-envelope-open-text"></i> 生輔組服務信箱：<a href="mailto:sld@mail.fju.edu.tw">sld@mail.fju.edu.tw</a></p>
+            <p><i class="icon fas fa-map-marker-alt"></i> 地址：242062 新北市新莊區中正路 510 號 天主教輔仁大學</p>
+            <p><i class="icon fas fa-phone"></i> 輔仁大學生活輔導組電話： <a href="tel:(02)2905-2264">(02) 2905-2264</a></p>
+            <p><i class="icon fas fa-envelope-open-text"></i> 輔仁大學生活輔導組服務信箱： <a href="mailto:sld@mail.fju.edu.tw">sld@mail.fju.edu.tw</a></p>
         </div>
 
         <div class="divider"></div>
 
         <div class="contact-section">
-            <p><b>承辦人：</b>邱小姐</p>
-            <p><b>電話：</b><a href="tel:(02)2905-3031">(02) 2905-3031</a></p>
+            <p><b>承辦人： </b>邱小姐</p>
+            <p><b>聯絡電話： </b><a href="tel:(02)2905-3031">(02) 2905-3031</a></p>
         </div>
 
         <div class="divider"></div>
 
         <div class="contact-section">
-            <p class="office-title">日間部辦公室（于斌樓一樓 YP104）</p>
-            <p>學期中：週一至週五 08:00–16:30</p>
-            <p>寒暑假：週一至週四 08:00–16:30</p>
+            <p class="office-title">日間部辦公室（于斌樓一樓 YP 104）</p>
+            <p>學期中： 週一至週五 08:00–16:30</p>
+            <p>寒暑假： 週一至週四 08:00–16:30</p>
         </div>
 
         <div class="divider"></div>
 
         <div class="contact-section">
-            <p class="office-title">進修部辦公室（進修部大樓二樓 ES201）</p>
-            <p>學期中：週一至週五 15:00–22:00</p>
-            <p>寒暑假：週一至週四 08:00–16:30</p>
+            <p class="office-title">進修部辦公室（進修部大樓二樓 ES 201）</p>
+            <p>學期中： 週一至週五 15:00–22:00</p>
+            <p>寒暑假： 週一至週四 08:00–16:30</p>
             <p class="note">（寒暑假作息請參照本校行事曆）</p>
         </div>
     </div>

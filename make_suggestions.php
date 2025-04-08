@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             padding: 30px;
             background-color: rgba(255, 255, 255, 0.9); /* 半透明白底 */
             border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s;
         }
 
