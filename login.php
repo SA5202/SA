@@ -40,7 +40,7 @@
 
         .input-box input {
             width: 100%;
-            padding: 12px;
+            padding: 12px 40px 12px 40px; /* Adjust padding to make space for icon */
             border: 1px solid #ddd;
             border-radius: 10px;
             outline: none;
