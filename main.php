@@ -23,30 +23,24 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
 </head>
 <style>
-    
-    /*跑馬燈*/
-    #mqmain {
-        background: linear-gradient(45deg, rgb(247, 236, 140), rgb(220, 201, 108));
-        /* 渐变背景 */
-        color: black;
-        /* 白色文字 */
-        font-size: 1.2rem;
-        /* 字体大小 */
-        padding: 10px;
-        /* 内边距 */
-        border-radius: 10px;
-        /* 圆角 */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        /* 阴影效果 */
-        font-weight: bold;
-        /* 加粗文字 */
-        overflow: hidden;
-        /* 确保内容不会溢出容器 */
-        position: relative;
-        /* 相对定位，为了调整子元素位置 */
-        width: 100%;
-        /* 确保容器宽度自适应 */
-    }
+        body {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background-color: transparent;
+            overflow-x: hidden; /* 防止 iframe 出現左右捲軸 */
+        }
+
+        h3 {
+            margin-top: 30px;
+            font-weight: bold;
+        }
+
+        .card {
+            margin-bottom: 30px;
+        }
 </style>
 
 <body>
