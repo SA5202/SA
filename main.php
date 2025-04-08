@@ -23,11 +23,12 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
 </head>
 <style>
+    
     /*跑馬燈*/
     #mqmain {
-        background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
+        background: linear-gradient(45deg, rgb(247, 236, 140), rgb(220, 201, 108));
         /* 渐变背景 */
-        color: white;
+        color: black;
         /* 白色文字 */
         font-size: 1.2rem;
         /* 字体大小 */

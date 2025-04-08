@@ -1,201 +1,105 @@
-<style>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>輔大愛校建言捐款系統</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 0;
+      background-color: #f4f6f9;
+      font-family: 'Noto Sans TC', sans-serif;
     }
-
-    .container {
-
-        margin: 20px auto;
+    .sidebar {
+      height: 100vh;
+      background-color: #2e3b55;
+      color: white;
+      position: fixed;
+      width: 240px;
+      padding-top: 20px;
     }
-
-    .search-container {
-        text-align: left;
-        margin-bottom: 20px;
+    .sidebar h4 {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 30px;
     }
-
-    .search-container input[type="text"] {
-        padding: 10px;
-        font-size: 16px;
-        width: 400px;
-        border: 2px solid #ddd;
-        border-radius: 30px;
-        /* 圓角邊框 */
-        outline: none;
-        transition: all 0.3s ease;
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 12px 20px;
     }
-
-    .search-container input[type="text"]:focus {
-        border-color: rgb(157, 209, 45);
-        /* 當聚焦時改變邊框顏色 */
-        box-shadow: 0 0 8px rgba(58, 67, 5, 0.7);
-        /* 聚焦時增加陰影效果 */
+    .sidebar a:hover {
+      background-color: #1d273a;
     }
-
-    .search-container button {
-        padding: 10px 16px;
-        font-size: 16px;
-        background-color: rgb(119, 125, 35);
-        color: white;
-        border: none;
-        border-radius: 30px;
-        /* 圓角按鈕 */
-        cursor: pointer;
-        transition: background-color 0.3s;
+    .main {
+      margin-left: 240px;
+      padding: 30px;
     }
-
-    .search-container button:hover {
-        background-color: rgb(75, 99, 21);
+    .card-title {
+      font-weight: 600;
     }
-
-    .search-container button:focus {
-        outline: none;
+    .topbar {
+      background-color: white;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
     }
-
-
-    .card {
-        background-color: white;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        padding: 16px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: space-between;
-        flex-direction: row;
+    .topbar .user-info {
+      text-align: right;
     }
+  </style>
+</head>
+<body>
 
-    .card-content {
-        flex: 1;
-        margin-right: 20px;
-    }
+  <!-- 側邊欄 -->
+  <div class="sidebar">
+    <h4>輔大 I-Money</h4>
+    <a href="#">首頁</a>
+    <a href="#">建言總覽</a>
+    <a href="#">提出建言</a>
+    <a href="#">捐款進度</a>
+    <a href="#">榮譽制度</a>
+    <a href="#">捐款報表</a>
+    <a href="#">聯絡我們</a>
+  </div>
 
-    .card-header {
-        font-size: 18px;
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #333;
-    }
-
-    .card-description {
-        font-size: 14px;
-        margin-bottom: 8px;
-        color: #555;
-    }
-
-    .card-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .tag {
-        font-size: 12px;
-        color: white;
-        background-color: rgb(153, 134, 50);
-        padding: 4px 8px;
-        border-radius: 4px;
-    }
-
-    .card-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .btn {
-        text-decoration: none;
-        font-size: 14px;
-        padding: 8px 12px;
-        border-radius: 4px;
-        color: white;
-        text-align: center;
-        transition: background-color 0.3s;
-    }
-
-    .btn-favorite {
-        background-color: rgb(248, 177, 96);
-        font-weight: bold;
-        padding: 8px 16px;
-        border-radius: 4px;
-        text-align: center;
-        display: inline-block;
-        transition: background-color 0.3s;
-    }
-
-    .btn-favorite:hover {
-        background-color: rgb(196, 130, 31);
-    }
-
-    .btn-disabled {
-        background-color: rgb(159, 129, 64);
-        cursor: not-allowed;
-    }
-</style>
-<div class="filter-section">
-    <h1 class="h3 mb-2 text-gray-800">公告</h1>
-    <br>
-    <div class="container">
-        <!-- 搜尋表單 -->
-        <div class="search-container">
-            <form method="GET" action="">
-                <input type="text" name="search" placeholder="搜尋公告"
-                    value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
-                <button type="submit">搜尋</button>
-            </form>
-        </div>
-
-        <?php
-        // Step 1: 連接資料庫
-        $link = mysqli_connect('localhost', 'root');
-        mysqli_select_db($link, "announcement");
-
-        // Step 2: 處理搜尋功能
-        $search = isset($_GET['search']) ? mysqli_real_escape_string($link, $_GET['search']) : '';
-
-        // Step 3: 查詢公告資料，根據搜尋關鍵字來篩選標題或內容
-        $sql = "SELECT * FROM announce";
-        if ($search) {
-            $sql .= " WHERE title LIKE '%$search%' OR content LIKE '%$search%'";
-        }
-        $result = mysqli_query($link, $sql);
-
-        // Step 4: 顯示公告
-        while ($row = mysqli_fetch_assoc($result)) {
-            // 檢查是否已收藏
-            $favorite_button_text = $row['favorite'] == 1 ? '已收藏 !' : '收藏';
-            $favorite_button_class = $row['favorite'] == 1 ? 'btn-favorite btn-disabled' : 'btn-favorite';
-
-            echo '<div class="card">';
-            echo '<div class="card-content">';
-            echo '<div class="card-header">' . $row['title'] . '</div>';
-            echo '<div class="card-description">' . $row['content'] . '</div>';
-            echo '<div class="card-tags">';
-
-            // 顯示標籤
-            $tags = explode(' ', $row['tag']);
-            foreach ($tags as $tag) {
-                if (!empty($tag)) {
-                    echo '<span class="tag">' . $tag . '</span>';
-                }
-            }
-            echo '</div>';
-            echo '</div>';
-
-            // 顯示收藏按鈕
-            echo '<div class="card-buttons">';
-            if ($row['favorite'] == 0) {
-                echo "<a href='favorite.php?id=" . $row['id'] . "' class='btn $favorite_button_class'>$favorite_button_text</a>";
-            } else {
-                echo "<span class='btn $favorite_button_class'>$favorite_button_text</span>";
-            }
-            echo '</div>';
-
-            echo '</div>';
-        }
-        ?>
+  <!-- 主內容區 -->
+  <div class="main">
+    <!-- 上方欄 -->
+    <div class="topbar d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">輔大愛校建言捐款系統</h5>
+      <div class="user-info">
+        <span>您好，使用者</span>
+        <button class="btn btn-outline-primary btn-sm ms-2">登出</button>
+      </div>
     </div>
-</div>
-</div>
+
+    <!-- 系統公告 -->
+    <div class="alert alert-info">
+      系統公告：4/10 將進行系統維護，請提前完成捐款與建言。
+    </div>
+
+    <!-- 建言內容 -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">最新建言</h5>
+        <p class="card-text">學生建議改善校內飲水機水質與維護頻率。</p>
+      </div>
+    </div>
+
+    <!-- 捐款進度 -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">捐款進度</h5>
+        <div class="progress">
+          <div class="progress-bar bg-success" style="width: 65%;">65%</div>
+        </div>
+        <p class="mt-2">目前已募得 NT$ 65,000 / 100,000</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

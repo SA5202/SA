@@ -75,7 +75,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background: rgba(255, 255, 255, 0.2);
             transform: translateX(10px);
         }
-        
+
         .footer {
             text-align: center;
             background: linear-gradient(135deg, rgb(160, 164, 138), rgb(15, 21, 24));
@@ -116,7 +116,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgb(104, 105, 121);
             transform: translateY(-5px);
         }
-      
+
 
         /* Align login/logout button to the top right */
         .btn-position {
@@ -156,12 +156,13 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .content iframe {
-            width: 1000px;
+            width: 900px;
             border: none;
             /* 移除邊框 */
             margin-left: 400px;
             margin-top: 30px;
             margin-bottom: 30px;
+
         }
 
         .content {
@@ -172,11 +173,29 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* 垂直置中 */
             padding: 20px;
             /* 增加內邊距避免貼邊 */
-            
+
         }
 
         iframe {
             font-family: 'Noto Serif TC', serif;
+        }
+
+        @media (min-width: 768px) {
+
+            /*大於768px*/
+            .grid-containers {
+                display: grid;
+                grid-template-columns: 50% 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /*小於768px*/
+            .grid-containers {
+                display: grid;
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -185,13 +204,15 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <!--導覽列-->
     <div class="header">
         <div class="sidebar">
-            <a href="main.php" target="contentFrame"><h1>FJU I-Money</h1></a>
+            <a href="main.php" target="contentFrame">
+                <h1>FJU I-Money</h1>
+            </a>
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
             <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>
-            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b>捐款進度</b></a>
+            <a href="record.php" target="contentFrame"><i class="icon fas fa-clipboard-list"></i><b>建言紀錄</b></a>
+            <a href="#" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b>捐款進度</b></a> <!--考完再嵌連結 donate.php-->
             <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
-            <a href="statement.php" target="contentFrame"><i class="icon fas fa-chart-pie"></i><b>捐款報表</b></a>
             <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
         </div>
         <div class="main-content">
@@ -205,6 +226,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                     <button type="button" class="btn btn-custom btn-outline-success btn-position"><b>登入</b></button>
                 </a>
             <?php endif; ?>
+
         </div>
         <div class="content">
             <iframe name="contentFrame" src="main.php" width="100%" height="1000" allowtransparency="true"></iframe>

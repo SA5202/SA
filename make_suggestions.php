@@ -1,4 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['User_Name'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+<?php
 $success = null; // 預設設為null, 表示尚未提交過表單
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

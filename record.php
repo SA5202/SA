@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['User_Name'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="zh-TW">
 
