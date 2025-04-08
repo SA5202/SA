@@ -230,6 +230,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </div>
         <div class="content">
             <iframe name="contentFrame" src="main.php" width="100%" height="1000" allowtransparency="true"></iframe>
+            
         </div>
 
 

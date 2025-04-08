@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .suggestion-form {
             max-width: 700px;
             margin-top: 15px;
-            margin-left: 180px;
+            margin-left: 100px;
             padding: 30px;
             background-color: #fff;
             border-radius: 25px;
