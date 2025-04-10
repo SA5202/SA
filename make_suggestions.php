@@ -7,30 +7,65 @@ if (!isset($_SESSION['User_Name'])) {
 
 $success = null;
 
+// 建立資料庫連線並取得所有設施與建築物資料
+$link = new mysqli('localhost', 'root', '', 'sa');
+if ($link->connect_error) {
+    die('資料庫連接失敗: ' . $link->connect_error);
+}
+
+$facilities = [];
+$buildings = [];
+
+$facilityResult = $link->query("SELECT facility_id, facility_type FROM facility");
+if ($facilityResult) {
+    while ($row = $facilityResult->fetch_assoc()) {
+        $facilities[] = $row;
+    }
+}
+
+$buildingResult = $link->query("SELECT building_id, building_name FROM building");
+if ($buildingResult) {
+    while ($row = $buildingResult->fetch_assoc()) {
+        $buildings[] = $row;
+    }
+}
+
+// 表單送出時處理資料
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // 驗證 POST 資料
+    var_dump($_POST); // 用來檢查傳遞的資料
+
     $title = $_POST['title'];
-    $facility = $_POST['facility'];
-    $building = $_POST['building'];
+    $facility = isset($_POST['facility']) ? (int) $_POST['facility'] : 0;  // 設施 id
+    $building = isset($_POST['building']) ? (int) $_POST['building'] : 0;  // 建築物 id
     $description = $_POST['description'];
 
-    if (empty($title) || empty($facility) || empty($building) || empty($description)) {
+    // 檢查必填欄位
+    if (empty($title) || $facility == 0 || $building == 0 || empty($description)) {
         $success = false;
     } else {
-        $link = new mysqli('localhost', 'root', '', 'sa');
-        if ($link->connect_error) {
-            die('資料庫連接失敗: ' . $link->connect_error);
-        }
+        // 確保處理其他欄位
+        $updatedAt = date('Y-m-d H:i:s'); // 使用當前時間作為更新時間
+        $upvotedAmount = 0; // 初始點讚數
 
-        $stmt = $link->prepare("INSERT INTO suggestion (title, facility, building, description) VALUES (?, ?, ?, ?)");
+        // 準備 SQL 語句
+        $stmt = $link->prepare("INSERT INTO suggestion (title, facility_id, building_id, description, updated_at, upvoted_amount) VALUES (?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die('準備語句失敗: ' . $link->error);
         }
 
-        $stmt->bind_param("ssss", $title, $facility, $building, $description);
-        $success = $stmt->execute();
+        // 綁定參數，新增 `updated_at` 和 `upvoted_amount`
+        $stmt->bind_param("siisss", $title, $facility, $building, $description, $updatedAt, $upvotedAmount);
+
+        // 嘗試執行插入
+        if (!$stmt->execute()) {
+            die('資料插入失敗: ' . $stmt->error);
+        }
+
+        $success = true;
         $stmt->close();
-        $link->close();
     }
+    $link->close();
 }
 ?>
 
@@ -45,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <style>
         body {
-            background-color: transparent; /* 關鍵：透明背景 */
+            background-color: transparent;
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
             line-height: 1.8;
@@ -55,10 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .suggestion-form {
-            max-width: 700px;
+            max-width: 75%;
             margin: 0 auto;
             padding: 30px;
-            background-color: rgba(255, 255, 255, 0.9); /* 半透明白底 */
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 25px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s;
@@ -163,17 +198,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <div class="form-group">
-            <label for="facility">關聯設施：</label>
-            <input type="text" id="facility" name="facility" placeholder="請輸入設施名稱" class="form-control" required>
+            <label for="facility">選擇關聯設施：</label>
+            <select id="facility" name="facility" class="form-select" required>
+                <option value="">請選擇設施</option>
+                <?php foreach ($facilities as $f): ?>
+                    <option value="<?= $f['facility_id'] ?>"><?= htmlspecialchars($f['facility_type']) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="form-group">
-            <label for="building">請選擇關聯樓棟：</label>
+            <label for="building">選擇關聯建築物：</label>
             <select id="building" name="building" class="form-select" required>
-                <option value="">選擇大樓</option>
-                <option value="利瑪竇">利瑪竇</option>
-                <option value="進修部">進修部</option>
-                <option value="羅耀拉">羅耀拉</option>
+                <option value="">請選擇建築物</option>
+                <?php foreach ($buildings as $b): ?>
+                    <option value="<?= $b['building_id'] ?>"><?= htmlspecialchars($b['building_name']) ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
 
