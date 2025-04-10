@@ -23,24 +23,57 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
 </head>
 <style>
-        body {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 30px;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            background-color: transparent;
-            overflow-x: hidden; /* 防止 iframe 出現左右捲軸 */
-        }
+    body {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 30px;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        background-color: transparent;
+        overflow-x: hidden;
+        /* 防止 iframe 出現左右捲軸 */
+    }
 
-        h3 {
-            margin-top: 30px;
-            font-weight: bold;
-        }
+    h3 {
+        margin-top: 30px;
+        font-weight: bold;
+    }
 
-        .card {
-            margin-bottom: 30px;
-        }
+    .card {
+        margin-bottom: 30px;
+    }
+
+    .honor-wrapper {
+        max-width: 1000px;
+        margin: 0 auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    h3 {
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    .honor-item {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .honor-item h5 {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .honor-icon {
+        color: #ffc107;
+        margin-right: 10px;
+    }
 </style>
 
 <body>
@@ -66,7 +99,21 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 </div>
             </div>
         </div>
-        <h3>榮譽榜</h3>
+        <div class="honor-wrapper">
+            <h3><i class="fas fa-medal"></i> 榮譽榜</h3>
+
+            <div class="honor-item">
+                <h5><i class="fas fa-trophy honor-icon"></i> 卓越貢獻獎</h5>
+                <p>感謝李珍校友捐贈百萬 為輔大永續發展注入愛與希望</p>
+            </div>
+
+            <div class="honor-item">
+                <h5><i class="fas fa-trophy honor-icon"></i> 卓越貢獻獎</h5>
+                <p>感謝張氏家庭百萬美金捐贈化學系及民生學院 助力輔大教育永續發展</p>
+            </div>
+
+        </div>
+
     </div>
 
 </body>
