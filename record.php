@@ -70,7 +70,7 @@ if (!isset($_SESSION['User_Name'])) {
             display: inline-block;
             padding: 8px 18px;
             font-size: 1rem;
-            color:rgb(123, 163, 23);
+            color: rgb(123, 163, 23);
             border: 2px solid rgb(123, 163, 23);
             border-radius: 30px;
             text-decoration: none;
@@ -192,8 +192,9 @@ if (!isset($_SESSION['User_Name'])) {
                 </tr>
             </tbody>
         </table>
-    </div>
 
+    </div><br>
+    <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
 </body>
 <!-- 引入 Font Awesome 圖標 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">

@@ -102,53 +102,6 @@ if (!isset($_SESSION['User_Name'])) {
             <p>所有參與捐款者，將可選擇是否列名於感謝榜，以示表揚其對校園的熱心支持。</p>
         </div>
 
-        <!-- 榮譽榜表格區塊 -->
-        <div class="table-wrapper">
-            <h3><i class="fas fa-list-ol"></i> 感謝榜</h3>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>排行</th>
-                            <th>姓名</th>
-                            <th>建言數量</th>
-                            <th>捐款金額</th>
-                            <th>獲獎項目</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>廖建翔</td>
-                            <td>5</td>
-                            <td>$10,000</td>
-                            <td>愛校之星、卓越貢獻獎</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>呂奇傑</td>
-                            <td>4</td>
-                            <td>$5,000</td>
-                            <td>愛校之星、卓越貢獻獎</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>王冠云</td>
-                            <td>3</td>
-                            <td>$3,000</td>
-                            <td>愛校之星、卓越貢獻獎</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>林保羅</td>
-                            <td>2</td>
-                            <td>$6,000</td>
-                            <td>卓越貢獻獎</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
     </div>
 

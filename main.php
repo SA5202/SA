@@ -74,12 +74,29 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         color: #ffc107;
         margin-right: 10px;
     }
+
+    /*跑馬燈*/
+    .marquee-wrapper {
+        max-width: 1000px;
+        margin: 0 auto 30px auto;
+    }
+
+    #mqmain {
+        background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
+        color: white;
+        font-size: 1.1rem;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        overflow: hidden;
+        width: 100%;
+    }
 </style>
 
 <body>
     <h3>重要資訊</h3>
-    <div class="item">
-        <marquee id="mqmain" scrollamount="10">4/5將進行系統維護，請使用者注意。</marquee>
+    <div class="marquee-wrapper">
+        <marquee id="mqmain" scrollamount="8">7/8系統將進行年度保養，請使用者留意。</marquee>
     </div>
     <h3>建言一覽</h3>
     <div class="row">
