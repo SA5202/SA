@@ -115,7 +115,7 @@ if (!isset($_SESSION['User_Name'])) {
                           </tr>
                           <tr>
                             <td colspan='2' class='left'>
-                                <a href='update.php?User_Name={$row['User_Name']}'>[修改]</a>&nbsp;
+                                <a href='update.php?method=update&User_Name={$row['User_Name']}'>[修改]</a>&nbsp;
                                 <a href='dblink.php?method=delete&User_Name={$row['User_Name']}'>[刪除]</a>
                             </td>
                           </tr>";

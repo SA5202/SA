@@ -1,42 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>修改帳號資訊</title>
 </head>
 
 <body>
     <?php
-    $User_Name = $_GET['User_Name'];
-    //step1
-    $link = mysqli_connect('localhost', 'root', '', 'SA');
-    //step3
-    $sql = "select distinct * from useraccount where User_Name='$User_Name'";
-    $result = mysqli_query($link, $sql);
-    //step4
-    if ($row = mysqli_fetch_assoc($result)) {
-        $Email = $row['Email'];
-        $Password = $row['Password'];
+    session_start();
+    if (!isset($_SESSION['User_Name'])) {
+        die("請先登入！");
     }
+
+    $User_Name = $_SESSION['User_Name']; // 取得當前登入的使用者名稱
+
+    // 連接資料庫
+    $link = mysqli_connect('localhost', 'root', '', 'SA');
+    if (!$link) {
+        die("資料庫連線失敗：" . mysqli_connect_error());
+    }
+
+    // 查詢使用者資訊
+    $sql = "SELECT * FROM useraccount WHERE User_Name='$User_Name'";
+    $result = mysqli_query($link, $sql);
+
+    if ($row = mysqli_fetch_assoc($result)) {
+        $Email = $row['Email']; // 取出 Email
+    } else {
+        die("找不到使用者資料！");
+    }
+    mysqli_close($link);
     ?>
-    <form action="dblink.php" method="post">
+
+    <h2 align="center">修改帳號資訊</h2>
+    <form action="dblink.php?method=update" method="post">
         <table class="RedList" width="500" align="center">
             <tr align="center">
                 <td>帳號</td>
-                <td><input type="text" name="User_Name" value="<?php echo $User_Name ?>"required></td>
+                <td><input type="text" name="User_Name" value="<?php echo $User_Name; ?>" readonly></td>
             </tr>
             <tr align="center">
                 <td>Email</td>
-                <td><input type="text" name="Email" value="<?php echo $Email ?>" required></td>
+                <td><input type="email" name="Email" value="<?php echo $Email; ?>" required></td>
             </tr>
             <tr align="center">
-                <td>密碼</td>
-                <td><input type="text" name="Password" value="<?php echo $Password ?>" required></td>
+                <td>新密碼</td>
+                <td>
+                    <input type="password" id="Password" name="Password" required>
+                </td>
             </tr>
             <tr align="center">
-                <td colspan="2"><input type="submit"><input type="reset"></td>
+                <td colspan="2">
+                    <input type="submit" value="更新資料">
+                    <input type="reset" value="重設">
+                </td>
             </tr>
         </table>
     </form>
