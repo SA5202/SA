@@ -8,6 +8,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,23 +71,30 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .icon {
-            font-size: 1.5rem;  /* 設定圖示的基本大小 */
-            width: 1.5rem;      /* 設定寬度 */
-            height: 1.5rem;     /* 設定高度 */
+            font-size: 1.5rem;
+            /* 設定圖示的基本大小 */
+            width: 1.5rem;
+            /* 設定寬度 */
+            height: 1.5rem;
+            /* 設定高度 */
             margin-right: 10px;
-            vertical-align: middle; /* 保證垂直居中 */
-            display: inline-block;   /* 確保圖示作為區塊顯示 */
+            vertical-align: middle;
+            /* 保證垂直居中 */
+            display: inline-block;
+            /* 確保圖示作為區塊顯示 */
         }
 
         /* 主內容區 iframe */
         .content {
             position: absolute;
             top: 0;
-            left: 300px; /* 與 sidebar 寬度一致 */
+            left: 300px;
+            /* 與 sidebar 寬度一致 */
             right: 0;
-            bottom: 60px; /* 與 footer 高度一致 */
+            bottom: 60px;
+            /* 與 footer 高度一致 */
             overflow: hidden;
-            background-color: rgb(104, 105, 121,0.2);
+            background-color: rgb(104, 105, 121, 0.2);
             padding: 20px;
         }
 
@@ -156,17 +164,41 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(0, 0, 0, 0.7);
             transform: translateY(-5px);
         }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            font-size: 2rem;
+            padding: 10px 20px;
+            border-radius: 50%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 300;
+            transition: 0.3s;
+            display: none;
+            /* 預設不顯示 */
+        }
+
+        .back-to-top:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: translateY(-5px);
+        }
     </style>
 </head>
 
 <body>
     <!-- 導覽列 -->
     <div class="sidebar">
-        <a href="main.php" target="contentFrame"><h1>FJU I-Money</h1></a>
+        <a href="main.php" target="contentFrame">
+            <h1>FJU I-Money</h1>
+        </a>
         <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
         <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
         <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>
-        <a href="record.php" target="contentFrame"><i class="icon fas fa-clipboard-list"></i><b> 建言紀錄</b></a>
+        <a href="record.php" target="contentFrame"><i class="fas fa-user"></i><b> 個人資訊</b></a>
         <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
         <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
         <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
@@ -194,8 +226,45 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     </div>
 
     <!-- 回頂部按鈕 -->
-    <div class="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' });">
+    <div class="back-to-top" id="backToTopBtn">
         ↑
     </div>
+
+    <script>
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        const iframe = document.querySelector('iframe[name="contentFrame"]');
+
+        // 點擊按鈕時滾動 iframe 頁面回頂部
+        backToTopBtn.addEventListener('click', () => {
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // iframe 載入新頁面後，掛載 scroll 事件
+        iframe.addEventListener('load', () => {
+            const iframeWindow = iframe.contentWindow;
+
+            // 清除舊的事件（避免重複掛載）
+            iframeWindow.removeEventListener('scroll', toggleBackToTop);
+
+            // 定義滾動處理函式
+            function toggleBackToTop() {
+                const scrollTop = iframeWindow.scrollY || iframeWindow.pageYOffset;
+                backToTopBtn.style.display = scrollTop > 200 ? 'block' : 'none';
+            }
+
+            // 初始執行一次以防一進來就已經有捲動
+            toggleBackToTop();
+
+            // 加上監聽
+            iframeWindow.addEventListener('scroll', toggleBackToTop);
+        });
+    </script>
+
 </body>
+
 </html>

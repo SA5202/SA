@@ -65,12 +65,33 @@ if (!isset($_SESSION['User_Name'])) {
         .left {
             text-align: left;
         }
+
+        .custom-btn {
+            display: inline-block;
+            padding: 8px 18px;
+            font-size: 1rem;
+            color:rgb(123, 163, 23);
+            border: 2px solid rgb(123, 163, 23);
+            border-radius: 30px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .custom-btn i {
+            margin-right: 6px;
+        }
+
+        .custom-btn:hover {
+            background-color: rgb(123, 163, 23);
+            color: white;
+        }
     </style>
 </head>
 
 <body>
 
-    <h3><i class="fas fa-chart-pie"></i> 建言記錄</h3>
+    <h3><i class="fas fa-user"></i> 個人資訊</h3>
     <div class="table-responsive">
         <table>
             <tbody>
@@ -114,11 +135,14 @@ if (!isset($_SESSION['User_Name'])) {
                             </td>
                           </tr>
                           <tr>
-                            <td colspan='2' class='left'>
-                                <a href='update.php?method=update&User_Name={$row['User_Name']}'>[修改]</a>&nbsp;
-                                <a href='dblink.php?method=delete&User_Name={$row['User_Name']}'>[刪除]</a>
-                            </td>
-                          </tr>";
+    <td colspan='2' class='left'>
+        <a href='update.php?method=update&User_Name={$row['User_Name']}' class='custom-btn'>
+            <i class='fas fa-pen-to-square'></i> 修改資料
+        </a>
+    </td>
+</tr>
+
+                          ";
                     } else {
                         echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
                     }
@@ -132,7 +156,7 @@ if (!isset($_SESSION['User_Name'])) {
     </div>
 
     <br>
-
+    <h3><i class="fas fa-donate"></i> 我的捐款紀錄</h3>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead>
