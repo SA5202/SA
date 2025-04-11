@@ -4,7 +4,29 @@ if (!isset($_SESSION['User_Name'])) {
     header("Location: login.php");
     exit();
 }
+
+$link = new mysqli('localhost', 'root', '', 'sa');
+if ($link->connect_error) {
+    die('資料庫連接失敗: ' . $link->connect_error);
+}
+
+$userID = $_SESSION['User_ID'];
+$sql = "
+    SELECT s.title, s.description, s.updated_at, s.upvoted_amount,
+           f.facility_type, b.building_name
+    FROM suggestion s
+    JOIN facility f ON s.facility_id = f.facility_id
+    JOIN building b ON s.building_id = b.building_id
+    WHERE s.User_ID = ?
+    ORDER BY s.updated_at DESC
+";
+
+$stmt = $link->prepare($sql);
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -13,7 +35,6 @@ if (!isset($_SESSION['User_Name'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>捐款報表 | 輔仁大學愛校建言捐款系統</title>
 
-    <!-- 樣式與字體 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
@@ -41,17 +62,6 @@ if (!isset($_SESSION['User_Name'])) {
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            text-align: center;
-            vertical-align: middle;
         }
 
         .table th {
@@ -86,6 +96,18 @@ if (!isset($_SESSION['User_Name'])) {
             background-color: rgb(123, 163, 23);
             color: white;
         }
+
+        .table-container {
+            background-color: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .badge {
+            padding: 0.6em 1em;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 
@@ -96,126 +118,119 @@ if (!isset($_SESSION['User_Name'])) {
         <table>
             <tbody>
                 <?php
-                if (isset($_SESSION['User_Name'])) {
-                    $current_User_Name = $_SESSION['User_Name']; // 取得當前使用者的 username
+                $current_User_Name = $_SESSION['User_Name'];
 
-                    // 連接資料庫
-                    $link = mysqli_connect('localhost', 'root', '', 'SA');
-                    if (!$link) {
-                        die("資料庫連線失敗：" . mysqli_connect_error());
-                    }
-
-                    // 查詢當前使用者
-                    $sql = "SELECT * FROM useraccount WHERE User_Name = '$current_User_Name'";
-                    $result = mysqli_query($link, $sql);
-
-                    if ($row = mysqli_fetch_assoc($result)) {
-                        $password = htmlspecialchars($row['Password']); // 防止 XSS 攻擊
-
-                        echo "<tr>
-                            <td rowspan='5'>
-                                <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7' style='border-radius: 5%;'>
-                            </td>
-                            <td class='left'>帳號：{$row['User_Name']}</td>
-                          </tr>
-                          <tr>
-                            <td class='left'>使用者編號：{$row['User_ID']}</td>
-                          </tr>
-                          <tr>
-                            <td class='left'>Email：{$row['Email']}</td>
-                          </tr>
-                          <tr>
-                            <td class='left'>
-                                密碼：
-                                <span id='password' style='font-weight: bold;'>••••••</span>
-                                <button id='togglePassword' onclick='togglePassword()' style='border: none; background: none; cursor: pointer;'>
-                                    <i id='eyeIcon' class='fa fa-eye'></i>
-                                </button>
-                                <span id='realPassword' style='display: none;'>{$password}</span>
-                            </td>
-                          </tr>
-                          <tr>
-    <td colspan='2' class='left'>
-        <a href='update.php?method=update&User_Name={$row['User_Name']}' class='custom-btn'>
-            <i class='fas fa-pen-to-square'></i> 修改資料
-        </a>
-    </td>
-</tr>
-
-                          ";
-                    } else {
-                        echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
-                    }
-                    mysqli_close($link); // 關閉資料庫連線
-                } else {
-                    echo "<tr><td colspan='2' align='center'>未登入，請先登入</td></tr>";
+                $link = mysqli_connect('localhost', 'root', '', 'SA');
+                if (!$link) {
+                    die("資料庫連線失敗：" . mysqli_connect_error());
                 }
+
+                $sql = "SELECT * FROM useraccount WHERE User_Name = '$current_User_Name'";
+                $result_user = mysqli_query($link, $sql);
+
+                if ($row = mysqli_fetch_assoc($result_user)) {
+                    $password = htmlspecialchars($row['Password']);
+
+                    echo "<tr>
+                        <td rowspan='5'>
+                            <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7' style='border-radius: 5%;'>
+                        </td>
+                        <td class='left'>帳號：{$row['User_Name']}</td>
+                      </tr>
+                      <tr>
+                        <td class='left'>使用者編號：{$row['User_ID']}</td>
+                      </tr>
+                      <tr>
+                        <td class='left'>Email：{$row['Email']}</td>
+                      </tr>
+                      <tr>
+                        <td class='left'>
+                            密碼：
+                            <span id='password' style='font-weight: bold;'>••••••</span>
+                            <button id='togglePassword' onclick='togglePassword()' style='border: none; background: none; cursor: pointer;'>
+                                <i id='eyeIcon' class='fa fa-eye'></i>
+                            </button>
+                            <span id='realPassword' style='display: none;'>{$password}</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan='2' class='left'>
+                            <a href='update.php?method=update&User_Name={$row['User_Name']}' class='custom-btn'>
+                                <i class='fas fa-pen-to-square'></i> 修改資料
+                            </a>
+                        </td>
+                      </tr>";
+                } else {
+                    echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
+                }
+
+                mysqli_close($link);
                 ?>
             </tbody>
         </table>
     </div>
 
     <br>
-    <h3><i class="fas fa-donate"></i> 我的捐款紀錄</h3>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>項目名稱</th>
-                    <th>捐款人數</th>
-                    <th>已募金額</th>
-                    <th>目標金額</th>
-                    <th>達成率</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>圖書館翻新</td>
-                    <td>58</td>
-                    <td>NT$320,000</td>
-                    <td>NT$500,000</td>
-                    <td>64%</td>
-                </tr>
-                <tr>
-                    <td>校園綠化</td>
-                    <td>42</td>
-                    <td>NT$85,000</td>
-                    <td>NT$200,000</td>
-                    <td>42.5%</td>
-                </tr>
-                <tr>
-                    <td>學生餐廳改善</td>
-                    <td>33</td>
-                    <td>NT$115,000</td>
-                    <td>NT$300,000</td>
-                    <td>38.3%</td>
-                </tr>
-            </tbody>
-        </table>
+    <h3><i class="fas fa-donate"></i> 我的建言紀錄</h3>
+    <div class="container">
+        <div class="table-container">
+            <table class="table table-bordered table-striped align-middle text-center shadow-sm rounded">
+                <thead class="table-primary">
+                    <tr>
+                        <th class="fw-bold">標題</th>
+                        <th class="fw-bold">設施</th>
+                        <th class="fw-bold">建築物</th>
+                        <th class="fw-bold">內容</th>
+                        <th class="fw-bold">發佈時間</th>
+                        <th class="fw-bold">按讚數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($result->num_rows > 0): ?>
+                        <?php while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row['title']) ?></td>
+                                <td><?= htmlspecialchars($row['facility_type']) ?></td>
+                                <td><?= htmlspecialchars($row['building_name']) ?></td>
+                                <td class="text-start"><?= nl2br(htmlspecialchars($row['description'])) ?></td>
+                                <td><?= date('Y-m-d H:i', strtotime($row['updated_at'])) ?></td>
+                                <td>
+                                    <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> 👍</span>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">尚未有建言紀錄。</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    </div><br>
+    <br>
     <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
-</body>
-<!-- 引入 Font Awesome 圖標 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-<!-- JavaScript 控制眼睛按鈕 -->
-<script>
-    function togglePassword() {
-        let passwordField = document.getElementById("password");
-        let realPasswordField = document.getElementById("realPassword");
-        let eyeIcon = document.getElementById("eyeIcon");
+    <script>
+        function togglePassword() {
+            let passwordField = document.getElementById("password");
+            let realPasswordField = document.getElementById("realPassword");
+            let eyeIcon = document.getElementById("eyeIcon");
 
-        if (passwordField.style.display === "none") {
-            passwordField.style.display = "inline";
-            realPasswordField.style.display = "none";
-            eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
-        } else {
-            passwordField.style.display = "none";
-            realPasswordField.style.display = "inline";
-            eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+            if (passwordField.style.display === "none") {
+                passwordField.style.display = "inline";
+                realPasswordField.style.display = "none";
+                eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+            } else {
+                passwordField.style.display = "none";
+                realPasswordField.style.display = "inline";
+                eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+            }
         }
-    }
-</script>
+    </script>
+
+</body>
 
 </html>
+
