@@ -8,6 +8,7 @@ $result = mysqli_query($link, $sql);
 
 if ($User_Name == "admin") {
     $_SESSION['User_Name'] = $User_Name;
+    $_SESSION['User_ID'] = $record['User_ID'];
     $_SESSION['is_admin'] = true; // 設置為管理員
     // 登入成功，刷新父頁面並關閉當前 iframe 頁面
     echo '<script>
