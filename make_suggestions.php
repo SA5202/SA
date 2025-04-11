@@ -6,13 +6,15 @@ if (!isset($_SESSION['User_Name'])) {
 }
 
 $success = null;
+$errorMessages = [];
 
-// 建立資料庫連線並取得所有設施與建築物資料
+// 建立資料庫連線
 $link = new mysqli('localhost', 'root', '', 'sa');
 if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
 }
 
+// 取得設施與建築物資料
 $facilities = [];
 $buildings = [];
 
@@ -32,32 +34,54 @@ if ($buildingResult) {
 
 // 表單送出時處理資料
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // 驗證 POST 資料
-    var_dump($_POST); // 用來檢查傳遞的資料
+    $title = $_POST['title'] ?? '';
+    $facility = isset($_POST['facility']) ? (int) $_POST['facility'] : 0;
+    $building = isset($_POST['building']) ? (int) $_POST['building'] : 0;
+    $description = $_POST['description'] ?? '';
+    $userID = $_SESSION['User_ID'] ?? null;
 
-    $title = $_POST['title'];
-    $facility = isset($_POST['facility']) ? (int) $_POST['facility'] : 0;  // 設施 id
-    $building = isset($_POST['building']) ? (int) $_POST['building'] : 0;  // 建築物 id
-    $description = $_POST['description'];
+    // 檢查必填欄位，並收集錯誤訊息
+    if (empty($title)) {
+        $errorMessages[] = "請輸入標題";
+    }
+    if ($facility === 0) {
+        $errorMessages[] = "請選擇設施";
+    }
+    if ($building === 0) {
+        $errorMessages[] = "請選擇建築物";
+    }
+    if (empty($description)) {
+        $errorMessages[] = "請輸入建議內容";
+    }
+    if (empty($userID)) {
+        $errorMessages[] = "使用者未登入";
+    }
 
-    // 檢查必填欄位
-    if (empty($title) || $facility == 0 || $building == 0 || empty($description)) {
+    if (!empty($errorMessages)) {
         $success = false;
-    } else {
-        // 確保處理其他欄位
-        $updatedAt = date('Y-m-d H:i:s'); // 使用當前時間作為更新時間
-        $upvotedAmount = 0; // 初始點讚數
 
-        // 準備 SQL 語句
-        $stmt = $link->prepare("INSERT INTO suggestion (title, facility_id, building_id, description, updated_at, upvoted_amount) VALUES (?, ?, ?, ?, ?, ?)");
+        // 只有錯誤時才輸出 POST 資料
+        echo "<pre>";
+        var_dump($_POST);
+        echo "</pre>";
+
+        // 顯示錯誤訊息
+        echo "<div style='color: red;'><ul>";
+        foreach ($errorMessages as $msg) {
+            echo "<li>$msg</li>";
+        }
+        echo "</ul></div>";
+    } else {
+        $updatedAt = date('Y-m-d H:i:s');
+        $upvotedAmount = 0;
+
+        $stmt = $link->prepare("INSERT INTO suggestion (title, facility_id, building_id, description, updated_at, upvoted_amount, User_ID) VALUES (?, ?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die('準備語句失敗: ' . $link->error);
         }
 
-        // 綁定參數，新增 `updated_at` 和 `upvoted_amount`
-        $stmt->bind_param("siisss", $title, $facility, $building, $description, $updatedAt, $upvotedAmount);
+        $stmt->bind_param("siisssi", $title, $facility, $building, $description, $updatedAt, $upvotedAmount, $userID);
 
-        // 嘗試執行插入
         if (!$stmt->execute()) {
             die('資料插入失敗: ' . $stmt->error);
         }
@@ -65,9 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $success = true;
         $stmt->close();
     }
+
     $link->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="zh-TW">

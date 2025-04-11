@@ -18,6 +18,7 @@ if ($User_Name == "admin") {
 if ($record = mysqli_fetch_assoc($result)) {
     $_SESSION['User_Name'] = $record['User_Name'];
     $_SESSION['User_Type'] = $record['User_Type'];
+    $_SESSION['User_ID'] = $record['User_ID'];
     $_SESSION['is_admin'] = false; // 非管理員
     echo '<script>
                 parent.location.reload();
