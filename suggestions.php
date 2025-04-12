@@ -51,140 +51,189 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <meta charset="UTF-8">
     <title>建言總覽 | 輔仁大學愛校建言捐款系統</title>
     <style>
-        * {
+       * {
             box-sizing: border-box;
         }
 
         body {
-            max-width: 80%;
+            max-width: 85%;
             margin: 20px auto;
             padding: 30px;
             background-color: transparent;
-            overflow-x: hidden;
-            /* 防止 iframe 出現左右捲軸 */
+            font-family: 'Poppins', sans-serif;
+            color: #222;
         }
 
+        /* 表單區塊：比卡片稍深的淡藍灰背景，現代感風格 */
         form {
-            display: flex;  /* 使用 flex 佈局 */
-            flex-wrap: nowrap;  /* 確保不換行 */
-            gap: 1rem;  /* 元素間的間距 */
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 1.2rem;
             margin-bottom: 2rem;
-            align-items: center;  /* 垂直置中對齊 */
+            background: #e2e6f0; /* 比卡片稍深 */
+            padding: 1.2rem;
+            border-radius: 12px;
+            border: 1px solid #ccd5e0;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            align-items: flex-end;
+            overflow-x: auto;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
         }
 
         form > div {
             display: flex;
             flex-direction: column;
-            flex: 1 1 200px;  /* 設定所有表單欄位的最小寬度 */
-        }
-
-        form > div:first-child,
-        form > div:nth-child(2),
-        form > div:nth-child(3) {
-            flex: 1;  /* 其他欄位占相同空間 */
+            flex: 1 1 auto;
+            min-width: 160px;
         }
 
         form > div:nth-child(4) {
-            flex: 1.5;  /* 搜尋關鍵字佔更多空間 */
+            flex: 2 1 auto;
         }
 
         form > div:last-child {
-            flex: 0 0 auto;  /* 搜尋按鈕不佔空間，只會顯示需要的寬度 */
+            flex: 0 0 auto;
         }
 
         label {
-            font-weight: bold;
-            font-size: 1.05rem;
-            margin-bottom: 0.5rem;
-            display: block;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+            color: #333;
         }
 
         input[type="text"],
         select {
-            padding: 0.5rem;
+            padding: 0.6rem;
             width: 100%;
             border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 8px;
+            background: #fff;
+            color: #333;
+            font-size: 0.95rem;
+            transition: border 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #0077cc;
+            box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.2);
+            outline: none;
+        }
+
+        /* 按鈕樣式 */
         button {
-            margin-top: 30px;
-            padding: 5px 25px;
-            background-color: #0077cc;
+            padding: 0.6rem 20px;
+            background-color: #005fa3;
             color: white;
             border: none;
-            border-radius: 10px;
-            cursor: pointer;
+            border-radius: 8px;
             font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
-            background-color: #005fa3;
+            background-color: #004b84;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
+        /* 建言卡片群組 */
         .cards {
-            max-width: 100%;
             display: grid;
-            grid-template-columns: 1fr;  /* 只顯示一個卡片，單欄顯示 */
+            grid-template-columns: 1fr;
             gap: 1.5rem;
         }
 
+        /* 卡片樣式：現代風格淺藍灰背景 */
         .card {
-            background-color: white;
+            background-color: #f0f3f9;
+            border: 1px solid #ccd5e0;
+            border-radius: 12px;
             padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 26px rgba(0, 0, 0, 0.12);
         }
 
         .card h4 {
-            margin-top: 0;
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.25rem;
             color: #222;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
         }
 
         .card p {
-            color: #555;
-            line-height: 1.5;
+            color: #444;
+            line-height: 1.6;
+            font-size: 0.95rem;
         }
 
         .card .meta {
             font-size: 0.85rem;
             color: #777;
             margin-bottom: 1rem;
+            font-style: italic;
         }
 
         .card .actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 1rem;
         }
 
         .card .btn {
-            padding: 0.5rem 1rem;
-            background-color: #e6f0ff;
-            color: #0077cc;
+            padding: 0.6rem 1.2rem;
+            background-color: #e0f0ff;
+            color: #005fa3;
             border: none;
-            border-radius: 8px;
-            text-decoration: none;
+            border-radius: 6px;
             font-size: 0.9rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .card .btn:hover {
-            background-color: #cce0ff;
+            background-color: #c9e4ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* 附加細節：調整卡片和表單的過渡效果 */
+        form, .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        form:hover, .card:hover {
+            background-color: #e6e9f3; /* 當滑鼠懸停時，表單和卡片的背景色變淺 */
         }
 
         .likes {
             font-size: 0.9rem;
-            color: #333;
+            color: #444;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         .likes::before {
             content: "❤️ ";
+            color: #cc3333;
+            margin-right: 5px;
         }
     </style>
 </head>
