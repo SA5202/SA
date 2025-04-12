@@ -59,30 +59,46 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             max-width: 85%;
             margin: 20px auto;
             padding: 30px;
-            background-color: transparent;
+            background-color:transparent;
             font-family: 'Poppins', sans-serif;
-            color: #222;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
         }
 
-        /* 表單區塊：比卡片稍深的淡藍灰背景，現代感風格 */
+        /* 玻璃感效果 */
+        .glass-effect {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(245, 245, 245, 0.35));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(200, 200, 200, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            transition: all 0.35s ease;
+        }
+
+        /* 表單區塊，應用玻璃效果 */
         form {
             display: flex;
             flex-wrap: nowrap;
             gap: 1.2rem;
             margin-bottom: 2rem;
-            background: #e2e6f0; /* 比卡片稍深 */
-            padding: 1.2rem;
+            padding: 1.5rem;
             border-radius: 12px;
-            border: 1px solid #ccd5e0;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
             align-items: flex-end;
             overflow-x: auto;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
+
+            /* 更深的灰色背景，與卡片內容區區分 */
+            background: rgba(225, 225, 225, 0.9); /* 深灰色背景 */
+            backdrop-filter: blur(8px); /* 稍微減弱模糊效果 */
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(200, 200, 200, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
         }
 
         form:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
         }
 
         form > div {
@@ -104,7 +120,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             font-weight: 600;
             font-size: 0.95rem;
             margin-bottom: 0.4rem;
-            color: #333;
+            color: #4c5b63; /* 深灰藍色 */
         }
 
         input[type="text"],
@@ -113,24 +129,23 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 8px;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9);
             color: #333;
             font-size: 0.95rem;
             transition: border 0.3s, box-shadow 0.3s;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         input[type="text"]:focus,
         select:focus {
-            border-color: #0077cc;
-            box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.2);
+            border-color: #999;
+            box-shadow: 0 0 0 3px rgba(180, 180, 180, 0.2);
             outline: none;
         }
 
         /* 按鈕樣式 */
         button {
             padding: 0.6rem 20px;
-            background-color: #005fa3;
+            background-color: #6c757d; /* 深灰色 */
             color: white;
             border: none;
             border-radius: 8px;
@@ -141,53 +156,66 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         button:hover {
-            background-color: #004b84;
+            background-color: #5a6268; /* 深灰色 */
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
-        /* 建言卡片群組 */
+        /* 卡片群組 */
         .cards {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1.5rem;
         }
 
-        /* 卡片樣式：現代風格淺藍灰背景 */
+        /* 卡片樣式：帶漸層+玻璃感+陰影 */
         .card {
-            background-color: #f0f3f9;
-            border: 1px solid #ccd5e0;
-            border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+            border: 1px solid rgba(200, 200, 200, 0.3);
+            background: rgba(235, 235, 235, 0.95); /* 淺灰色背景，避免與標題區過於相似 */
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 26px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
+        /* 卡片標題區 */
         .card h4 {
-            font-size: 1.25rem;
-            color: #222;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            color: #34495e; /* 深灰藍色標題 */
+            margin: -1.5rem -1.5rem 1rem;
+            padding: 1rem 1.5rem;
+            background-color: rgba(240, 240, 240, 0.95); /* 淺灰色背景 */
+            border-bottom: 1px solid #ddd;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            font-weight: bold;
         }
 
-        .card p {
+        /* 卡片內容區域 */
+        .card .content {
+            background: rgba(240, 240, 240, 0.85); /* 更淺灰色背景 */
+            padding: 1rem;
+            border-radius: 8px;
             color: #444;
-            line-height: 1.6;
             font-size: 0.95rem;
+            line-height: 1.6;
         }
 
+        /* 讓卡片內容區有對比的顏色 */
         .card .meta {
             font-size: 0.85rem;
-            color: #777;
+            color: #888;
             margin-bottom: 1rem;
             font-style: italic;
         }
 
+        /* 操作按鈕區 */
         .card .actions {
             display: flex;
             justify-content: space-between;
@@ -195,33 +223,25 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             margin-top: 1rem;
         }
 
+        /* 操作按鈕樣式 */
         .card .btn {
             padding: 0.6rem 1.2rem;
-            background-color: #e0f0ff;
-            color: #005fa3;
+            background-color: rgba(240, 240, 240, 0.85);
+            color: #333;
             border: none;
             border-radius: 6px;
             font-size: 0.9rem;
             text-decoration: none;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
         .card .btn:hover {
-            background-color: #c9e4ff;
+            background-color: rgba(220, 220, 220, 0.95);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        }
-        
-        /* 附加細節：調整卡片和表單的過渡效果 */
-        form, .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
         }
 
-        form:hover, .card:hover {
-            background-color: #e6e9f3; /* 當滑鼠懸停時，表單和卡片的背景色變淺 */
-        }
-
+        /* 喜歡數樣式 */
         .likes {
             font-size: 0.9rem;
             color: #444;
@@ -235,6 +255,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             color: #cc3333;
             margin-right: 5px;
         }
+
     </style>
 </head>
 
