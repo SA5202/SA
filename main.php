@@ -5,6 +5,7 @@ session_start();
 $is_logged_in = isset($_SESSION['username']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 ?>
+
 <?php
 require_once "db_connect.php";
 
@@ -27,6 +28,7 @@ $result = $link->query($sql);
 $buildings = $link->query("SELECT DISTINCT Building_Name FROM Building ORDER BY Building_Name");
 $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY Facility_Type");
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -44,81 +46,82 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
 </head>
-<style>
-    body {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 30px;
-        font-size: 1.1rem;
-        line-height: 1.8;
-        background-color: transparent;
-        overflow-x: hidden;
-        /* 防止 iframe 出現左右捲軸 */
-    }
+    <style>
+        body {
+            max-width: 85%;
+            margin: 0 auto;
+            padding: 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            background-color: transparent;
+            overflow-x: hidden;
+            /* 防止 iframe 出現左右捲軸 */
+        }
 
-    h3 {
-        margin-top: 30px;
-        font-weight: bold;
-    }
+        h3 {
+            margin-top: 30px;
+            font-weight: bold;
+        }
 
-    .card {
-        margin-bottom: 30px;
-    }
+        .card {
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
 
-    .honor-wrapper {
-        max-width: 1000px;
-        margin: 0 auto;
-        background-color: rgba(255, 255, 255, 0.9);
-        padding: 30px;
-        border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    }
+        .honor-wrapper {
+            width: 98%;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
 
-    h3 {
-        margin-bottom: 25px;
-        font-weight: bold;
-    }
+        h3 {
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
 
-    .honor-item {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-    }
+        .honor-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
 
-    .honor-item h5 {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
+        .honor-item h5 {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-    .honor-icon {
-        color: #ffc107;
-        margin-right: 10px;
-    }
+        .honor-icon {
+            color: #ffc107;
+            margin-right: 10px;
+        }
 
-    /*跑馬燈*/
-    .marquee-wrapper {
-        max-width: 1000px;
-        margin: 0 auto 30px auto;
-    }
+        /*跑馬燈*/
+        .marquee-wrapper {
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+        }
 
-    #mqmain {
-        background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
-        color: white;
-        font-size: 1.1rem;
-        padding: 10px;
-        border-radius: 10px;
-        font-weight: bold;
-        overflow: hidden;
-        width: 100%;
-    }
-</style>
+        #mqmain {
+            background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
+            color: white;
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            overflow: hidden;
+            width: 100%;
+        }
+    </style>
 
 <body>
     <h3>重要資訊</h3>
     <div class="marquee-wrapper">
-        <marquee id="mqmain" scrollamount="8">7/8系統將進行年度保養，請使用者留意。</marquee>
+        <marquee id="mqmain" scrollamount="8">7/8 系統將進行年度保養，請使用者留意。</marquee>
     </div>
     <h3>建言一覽</h3>
     <div class="row">

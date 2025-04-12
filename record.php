@@ -33,7 +33,7 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>捐款報表 | 輔仁大學愛校建言捐款系統</title>
+    <title>個人資訊 | 輔仁大學愛校建言捐款系統</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@ $result = $stmt->get_result();
 
     <style>
         body {
-            max-width: 1000px;
+            max-width: 80%;
             margin: 0 auto;
             padding: 30px;
             font-family: 'Poppins', sans-serif;
@@ -52,16 +52,30 @@ $result = $stmt->get_result();
             color: #333;
         }
 
-        h3 {
-            margin-bottom: 25px;
+        .icon {
+            font-size: 1.5rem;
+            /* 設定圖示的基本大小 */
+            width: 1.5rem;
+            /* 設定寬度 */
+            height: 1.5rem;
+            /* 設定高度 */
+            margin-right: 10px;
+            vertical-align: middle;
+            /* 保證垂直居中 */
+            display: inline-block;
+            /* 確保圖示作為區塊顯示 */
+        }
+
+        h4 {
+            margin: 20px 0;
             font-weight: bold;
         }
 
         .table-responsive {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         .table th {
@@ -78,7 +92,7 @@ $result = $stmt->get_result();
 
         .custom-btn {
             display: inline-block;
-            padding: 8px 18px;
+            padding: 4px 25px;
             font-size: 1rem;
             color: rgb(123, 163, 23);
             border: 2px solid rgb(123, 163, 23);
@@ -99,21 +113,36 @@ $result = $stmt->get_result();
 
         .table-container {
             background-color: white;
-            border-radius: 16px;
-            padding: 25px;
+            border-radius: 25px;
+            padding: 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
+        .table {
+            border-radius: 10px; /* 調整圓角的大小 */
+            overflow: hidden; /* 防止內容溢出圓角 */
+        }
+
+        /* 設置單元格的圓角邊框 */
+        .table th, .table td {
+            border-radius: 0px; /* 單元格的圓角 */
+        }
+
+
+        .table-primary {
+            background-color: #e9f5ff; /* 可調整表頭顏色 */
+        }
+
         .badge {
-            padding: 0.6em 1em;
-            font-size: 0.9rem;
+            padding: 0.3em 1em;
+            font-size: 0.5rem;
         }
     </style>
 </head>
 
 <body>
 
-    <h3><i class="fas fa-user"></i> 個人資訊</h3>
+    <h4><i class="icon fas fa-user"></i> 個人檔案</h4>
     <div class="table-responsive">
         <table>
             <tbody>
@@ -131,36 +160,38 @@ $result = $stmt->get_result();
                 if ($row = mysqli_fetch_assoc($result_user)) {
                     $password = htmlspecialchars($row['Password']);
 
-                    echo "<tr>
+                    echo 
+                    "<tr>
                         <td rowspan='5'>
-                            <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7' style='border-radius: 5%;'>
+                            <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7'  style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
                         <td class='left'>帳號：{$row['User_Name']}</td>
-                      </tr>
-                      <tr>
-                        <td class='left'>使用者編號：{$row['User_ID']}</td>
-                      </tr>
-                      <tr>
+                    </tr>
+                    <tr>
+                        <td class='left'>使用者ID：0000000000{$row['User_ID']}</td>
+                    </tr>
+                    <tr>
                         <td class='left'>Email：{$row['Email']}</td>
-                      </tr>
-                      <tr>
+                    </tr>
+                    <tr>
                         <td class='left'>
                             密碼：
-                            <span id='password' style='font-weight: bold;'>••••••</span>
+                            <span id='password' style='font-weight: bold;'>••••••••••</span>
                             <button id='togglePassword' onclick='togglePassword()' style='border: none; background: none; cursor: pointer;'>
                                 <i id='eyeIcon' class='fa fa-eye'></i>
                             </button>
                             <span id='realPassword' style='display: none;'>{$password}</span>
                         </td>
-                      </tr>
-                      <tr>
+                    </tr>
+                    <tr>
                         <td colspan='2' class='left'>
                             <a href='update.php?method=update&User_Name={$row['User_Name']}' class='custom-btn'>
                                 <i class='fas fa-pen-to-square'></i> 修改資料
                             </a>
                         </td>
-                      </tr>";
-                } else {
+                    </tr>";
+                } 
+                else {
                     echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
                 }
 
@@ -171,10 +202,9 @@ $result = $stmt->get_result();
     </div>
 
     <br>
-    <h3><i class="fas fa-donate"></i> 我的建言紀錄</h3>
-    <div class="container">
+    <h4><i class="icon fas fa-donate"></i> 我的建言紀錄</h4>
         <div class="table-container">
-            <table class="table table-bordered table-striped align-middle text-center shadow-sm rounded">
+            <table class="table">
                 <thead class="table-primary">
                     <tr>
                         <th class="fw-bold">標題</th>
@@ -195,7 +225,7 @@ $result = $stmt->get_result();
                                 <td class="text-start"><?= nl2br(htmlspecialchars($row['description'])) ?></td>
                                 <td><?= date('Y-m-d H:i', strtotime($row['updated_at'])) ?></td>
                                 <td>
-                                    <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> 👍</span>
+                                    <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -210,7 +240,7 @@ $result = $stmt->get_result();
     </div>
 
     <br>
-    <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
+    <h4><i class="icon fas fa-medal"></i> 我的榮譽等級</h4>
 
     <script>
         function togglePassword() {
