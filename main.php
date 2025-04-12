@@ -5,6 +5,28 @@ session_start();
 $is_logged_in = isset($_SESSION['username']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 ?>
+<?php
+require_once "db_connect.php";
+
+$sort = $_GET['sort'] ?? 'latest';
+
+$sql = "
+SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,
+       f.Facility_Type,
+       b.Building_Name,
+       (SELECT COUNT(*) FROM Upvote u WHERE u.Suggestion_ID = s.Suggestion_ID AND u.Is_Upvoted = 1) AS LikeCount
+FROM Suggestion s
+JOIN Facility f ON s.Facility_ID = f.Facility_ID
+JOIN Building b ON s.Building_ID = b.Building_ID
+WHERE 1=1
+";
+
+$result = $link->query($sql);
+
+// 抓建築與設施選單
+$buildings = $link->query("SELECT DISTINCT Building_Name FROM Building ORDER BY Building_Name");
+$facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY Facility_Type");
+?>
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -103,8 +125,18 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">📜<b> 最新建言</b></div>
-                <div class="card-body">
-                    <p>學生希望改善校內飲水機品質...</p>
+                <div class="cards">
+                    <?php while ($row = $result->fetch_assoc()): ?>
+
+                        <h5><?= htmlspecialchars($row['Title']) ?></h5>
+
+                        <div class="meta">
+                            更新：<?= $row['Updated_At'] ?>
+                        </div>
+                        <div class="actions">
+                            <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看建言</a>
+                        </div>
+                    <?php endwhile; ?>
                 </div>
             </div>
         </div>
