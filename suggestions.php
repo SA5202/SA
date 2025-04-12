@@ -56,10 +56,10 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         body {
-            max-width: 85%;
+            max-width: 80%;
             margin: 20px auto;
             padding: 30px;
-            background-color:transparent;
+            background-color: transparent;
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
             line-height: 1.8;
@@ -83,12 +83,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             gap: 1.2rem;
             margin-bottom: 2rem;
             padding: 1.5rem;
-            border-radius: 12px;
+            border-radius: 20px;
             align-items: flex-end;
             overflow-x: auto;
 
             /* 更深的灰色背景，與卡片內容區區分 */
-            background: rgba(225, 225, 225, 0.9); /* 深灰色背景 */
+            background: rgba(225, 225, 225, 0.5); /* 深灰色背景 */
             backdrop-filter: blur(8px); /* 稍微減弱模糊效果 */
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(200, 200, 200, 0.4);
@@ -104,12 +104,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         form > div {
             display: flex;
             flex-direction: column;
-            flex: 1 1 auto;
+            flex: 1;
             min-width: 160px;
         }
 
         form > div:nth-child(4) {
-            flex: 2 1 auto;
+            flex: 1.5;
         }
 
         form > div:last-child {
@@ -144,11 +144,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 按鈕樣式 */
         button {
-            padding: 0.6rem 20px;
+            padding: 0.5rem 15px;
             background-color: #6c757d; /* 深灰色 */
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;
@@ -169,8 +169,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 卡片樣式：帶漸層+玻璃感+陰影 */
         .card {
-            padding: 1.5rem;
-            border-radius: 12px;
+            padding: 2rem;
+            border-radius: 20px;
             border: 1px solid rgba(200, 200, 200, 0.3);
             background: rgba(235, 235, 235, 0.95); /* 淺灰色背景，避免與標題區過於相似 */
             backdrop-filter: blur(14px);
@@ -188,18 +188,18 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         .card h4 {
             font-size: 1.2rem;
             color: #34495e; /* 深灰藍色標題 */
-            margin: -1.5rem -1.5rem 1rem;
-            padding: 1rem 1.5rem;
+            margin: -2rem -2rem 1rem;
+            padding: 1rem 2rem;
             background-color: rgba(240, 240, 240, 0.95); /* 淺灰色背景 */
             border-bottom: 1px solid #ddd;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
             font-weight: bold;
         }
 
         /* 卡片內容區域 */
         .card .content {
-            background: rgba(240, 240, 240, 0.85); /* 更淺灰色背景 */
+            background: rgba(200, 200, 200);
             padding: 1rem;
             border-radius: 8px;
             color: #444;
@@ -212,7 +212,6 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             font-size: 0.85rem;
             color: #888;
             margin-bottom: 1rem;
-            font-style: italic;
         }
 
         /* 操作按鈕區 */
@@ -226,14 +225,14 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 操作按鈕樣式 */
         .card .btn {
             padding: 0.6rem 1.2rem;
-            background-color: rgba(240, 240, 240, 0.85);
+            background-color: rgba(240, 240, 240);
             color: #333;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             font-size: 0.9rem;
             text-decoration: none;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .card .btn:hover {
@@ -297,7 +296,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             <input type="text" name="keyword" value="<?= htmlspecialchars($keyword) ?>" placeholder="輸入標題或描述">
         </div>
         <div>
-            <button type="submit">搜尋</button>
+            <button type="submit">查 詢</button>
         </div>
     </form>
 

@@ -73,7 +73,7 @@ $result = $stmt->get_result();
 
         .table-responsive {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
+            padding: 20px 20px;
             border-radius: 25px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
@@ -119,12 +119,17 @@ $result = $stmt->get_result();
         }
 
         .table {
-            border-radius: 10px; /* 調整圓角的大小 */
-            overflow: hidden; /* 防止內容溢出圓角 */
+            width: 100%; /* 保證表格填滿容器 */
+            border-radius: 15px; /* 內部表格圓角 */
+            border: 2px solid #ddd; /* 設置表格邊框 */
+            border-collapse: separate; /* 確保圓角有效 */
+            overflow: hidden; /* 讓表格內容不超出圓角範圍 */
+            border-spacing: 0; /* 去除單元格間的間隔 */
         }
 
         /* 設置單元格的圓角邊框 */
         .table th, .table td {
+            padding: 10px 30px;
             border-radius: 0px; /* 單元格的圓角 */
         }
 
@@ -207,10 +212,7 @@ $result = $stmt->get_result();
             <table class="table">
                 <thead class="table-primary">
                     <tr>
-                        <th class="fw-bold">標題</th>
-                        <th class="fw-bold">設施</th>
-                        <th class="fw-bold">建築物</th>
-                        <th class="fw-bold">內容</th>
+                        <th class="fw-bold">建言標題</th>
                         <th class="fw-bold">發佈時間</th>
                         <th class="fw-bold">按讚數</th>
                     </tr>
@@ -220,10 +222,7 @@ $result = $stmt->get_result();
                         <?php while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?= htmlspecialchars($row['title']) ?></td>
-                                <td><?= htmlspecialchars($row['facility_type']) ?></td>
-                                <td><?= htmlspecialchars($row['building_name']) ?></td>
-                                <td class="text-start"><?= nl2br(htmlspecialchars($row['description'])) ?></td>
-                                <td><?= date('Y-m-d H:i', strtotime($row['updated_at'])) ?></td>
+                                <td><?= date('Y-m-d', strtotime($row['updated_at'])) ?></td>
                                 <td>
                                     <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
                                 </td>
