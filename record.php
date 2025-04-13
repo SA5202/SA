@@ -33,7 +33,7 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人資訊 | 輔仁大學愛校建言捐款系統</title>
+    <title>個人檔案 | 輔仁大學愛校建言捐款系統</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
@@ -92,23 +92,20 @@ $result = $stmt->get_result();
 
         .custom-btn {
             display: inline-block;
-            padding: 4px 25px;
+            padding: 4px 40px;
             font-size: 1rem;
-            color: rgb(123, 163, 23);
-            border: 2px solid rgb(123, 163, 23);
-            border-radius: 30px;
+            font-weight: 500;
+            background: linear-gradient(to right, #84c684, #6fb36f);
+            color: #fff;
+            border-radius: 15px;
             text-decoration: none;
             transition: background-color 0.3s ease, color 0.3s ease;
-            font-weight: 500;
-        }
-
-        .custom-btn i {
-            margin-right: 6px;
         }
 
         .custom-btn:hover {
-            background-color: rgb(123, 163, 23);
-            color: white;
+            background: linear-gradient(to right, #84c684, #6fb36f, 0.5);
+            box-shadow: 0 0 10px rgba(111, 179, 111, 0.4);
+            transform: translateY(-2px);
         }
 
         .table-container {
@@ -138,6 +135,27 @@ $result = $stmt->get_result();
             background-color: #e9f5ff; /* 可調整表頭顏色 */
         }
 
+        .pretty-btn {
+            background: linear-gradient(to right, #84c684, #6fb36f);
+            border: none;
+            color: white;
+            padding: 4px 20px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .pretty-btn:hover {
+            background: linear-gradient(to right, #84c684, #6fb36f, 0.5);
+            box-shadow: 0 0 10px rgba(111, 179, 111, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .pretty-btn i {
+            margin-right: 6px;
+        }
+
         .badge {
             padding: 0.3em 1em;
             font-size: 0.5rem;
@@ -147,7 +165,7 @@ $result = $stmt->get_result();
 
 <body>
 
-    <h4><i class="icon fas fa-user"></i> 個人檔案</h4>
+    <h4><i class="icon fas fa-user"></i> 帳戶基本資訊</h4>
     <div class="table-responsive">
         <table>
             <tbody>
@@ -170,13 +188,13 @@ $result = $stmt->get_result();
                         <td rowspan='5'>
                             <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7'  style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
-                        <td class='left'>帳號：{$row['User_Name']}</td>
+                        <td class='left'>用戶名稱： {$row['User_Name']}</td>
                     </tr>
                     <tr>
-                        <td class='left'>使用者ID：0000000000{$row['User_ID']}</td>
+                        <td class='left'>使用者ID： 0000000000{$row['User_ID']}</td>
                     </tr>
                     <tr>
-                        <td class='left'>Email：{$row['Email']}</td>
+                        <td class='left'>Email： {$row['Email']}</td>
                     </tr>
                     <tr>
                         <td class='left'>
@@ -215,6 +233,7 @@ $result = $stmt->get_result();
                         <th class="fw-bold">建言標題</th>
                         <th class="fw-bold">發佈時間</th>
                         <th class="fw-bold">按讚數</th>
+                        <th class="fw-bold">編輯建言</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -225,6 +244,11 @@ $result = $stmt->get_result();
                                 <td><?= date('Y-m-d', strtotime($row['updated_at'])) ?></td>
                                 <td>
                                     <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
+                                </td>
+                                <td>
+                                    <button class="pretty-btn">
+                                        <i class="fas fa-pen-to-square"></i> 修改
+                                    </button>
                                 </td>
                             </tr>
                         <?php endwhile; ?>

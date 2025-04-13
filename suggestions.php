@@ -105,7 +105,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             display: flex;
             flex-direction: column;
             flex: 1;
-            min-width: 160px;
+            min-width: 10px;
         }
 
         form > div:nth-child(4) {
@@ -125,7 +125,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         input[type="text"],
         select {
-            padding: 0.6rem;
+            padding: 0.4rem;
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -144,7 +144,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 按鈕樣式 */
         button {
-            padding: 0.5rem 15px;
+            padding: 0.4rem 25px;
             background-color: #6c757d; /* 深灰色 */
             color: white;
             border: none;
@@ -296,7 +296,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             <input type="text" name="keyword" value="<?= htmlspecialchars($keyword) ?>" placeholder="輸入標題或描述">
         </div>
         <div>
-            <button type="submit">查 詢</button>
+            <button type="submit">查詢</button>
         </div>
     </form>
 

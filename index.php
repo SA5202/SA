@@ -196,7 +196,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <h1>FJU I-Money</h1>
         </a>
         <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
-        <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><b> 個人資訊</b></a>
+        <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><b> 個人檔案</b></a>
         <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
         <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>
         <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
