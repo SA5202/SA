@@ -14,14 +14,24 @@
     $Email = $_POST['Email'];
     $Password = $_POST['Password'];
 
-    //step1
+    // 1. 連接到資料庫
     $link = mysqli_connect('localhost', 'root', '', 'SA');
-    //step3
-    $sql = "insert into useraccount(User_Name,Email,Password,User_Type) values('$User_Name','$Email','$Password','user')";
-    if (mysqli_query($link, $sql)) {
-        echo "新增成功", "<br>";
+
+    // 檢查電子郵件是否已經存在
+    $checkEmailQuery = "SELECT * FROM useraccount WHERE Email = '$Email'";
+    $result = mysqli_query($link, $checkEmailQuery);
+
+    // 如果資料庫中有該電子郵件，顯示錯誤訊息
+    if (mysqli_num_rows($result) > 0) {
+        echo "這個電子郵件已經註冊過，請使用其他電子郵件。", "<br>";
     } else {
-        echo "新增失敗", "<br>";
+        // 2. 如果沒有重複的電子郵件，則插入新用戶
+        $sql = "INSERT INTO useraccount(User_Name, Email, Password, User_Type) VALUES('$User_Name', '$Email', '$Password', 'user')";
+        if (mysqli_query($link, $sql)) {
+            echo "註冊成功", "<br>";
+        } else {
+            echo "註冊失敗", "<br>";
+        }
     }
     ?>
 </body>
