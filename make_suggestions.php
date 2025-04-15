@@ -72,9 +72,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
         echo "</ul></div>";
     } else {
-        $updatedAt = date('Y-m-d H:i:s');
+        // 取得當前的 UTC 時間，並將其轉換為台北時間
+        $updatedAt = new DateTime('now', new DateTimeZone('UTC')); // 當前時間（UTC）
+        $updatedAt->setTimezone(new DateTimeZone('Asia/Taipei')); // 轉換為台北時間
+        $updatedAt = $updatedAt->format('Y-m-d H:i:s'); // 格式化為資料庫可以接受的格式
+
         $upvotedAmount = 0;
 
+        // 插入資料
         $stmt = $link->prepare("INSERT INTO suggestion (title, facility_id, building_id, description, updated_at, upvoted_amount, User_ID) VALUES (?, ?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die('準備語句失敗: ' . $link->error);
@@ -93,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $link->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="zh-TW">
