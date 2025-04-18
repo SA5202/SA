@@ -19,7 +19,8 @@ SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,
 FROM Suggestion s
 JOIN Facility f ON s.Facility_ID = f.Facility_ID
 JOIN Building b ON s.Building_ID = b.Building_ID
-WHERE 1=1
+ORDER BY s.Updated_At DESC
+LIMIT 3
 ";
 
 $result = $link->query($sql);
@@ -46,77 +47,81 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@550&display=swap">
 </head>
-    <style>
-        body {
-            max-width: 85%;
-            margin: 0 auto;
-            padding: 30px;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            background-color: transparent;
-            overflow-x: hidden;
-            /* 防止 iframe 出現左右捲軸 */
-        }
+<style>
+    body {
+        max-width: 85%;
+        margin: 0 auto;
+        padding: 30px;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        background-image: url('https://www.transparenttextures.com/patterns/brick-wall.png');
+        /* 花紋背景 */
+        background-repeat: repeat;
+        background-color: #fefefe;
+        /* 淡背景底色搭配花紋 */
+        overflow-x: hidden;
+    }
 
-        h3 {
-            margin-top: 30px;
-            font-weight: bold;
-        }
 
-        .card {
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
+    h3 {
+        margin-top: 30px;
+        font-weight: bold;
+    }
 
-        .honor-wrapper {
-            width: 98%;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
+    .card {
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
 
-        h3 {
-            margin-bottom: 25px;
-            font-weight: bold;
-        }
+    .honor-wrapper {
+        width: 98%;
+        margin: 0 auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 25px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
 
-        .honor-item {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-        }
+    h3 {
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
 
-        .honor-item h5 {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+    .honor-item {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    }
 
-        .honor-icon {
-            color: #ffc107;
-            margin-right: 10px;
-        }
+    .honor-item h5 {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
 
-        /*跑馬燈*/
-        .marquee-wrapper {
-            max-width: 1000px;
-            margin: 0 auto 30px auto;
-        }
+    .honor-icon {
+        color: #ffc107;
+        margin-right: 10px;
+    }
 
-        #mqmain {
-            background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
-            color: white;
-            font-size: 1.1rem;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            overflow: hidden;
-            width: 100%;
-        }
-    </style>
+    /*跑馬燈*/
+    .marquee-wrapper {
+        max-width: 1000px;
+        margin: 0 auto 30px auto;
+    }
+
+    #mqmain {
+        background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
+        color: white;
+        font-size: 1.1rem;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        overflow: hidden;
+        width: 100%;
+    }
+</style>
 
 <body>
     <h3>重要資訊</h3>

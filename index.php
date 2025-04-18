@@ -89,14 +89,16 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             position: absolute;
             top: 0;
             left: 300px;
-            /* 與 sidebar 寬度一致 */
             right: 0;
             bottom: 60px;
-            /* 與 footer 高度一致 */
             overflow: hidden;
-            background-color: rgb(104, 105, 121, 0.2);
+            background: url('https://www.transparenttextures.com/patterns/brick-wall.png');
+
             padding: 20px;
         }
+
+
+
 
         .content iframe {
             width: 100%;
