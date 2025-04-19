@@ -132,7 +132,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">📜<b> 最新建言</b></div>
+                <div class="card-header">📝<b> 最新建言</b></div>
                 <div class="cards">
                     <?php while ($row = $result->fetch_assoc()): ?>
 
@@ -150,7 +150,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         </div>
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">📊<b> 熱門建言</b></div>
+                <div class="card-header">🔥<b> 熱門建言</b></div>
                 <div class="card-body">
                     <p>學生希望改善校內飲水機品質...</p>
                 </div>
