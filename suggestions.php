@@ -40,7 +40,11 @@ if ($sort == 'oldest') {
 $result = $link->query($sql);
 
 // 抓建築與設施選單
-$buildings = $link->query("SELECT DISTINCT Building_Name FROM Building ORDER BY Building_Name");
+$buildings = $link->query("
+    SELECT DISTINCT Building_Name 
+    FROM Building 
+    ORDER BY SUBSTRING_INDEX(Building_Name, '(', -1) ASC
+");
 $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY Facility_Type");
 ?>
 
