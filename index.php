@@ -37,8 +37,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .sidebar {
             width: 340px;
             background:
-                linear-gradient(rgba(170, 197, 212, 0.62), rgba(24, 54, 65, 0.83)),
-                url('https://doqvf81n9htmm.cloudfront.net/data/TommyHuang_147/0705/0714/ntd.jpg');
+                linear-gradient(rgba(170, 197, 212, 0.5), rgba(24, 54, 65, 0.8)),
+                url('https://cdn.pixabay.com/photo/2015/07/25/15/24/money-860128_1280.jpg');
             background-size: 350px;
             background-repeat: repeat;
             background-position: center;
