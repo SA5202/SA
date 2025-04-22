@@ -74,6 +74,9 @@ $result = $stmt->get_result();
             padding: 20px 20px;
             border-radius: 25px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
         }
 
         .table th {
@@ -111,26 +114,38 @@ $result = $stmt->get_result();
             border-radius: 25px;
             padding: 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
         }
 
         .table {
-            width: 100%; /* 保證表格填滿容器 */
-            border-radius: 15px; /* 內部表格圓角 */
-            border: 2px solid #ddd; /* 設置表格邊框 */
-            border-collapse: separate; /* 確保圓角有效 */
-            overflow: hidden; /* 讓表格內容不超出圓角範圍 */
-            border-spacing: 0; /* 去除單元格間的間隔 */
+            width: 100%;
+            /* 保證表格填滿容器 */
+            border-radius: 15px;
+            /* 內部表格圓角 */
+            border: 2px solid #ddd;
+            /* 設置表格邊框 */
+            border-collapse: separate;
+            /* 確保圓角有效 */
+            overflow: hidden;
+            /* 讓表格內容不超出圓角範圍 */
+            border-spacing: 0;
+            /* 去除單元格間的間隔 */
         }
 
         /* 設置單元格的圓角邊框 */
-        .table th, .table td {
+        .table th,
+        .table td {
             padding: 10px 30px;
-            border-radius: 0px; /* 單元格的圓角 */
+            border-radius: 0px;
+            /* 單元格的圓角 */
         }
 
 
         .table-primary {
-            background-color: #e9f5ff; /* 可調整表頭顏色 */
+            background-color: #e9f5ff;
+            /* 可調整表頭顏色 */
         }
 
         .pretty-btn {
@@ -181,7 +196,7 @@ $result = $stmt->get_result();
                 if ($row = mysqli_fetch_assoc($result_user)) {
                     $password = htmlspecialchars($row['Password']);
 
-                    echo 
+                    echo
                     "<tr>
                         <td rowspan='5'>
                             <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7'  style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
@@ -211,8 +226,7 @@ $result = $stmt->get_result();
                             </a>
                         </td>
                     </tr>";
-                } 
-                else {
+                } else {
                     echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
                 }
 
@@ -224,40 +238,40 @@ $result = $stmt->get_result();
 
     <br>
     <h4><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h4>
-        <div class="table-container">
-            <table class="table">
-                <thead class="table-primary">
-                    <tr>
-                        <th class="fw-bold">建言標題</th>
-                        <th class="fw-bold">發佈時間</th>
-                        <th class="fw-bold">按讚數</th>
-                        <th class="fw-bold">編輯建言</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($result->num_rows > 0): ?>
-                        <?php while ($row = $result->fetch_assoc()): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row['title']) ?></td>
-                                <td><?= date('Y-m-d', strtotime($row['updated_at'])) ?></td>
-                                <td>
-                                    <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
-                                </td>
-                                <td>
-                                    <button class="pretty-btn">
-                                        <i class="fas fa-pen-to-square"></i> 修改
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    <?php else: ?>
+    <div class="table-container">
+        <table class="table">
+            <thead class="table-primary">
+                <tr>
+                    <th class="fw-bold">建言標題</th>
+                    <th class="fw-bold">發佈時間</th>
+                    <th class="fw-bold">按讚數</th>
+                    <th class="fw-bold">編輯建言</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if ($result->num_rows > 0): ?>
+                    <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td colspan="6" class="text-center text-muted">尚未有建言紀錄。</td>
+                            <td><?= htmlspecialchars($row['title']) ?></td>
+                            <td><?= date('Y-m-d', strtotime($row['updated_at'])) ?></td>
+                            <td>
+                                <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
+                            </td>
+                            <td>
+                                <button class="pretty-btn">
+                                    <i class="fas fa-pen-to-square"></i> 修改
+                                </button>
+                            </td>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">尚未有建言紀錄。</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
     </div>
 
     <br>
@@ -284,4 +298,3 @@ $result = $stmt->get_result();
 </body>
 
 </html>
-

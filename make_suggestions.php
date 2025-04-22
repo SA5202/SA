@@ -101,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -127,6 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 25px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s;
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
         }
 
         .suggestion-form:hover {
@@ -259,4 +263,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 
 </body>
+
 </html>

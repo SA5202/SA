@@ -13,6 +13,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            
         }
 
         .wrapper {
@@ -27,6 +28,7 @@
             border-radius: 25px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
+            
         }
 
         .wrapper h2 {

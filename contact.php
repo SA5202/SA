@@ -7,6 +7,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 ?>
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +20,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
     <style>
         body {
-            background-color: transparent; /* 關鍵：讓 iframe 透出背景 */
+            background-color: transparent;
+            /* 關鍵：讓 iframe 透出背景 */
             font-family: 'Poppins', 'Noto Serif TC', sans-serif;
             font-size: 1.05rem;
             line-height: 1.8;
@@ -31,10 +33,14 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .contact-card {
             max-width: 75%;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9); /* 白色半透明背景 */
+            background-color: rgba(255, 255, 255, 0.9);
+            /* 白色半透明背景 */
             border-radius: 25px;
             padding: 50px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
         }
 
         .contact-title {
@@ -46,21 +52,30 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .contact-title i {
             color: #6c713d;
-            font-size: 1.8rem;  /* 設定圖示的基本大小 */
-            width: 1.5rem;      /* 設定寬度 */
-            height: 1.5rem;     /* 設定高度 */
+            font-size: 1.8rem;
+            /* 設定圖示的基本大小 */
+            width: 1.5rem;
+            /* 設定寬度 */
+            height: 1.5rem;
+            /* 設定高度 */
             margin-right: 20px;
-            display: inline-block;   /* 確保圖示作為區塊顯示 */
+            display: inline-block;
+            /* 確保圖示作為區塊顯示 */
         }
 
         .icon {
             color: #6c713d;
-            font-size: 1.3rem;  /* 設定圖示的基本大小 */
-            width: 1.5rem;      /* 設定寬度 */
-            height: 1.5rem;     /* 設定高度 */
+            font-size: 1.3rem;
+            /* 設定圖示的基本大小 */
+            width: 1.5rem;
+            /* 設定寬度 */
+            height: 1.5rem;
+            /* 設定高度 */
             margin-right: 10px;
-            vertical-align: middle; /* 保證垂直居中 */
-            display: inline-block;   /* 確保圖示作為區塊顯示 */
+            vertical-align: middle;
+            /* 保證垂直居中 */
+            display: inline-block;
+            /* 確保圖示作為區塊顯示 */
         }
 
         .contact-section p {
@@ -131,4 +146,5 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </div>
     </div>
 </body>
+
 </html>

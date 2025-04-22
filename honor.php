@@ -36,6 +36,9 @@ if (!isset($_SESSION['User_Name'])) {
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
         }
 
         h3 {
