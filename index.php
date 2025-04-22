@@ -132,7 +132,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         /* When the sidebar is collapsed, move the button to the left */
         .sidebar.collapsed+.toggle-btn {
-            left: 80px;
+            left: 100px;
             /* Adjust position when sidebar is collapsed */
         }
 
