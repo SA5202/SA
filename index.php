@@ -53,7 +53,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .sidebar.collapsed {
-            width: 80px;
+            width: 100px;
         }
 
         .sidebar h1 {
