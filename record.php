@@ -225,7 +225,11 @@ $result = $stmt->get_result();
     </div>
 
     <br>
+<<<<<<< HEAD
     <h4><i class="icon fas fa-donate"></i> 我的建言紀錄</h4>
+=======
+    <h4><i class="fas fa-clipboard-list"></i> 我的建言紀錄</h4>
+>>>>>>> parent of 2586f0a (改了登入鍵樣式跟其他小東西)
         <div class="table-container">
             <table class="table">
                 <thead class="table-primary">

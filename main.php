@@ -132,7 +132,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <div class="row">
         <div class="col-md-6">
             <div class="card">
+<<<<<<< HEAD
                 <div class="card-header">📜<b> 最新建言</b></div>
+=======
+                <div class="card-header">📝<b> 最新建言</b></div>
+>>>>>>> parent of 2586f0a (改了登入鍵樣式跟其他小東西)
                 <div class="cards">
                     <?php while ($row = $result->fetch_assoc()): ?>
 
