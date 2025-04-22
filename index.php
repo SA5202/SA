@@ -39,7 +39,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             width: 340px;
             background:
                 linear-gradient(rgba(170, 197, 212, 0.62), rgba(24, 54, 65, 0.83)),
-                url('https://cdn.pixabay.com/photo/2015/07/25/15/24/money-860128_1280.jpg');
+                url('https://doqvf81n9htmm.cloudfront.net/data/TommyHuang_147/0705/0714/ntd.jpg');
             background-size: 350px;
             background-repeat: repeat;
             background-position: center;
@@ -192,7 +192,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             height: 60px;
             line-height: 60px;
             text-align: center;
-            background: linear-gradient(135deg, rgba(24, 54, 65, 0.83), rgba(143, 178, 196, 0.71));
+            background: linear-gradient(135deg, rgba(24, 54, 65, 0.83), rgba(170, 197, 212, 0.62));
             color: white;
             position: fixed;
             bottom: 0;
