@@ -16,7 +16,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <!-- 外部資源 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/png" href="https://www.design-thinking.tw/assets/images/school-logo/FJU.png" />
     <style>
         * {
@@ -28,7 +27,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: "Noto Serif TC", serif;
             margin: 0;
             height: 100vh;
             overflow: hidden;

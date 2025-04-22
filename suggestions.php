@@ -64,7 +64,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             margin: 20px auto;
             padding: 30px;
             background-color: transparent;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Noto Serif TC", serif;
             font-size: 1.1rem;
             line-height: 1.8;
             color: #333;
@@ -136,6 +136,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             background: rgba(255, 255, 255, 0.9);
             color: #333;
             font-size: 0.95rem;
+            font-family: "Noto Serif TC", serif;
             transition: border 0.3s, box-shadow 0.3s;
         }
 
@@ -153,6 +154,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             color: white;
             border: none;
             border-radius: 10px;
+            font-family: "Noto Serif TC", serif;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease;

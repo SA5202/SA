@@ -15,13 +15,12 @@ if (!isset($_SESSION['User_Name'])) {
 
     <!-- 字體與樣式 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
 
     <style>
         body {
             background-color: transparent;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Noto Serif TC", serif;
             font-size: 1.1rem;
             line-height: 1.8;
             margin: 0;
@@ -44,6 +43,18 @@ if (!isset($_SESSION['User_Name'])) {
         h3 {
             margin-bottom: 25px;
             font-weight: bold;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            /* 設定圖示的基本大小 */
+            width: 1.5rem;
+            /* 設定寬度 */
+            height: 1.5rem;
+            /* 設定高度 */
+            margin-right: 10px;
+            display: inline-block;
+            /* 確保圖示作為區塊顯示 */
         }
 
         .honor-item {
@@ -88,7 +99,7 @@ if (!isset($_SESSION['User_Name'])) {
 <body>
 
     <div class="honor-wrapper">
-        <h3><i class="fas fa-medal"></i> 榮譽機制</h3>
+        <h3><i class="icon fas fa-medal"></i> 榮譽機制</h3>
 
         <div class="honor-item">
             <h5><i class="fas fa-star honor-icon"></i> 愛校之星</h5>

@@ -36,7 +36,6 @@ $result = $stmt->get_result();
     <title>個人檔案 | 輔仁大學愛校建言捐款系統</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
 
     <style>
@@ -46,6 +45,7 @@ $result = $stmt->get_result();
             padding: 30px;
             font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
+            font-family: "Noto Serif TC", serif;
             line-height: 1.8;
             background-color: transparent;
             overflow-x: hidden;
@@ -64,7 +64,7 @@ $result = $stmt->get_result();
             /* 確保圖示作為區塊顯示 */
         }
 
-        h4 {
+        h3 {
             margin: 20px 0;
             font-weight: bold;
         }
@@ -178,7 +178,7 @@ $result = $stmt->get_result();
 
 <body>
 
-    <h4><i class="icon fas fa-user"></i> 帳戶基本資訊</h4>
+    <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
     <div class="table-responsive">
         <table>
             <tbody>
@@ -237,7 +237,7 @@ $result = $stmt->get_result();
     </div>
 
     <br>
-    <h4><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h4>
+    <h3><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h3>
     <div class="table-container">
         <table class="table">
             <thead class="table-primary">
@@ -252,7 +252,7 @@ $result = $stmt->get_result();
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><?= htmlspecialchars($row['title']) ?></td>
+                            <td><b><?= htmlspecialchars($row['title']) ?></b></td>
                             <td><?= date('Y-m-d', strtotime($row['updated_at'])) ?></td>
                             <td>
                                 <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
@@ -275,7 +275,7 @@ $result = $stmt->get_result();
     </div>
 
     <br>
-    <h4><i class="icon fas fa-medal"></i> 我的榮譽等級</h4>
+    <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
 
     <script>
         function togglePassword() {
