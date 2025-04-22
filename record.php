@@ -60,8 +60,6 @@ $result = $stmt->get_result();
             height: 1.5rem;
             /* 設定高度 */
             margin-right: 10px;
-            vertical-align: middle;
-            /* 保證垂直居中 */
             display: inline-block;
             /* 確保圖示作為區塊顯示 */
         }
@@ -225,11 +223,7 @@ $result = $stmt->get_result();
     </div>
 
     <br>
-<<<<<<< HEAD
-    <h4><i class="icon fas fa-donate"></i> 我的建言紀錄</h4>
-=======
-    <h4><i class="fas fa-clipboard-list"></i> 我的建言紀錄</h4>
->>>>>>> parent of 2586f0a (改了登入鍵樣式跟其他小東西)
+    <h4><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h4>
         <div class="table-container">
             <table class="table">
                 <thead class="table-primary">

@@ -73,6 +73,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         margin-bottom: 30px;
     }
 
+
+
     .honor-wrapper {
         width: 98%;
         margin: 0 auto;
@@ -82,10 +84,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     }
 
+
     h3 {
         margin-bottom: 25px;
         font-weight: bold;
     }
+
 
     .honor-item {
         background-color: #f8f9fa;
@@ -95,21 +99,25 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
     }
 
+
     .honor-item h5 {
         font-weight: bold;
         margin-bottom: 10px;
     }
+
 
     .honor-icon {
         color: #ffc107;
         margin-right: 10px;
     }
 
+
     /*跑馬燈*/
     .marquee-wrapper {
         max-width: 1000px;
         margin: 0 auto 30px auto;
     }
+
 
     #mqmain {
         background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
@@ -132,11 +140,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-<<<<<<< HEAD
-                <div class="card-header">📜<b> 最新建言</b></div>
-=======
                 <div class="card-header">📝<b> 最新建言</b></div>
->>>>>>> parent of 2586f0a (改了登入鍵樣式跟其他小東西)
                 <div class="cards">
                     <?php while ($row = $result->fetch_assoc()): ?>
 
