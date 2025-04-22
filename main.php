@@ -54,10 +54,10 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             padding: 30px;
             font-size: 1.1rem;
             line-height: 1.8;
-            background-image: url('https://www.transparenttextures.com/patterns/brick-wall.png');
+            
             /* 花紋背景 */
             background-repeat: repeat;
-            background-color: #fefefe;
+            background-color:transparent;
             /* 淡背景底色搭配花紋 */
             overflow-x: hidden;
         }
@@ -119,7 +119,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         #mqmain {
-            background: linear-gradient(45deg, rgb(189, 182, 117), rgb(153, 151, 104));
+            background: linear-gradient(45deg, rgb(162, 198, 212), rgb(91, 137, 155));
             color: white;
             font-size: 1.1rem;
             padding: 10px;
