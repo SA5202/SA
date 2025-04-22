@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// 判斷是否登入和是否為管理員
 $is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 ?>
@@ -10,15 +9,15 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 <html lang="zh-Hant">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>輔仁大學愛校建言捐款系統</title>
 
     <!-- 外部資源 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="https://www.design-thinking.tw/assets/images/school-logo/FJU.png">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="https://www.design-thinking.tw/assets/images/school-logo/FJU.png" />
     <style>
         * {
             margin: 0;
@@ -36,32 +35,38 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             position: relative;
         }
 
-        /* 側邊欄 */
         .sidebar {
             width: 340px;
             background:
                 linear-gradient(rgba(170, 197, 212, 0.62), rgba(24, 54, 65, 0.83)),
                 url('https://cdn.pixabay.com/photo/2015/07/25/15/24/money-860128_1280.jpg');
-            /* 輔仁大學圖案連結 */
             background-size: 350px;
-            /* 控制浮水印圖案的大小 */
             background-repeat: repeat;
-            /* 重複顯示浮水印 */
             background-position: center;
             background-attachment: fixed;
-            /* 固定背景 */
             color: white;
-            padding: 30px;
+            padding: 30px 20px;
             position: fixed;
             height: 100%;
             box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
             z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
         }
 
         .sidebar h1 {
             text-align: center;
             font-size: 2.5rem;
             font-weight: 700;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.collapsed h1 {
+            opacity: 0;
+            visibility: hidden;
         }
 
         .sidebar a {
@@ -73,6 +78,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             margin: 10px 0;
             font-size: 20px;
             transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .sidebar a:hover {
@@ -80,42 +87,83 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             transform: translateX(10px);
         }
 
-        .icon {
-            font-size: 1.5rem;
-            /* 設定圖示的基本大小 */
-            width: 1.5rem;
-            /* 設定寬度 */
-            height: 1.5rem;
-            /* 設定高度 */
-            margin-right: 10px;
-            vertical-align: middle;
-            /* 保證垂直居中 */
-            display: inline-block;
-            /* 確保圖示作為區塊顯示 */
+        .sidebar.collapsed a span {
+            display: none;
         }
 
-        /* 主內容區 iframe */
+        .icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        /* Position the sidebar toggle button at the bottom of the sidebar */
+        .toggle-btn {
+            position: fixed;
+            bottom: 0px;
+            /* Position 20px from the bottom */
+            left: 340px;
+            /* Align with the sidebar */
+            background-color: rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 150;
+            transition: left 0.3s ease, transform 0.3s ease;
+            /* Smooth transition */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            /* Add shadow for depth */
+            font-size: 1.5rem;
+            /* Increase the size of the icon */
+            color: #fff;
+            text-align: center;
+        }
+
+        /* Button hover effect */
+        .toggle-btn:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Darken on hover */
+            transform: translateY(-5px);
+            /* Slight upward movement */
+        }
+
+        /* When the sidebar is collapsed, move the button to the left */
+        .sidebar.collapsed+.toggle-btn {
+            left: 80px;
+            /* Adjust position when sidebar is collapsed */
+        }
+
+
         .content {
             position: absolute;
             top: 0;
-            left: 300px;
+            left: 340px;
             right: 0;
             bottom: 60px;
             overflow: hidden;
             background: url('https://sis.fju.edu.tw/images/fju_fx_3.svg');
-
+            background-size: 110% auto;
+            background-repeat: no-repeat;
+            background-position: center;
             padding: 20px;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar.collapsed~.content {
+            left: 80px;
         }
 
         .content iframe {
             width: 100%;
             height: 100%;
             border: none;
-            display: block;
             background-color: transparent;
         }
 
-        /* 登入-登出按鈕 */
         .btn-position {
             position: fixed;
             top: 30px;
@@ -140,7 +188,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             transform: translateY(-3px);
         }
 
-        /* Footer */
         .footer {
             height: 60px;
             line-height: 60px;
@@ -151,27 +198,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             bottom: 0;
             width: 100%;
             z-index: 99;
-        }
-
-        /* 回頂部按鈕 */
-        .back-to-top {
-            position: fixed;
-            bottom: 80px;
-            right: 40px;
-            background-color: rgba(0, 0, 0, 0.4);
-            color: white;
-            font-size: 2rem;
-            padding: 10px 20px;
-            border-radius: 50%;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 300;
-            transition: 0.3s;
-        }
-
-        .back-to-top:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-            transform: translateY(-5px);
         }
 
         .back-to-top {
@@ -188,7 +214,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             z-index: 300;
             transition: 0.3s;
             display: none;
-            /* 預設不顯示 */
         }
 
         .back-to-top:hover {
@@ -199,21 +224,26 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 </head>
 
 <body>
-    <!-- 導覽列 -->
-    <div class="sidebar">
+
+    <div class="sidebar" id="sidebar">
         <a href="main.php" target="contentFrame">
             <h1>FJU I-Money</h1>
         </a>
-        <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><b> 首頁</b></a>
-        <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><b> 個人檔案</b></a>
-        <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><b> 建言總覽</b></a>
-        <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><b> 提出建言</b></a>
-        <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><b> 捐款進度</b></a>
-        <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><b> 榮譽機制</b></a>
-        <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><b> 聯絡我們</b></a>
+        <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
+        <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><span><b> 個人檔案</b></span></a>
+        <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
+        <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
+        <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
+        <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span></a>
+        <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span></a>
     </div>
 
-    <!-- 登入/登出按鈕 -->
+    <!-- 收合按鈕 -->
+    <button class="toggle-btn" onclick="toggleSidebar(this)">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <!-- 登入/登出 -->
     <?php if ($is_logged_in): ?>
         <a href="logout.php" target="contentFrame">
             <button class="btn btn-custom btn-position"><b><i class="fa-solid fa-circle-user"></i> 登出</b></button>
@@ -224,26 +254,20 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </a>
     <?php endif; ?>
 
-    <!-- 主內容區 -->
     <div class="content">
         <iframe name="contentFrame" src="main.php" allowtransparency="true"></iframe>
     </div>
 
-    <!-- 頁尾 -->
     <div class="footer">
         <b>2025 © 天主教輔仁大學 愛校建言捐款系統</b>
     </div>
 
-    <!-- 回頂部按鈕 -->
-    <div class="back-to-top" id="backToTopBtn">
-        ↑
-    </div>
+    <div class="back-to-top" id="backToTopBtn">↑</div>
 
     <script>
         const backToTopBtn = document.getElementById('backToTopBtn');
         const iframe = document.querySelector('iframe[name="contentFrame"]');
 
-        // 點擊按鈕時滾動 iframe 頁面回頂部
         backToTopBtn.addEventListener('click', () => {
             if (iframe && iframe.contentWindow) {
                 iframe.contentWindow.scrollTo({
@@ -253,25 +277,30 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             }
         });
 
-        // iframe 載入新頁面後，掛載 scroll 事件
         iframe.addEventListener('load', () => {
             const iframeWindow = iframe.contentWindow;
 
-            // 清除舊的事件（避免重複掛載）
-            iframeWindow.removeEventListener('scroll', toggleBackToTop);
-
-            // 定義滾動處理函式
             function toggleBackToTop() {
                 const scrollTop = iframeWindow.scrollY || iframeWindow.pageYOffset;
                 backToTopBtn.style.display = scrollTop > 200 ? 'block' : 'none';
             }
-
-            // 初始執行一次以防一進來就已經有捲動
             toggleBackToTop();
-
-            // 加上監聽
             iframeWindow.addEventListener('scroll', toggleBackToTop);
         });
+
+        function toggleSidebar(btn) {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('collapsed');
+
+            const icon = btn.querySelector('i');
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-chevron-left');
+                icon.classList.add('fa-chevron-right'); // 展開 icon
+            } else {
+                icon.classList.remove('fa-chevron-right');
+                icon.classList.add('fa-chevron-left'); // 收起 icon
+            }
+        }
     </script>
 
 </body>
