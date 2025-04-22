@@ -109,7 +109,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* Align with the sidebar */
             background-color: rgba(0, 0, 0, 0.1);
             border: none;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border-radius: 50%;
             cursor: pointer;
             z-index: 150;
@@ -146,7 +146,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             bottom: 60px;
             overflow: hidden;
             background: url('https://sis.fju.edu.tw/images/fju_fx_3.svg');
-            background-size: 110% auto;
+            background-size: 120% auto;
             background-repeat: no-repeat;
             background-position: center;
             padding: 20px;
