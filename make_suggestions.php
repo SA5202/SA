@@ -25,7 +25,7 @@ if ($facilityResult) {
     }
 }
 
-$buildingResult = $link->query("SELECT building_id, building_name FROM building");
+$buildingResult = $link->query("SELECT building_id, building_name FROM building ORDER BY SUBSTRING_INDEX(Building_Name, '(', -1) ASC");
 if ($buildingResult) {
     while ($row = $buildingResult->fetch_assoc()) {
         $buildings[] = $row;
