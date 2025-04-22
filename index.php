@@ -39,17 +39,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         /* 側邊欄 */
         .sidebar {
             width: 340px;
-            background:
-                linear-gradient(rgba(149, 147, 80, 0.62), rgba(0, 0, 0, 0.83)),
-                url('https://cdn.pixabay.com/photo/2015/07/25/15/24/money-860128_1280.jpg');
-            /* 輔仁大學圖案連結 */
-            background-size: 350px;
-            /* 控制浮水印圖案的大小 */
-            background-repeat: repeat;
-            /* 重複顯示浮水印 */
-            background-position: center;
-            background-attachment: fixed;
-            /* 固定背景 */
+            background: linear-gradient(135deg, rgb(160, 164, 138), rgb(15, 21, 24));
             color: white;
             padding: 30px;
             position: fixed;

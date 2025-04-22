@@ -225,7 +225,7 @@ $result = $stmt->get_result();
     </div>
 
     <br>
-    <h4><i class="fas fa-clipboard-list"></i> 我的建言紀錄</h4>
+    <h4><i class="icon fas fa-donate"></i> 我的建言紀錄</h4>
         <div class="table-container">
             <table class="table">
                 <thead class="table-primary">
