@@ -39,7 +39,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         /* 側邊欄 */
         .sidebar {
             width: 340px;
-            background: linear-gradient(135deg, rgb(160, 164, 138), rgb(15, 21, 24));
+            background:
+                linear-gradient(rgba(149, 147, 80, 0.62), rgba(0, 0, 0, 0.83)),
+                url('https://cdn.pixabay.com/photo/2015/07/25/15/24/money-860128_1280.jpg');
+            /* 輔仁大學圖案連結 */
+            background-size: 350px;
+            /* 控制浮水印圖案的大小 */
+            background-repeat: repeat;
+            /* 重複顯示浮水印 */
+            background-position: center;
+            background-attachment: fixed;
+            /* 固定背景 */
             color: white;
             padding: 30px;
             position: fixed;
@@ -97,9 +107,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             padding: 20px;
         }
 
-
-
-
         .content iframe {
             width: 100%;
             height: 100%;
@@ -117,18 +124,18 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .btn-custom {
-            background-color: rgba(198, 225, 230);
+            background-color: rgba(190, 225, 230);
             color: midnightblue;
             border-radius: 25px;
-            padding: 5px 25px;
+            padding: 5px 20px;
             font-size: 1rem;
             transition: 0.3s;
-            border: 1px solid rgba(104, 105, 121, 0.8);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .btn-custom:hover {
-            background-color: rgb(104, 105, 121, 0.7);
+            background-color: rgb(104, 105, 121, 0.5);
             color: #fff;
             transform: translateY(-3px);
         }
@@ -150,7 +157,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .back-to-top {
             position: fixed;
             bottom: 80px;
-            right: 20px;
+            right: 40px;
             background-color: rgba(0, 0, 0, 0.4);
             color: white;
             font-size: 2rem;
@@ -170,7 +177,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .back-to-top {
             position: fixed;
             bottom: 80px;
-            right: 20px;
+            right: 40px;
             background-color: rgba(0, 0, 0, 0.4);
             color: white;
             font-size: 2rem;
@@ -209,11 +216,11 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <!-- 登入/登出按鈕 -->
     <?php if ($is_logged_in): ?>
         <a href="logout.php" target="contentFrame">
-            <button class="btn btn-custom btn-position"><b>登出</b></button>
+            <button class="btn btn-custom btn-position"><b><i class="fa-solid fa-circle-user"></i> 登出</b></button>
         </a>
     <?php else: ?>
         <a href="login.php" target="contentFrame">
-            <button class="btn btn-custom btn-outline-success btn-position"><b>登入</b></button>
+            <button class="btn btn-custom btn-outline-success btn-position"><b><i class="fa-solid fa-circle-user"></i> 登入</b></button>
         </a>
     <?php endif; ?>
 
