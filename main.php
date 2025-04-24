@@ -126,7 +126,7 @@ $popular_result = $link->query($popular_sql);
         }
 
         .card .card-header {
-            background-color: rgba(40, 140, 168, 0.8);
+            background-color: rgba(85, 164, 186, 0.8);
             color: white;
             font-weight: bold;
             font-size: 1.3rem;

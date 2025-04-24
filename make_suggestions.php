@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .btn-submit {
-            background-color: #4C85B1;
+            background-color:rgb(120, 174, 215);
             color: white;
             padding: 6px 30px;
             border: none;
@@ -170,12 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .btn-submit:hover {
-            background-color: #0047AB;
+            background-color:rgb(43, 122, 183);
             transform: translateY(-3px);
         }
 
         .btn-reset {
-            background-color: #FF4C4C;
+            background-color:rgb(224, 107, 107);
             color: white;
             padding: 6px 30px;
             border: none;
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .btn-reset:hover {
-            background-color: #e60000;
+            background-color:rgb(180, 78, 78);
             transform: translateY(-3px);
         }
 

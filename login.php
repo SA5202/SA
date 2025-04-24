@@ -52,8 +52,8 @@
         }
 
         .input-box input:focus {
-            border-color:rgb(160, 205, 86);
-            box-shadow: 0 0 8px rgba(93, 101, 72, 0.88);
+            border-color:rgb(173, 231, 248);
+            box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
         }
 
         .input-box .icon {
@@ -68,7 +68,7 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background: rgb(205, 204, 147);
+            background: rgb(147, 188, 205);
             color: #fff;
             border: none;
             border-radius: 20px;
@@ -78,7 +78,7 @@
         }
 
         .btn:hover {
-            background: rgb(180, 181, 134);
+            background: rgb(108, 141, 173);
         }
 
         .remember-forgot {

@@ -219,6 +219,56 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(0, 0, 0, 0.7);
             transform: translateY(-5px);
         }
+
+        .user-info-logout {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: rgba(190, 225, 230, 0.95);
+            color: midnightblue;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-info-logout .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info-logout .username {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .user-info-logout .logout-link {
+            font-size: 0.9rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .btn-prussian {
+            color: #003153;
+            border: 2px solid #003153;
+            background-color: transparent;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .btn-prussian:hover {
+            background-color: #003153;
+            color: white;
+        }
     </style>
 </head>
 
@@ -244,12 +294,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
     <!-- 登入/登出 -->
     <?php if ($is_logged_in): ?>
-        <a href="logout.php" target="contentFrame">
-            <button class="btn btn-custom btn-position"><b><i class="fa-solid fa-circle-user"></i> 登出</b></button>
-        </a>
+        <div class="user-info-logout btn-position">
+            <img src="https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="頭像" class="avatar">
+            <span class="username"><b><?= htmlspecialchars($_SESSION['User_Name']) ?></b></span>
+            <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
+        </div>
+
     <?php else: ?>
         <a href="login.php" target="contentFrame">
-            <button class="btn btn-custom btn-outline-success btn-position"><b><i class="fa-solid fa-circle-user"></i> 登入</b></button>
+            <button class="btn btn-custom btn-outline-success btn-position">
+                <b><i class="fa-solid fa-circle-user"></i> 登入</b>
+            </button>
         </a>
     <?php endif; ?>
 
