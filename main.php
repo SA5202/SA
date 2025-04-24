@@ -76,9 +76,7 @@ $popular_result = $link->query($popular_sql);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
-            /* 加這行才會顯示框線 */
         }
-
 
         .honor-item {
             background-color: #f8f9fa;
@@ -96,22 +94,6 @@ $popular_result = $link->query($popular_sql);
         .honor-icon {
             color: #ffc107;
             margin-right: 10px;
-        }
-
-        .marquee-wrapper {
-            max-width: 1000px;
-            margin: 0 auto 30px auto;
-        }
-
-        #mqmain {
-            background: linear-gradient(45deg, rgb(162, 198, 212), rgb(91, 137, 155));
-            color: white;
-            font-size: 1.1rem;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            overflow: hidden;
-            width: 100%;
         }
 
         .card {
@@ -141,10 +123,12 @@ $popular_result = $link->query($popular_sql);
         }
 
         .suggestion-item {
+            position: relative;
             margin-bottom: 20px;
             padding: 20px;
             background-color: #f1f4f9;
             border-radius: 15px;
+            min-height: 120px;
             transition: transform 0.2s ease-in-out;
         }
 
@@ -165,24 +149,86 @@ $popular_result = $link->query($popular_sql);
         }
 
         .btn-view {
-            margin-top: 10px;
-            background-color: rgba(255, 193, 7, 0.5);
-            color: black;
-            font-weight: bold;
-            border: none;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 4px 20px;
+            background-color: rgba(0, 230, 219, 0.4);
+            color: rgb(0, 76, 148);
+            font-weight: 750;
+            border-radius: 10px;
         }
 
         .btn-view:hover {
-            background-color: rgba(224, 168, 0, 0.75);
+            background-color: rgba(0, 176, 224, 0.6);
             color: white;
         }
+
+        .carousel-item {
+            position: relative;
+            background-color: #f8f9fa;
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+        }
+
+        .carousel-inner {
+            border-radius: 20px;
+        }
+
+        .carousel-indicators [data-bs-target] {
+            background-color: #999;
+            width: 40px;
+            height: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .carousel-indicators .active {
+            background-color: #007bff;
+        }
+
     </style>
 </head>
 
 <body>
-    <h3><i class="icon fa-solid fa-bell"></i> 重要資訊</h3>
-    <div class="marquee-wrapper">
-        <marquee id="mqmain" scrollamount="8">7/8 系統將進行年度保養，請使用者留意。</marquee>
+    <!-- 公告卡片 -->
+    <h3><i class="icon fa-solid fa-bell"></i> 最新公告</h3>
+    <div id="announcementCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <!-- 進度條 -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#announcementCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="公告 1"></button>
+            <button type="button" data-bs-target="#announcementCarousel" data-bs-slide-to="1" aria-label="公告 2"></button>
+        </div>
+
+        <!-- 輪播內容 -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="announcement-card">
+                    <div class="announcement-card-header">
+                        <i class="icon fa-solid fa-bullhorn"></i> 系統維護通知
+                    </div>
+                    <div class="announcement-card-body">
+                        <p>🔧 7/8 系統將進行年度保養，請使用者留意，屆時將暫停服務。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <div class="announcement-card">
+                    <div class="announcement-card-header">
+                        <i class="icon fa-solid fa-bullhorn"></i> 暑假志工活動開放報名
+                    </div>
+                    <div class="announcement-card-body">
+                        <p>🌟 歡迎同學報名暑期校園志工活動，報名截止日為 7/20，詳細資訊請見學務處官網。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <h3><i class="icon fa-solid fa-list"></i> 建言一覽</h3>

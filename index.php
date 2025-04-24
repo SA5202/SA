@@ -145,7 +145,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* Position 20px from the bottom */
             left: 340px;
             /* Align with the sidebar */
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: transparent;
             border: none;
             padding: 10px 20px;
             border-radius: 50%;
@@ -153,7 +153,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             z-index: 150;
             transition: transform 0.3s ease, background-color 0.3s ease, rotate 0.4s;
             /* Smooth transition */
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             /* Add shadow for depth */
             font-size: 1.5rem;
             /* Increase the size of the icon */
@@ -164,7 +163,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         /* Button hover effect */
         .toggle-btn:hover {
-            background-color: rgba(0, 0, 0, 0.7);
             /* Darken on hover */
             transform: translateY(-5px) rotate(10deg);
             /* Slight upward movement */
