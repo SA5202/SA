@@ -236,6 +236,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             border: none;
             border-radius: 10px;
             font-size: 0.9rem;
+            font-weight: 750;
             text-decoration: none;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -314,7 +315,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                 <p><?= mb_strimwidth(strip_tags($row['Description']), 0, 100, "...") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
-                    更新時間： <?= $row['Updated_At'] ?>
+                    更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
                 </div>
                 <div class="actions">
                     <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>

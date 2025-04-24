@@ -95,7 +95,7 @@ $result = $stmt->get_result();
             display: inline-block;
             padding: 4px 40px;
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 750;
             background: linear-gradient(to right, #84c684, #6fb36f);
             color: #fff;
             border-radius: 15px;
@@ -155,7 +155,7 @@ $result = $stmt->get_result();
             padding: 4px 20px;
             border-radius: 10px;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 750;
             transition: background 0.3s ease;
         }
 

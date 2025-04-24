@@ -30,7 +30,7 @@
 
         .wrapper h2 {
             margin-bottom: 20px;
-            font-weight: 600;
+            font-weight: 750;
             color: #333;
         }
 
@@ -71,6 +71,7 @@
             border: none;
             border-radius: 20px;
             font-size: 16px;
+            font-weight: 750;
             cursor: pointer;
             transition: 0.3s;
         }

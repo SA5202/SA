@@ -137,12 +137,12 @@ $popular_result = $link->query($popular_sql);
 
         .card-body {
             flex-grow: 1;
-            padding: 20px;
+            padding: 25px;
         }
 
         .suggestion-item {
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 20px;
             background-color: #f1f4f9;
             border-radius: 15px;
             transition: transform 0.2s ease-in-out;
@@ -195,7 +195,7 @@ $popular_result = $link->query($popular_sql);
                     <?php while ($row = $newest_result->fetch_assoc()): ?>
                         <div class="suggestion-item">
                             <div class="suggestion-title"><?= htmlspecialchars($row['Title']) ?></div>
-                            <div class="suggestion-meta">更新時間：<?= $row['Updated_At'] ?></div>
+                            <div class="suggestion-meta">更新時間：<?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?></div>
                             <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
                         </div>
                     <?php endwhile; ?>
