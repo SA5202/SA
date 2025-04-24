@@ -15,11 +15,7 @@ if ($record = mysqli_fetch_assoc($result)) {
     $_SESSION['User_Type'] = $record['User_Type'];
 
     // 根據使用者類型判斷是否為管理員
-    if ($record['User_Type'] === 'admin') {
-        $_SESSION['is_admin'] = true;
-    } else {
-        $_SESSION['is_admin'] = false;
-    }
+    $_SESSION['is_admin'] = ($record['User_Type'] === 'admin');
 
     // 登入成功，刷新父頁面
     echo '<script>
@@ -27,6 +23,8 @@ if ($record = mysqli_fetch_assoc($result)) {
           </script>';
     exit();
 } else {
-    echo "登入失敗";
+    // 登入失敗，導向失敗頁面
+    header("Location: login_failed.php");
+    exit();
 }
-
+?>
