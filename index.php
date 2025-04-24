@@ -79,7 +79,46 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             transition: all 0.3s ease;
             white-space: nowrap;
             overflow: hidden;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.6s forwards;
         }
+
+        .sidebar a:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .sidebar a:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .sidebar a:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .sidebar a:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .sidebar a:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        .sidebar a:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+
+        .sidebar a:nth-child(8) {
+            animation-delay: 0.7s;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
 
         .sidebar a:hover {
             background: rgba(255, 255, 255, 0.2);
@@ -112,7 +151,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             border-radius: 50%;
             cursor: pointer;
             z-index: 150;
-            transition: left 0.3s ease, transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease, rotate 0.4s;
             /* Smooth transition */
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
             /* Add shadow for depth */
@@ -120,13 +159,14 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* Increase the size of the icon */
             color: #fff;
             text-align: center;
+
         }
 
         /* Button hover effect */
         .toggle-btn:hover {
             background-color: rgba(0, 0, 0, 0.7);
             /* Darken on hover */
-            transform: translateY(-5px);
+            transform: translateY(-5px) rotate(10deg);
             /* Slight upward movement */
         }
 
@@ -182,9 +222,10 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .btn-custom:hover {
-            background-color: rgb(104, 105, 121, 0.5);
-            color: #fff;
-            transform: translateY(-3px);
+            background-color: #002b5b;
+            color: white;
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .footer {
@@ -213,11 +254,12 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             z-index: 300;
             transition: 0.3s;
             display: none;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
         .back-to-top:hover {
             background-color: rgba(0, 0, 0, 0.7);
-            transform: translateY(-5px);
+            transform: scale(1.1) translateY(-5px);
         }
 
         .user-info-logout {
@@ -267,7 +309,22 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .btn-prussian:hover {
             background-color: #003153;
-            color: white;
+
+            transform: scale(1.05);
+
+            color: #fff;
+        }
+
+        /* iframe內容淡入 */
+        iframe {
+            opacity: 0;
+            animation: fadeInIframe 1.5s forwards;
+        }
+
+        @keyframes fadeInIframe {
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
