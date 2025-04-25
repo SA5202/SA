@@ -92,7 +92,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             overflow-x: auto;
 
             /* 更深的灰色背景，與卡片內容區區分 */
-            background: rgba(225, 225, 225, 0.5); /* 深灰色背景 */
+            background: rgba(230, 240, 249, 0.7);
             backdrop-filter: blur(8px); /* 稍微減弱模糊效果 */
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(200, 200, 200, 0.4);
@@ -150,7 +150,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 按鈕樣式 */
         button {
             padding: 0.4rem 25px;
-            background-color: #6c757d; /* 深灰色 */
+            background-color:rgb(120, 128, 130); /* 深灰色 */
             color: white;
             border: none;
             border-radius: 10px;
@@ -178,7 +178,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             padding: 2rem;
             border-radius: 20px;
             border: 1px solid rgba(200, 200, 200, 0.3);
-            background: rgba(235, 235, 235, 0.95); /* 淺灰色背景，避免與標題區過於相似 */
+            background-color: white;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
@@ -196,7 +196,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             color: #34495e; /* 深灰藍色標題 */
             margin: -2rem -2rem 1rem;
             padding: 1rem 2rem;
-            background-color: rgba(240, 240, 240, 0.95); /* 淺灰色背景 */
+            background: rgba(230, 240, 249);
             border-bottom: 1px solid #ddd;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
@@ -231,7 +231,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 操作按鈕樣式 */
         .card .btn {
             padding: 0.6rem 1.2rem;
-            background-color: rgba(240, 240, 240);
+            background-color: rgba(170, 216, 224, 0.3);
             color: #333;
             border: none;
             border-radius: 10px;
