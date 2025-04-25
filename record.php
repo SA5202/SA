@@ -40,7 +40,7 @@ $result = $stmt->get_result();
 
     <style>
         body {
-            max-width: 80%;
+            max-width: 85%;
             margin: 0 auto;
             padding: 30px;
             font-family: 'Poppins', sans-serif;

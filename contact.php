@@ -31,7 +31,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .contact-card {
             max-width: 75%;
-            margin: 0 auto;
+            margin: 50px auto;
             background-color: rgba(255, 255, 255, 0.9);
             /* 白色半透明背景 */
             border-radius: 25px;

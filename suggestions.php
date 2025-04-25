@@ -60,8 +60,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         body {
-            max-width: 80%;
-            margin: 20px auto;
+            max-width: 85%;
+            margin: 50px auto;
             padding: 30px;
             background-color: transparent;
             font-family: "Noto Serif TC", serif;
@@ -193,7 +193,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 卡片標題區 */
         .card h4 {
             font-size: 1.2rem;
-            color:rgb(51, 50, 95);
+            color: #fff;
             margin: -2rem -2rem 1rem;
             padding: 1rem 2rem;
             background-color: rgba(85, 164, 186, 0.8);
@@ -320,7 +320,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">
                 <h4><?= htmlspecialchars($row['Title']) ?></h4>
-                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 100, "...") ?></p>
+                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 120, "...") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>

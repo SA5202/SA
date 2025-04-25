@@ -30,7 +30,7 @@ if (!isset($_SESSION['User_Name'])) {
 
         .honor-wrapper {
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 50px auto;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 30px;
             border-radius: 20px;

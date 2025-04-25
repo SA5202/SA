@@ -189,7 +189,7 @@ $popular_result = $link->query($popular_sql);
         }
 
         .carousel-indicators .active {
-            background-color: #007bff;
+            background-color:rgb(0, 174, 225);
         }
 
     </style>

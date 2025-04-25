@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .suggestion-form {
             max-width: 75%;
-            margin: 0 auto;
+            margin: 50px auto;
             padding: 30px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 25px;
@@ -167,6 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 10px;
             transition: background-color 0.3s, transform 0.3s;
             font-size: 16px;
+            font-weight: 700;
         }
 
         .btn-submit:hover {
@@ -182,6 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             border-radius: 10px;
             transition: background-color 0.3s, transform 0.3s;
             font-size: 16px;
+            font-weight: 700;
         }
 
         .btn-reset:hover {
@@ -252,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="form-group">
             <label for="description">建言內容：</label>
-            <textarea id="description" name="description" rows="5" placeholder="請具體描述您的建言內容" class="form-control" required></textarea>
+            <textarea id="description" name="description" rows="3" placeholder="請具體描述您的建言內容" class="form-control" required></textarea>
         </div>
 
         <div class="button-container">

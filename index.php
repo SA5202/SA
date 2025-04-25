@@ -172,7 +172,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* Adjust position when sidebar is collapsed */
         }
 
-
         .content {
             position: absolute;
             top: 0;
@@ -260,7 +259,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .user-info-logout {
             position: fixed;
-            top: 30px;
+            top: 20px;
             right: 40px;
             z-index: 200;
             display: flex;
@@ -306,9 +305,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .btn-prussian:hover {
             background-color: #003153;
             color: white;
-
             transform: scale(1.05);
-
             color: #fff;
         }
 
