@@ -121,7 +121,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         label {
-            font-weight: 600;
+            font-weight: 750;
             font-size: 0.95rem;
             margin-bottom: 0.4rem;
             color: #4c5b63; /* 深灰藍色 */
@@ -170,7 +170,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         .cards {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: 2rem;
         }
 
         /* 卡片樣式：帶漸層+玻璃感+陰影 */
@@ -193,7 +193,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 卡片標題區 */
         .card h4 {
             font-size: 1.2rem;
-            color: #fff;
+            color:rgb(51, 50, 95);
             margin: -2rem -2rem 1rem;
             padding: 1rem 2rem;
             background-color: rgba(85, 164, 186, 0.8);
@@ -225,6 +225,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 讓卡片內容區有對比的顏色 */
         .card .meta {
             font-size: 0.85rem;
+            font-weight: 550;
             color: #888;
             margin-bottom: 1rem;
         }
