@@ -106,13 +106,13 @@ $result = $conn->query($sql);
                         ? ($row["Raised_Amount"] / $row["Required_Amount"]) * 100
                         : 0;
                     $progress = round($progress, 2);
-                    ?>
+            ?>
                     <div class="donation-card">
                         <!-- 左側區塊 -->
                         <div class="left-section">
                             <h3><?= htmlspecialchars($row["Title"]) ?></h3>
-                            <p>募款目標：<?= number_format($row["Required_Amount"], 2) ?> 元</p>
-                            <p>目前募得：<?= number_format($row["Raised_Amount"], 2) ?> 元</p>
+                            <p>募款目標：<?= number_format($row["Required_Amount"], 0) ?> 元</p>
+                            <p>目前募得：<?= number_format($row["Raised_Amount"], 0) ?> 元</p>
                             <p>狀態：<?= htmlspecialchars($row["Status"]) ?></p>
                             <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
                         </div>
@@ -121,9 +121,9 @@ $result = $conn->query($sql);
                         <div class="right-section">
                             <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
                             <div class="text-center">
-                                <img src="piggy-bank.png" class="piggy-bank" alt="Piggy Bank" onclick="alert('即將開啟捐款功能')" />
-                                <div class="donate-label">點我捐款</div>
+                                <i class="fas fa-piggy-bank donate-label" style="font-size: 1rem; cursor: pointer;" onclick="alert('即將開啟捐款功能')">點我捐款</i>
                             </div>
+
                         </div>
                     </div>
 
@@ -154,10 +154,12 @@ $result = $conn->query($sql);
                                 responsive: false,
                                 cutout: '70%',
                                 plugins: {
-                                    legend: { display: false },
+                                    legend: {
+                                        display: false
+                                    },
                                     tooltip: {
                                         callbacks: {
-                                            label: function (tooltipItem) {
+                                            label: function(tooltipItem) {
                                                 return tooltipItem.label + ': ' + tooltipItem.raw + '%';
                                             }
                                         }
@@ -166,7 +168,7 @@ $result = $conn->query($sql);
                             }
                         });
                     </script>
-                    <?php
+            <?php
                 }
             } else {
                 echo "<p class='text-center'>目前沒有募款建議。</p>";
