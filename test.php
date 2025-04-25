@@ -1,105 +1,120 @@
+<?php
+session_start();
+
+// 資料庫連接
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "SA";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("資料庫連接失敗: " . $conn->connect_error);
+}
+
+// 處理表單提交
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  
+    $suggestion_id = $_POST['suggestion_id'];
+    $required_amount = $_POST['required_amount'];
+    $status = $_POST['status'];
+
+    // 插入募款建議到 FundingSuggestion
+    $sql = "INSERT INTO FundingSuggestion (Suggestion_ID, Required_Amount, Raised_Amount, Status, Updated_At) 
+            VALUES (?, ?, 0, ?, NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ids", $suggestion_id, $required_amount, $status);
+    
+    if ($stmt->execute()) {
+        // 插入成功後跳轉到 test1.php 顯示進度
+        header("Location: test1.php");
+        exit();
+    } else {
+        echo "<p>新增募款建議失敗：" . $conn->error . "</p>";
+    }
+
+    $stmt->close();
+}
+
+// 查詢已有的建言
+$sql = "SELECT Suggestion_ID, Title FROM Suggestion";
+$result = $conn->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>輔大愛校建言捐款系統</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f4f6f9;
-      font-family: 'Noto Sans TC', sans-serif;
-    }
-    .sidebar {
-      height: 100vh;
-      background-color: #2e3b55;
-      color: white;
-      position: fixed;
-      width: 240px;
-      padding-top: 20px;
-    }
-    .sidebar h4 {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      display: block;
-      padding: 12px 20px;
-    }
-    .sidebar a:hover {
-      background-color: #1d273a;
-    }
-    .main {
-      margin-left: 240px;
-      padding: 30px;
-    }
-    .card-title {
-      font-weight: 600;
-    }
-    .topbar {
-      background-color: white;
-      padding: 10px 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-    .topbar .user-info {
-      text-align: right;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新增募款建議</title>
+
+    <!-- 引入Bootstrap樣式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <style>
+        .form-container {
+            margin-top: 50px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-container form {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container form .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
+
 <body>
+    <div class="container form-container">
+        <h2>新增募款建議</h2>
+        <form action="test.php" method="POST">
+            <div class="form-group">
+                <label for="suggestion_id">選擇建言：</label>
+                <select name="suggestion_id" id="suggestion_id" class="form-control" required>
+                    <option value="">-- 請選擇建言 --</option>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row['Suggestion_ID'] . "'>" . htmlspecialchars($row['Title']) . "</option>";
+                        }
+                    } else {
+                        echo "<option disabled>無可選建言</option>";
+                    }
+                    ?>
+                </select>
+            </div>
 
-  <!-- 側邊欄 -->
-  <div class="sidebar">
-    <h4>輔大 I-Money</h4>
-    <a href="#">首頁</a>
-    <a href="#">建言總覽</a>
-    <a href="#">提出建言</a>
-    <a href="#">捐款進度</a>
-    <a href="#">榮譽制度</a>
-    <a href="#">捐款報表</a>
-    <a href="#">聯絡我們</a>
-  </div>
+            <div class="form-group">
+                <label for="required_amount">募款目標金額：</label>
+                <input type="number" name="required_amount" id="required_amount" class="form-control" required min="0" step="0.01">
+            </div>
 
-  <!-- 主內容區 -->
-  <div class="main">
-    <!-- 上方欄 -->
-    <div class="topbar d-flex justify-content-between align-items-center">
-      <h5 class="mb-0">輔大愛校建言捐款系統</h5>
-      <div class="user-info">
-        <span>您好，使用者</span>
-        <button class="btn btn-outline-primary btn-sm ms-2">登出</button>
-      </div>
+            <div class="form-group">
+                <label for="status">募款狀態：</label>
+                <select name="status" id="status" class="form-control" required>
+                    <option value="募款中">募款中</option>
+                    <option value="已達標">已達標</option>
+                    <option value="募款結束">募款結束</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">提交募款建議</button>
+        </form>
     </div>
 
-    <!-- 系統公告 -->
-    <div class="alert alert-info">
-      系統公告：4/10 將進行系統維護，請提前完成捐款與建言。
-    </div>
+    <?php $conn->close(); ?>
 
-    <!-- 建言內容 -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">最新建言</h5>
-        <p class="card-text">學生建議改善校內飲水機水質與維護頻率。</p>
-      </div>
-    </div>
-
-    <!-- 捐款進度 -->
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">捐款進度</h5>
-        <div class="progress">
-          <div class="progress-bar bg-success" style="width: 65%;">65%</div>
-        </div>
-        <p class="mt-2">目前已募得 NT$ 65,000 / 100,000</p>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

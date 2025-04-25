@@ -1,110 +1,151 @@
 <?php
 session_start();
-if (!isset($_SESSION['User_Name'])) {
-    header("Location: login.php");
-    exit();
+
+// 資料庫連接
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "SA";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("資料庫連接失敗: " . $conn->connect_error);
 }
+
+// 查詢募款進度
+$sql = "
+    SELECT f.Funding_ID, s.Title, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
+    FROM FundingSuggestion f
+    JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
+    ORDER BY f.Updated_At DESC
+";
+$result = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>捐款進度 | 輔仁大學愛校建言捐款系統</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>募款進度</title>
 
-    <!-- 樣式與字體 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- 引入Bootstrap樣式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
-
     <style>
-        body {
-            background-color: transparent;
-            font-family: "Noto Serif TC", serif;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin: 0;
-            padding: 30px;
-            color: #333;
+        .donation-progress {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .donation-card {
+            margin-bottom: 20px;
+            background-color:transparent;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
         }
 
-        h3 {
-            margin-bottom: 25px;
-            font-weight: bold;
+        .donation-card:hover {
+            transform: scale(1.03);
         }
 
-        .icon {
-            font-size: 1.5rem;
-            /* 設定圖示的基本大小 */
-            width: 1.5rem;
-            /* 設定寬度 */
-            height: 1.5rem;
-            /* 設定高度 */
-            margin-right: 10px;
-            display: inline-block;
-            /* 確保圖示作為區塊顯示 */
-        }
-
-        .donate-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
-            /* 加這行才會顯示框線 */
-        }
-
-        .card {
-            margin-bottom: 25px;
-        }
-
-        .progress {
-            height: 25px;
-            background-color: #e9ecef;
+        .progress-bar-container {
+            position: relative;
+            height: 30px;
+            margin-bottom: 15px;
         }
 
         .progress-bar {
-            font-weight: bold;
+            position: absolute;
+            height: 100%;
+            width: 0;
+            background-color: #28a745;
+            transition: width 0.5s ease;
         }
 
-        .donation-info {
-            margin-bottom: 10px;
-            font-size: 1rem;
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: #fff;
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
+        <h2 class="text-center mb-4">募款進度</h2>
 
-    <div class="donate-wrapper">
-        <h3><i class="icon fas fa-hand-holding-usd"></i> 捐款進度</h3>
+        <div class="donation-progress">
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    // 計算進度百分比，避免目標金額為 0 時出現錯誤
+                    if ($row["Required_Amount"] > 0) {
+                        $progress = ($row["Raised_Amount"] / $row["Required_Amount"]) * 100;
+                    } else {
+                        $progress = 0; // 目標金額為 0 時進度為 0
+                    }
 
-        <div class="card shadow-sm">
-            <div class="card-header">項目：圖書館翻新計畫</div>
-            <div class="card-body">
-                <div class="donation-info">目標金額：NT$500,000</div>
-                <div class="donation-info">已募得：NT$320,000</div>
-                <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 64%;">64%</div>
-                </div>
-            </div>
+                    // 確保進度條至少顯示 1%（避免 0% 時完全隱藏進度條）
+                    $progress = max($progress, 1); // 防止進度條為 0%
+
+                    ?>
+                    <div class="donation-card">
+                        <h3><?= htmlspecialchars($row["Title"]) ?></h3>
+                        <p>募款目標：<?= number_format($row["Required_Amount"], 2) ?> 元</p>
+                        <p>目前募得：<?= number_format($row["Raised_Amount"], 2) ?> 元</p>
+                        <p>狀態：<?= htmlspecialchars($row["Status"]) ?></p>
+                        
+                        <!-- 進度條 -->
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: <?= $progress ?>%;"></div>
+                            <div class="progress-text"><?= number_format($progress, 2) ?>%</div>
+                        </div>
+
+                        <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
+                    </div>
+                    <?php
+                }
+            } else {
+                echo "<p class='text-center'>目前沒有募款建議。</p>";
+            }
+
+            $conn->close();
+            ?>
         </div>
-
-        <div class="card shadow-sm">
-            <div class="card-header">項目：校園環境綠化</div>
-            <div class="card-body">
-                <div class="donation-info">目標金額：NT$200,000</div>
-                <div class="donation-info">已募得：NT$85,000</div>
-                <div class="progress">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 42.5%;">42.5%</div>
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <script>
+        // 檢查返回頂部的按鈕顯示與隱藏
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        const iframe = document.querySelector('iframe[name="contentFrame"]');
+
+        backToTopBtn.addEventListener('click', () => {
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        iframe.addEventListener('load', () => {
+            const iframeWindow = iframe.contentWindow;
+
+            function toggleBackToTop() {
+                const scrollTop = iframeWindow.scrollY || iframeWindow.pageYOffset;
+                backToTopBtn.style.display = scrollTop > 200 ? 'block' : 'none';
+            }
+            toggleBackToTop();
+            iframeWindow.addEventListener('scroll', toggleBackToTop);
+        });
+    </script>
 </body>
 
 </html>
