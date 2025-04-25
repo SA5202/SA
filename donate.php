@@ -71,8 +71,10 @@ $result = $conn->query($sql);
             padding: 20px;
             margin: 10px;
             border-radius: 12px;
-           
-            
+            background-color: transparent;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .right-card {
@@ -117,7 +119,12 @@ $result = $conn->query($sql);
         .description {
             font-size: 1rem;
             color: #555;
-            margin-top: 10px;
+            margin-top: 25px;
+            max-height: 180px;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            flex-grow: 1;
         }
 
         .amount-section {
@@ -175,8 +182,15 @@ $result = $conn->query($sql);
                         <div class="left-card">
                             <h3><?= htmlspecialchars($row["Title"]) ?></h3>
                             <!-- 顯示建言描述 -->
-                            <?php if (!empty($row["Description"])) { ?>
-                                <p class="description"><?= nl2br(htmlspecialchars($row["Description"])) ?></p>
+                            <?php
+                            $maxLength = 120; 
+                            $description = $row["Description"];
+                            if (!empty($description)) {
+                                $shortDescription = mb_strlen($description) > $maxLength 
+                                    ? mb_substr($description, 0, $maxLength) . '...' 
+                                    : $description;
+                            ?>
+                                <p class="description"><?= nl2br(htmlspecialchars($shortDescription)) ?></p>
                             <?php } ?>
                         </div>
 
