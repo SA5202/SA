@@ -35,46 +35,51 @@ $result = $conn->query($sql);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <style>
-        .donation-progress {
-            margin-top: 30px;
-            margin-bottom: 30px;
-        }
-        
-        .donation-card {
-            margin-bottom: 20px;
-            background-color:transparent;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            transition: transform 0.3s ease;
-        }
+    body {
+        background-color: transparent !important;
+    }
 
-        .donation-card:hover {
-            transform: scale(1.03);
-        }
+    .donation-progress {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
 
-        .progress-bar-container {
-            position: relative;
-            height: 30px;
-            margin-bottom: 15px;
-        }
+    .donation-card {
+        margin-bottom: 20px;
+        background-color:rgb(202, 221, 225); /* 卡片底色 */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.3s ease;
+    }
 
-        .progress-bar {
-            position: absolute;
-            height: 100%;
-            width: 0;
-            background-color: #28a745;
-            transition: width 0.5s ease;
-        }
+    .donation-card:hover {
+        transform: scale(1.03);
+    }
 
-        .progress-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            font-weight: bold;
-            color: #fff;
-        }
-    </style>
+    .progress-bar-container {
+        position: relative;
+        height: 30px;
+        margin-bottom: 15px;
+    }
+
+    .progress-bar {
+        position: absolute;
+        height: 100%;
+        width: 0;
+        background-color: #28a745;
+        transition: width 0.5s ease;
+    }
+
+    .progress-text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        color: #fff;
+    }
+</style>
+
 </head>
 
 <body>
@@ -101,7 +106,7 @@ $result = $conn->query($sql);
                         <p>募款目標：<?= number_format($row["Required_Amount"], 2) ?> 元</p>
                         <p>目前募得：<?= number_format($row["Raised_Amount"], 2) ?> 元</p>
                         <p>狀態：<?= htmlspecialchars($row["Status"]) ?></p>
-                        
+
                         <!-- 進度條 -->
                         <div class="progress-bar-container">
                             <div class="progress-bar" style="width: <?= $progress ?>%;"></div>
