@@ -212,6 +212,15 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             font-size: 0.95rem;
             line-height: 1.6;
         }
+        .card-description {
+            overflow-wrap: break-word; /* 換行長字串 */
+            word-break: break-word;    /* 進一步保險，即使中英文混排 */
+            white-space: normal;       /* 確保會換行 */
+            margin-bottom: 1em;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
+        }
 
         /* 讓卡片內容區有對比的顏色 */
         .card .meta {
@@ -312,7 +321,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">
                 <h4><?= htmlspecialchars($row['Title']) ?></h4>
-                <p><?= mb_strimwidth(strip_tags($row['Description']), 0, 100, "...") ?></p>
+                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 100, "...") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
