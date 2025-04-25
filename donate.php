@@ -71,8 +71,10 @@ $result = $conn->query($sql);
             padding: 20px;
             margin: 10px;
             border-radius: 12px;
-           
-            
+            background-color: transparent;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .right-card {
@@ -118,9 +120,10 @@ $result = $conn->query($sql);
             font-size: 1rem;
             color: #555;
             margin-top: 25px;
-            min-height: 80px; /* 最小顯示區域高度 */
-            overflow: hidden;
-            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            flex-grow: 1;
         }
 
         .amount-section {
