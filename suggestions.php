@@ -92,7 +92,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             overflow-x: auto;
 
             /* 更深的灰色背景，與卡片內容區區分 */
-            background: rgba(230, 240, 249, 0.7);
+            background: rgba(241, 244, 249, 0.7);
             backdrop-filter: blur(8px); /* 稍微減弱模糊效果 */
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(200, 200, 200, 0.4);
@@ -193,10 +193,10 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 卡片標題區 */
         .card h4 {
             font-size: 1.2rem;
-            color: #34495e; /* 深灰藍色標題 */
+            color: #fff;
             margin: -2rem -2rem 1rem;
             padding: 1rem 2rem;
-            background: rgba(230, 240, 249);
+            background-color: rgba(85, 164, 186, 0.8);
             border-bottom: 1px solid #ddd;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
@@ -239,21 +239,19 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 操作按鈕樣式 */
         .card .btn {
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 1.5rem;
             background-color: rgba(170, 216, 224, 0.3);
-            color: #333;
-            border: none;
+            color: rgb(0, 76, 148);
             border-radius: 10px;
             font-size: 0.9rem;
             font-weight: 750;
             text-decoration: none;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .card .btn:hover {
-            background-color: rgba(220, 220, 220, 0.95);
-            transform: translateY(-2px);
+            background-color: rgba(0, 176, 224, 0.3);
+            color: white;
         }
 
         /* 喜歡數樣式 */

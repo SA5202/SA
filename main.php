@@ -153,14 +153,14 @@ $popular_result = $link->query($popular_sql);
             bottom: 20px;
             right: 20px;
             padding: 4px 20px;
-            background-color: rgba(0, 230, 219, 0.4);
+            background-color: rgba(170, 216, 224, 0.3);
             color: rgb(0, 76, 148);
             font-weight: 750;
             border-radius: 10px;
         }
 
         .btn-view:hover {
-            background-color: rgba(0, 176, 224, 0.6);
+            background-color: rgba(0, 176, 224, 0.3);
             color: white;
         }
 
