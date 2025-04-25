@@ -120,6 +120,7 @@ $result = $conn->query($sql);
             font-size: 1rem;
             color: #555;
             margin-top: 25px;
+            max-height: 180px;
             overflow-wrap: break-word;
             word-break: break-word;
             white-space: normal;
@@ -182,7 +183,7 @@ $result = $conn->query($sql);
                             <h3><?= htmlspecialchars($row["Title"]) ?></h3>
                             <!-- 顯示建言描述 -->
                             <?php
-                            $maxLength = 200; // 限制顯示最大 200 字
+                            $maxLength = 120; 
                             $description = $row["Description"];
                             if (!empty($description)) {
                                 $shortDescription = mb_strlen($description) > $maxLength 
