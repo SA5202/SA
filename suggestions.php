@@ -212,13 +212,13 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             font-size: 0.95rem;
             line-height: 1.6;
         }
+
         .card-description {
             overflow-wrap: break-word; /* 換行長字串 */
             word-break: break-word;    /* 進一步保險，即使中英文混排 */
             white-space: normal;       /* 確保會換行 */
             margin-bottom: 1em;
-            font-size: 1rem;
-            color: #555;
+            font-size: 1.05rem;
             line-height: 1.6;
         }
 
