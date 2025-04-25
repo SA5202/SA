@@ -27,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ids", $suggestion_id, $required_amount, $status);
     
     if ($stmt->execute()) {
-        // 插入成功後跳轉到 test1.php 顯示進度
-        header("Location: test1.php");
+        // 插入成功後跳轉到 donate.php 顯示進度
+        header("Location: donate.php");
         exit();
     } else {
         echo "<p>新增募款建議失敗：" . $conn->error . "</p>";
@@ -78,7 +78,7 @@ $result = $conn->query($sql);
 <body>
     <div class="container form-container">
         <h2>新增募款建議</h2>
-        <form action="test.php" method="POST">
+        <form action="fundingsuggestion.php" method="POST">
             <div class="form-group">
                 <label for="suggestion_id">選擇建言：</label>
                 <select name="suggestion_id" id="suggestion_id" class="form-control" required>
