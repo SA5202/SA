@@ -13,9 +13,9 @@ if ($conn->connect_error) {
     die("資料庫連接失敗: " . $conn->connect_error);
 }
 
-// 查詢募款進度
+// 查詢募款進度及建言描述
 $sql = "
-    SELECT f.Funding_ID, s.Title, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
+    SELECT f.Funding_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
     FROM FundingSuggestion f
     JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
     ORDER BY f.Updated_At DESC
@@ -52,43 +52,106 @@ $result = $conn->query($sql);
             justify-content: space-between;
             align-items: stretch;
             margin-bottom: 20px;
-            background-color: rgb(202, 221, 225);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
             padding: 20px;
             transition: transform 0.3s ease;
+            background-color:rgb(202, 220, 230);
+            border: 1px solid #ddd;
         }
 
         .donation-card:hover {
             transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .left-section {
-            flex: 2;
-        }
 
-        .right-section {
+        .left-card {
+            margin-right: 15px;
             flex: 1;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 12px;
+           
+            
+        }
+
+        .right-card {
+            margin-left: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            flex: 1;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 12px;
+            background-color:rgba(108, 139, 157, 0.29);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .piggy-bank {
-            width: 80px;
-            cursor: pointer;
-            margin-top: 10px;
+        h3 {
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+        }
+
+        p {
+            text-align: left;
+            font-size: 1rem;
+            color: #555;
+            line-height: 1.6;
         }
 
         .donate-label {
             font-weight: bold;
-            margin-top: 5px;
+            margin-top: 10px;
             color: #d63384;
+            font-size: 1.1rem;
+            cursor: pointer;
         }
 
         canvas {
             max-width: 100%;
+            margin-top: 20px;
+        }
+
+        .description {
+            font-size: 1rem;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .amount-section {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .amount-section p {
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .amount-section .status {
+            font-weight: bold;
+            color: rgb(55, 78, 116);
+        }
+
+        .status {
+            font-size: 1rem;
+            color: #888;
+        }
+
+        .piggy-bank {
+            width: 90px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .amount-section .text-muted {
+            font-size: 0.9rem;
+            color: #777;
         }
     </style>
 </head>
@@ -108,22 +171,36 @@ $result = $conn->query($sql);
                     $progress = round($progress, 2);
             ?>
                     <div class="donation-card">
-                        <!-- 左側區塊 -->
-                        <div class="left-section">
+                        <!-- 左側卡片: 標題和內文 -->
+                        <div class="left-card">
                             <h3><?= htmlspecialchars($row["Title"]) ?></h3>
-                            <p>募款目標：<?= number_format($row["Required_Amount"], 0) ?> 元</p>
-                            <p>目前募得：<?= number_format($row["Raised_Amount"], 0) ?> 元</p>
-                            <p>狀態：<?= htmlspecialchars($row["Status"]) ?></p>
-                            <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
+                            <!-- 顯示建言描述 -->
+                            <?php if (!empty($row["Description"])) { ?>
+                                <p class="description"><?= nl2br(htmlspecialchars($row["Description"])) ?></p>
+                            <?php } ?>
                         </div>
 
-                        <!-- 右側區塊 -->
-                        <div class="right-section">
-                            <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
-                            <div class="text-center">
-                                <i class="fas fa-piggy-bank donate-label" style="font-size: 1rem; cursor: pointer;" onclick="alert('即將開啟捐款功能')">點我捐款</i>
-                            </div>
+                        <!-- 右側卡片: 圓餅圖和募款金額 -->
+                        <div class="right-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!-- 右側金額顯示區 -->
+                                <div class="amount-section">
+                                    <p>募款目標：<?= number_format($row["Required_Amount"], 0) ?> 元</p>
+                                    <p>目前募得：<?= number_format($row["Raised_Amount"], 0) ?> 元</p>
+                                    <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
+                                    <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
+                                </div>
 
+                                <!-- 圓餅圖 -->
+                                <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
+                                    <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
+                                    <!-- 小豬撲滿捐款按鈕 -->
+                                    <div class="text-center mt-3">
+                                        <i class="fas fa-piggy-bank donate-label" onclick="alert('即將開啟捐款功能')">點我捐款</i>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
