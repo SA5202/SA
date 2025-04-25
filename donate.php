@@ -31,55 +31,66 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>募款進度</title>
 
-    <!-- 引入Bootstrap樣式 -->
+    <!-- Bootstrap、Font Awesome、Chart.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-    body {
-        background-color: transparent !important;
-    }
+        body {
+            background-color: transparent !important;
+        }
 
-    .donation-progress {
-        margin-top: 30px;
-        margin-bottom: 30px;
-    }
+        .donation-progress {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
 
-    .donation-card {
-        margin-bottom: 20px;
-        background-color:rgb(202, 221, 225); /* 卡片底色 */
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        transition: transform 0.3s ease;
-    }
+        .donation-card {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            margin-bottom: 20px;
+            background-color: rgb(202, 221, 225);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
 
-    .donation-card:hover {
-        transform: scale(1.03);
-    }
+        .donation-card:hover {
+            transform: scale(1.03);
+        }
 
-    .progress-bar-container {
-        position: relative;
-        height: 30px;
-        margin-bottom: 15px;
-    }
+        .left-section {
+            flex: 2;
+        }
 
-    .progress-bar {
-        position: absolute;
-        height: 100%;
-        width: 0;
-        background-color: #28a745;
-        transition: width 0.5s ease;
-    }
+        .right-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-    .progress-text {
-        position: absolute;
-        width: 100%;
-        text-align: center;
-        font-weight: bold;
-        color: #fff;
-    }
-</style>
+        .piggy-bank {
+            width: 80px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
+        .donate-label {
+            font-weight: bold;
+            margin-top: 5px;
+            color: #d63384;
+        }
+
+        canvas {
+            max-width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -90,31 +101,71 @@ $result = $conn->query($sql);
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    // 計算進度百分比，避免目標金額為 0 時出現錯誤
-                    if ($row["Required_Amount"] > 0) {
-                        $progress = ($row["Raised_Amount"] / $row["Required_Amount"]) * 100;
-                    } else {
-                        $progress = 0; // 目標金額為 0 時進度為 0
-                    }
-
-                    // 確保進度條至少顯示 1%（避免 0% 時完全隱藏進度條）
-                    $progress = max($progress, 1); // 防止進度條為 0%
-
+                    // 計算進度百分比
+                    $progress = ($row["Required_Amount"] > 0)
+                        ? ($row["Raised_Amount"] / $row["Required_Amount"]) * 100
+                        : 0;
+                    $progress = round($progress, 2);
                     ?>
                     <div class="donation-card">
-                        <h3><?= htmlspecialchars($row["Title"]) ?></h3>
-                        <p>募款目標：<?= number_format($row["Required_Amount"], 2) ?> 元</p>
-                        <p>目前募得：<?= number_format($row["Raised_Amount"], 2) ?> 元</p>
-                        <p>狀態：<?= htmlspecialchars($row["Status"]) ?></p>
-
-                        <!-- 進度條 -->
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" style="width: <?= $progress ?>%;"></div>
-                            <div class="progress-text"><?= number_format($progress, 2) ?>%</div>
+                        <!-- 左側區塊 -->
+                        <div class="left-section">
+                            <h3><?= htmlspecialchars($row["Title"]) ?></h3>
+                            <p>募款目標：<?= number_format($row["Required_Amount"], 2) ?> 元</p>
+                            <p>目前募得：<?= number_format($row["Raised_Amount"], 2) ?> 元</p>
+                            <p>狀態：<?= htmlspecialchars($row["Status"]) ?></p>
+                            <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
                         </div>
 
-                        <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
+                        <!-- 右側區塊 -->
+                        <div class="right-section">
+                            <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
+                            <div class="text-center">
+                                <img src="piggy-bank.png" class="piggy-bank" alt="Piggy Bank" onclick="alert('即將開啟捐款功能')" />
+                                <div class="donate-label">點我捐款</div>
+                            </div>
+                        </div>
                     </div>
+
+                    <script>
+                        const ctx<?= $row["Funding_ID"] ?> = document.getElementById('chart<?= $row["Funding_ID"] ?>').getContext('2d');
+                        let progress<?= $row["Funding_ID"] ?> = <?= $progress ?>;
+
+                        let color<?= $row["Funding_ID"] ?> = '#28a745';
+                        if (progress<?= $row["Funding_ID"] ?> >= 75) {
+                            color<?= $row["Funding_ID"] ?> = '#e60000';
+                        } else if (progress<?= $row["Funding_ID"] ?> >= 50) {
+                            color<?= $row["Funding_ID"] ?> = '#ff6600';
+                        } else if (progress<?= $row["Funding_ID"] ?> >= 25) {
+                            color<?= $row["Funding_ID"] ?> = '#ffcc00';
+                        }
+
+                        new Chart(ctx<?= $row["Funding_ID"] ?>, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['已募得', '剩餘'],
+                                datasets: [{
+                                    data: [progress<?= $row["Funding_ID"] ?>, 100 - progress<?= $row["Funding_ID"] ?>],
+                                    backgroundColor: [color<?= $row["Funding_ID"] ?>, '#e0e0e0'],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                cutout: '70%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function (tooltipItem) {
+                                                return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    </script>
                     <?php
                 }
             } else {
@@ -125,32 +176,6 @@ $result = $conn->query($sql);
             ?>
         </div>
     </div>
-
-    <script>
-        // 檢查返回頂部的按鈕顯示與隱藏
-        const backToTopBtn = document.getElementById('backToTopBtn');
-        const iframe = document.querySelector('iframe[name="contentFrame"]');
-
-        backToTopBtn.addEventListener('click', () => {
-            if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }
-        });
-
-        iframe.addEventListener('load', () => {
-            const iframeWindow = iframe.contentWindow;
-
-            function toggleBackToTop() {
-                const scrollTop = iframeWindow.scrollY || iframeWindow.pageYOffset;
-                backToTopBtn.style.display = scrollTop > 200 ? 'block' : 'none';
-            }
-            toggleBackToTop();
-            iframeWindow.addEventListener('scroll', toggleBackToTop);
-        });
-    </script>
 </body>
 
 </html>
