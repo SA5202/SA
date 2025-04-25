@@ -39,6 +39,7 @@ $result = $conn->query($sql);
     <style>
         body {
             background-color: transparent !important;
+            font-family: "Noto Serif TC", serif;
         }
 
         .donation-progress {

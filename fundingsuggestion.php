@@ -56,6 +56,7 @@ $result = $conn->query($sql);
     <style>
         body {
             background-color: #eef3f7;
+            font-family: "Noto Serif TC", serif;
         }
 
         .form-container {
