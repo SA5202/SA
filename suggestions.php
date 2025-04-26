@@ -54,6 +54,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 <head>
     <meta charset="UTF-8">
     <title>建言總覽 | 輔仁大學愛校建言捐款系統</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
        * {
             box-sizing: border-box;
@@ -203,6 +205,14 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             font-weight: bold;
         }
 
+        .card h4 i {
+            font-size: 1.3rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
         /* 卡片內容區域 */
         .card .content {
             background: rgba(200, 200, 200);
@@ -319,7 +329,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <div class="cards">
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">
-                <h4><?= htmlspecialchars($row['Title']) ?></h4>
+                <h4><i class='fas fa-pen-to-square'></i><?= htmlspecialchars($row['Title']) ?></h4>
                 <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 120, "...") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>

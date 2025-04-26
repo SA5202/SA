@@ -131,7 +131,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .icon {
             font-size: 1.5rem;
             width: 1.5rem;
-            height: 1.5rem;
+            height: 1.8rem;
             margin-right: 10px;
             vertical-align: middle;
             display: inline-block;
@@ -200,7 +200,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .btn-position {
             position: fixed;
-            top: 30px;
+            top: 20px;
             right: 40px;
             z-index: 200;
         }
