@@ -147,7 +147,7 @@ if (!$row) {
 
         .like-btn {
             background-color: #fff;
-            border: 2px solid rgb(0, 0, 0);
+            border: 2px solid rgb(147, 188, 205);
             color: #cc3333;
             font-size: 1rem;
             padding: 8px 16px;
@@ -156,12 +156,9 @@ if (!$row) {
             transition: background-color 0.3s, color 0.3s, transform 0.2s;
         }
 
-        .like-btn:hover {
-            background-color: #ffe6e6;
-        }
+
 
         .like-btn.liked {
-            background-color: #cc3333;
             color: #fff;
         }
 
