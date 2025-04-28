@@ -43,7 +43,7 @@ if (!$row) {
             max-width: 800px;
             margin: 40px auto;
             padding: 20px;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Noto Serif TC", serif;
             background-color: transparent;
             color: #333;
         }
@@ -53,6 +53,9 @@ if (!$row) {
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 40px;
+            /* 讓內容和進度條有間距 */
         }
 
         h2 {
@@ -70,7 +73,7 @@ if (!$row) {
         .description {
             font-size: 1.05rem;
             line-height: 1.8;
-            white-space: pre-wrap;
+
         }
 
         .likes {
@@ -87,16 +90,15 @@ if (!$row) {
         }
 
         .timeline {
+            flex: 1;
+            /* 右邊占 1 的比例 */
             position: relative;
-            margin: 20px 0;
+            margin: 0;
             padding: 0;
             list-style: none;
             border-left: 3px solid #ccc;
-            flex: 1;
-            /* 右邊佔1 */
-            padding-top: 10px;
-            /* 讓時間軸不要太緊 */
         }
+
 
         .timeline li {
             position: relative;
@@ -140,14 +142,37 @@ if (!$row) {
 
         .content {
             flex: 3;
-            /* 左邊佔3 */
+            /* 左邊占 3 的比例 */
         }
 
+        .like-btn {
+            background-color: #fff;
+            border: 2px solid rgb(0, 0, 0);
+            color: #cc3333;
+            font-size: 1rem;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        }
+
+        .like-btn:hover {
+            background-color: #ffe6e6;
+        }
+
+        .like-btn.liked {
+            background-color: #cc3333;
+            color: #fff;
+        }
+
+        .like-btn.liked #heart-icon {
+            color: #fff;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="card">
         <div class="content">
             <h2><?= htmlspecialchars($row['Title']) ?></h2>
             <div class="meta">
@@ -161,7 +186,13 @@ if (!$row) {
             </div>
 
             <div class="likes">
-                ❤️ <?= $row['LikeCount'] ?> 人喜歡這則建言
+                ❤️ <span id="like-count"><?= $row['LikeCount'] ?></span> 人喜歡這則建言
+            </div>
+            <br>
+            <div class="likes">
+                <button id="like-button" class="like-btn" data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>" data-liked="false">
+                    <i class="fas fa-heart" id="heart-icon">🤍</i>
+                </button>
             </div>
 
             <a href="suggestions.php" class="back">← 回建言總覽</a>
@@ -183,5 +214,55 @@ if (!$row) {
         </ul>
     </div>
 </body>
+<script>
+    document.getElementById('like-button').addEventListener('click', function() {
+        const button = this;
+        const suggestionId = button.getAttribute('data-suggestion-id');
+
+        fetch('like_suggestion.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'Suggestion_ID=' + suggestionId
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likeCountSpan = document.getElementById('like-count');
+                    let currentLikes = parseInt(likeCountSpan.textContent);
+
+                    const heartIcon = document.getElementById('heart-icon');
+
+                    if (data.liked) {
+                        // 按讚成功
+                        button.setAttribute('data-liked', 'true');
+                        button.classList.add('liked');
+                        heartIcon.textContent = '❤️'; // 實心愛心
+                        likeCountSpan.textContent = currentLikes + 1;
+                    } else {
+                        // 取消讚
+                        button.setAttribute('data-liked', 'false');
+                        button.classList.remove('liked');
+                        heartIcon.textContent = '🤍'; // 空心愛心
+                        likeCountSpan.textContent = currentLikes - 1;
+                    }
+                } else {
+                    if (data.redirect) {
+                        alert(data.message);
+                        window.location.href = data.redirect;
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            })
+            .catch(error => console.error('錯誤:', error));
+    });
+</script>
+
+
+
+
+
 
 </html>

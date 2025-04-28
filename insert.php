@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <meta http-equiv="refresh" content="2;url=login.php">
 </head>
 
 <body>
@@ -24,11 +23,13 @@
     // 如果資料庫中有該電子郵件，顯示錯誤訊息
     if (mysqli_num_rows($result) > 0) {
         echo "這個電子郵件已經註冊過，請使用其他電子郵件。", "<br>";
+        echo "<meta http-equiv='refresh' content='3;url=register.php'>";
     } else {
         // 2. 如果沒有重複的電子郵件，則插入新用戶
         $sql = "INSERT INTO useraccount(User_Name, Email, Password, User_Type) VALUES('$User_Name', '$Email', '$Password', 'user')";
         if (mysqli_query($link, $sql)) {
             echo "註冊成功", "<br>";
+            echo "<meta http-equiv='refresh' content='2;url=login.php'>";
         } else {
             echo "註冊失敗", "<br>";
         }

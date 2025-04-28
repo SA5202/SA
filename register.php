@@ -66,7 +66,7 @@
         .btn {
             width: 100%;
             padding: 12px;
-            background: rgb(205, 204, 147);
+            background: rgb(147, 188, 205);
             color: #fff;
             border: none;
             border-radius: 20px;
@@ -77,7 +77,7 @@
         }
 
         .btn:hover {
-            background: rgb(180, 181, 134);
+            background: rgb(108, 141, 173);
         }
 
         .remember-forgot {
