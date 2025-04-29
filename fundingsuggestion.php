@@ -134,8 +134,7 @@ $result = $conn->query($sql);
                     <?= htmlspecialchars($errorMessage) ?>
                 </div>
             <?php endif; ?>
-
-            <form action="funding_detail.php" method="POST">
+            <form action="fundingsuggestion.php" method="POST">
                 <div class="mb-3">
                     <label for="suggestion_id" class="form-label">選擇建言：</label>
                     <select name="suggestion_id" id="suggestion_id" class="form-select" required>
