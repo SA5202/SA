@@ -34,6 +34,20 @@ if (!$row) {
     echo "找不到該建言";
     exit;
 }
+
+$user_id = $_SESSION['User_ID'] ?? null;
+$hasLiked = false;
+
+if ($user_id) {
+    $like_sql = "SELECT Is_Upvoted FROM Upvote WHERE User_ID = ? AND Suggestion_ID = ? AND Is_Upvoted = 1";
+    $like_stmt = $link->prepare($like_sql);
+    $like_stmt->bind_param("ii", $user_id, $id);
+    $like_stmt->execute();
+    $like_result = $like_stmt->get_result();
+    $hasLiked = $like_result->num_rows > 0;
+}
+
+
 ?>
 
 
@@ -43,6 +57,8 @@ if (!$row) {
 <head>
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($row['Title']) ?> | 建言詳情</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         body {
             max-width: 800px;
@@ -164,11 +180,12 @@ if (!$row) {
 
 
         .like-btn.liked {
-            color: #fff;
+            color: #cc3333;
+            border-color: rgb(147, 188, 205);
         }
 
         .like-btn.liked #heart-icon {
-            color: #fff;
+            color: #cc3333;
         }
     </style>
 </head>
@@ -203,9 +220,16 @@ if (!$row) {
             <br>
             <?php if (!$is_admin): ?>
                 <div class="likes">
-                    <button id="like-button" class="like-btn" data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>" data-liked="false">
-                        <i class="fas fa-heart" id="heart-icon">🤍</i>
+                    <button id="like-button" class="like-btn <?= $hasLiked ? 'liked' : '' ?>"
+                        data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>"
+                        data-liked="<?= $hasLiked ? 'true' : 'false' ?>">
+
+                        <?php
+                        $heartClass = $hasLiked ? 'fas' : 'far';
+                        ?>
+                        <i class="<?= $heartClass ?> fa-heart" id="heart-icon"></i>
                     </button>
+
                 </div>
             <?php endif; ?>
 
@@ -230,6 +254,19 @@ if (!$row) {
     </div>
 </body>
 <script>
+    const button = document.getElementById('like-button');
+    const heartIcon = document.getElementById('heart-icon');
+
+    if (button.dataset.liked === 'true') {
+        button.classList.add('liked');
+        heartIcon.classList.remove('far');
+        heartIcon.classList.add('fas');
+    } else {
+        button.classList.remove('liked');
+        heartIcon.classList.remove('fas');
+        heartIcon.classList.add('far');
+    }
+
     document.getElementById('like-button').addEventListener('click', function() {
         const button = this;
         const suggestionId = button.getAttribute('data-suggestion-id');
@@ -246,22 +283,22 @@ if (!$row) {
                 if (data.success) {
                     const likeCountSpan = document.getElementById('like-count');
                     let currentLikes = parseInt(likeCountSpan.textContent);
-
                     const heartIcon = document.getElementById('heart-icon');
 
                     if (data.liked) {
-                        // 按讚成功
                         button.setAttribute('data-liked', 'true');
                         button.classList.add('liked');
-                        heartIcon.textContent = '❤️'; // 實心愛心
+                        heartIcon.classList.remove('far'); // 空心
+                        heartIcon.classList.add('fas'); // 實心
                         likeCountSpan.textContent = currentLikes + 1;
                     } else {
-                        // 取消讚
                         button.setAttribute('data-liked', 'false');
                         button.classList.remove('liked');
-                        heartIcon.textContent = '🤍'; // 空心愛心
+                        heartIcon.classList.remove('fas'); // 實心
+                        heartIcon.classList.add('far'); // 空心
                         likeCountSpan.textContent = currentLikes - 1;
                     }
+
                 } else {
                     if (data.redirect) {
                         alert(data.message);
@@ -274,6 +311,7 @@ if (!$row) {
             .catch(error => console.error('錯誤:', error));
     });
 </script>
+
 
 
 
