@@ -190,7 +190,7 @@ if ($result->num_rows > 0) {
                             ?>
                             <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                             <div class="action-btn">
-                                <button class="btn btn-warning" onclick="window.location.href='edit_funding.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯金額進度</button>
+                                <button class="btn btn-warning" onclick="window.location.href='edit_funding.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款建言</button>
                                 <button class="btn btn-danger" onclick="deleteFunding(<?= $row['Funding_ID'] ?>)">刪除</button>
                             </div>
                         </div>
