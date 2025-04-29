@@ -29,9 +29,17 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // 判斷是否達標或已結束
         $isCompleted = ($row["Raised_Amount"] >= $row["Required_Amount"]) || $row["Status"] === "已結束";
+
+        // 如果已達標，更新資料庫中的狀態為 '已完成'
         if ($isCompleted) {
+            // 更新狀態為已完成
+            $updateSql = "UPDATE FundingSuggestion SET Status = '已完成' WHERE Funding_ID = " . $row["Funding_ID"];
+            $conn->query($updateSql);
+
+            // 將已完成的建議加入 completed 陣列
             $completed[] = $row;
         } else {
+            // 進行中的募款
             $ongoing[] = $row;
         }
     }
@@ -208,7 +216,6 @@ if ($result->num_rows > 0) {
         <!-- 已結束 -->
         <h2><i class="fas fa-check-circle me-2 text-success"></i>已完成的建議</h2>
 
-
         <div class="donation-progress">
             <?php if (!empty($completed)) {
                 foreach ($completed as $row) {
@@ -229,7 +236,7 @@ if ($result->num_rows > 0) {
                             <div class="amount-section">
                                 <p>募款目標：<?= number_format($row["Required_Amount"]) ?> 元</p>
                                 <p>目前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
-                                <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?>（已結束）</p>
+                                <p class="status">狀態：已結束</p>
                                 <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
                             </div>
                             <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
