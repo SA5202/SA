@@ -216,7 +216,6 @@ if ($result->num_rows > 0) {
         <!-- 已結束 -->
         <h2><i class="fas fa-check-circle me-2 text-success"></i>已完成的建議</h2>
 
-
         <div class="donation-progress">
             <?php if (!empty($completed)) {
                 foreach ($completed as $row) {
@@ -245,6 +244,42 @@ if ($result->num_rows > 0) {
                             </div>
                         </div>
                     </div>
+                    <script>
+                        const ctx<?= $row["Funding_ID"] ?> = document.getElementById('chart<?= $row["Funding_ID"] ?>').getContext('2d');
+                        let progress<?= $row["Funding_ID"] ?> = <?= $progress ?>;
+                        let color<?= $row["Funding_ID"] ?> = '#28a745';
+                        if (progress<?= $row["Funding_ID"] ?> >= 75) color<?= $row["Funding_ID"] ?> = '#e60000';
+                        else if (progress<?= $row["Funding_ID"] ?> >= 50) color<?= $row["Funding_ID"] ?> = '#ff6600';
+                        else if (progress<?= $row["Funding_ID"] ?> >= 25) color<?= $row["Funding_ID"] ?> = '#ffcc00';
+
+                        new Chart(ctx<?= $row["Funding_ID"] ?>, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['已募得', '剩餘'],
+                                datasets: [{
+                                    data: [progress<?= $row["Funding_ID"] ?>, 100 - progress<?= $row["Funding_ID"] ?>],
+                                    backgroundColor: [color<?= $row["Funding_ID"] ?>, '#e0e0e0'],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                cutout: '70%',
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(t) {
+                                                return t.label + ': ' + t.raw + '%';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    </script>
             <?php }
             } else {
                 echo "<p class='text-center'>目前沒有已結束的建議。</p>";
