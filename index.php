@@ -5,6 +5,7 @@ $is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 ?>
 
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
@@ -329,13 +330,23 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <a href="main.php" target="contentFrame">
             <h1>FJU I-Money</h1>
         </a>
-        <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-        <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><span><b> 個人檔案</b></span></a>
-        <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
-        <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
-        <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
-        <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span></a>
-        <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span></a>
+        <?php if ($is_admin): ?>
+            <!-- 管理者的側邊欄 -->
+            <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
+            <a href="admin_dashboard.php" target="contentFrame"><i class="icon fas fa-tools"></i><span><b> 公告管理</b></span></a>
+            <a href="manage_users.php" target="contentFrame"><i class="icon fas fa-users-cog"></i><span><b> #使用者管理</b></span></a>
+            <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
+            <?php else: ?>
+            <!-- 一般使用者的側邊欄 -->
+            <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
+            <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><span><b> 個人檔案</b></span></a>
+            <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
+            <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
+            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
+            <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span></a>
+            <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span></a>
+            <!-- 其他一般使用者的選單 -->
+        <?php endif; ?>
     </div>
 
     <!-- 收合按鈕 -->

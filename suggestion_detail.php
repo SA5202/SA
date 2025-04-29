@@ -2,6 +2,9 @@
 session_start();
 require_once "db_connect.php";
 
+$is_logged_in = isset($_SESSION['User_Name']);
+$is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "無效的建言 ID";
     exit;
@@ -10,13 +13,14 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = intval($_GET['id']);
 
 $sql = "
-SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,
+SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,s.User_ID,u.User_Name,
        f.Facility_Type,
        b.Building_Name,
        (SELECT COUNT(*) FROM Upvote u WHERE u.Suggestion_ID = s.Suggestion_ID AND u.Is_Upvoted = 1) AS LikeCount
 FROM Suggestion s
 JOIN Facility f ON s.Facility_ID = f.Facility_ID
 JOIN Building b ON s.Building_ID = b.Building_ID
+JOIN Useraccount u ON s.User_ID = u.User_ID
 WHERE s.Suggestion_ID = ?
 ";
 
@@ -31,6 +35,7 @@ if (!$row) {
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -172,11 +177,21 @@ if (!$row) {
     <div class="card">
         <div class="content">
             <h2><?= htmlspecialchars($row['Title']) ?></h2>
-            <div class="meta">
-                關聯設施：<?= htmlspecialchars($row['Facility_Type']) ?><br>
-                關聯建築物：<?= htmlspecialchars($row['Building_Name']) ?><br>
-                更新時間：<?= $row['Updated_At'] ?>
-            </div>
+            <?php if ($is_admin): ?>
+                <div class="meta">
+                    發布人：<?= htmlspecialchars($row['User_Name']) ?><br>
+                    關聯設施：<?= htmlspecialchars($row['Facility_Type']) ?><br>
+                    關聯建築物：<?= htmlspecialchars($row['Building_Name']) ?><br>
+                    更新時間：<?= $row['Updated_At'] ?>
+                </div>
+            <?php else: ?>
+                <div class="meta">
+                    關聯設施：<?= htmlspecialchars($row['Facility_Type']) ?><br>
+                    關聯建築物：<?= htmlspecialchars($row['Building_Name']) ?><br>
+                    更新時間：<?= $row['Updated_At'] ?>
+                </div>
+            <?php endif; ?>
+
 
             <div class="description">
                 <?= nl2br(htmlspecialchars($row['Description'])) ?>
