@@ -201,11 +201,14 @@ if (!$row) {
                 ❤️ <span id="like-count"><?= $row['LikeCount'] ?></span> 人喜歡這則建言
             </div>
             <br>
-            <div class="likes">
-                <button id="like-button" class="like-btn" data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>" data-liked="false">
-                    <i class="fas fa-heart" id="heart-icon">🤍</i>
-                </button>
-            </div>
+            <?php if (!$is_admin): ?>
+                <div class="likes">
+                    <button id="like-button" class="like-btn" data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>" data-liked="false">
+                        <i class="fas fa-heart" id="heart-icon">🤍</i>
+                    </button>
+                </div>
+            <?php endif; ?>
+
 
             <a href="suggestions.php" class="back">← 回建言總覽</a>
         </div>
