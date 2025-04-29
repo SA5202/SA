@@ -236,7 +236,7 @@ if ($result->num_rows > 0) {
                             <div class="amount-section">
                                 <p>募款目標：<?= number_format($row["Required_Amount"]) ?> 元</p>
                                 <p>目前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
-                                <p class="status">狀態：已結束</p>
+                                <p class="status">狀態：已完成</p>
                                 <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
                             </div>
                             <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
