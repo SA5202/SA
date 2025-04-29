@@ -214,7 +214,7 @@ if ($result->num_rows > 0) {
         </div>
 
         <!-- 已結束 -->
-        <h2><i class="fas fa-check-circle me-2 text-success"></i>已完成的建議</h2>
+        <h2><i class="fas fa-check-circle me-2 text-success"></i>募款已完成</h2>
 
         <div class="donation-progress">
             <?php if (!empty($completed)) {
