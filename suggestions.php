@@ -328,7 +328,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <div class="cards">
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">
-                <h4><i class="fa-solid fa-palette"></i> <?= htmlspecialchars($row['Title']) ?></h4>
+                <h4><i class="fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?></h4>
                 <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 120, "...") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>

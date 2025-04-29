@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ids", $suggestion_id, $required_amount, $status);
 
     if ($stmt->execute()) {
-        header("Location: donate.php");
+        header("Location: funding_detail.php");
         exit();
     } else {
         // 美化的錯誤訊息
