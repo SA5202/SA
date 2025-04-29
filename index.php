@@ -333,10 +333,13 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <?php if ($is_admin): ?>
             <!-- 管理者的側邊欄 -->
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="admin_dashboard.php" target="contentFrame"><i class="icon fas fa-tools"></i><span><b> 公告管理</b></span></a>
-            <a href="manage_users.php" target="contentFrame"><i class="icon fas fa-users-cog"></i><span><b> #使用者管理</b></span></a>
-            <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
-            <?php else: ?>
+            <a href="admin_dashboard.php" target="contentFrame"><i class="icon fas fa-tools"></i><span><b> 最新公告管理</b></span></a>
+            <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言進度管理</b></span></a>
+            <a href="manage_users.php" target="contentFrame">
+                <i class="icon fas fa-hand-holding-usd"></i><span><b> 募款建言管理</b></span>
+            </a>
+
+        <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
             <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><span><b> 個人檔案</b></span></a>
