@@ -52,20 +52,30 @@ if ($result->num_rows > 0) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>募款進度 | 輔仁大學愛校建言捐款系統</title>
+    <title>募款建言管理 | 輔仁大學愛校建言捐款系統</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
+            max-width: 85%;
+            margin: 20px auto;
+            padding: 30px;
             background-color: transparent !important;
             font-family: "Noto Serif TC", serif;
         }
 
-        h2 {
-            font-weight: 750;
-            text-align: left;
-            margin-top: 30px;
+        h3 {
+            margin-top: 20px 0;
+            font-weight: bold;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px;
+            display: inline-block;
         }
 
         .donation-card {
@@ -73,10 +83,10 @@ if ($result->num_rows > 0) {
             flex-direction: row;
             justify-content: space-between;
             align-items: stretch;
-            margin-bottom: 20px;
-            border-radius: 12px;
+            margin: 30px 0;
+            border-radius: 30px;
             padding: 20px;
-            background-color: rgb(224, 235, 241);
+            background-color: rgba(241, 244, 249, 0.9);
             border: 1px solid #ddd;
             transition: transform 0.3s ease;
         }
@@ -91,14 +101,18 @@ if ($result->num_rows > 0) {
             flex: 1;
             padding: 20px;
             margin: 10px;
-            border-radius: 12px;
+            border-radius: 30px;
             background-color: transparent;
         }
 
         .right-card {
-            background-color: rgba(108, 139, 157, 0.29);
+            background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             align-items: center;
+        }
+
+        .left-card h4 {
+            font-weight: bold;
         }
 
         .description {
@@ -112,11 +126,11 @@ if ($result->num_rows > 0) {
 
         .amount-section p {
             margin: 5px 0;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         .amount-section .status {
-            font-weight: bold;
             color: rgb(55, 78, 116);
         }
 
@@ -139,6 +153,7 @@ if ($result->num_rows > 0) {
         /* 自定義按鈕樣式 */
         .action-btn button {
             border: none;
+            margin: 10px 0;
             padding: 10px 20px;
             font-size: 1rem;
             font-weight: bold;
@@ -169,10 +184,8 @@ if ($result->num_rows > 0) {
 </head>
 
 <body>
-    <div class="container">
-
-        <!-- 正在進行 -->
-        <h2><i class="fas fa-coins me-2"></i>募款進行中</h2>
+    <!-- 正在進行 -->
+    <h3><i class="icon fas fa-coins me-2"></i> 進行中的募款建言</h3>
 
         <div class="donation-progress">
             <?php if (!empty($ongoing)) {
@@ -183,7 +196,7 @@ if ($result->num_rows > 0) {
             ?>
                     <div class="donation-card">
                         <div class="left-card">
-                            <h3><?= htmlspecialchars($row["Title"]) ?></h3>
+                            <h4><?= htmlspecialchars($row["Title"]) ?></h4>
                             <?php
                             $desc = $row["Description"];
                             $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '...' : $desc;
@@ -196,10 +209,10 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="right-card d-flex justify-content-between">
                             <div class="amount-section">
-                                <p>募款目標：<?= number_format($row["Required_Amount"]) ?> 元</p>
-                                <p>目前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
+                                <p>目標金額： NT$ <?= number_format($row["Required_Amount"]) ?></p>
+                                <p>當前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
                                 <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
-                                <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
+                                <p class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
                             </div>
                             <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
                                 <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
@@ -254,8 +267,8 @@ if ($result->num_rows > 0) {
             } ?>
         </div>
 
-        <!-- 已結束 -->
-        <h2><i class="fas fa-check-circle me-2 text-success"></i>募款已完成</h2>
+    <!-- 已結束 -->
+    <h3><i class="icon fas fa-check-circle me-2 text-success"></i> 已完成的募款建言</h3>
 
         <div class="donation-progress">
             <?php if (empty($completed)) : ?>
@@ -281,10 +294,10 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="right-card d-flex justify-content-between">
                             <div class="amount-section">
-                                <p>募款目標：<?= number_format($row["Required_Amount"]) ?> 元</p>
-                                <p>目前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
+                                <p>募款目標： NT$ <?= number_format($row["Required_Amount"]) ?></p>
+                                <p>目前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
                                 <p class="status">狀態：已完成</p>
-                                <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
+                                <p class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
                             </div>
                             <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
                                 <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
@@ -330,7 +343,7 @@ if ($result->num_rows > 0) {
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-    </div>
+        
 </body>
 
 </html>

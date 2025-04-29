@@ -68,35 +68,41 @@ if (isset($_GET['funding_id'])) {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>編輯募款建言</title>
+    <title>編輯募款建言 | 輔仁大學愛校建言捐款系統</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <style>
         body {
             background-color: transparent;
+            /* 設置透明背景 */
             font-family: "Noto Serif TC", serif;
         }
 
         .form-container {
-            margin-top: 60px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 50%;
+            margin: 80px auto;
         }
 
         .form-card {
             background-color: rgba(255, 255, 255, 0.9);
+            /* 淡透明背景 */
             padding: 40px;
-            border-radius: 12px;
+            border-radius: 30px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
         }
 
-        .form-card h2 {
+        .form-card h3 {
             text-align: center;
             margin-bottom: 30px;
-            font-weight: 600;
+            font-weight: bold;
             color: #2c3e50;
+        }
+
+        label {
+            font-weight: bold;
         }
 
         .btn-block {
@@ -107,9 +113,10 @@ if (isset($_GET['funding_id'])) {
             margin-top: 20px;
         }
 
+        /* 自訂按鈕顏色 */
         .btn-custom {
             background-color: rgb(136, 184, 209);
-            border-color: rgb(83, 127, 164);
+            padding: 10px 30px;
             color: white;
             font-weight: bold;
             transition: all 0.3s ease;
@@ -118,7 +125,6 @@ if (isset($_GET['funding_id'])) {
 
         .btn-custom:hover {
             background-color: rgb(83, 127, 164);
-            border-color: rgb(51, 81, 105);
         }
 
         .btn-custom:focus,
@@ -127,6 +133,7 @@ if (isset($_GET['funding_id'])) {
             box-shadow: none;
         }
 
+        /* 完全移除頁腳區塊 */
         footer {
             display: none;
         }
@@ -136,7 +143,7 @@ if (isset($_GET['funding_id'])) {
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h2>編輯募款建言</h2>
+            <h3>編輯募款建言</h3>
 
             <!-- 顯示錯誤訊息 -->
             <?php if (!empty($errorMessage)) : ?>
@@ -149,24 +156,24 @@ if (isset($_GET['funding_id'])) {
                 <input type="hidden" name="funding_id" value="<?= htmlspecialchars($row['Funding_ID']) ?>">
 
                 <div class="mb-3">
-                    <label for="required_amount" class="form-label">募款目標金額</label>
+                    <label for="required_amount" class="form-label">募款目標金額：</label>
                     <input type="number" class="form-control" id="required_amount" name="required_amount" value="<?= htmlspecialchars($row['Required_Amount']) ?>" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="raised_amount" class="form-label">已募得金額</label>
+                    <label for="raised_amount" class="form-label">當前已募得金額：</label>
                     <input type="number" class="form-control" id="raised_amount" name="raised_amount" value="<?= htmlspecialchars($row['Raised_Amount']) ?>" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="status" class="form-label">募款狀態</label>
+                    <label for="status" class="form-label">募款狀態：</label>
                     <select class="form-select" id="status" name="status" required>
                         <option value="進行中" <?= $row['Status'] === '進行中' ? 'selected' : '' ?>>進行中</option>
                         <option value="已完成" <?= $row['Status'] === '已完成' ? 'selected' : '' ?>>已完成</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-custom btn-block">保存更改</button>
+                <button type="submit" class="btn btn-custom btn-block">儲存變更</button>
             </form>
         </div>
     </div>

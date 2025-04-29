@@ -49,7 +49,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>新增募款建言 | 輔仁大學愛校建言捐款系統</title>
+    <title>公告管理 | 輔仁大學愛校建言捐款系統</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
@@ -124,7 +124,7 @@ $result = $conn->query($sql);
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h3>新增募款建言</h3>
+            <h3>發佈公告</h3>
 
             <!-- 錯誤提示訊息 -->
             <?php if (!empty($errorMessage)) : ?>
@@ -134,7 +134,7 @@ $result = $conn->query($sql);
             <?php endif; ?>
             <form action="fundingsuggestion.php" method="POST">
                 <div class="mb-3">
-                    <label for="suggestion_id" class="form-label">選擇待募款建言：</label>
+                    <label for="suggestion_id" class="form-label">公告標題：</label>
                     <select name="suggestion_id" id="suggestion_id" class="form-select" required>
                         <option value="">選擇建言</option>
                         <?php
@@ -150,7 +150,7 @@ $result = $conn->query($sql);
                 </div>
 
                 <div class="mb-3">
-                    <label for="required_amount" class="form-label">預期目標金額：</label>
+                    <label for="required_amount" class="form-label">公告內容：</label>
                     <input type="number" name="required_amount" id="required_amount" class="form-control" required min="0" step="1000">
                 </div>
 
@@ -161,7 +161,7 @@ $result = $conn->query($sql);
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-custom btn-block">提交募款建言</button>
+                <button type="submit" class="btn btn-custom btn-block">確認發佈</button>
             </form>
         </div>
     </div>

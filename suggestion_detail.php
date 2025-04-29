@@ -61,8 +61,8 @@ if ($user_id) {
 
     <style>
         body {
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 80%;
+            margin: 80px auto;
             padding: 20px;
             font-family: "Noto Serif TC", serif;
             background-color: transparent;
@@ -71,22 +71,25 @@ if ($user_id) {
 
         .card {
             background: white;
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 40px;
+            padding: 40px 50px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             display: flex;
             gap: 40px;
             /* 讓內容和進度條有間距 */
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
         }
 
-        h2 {
-            font-size: 1.8rem;
+        h3 {
+            font-size: 1.6rem;
             margin-bottom: 1rem;
             color: #2c3e50;
         }
 
         .meta {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             color: #666;
             margin-bottom: 1.5rem;
         }
@@ -111,6 +114,7 @@ if ($user_id) {
         }
 
         .timeline {
+            height: 50vh; /* 佔螢幕高度的 50% */
             flex: 1;
             /* 右邊占 1 的比例 */
             position: relative;
@@ -193,19 +197,19 @@ if ($user_id) {
 <body>
     <div class="card">
         <div class="content">
-            <h2><?= htmlspecialchars($row['Title']) ?></h2>
+            <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php if ($is_admin): ?>
                 <div class="meta">
-                    發布人：<?= htmlspecialchars($row['User_Name']) ?><br>
-                    關聯設施：<?= htmlspecialchars($row['Facility_Type']) ?><br>
-                    關聯建築物：<?= htmlspecialchars($row['Building_Name']) ?><br>
-                    更新時間：<?= $row['Updated_At'] ?>
+                    發佈者： <?= htmlspecialchars($row['User_Name']) ?><br>
+                    關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
+                    關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
+                    更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
                 </div>
             <?php else: ?>
                 <div class="meta">
-                    關聯設施：<?= htmlspecialchars($row['Facility_Type']) ?><br>
-                    關聯建築物：<?= htmlspecialchars($row['Building_Name']) ?><br>
-                    更新時間：<?= $row['Updated_At'] ?>
+                    關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
+                    關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
+                    更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
                 </div>
             <?php endif; ?>
 
@@ -234,7 +238,7 @@ if ($user_id) {
             <?php endif; ?>
 
 
-            <a href="suggestions.php" class="back">← 回建言總覽</a>
+            <a href="suggestions.php" class="back"><b>⬅ 回建言總覽</b></a>
         </div>
 
         <ul class="timeline">
