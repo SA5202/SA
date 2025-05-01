@@ -29,8 +29,7 @@ if ($result->num_rows === 1) {
     date_default_timezone_set('Asia/Taipei');
 
     $token = bin2hex(random_bytes(32));
-    $expires = date("Y-m-d H:i:s", strtotime('+1 hour'));
-
+    $expires = "9999-12-31 23:59:59";
 
     // 儲存 token 到資料庫
     $update = "UPDATE useraccount SET reset_token = ?, reset_token_expires = ? WHERE Email = ?";
@@ -39,8 +38,9 @@ if ($result->num_rows === 1) {
     $stmt->execute();
 
 
+
     // 建立重設連結
-    $reset_link = "http://localhost/Web/SA/reset.php?token=$token"; // 修改為指向 reset.php
+    $reset_link = "http://localhost/Web/SA/reset.php?token=$token"; 
 
     // 然後再寄信
     $mail = new PHPMailer(true); // 確保這一行存在
@@ -57,7 +57,7 @@ if ($result->num_rows === 1) {
         $mail->addAddress($email);  // 使用者的 email 地址
 
         $mail->Subject = '密碼重設連結';
-        $mail->Body    = "您好，請點擊以下連結重設您的密碼（1小時內有效）：\n\n$reset_link";
+        $mail->Body    = "您好，請點擊以下連結重設您的密碼：\n\n$reset_link";
 
         $mail->send();  // 發送郵件
 
