@@ -121,6 +121,9 @@
             </div>
             <button type="submit" class="btn">登入</button>
             <div class="login-register">
+                <p>忘記密碼 ? <a href="password.php">點擊復原</a></p>
+            </div>
+            <div class="login-register">
                 <p>沒有帳號 ? <a href="register.php">點擊註冊</a></p>
             </div>
         </form>
