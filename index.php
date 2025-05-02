@@ -333,7 +333,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <?php if ($is_admin): ?>
             <!-- 管理者的側邊欄 -->
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="news.php" target="contentFrame"><i class="icon fas fa-tools"></i><span><b> 公告管理</b></span></a>
+            <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-wrench"></i></i><span><b> 公告管理</b></span></a>
+            <a href="news_insert.php" target="contentFrame"><i class="icon fa-solid fa-notes-medical"></i><span><b> 新增公告</b></span></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言進度管理</b></span></a>
             <a href="funding_detail.php" target="contentFrame">
                 <i class="icon fas fa-cogs"></i><span><b> 募款建言管理</b></span>
@@ -346,7 +347,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="record.php" target="contentFrame"><i class="icon fas fa-user"></i><span><b> 個人檔案</b></span></a>
+            <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-bell"></i></i><span><b> 公告</b></span></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
             <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
             <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
@@ -365,7 +366,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <?php if ($is_logged_in): ?>
         <div class="user-info-logout btn-position">
             <img src="https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="頭像" class="avatar">
-            <span class="username"><b><?= htmlspecialchars($_SESSION['User_Name']) ?></b></span>
+            <a href="record.php" target="contentFrame" style="text-decoration: none;"><span class="username"><b><?= htmlspecialchars($_SESSION['User_Name']) ?></b></span></a>
             <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
         </div>
 

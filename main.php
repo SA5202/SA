@@ -5,6 +5,10 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 require_once "db_connect.php";
 
+// 查詢公告資料
+$news_sql = "SELECT News_Title, News_Content, Update_At FROM News ORDER BY Update_At DESC LIMIT 5";
+$news_result = $link->query($news_sql);
+
 // 最新建言（依照時間）
 $newest_sql = "
 SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,
@@ -36,7 +40,7 @@ $popular_result = $link->query($popular_sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>輔仁大學愛校建言捐款系統</title>
+    <title>首頁 丨 輔仁大學愛校建言捐款系統</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -167,8 +171,8 @@ $popular_result = $link->query($popular_sql);
         .carousel-item {
             position: relative;
             background-color: #f8f9fa;
-            padding: 25px 30px;
-            border-radius: 20px;
+            padding: 30px 50px;
+            border-radius: 25px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
             font-weight: bold;
             font-size: 1.1rem;
@@ -179,6 +183,11 @@ $popular_result = $link->query($popular_sql);
 
         .carousel-inner {
             border-radius: 20px;
+        }
+
+        .announcement-card-header {
+            font-weight: bold;
+            color:rgb(0, 102, 255);
         }
 
         .carousel-indicators [data-bs-target] {
@@ -207,27 +216,25 @@ $popular_result = $link->query($popular_sql);
 
         <!-- 輪播內容 -->
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="announcement-card">
-                    <div class="announcement-card-header">
-                        <i class="icon fa-solid fa-bullhorn"></i> 系統維護通知
-                    </div>
-                    <div class="announcement-card-body">
-                        <p>🔧 7/8 系統將進行年度保養，請使用者留意，屆時將暫停服務。</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="carousel-item">
-                <div class="announcement-card">
-                    <div class="announcement-card-header">
-                        <i class="icon fa-solid fa-bullhorn"></i> 暑假志工活動開放報名
-                    </div>
-                    <div class="announcement-card-body">
-                        <p>🌟 歡迎同學報名暑期校園志工活動，報名截止日為 7/20，詳細資訊請見學務處官網。</p>
-                    </div>
-                </div>
-            </div>
+            <?php
+            $news_result->data_seek(0);
+            $carousel_index = 0;
+            while ($row = $news_result->fetch_assoc()) {
+                $active_class = ($carousel_index == 0) ? " active" : "";
+                echo "<div class='carousel-item" . $active_class . "'>";
+                echo "<div class='announcement-card'>";
+                echo "<div class='announcement-card-header'>";
+                echo "<p><i class='icon fa-solid fa-bullhorn'></i> " . htmlspecialchars($row['News_Title']) . "</p>";
+                echo "</div>";
+                echo "<div class='announcement-card-body'>";
+                echo "<p class='card-text'>" . htmlspecialchars($row['News_Content']) . "</p>";
+                echo "<p class='card-text'><small class='text-muted'>更新時間： " . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
+                echo "</div>";
+                echo "</div>";
+                echo "</div>";
+                $carousel_index++;
+            }
+            ?>
         </div>
     </div>
 

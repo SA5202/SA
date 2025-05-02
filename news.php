@@ -1,175 +1,171 @@
 <?php
 session_start();
+$is_logged_in = isset($_SESSION['username']);
+$is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
-// 資料庫連接
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "SA";
+require_once "db_connect.php";
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("資料庫連接失敗: " . $conn->connect_error);
-}
-
-$errorMessage = ""; // 初始化錯誤訊息
-
-// 處理表單提交
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $suggestion_id = $_POST['suggestion_id'];
-    $required_amount = $_POST['required_amount'];
-    $status = $_POST['status'];
-
-    // 插入募款建議
-    $sql = "INSERT INTO FundingSuggestion (Suggestion_ID, Required_Amount, Raised_Amount, Status, Updated_At) 
-            VALUES (?, ?, 0, ?, NOW())";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ids", $suggestion_id, $required_amount, $status);
-
-    if ($stmt->execute()) {
-        header("Location: funding_detail.php");
-        exit();
-    } else {
-        // 美化的錯誤訊息
-        $errorMessage = "此建言找不到或已在募款中，請重新選擇。";
-    }
-
-    $stmt->close();
-}
-
-// 查詢建言列表
-$sql = "SELECT Suggestion_ID, Title FROM Suggestion";
-$result = $conn->query($sql);
+// 查詢公告資料
+$news_sql = "SELECT News_ID, News_Title, News_Content, Update_At FROM News ORDER BY Update_At DESC LIMIT 5";
+$news_result = $link->query($news_sql);
 ?>
 
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>公告管理 | 輔仁大學愛校建言捐款系統</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公告 丨 輔仁大學愛校建言捐款系統</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <style>
         body {
-            background-color: transparent;
-            /* 設置透明背景 */
+            max-width: 85%;
+            margin: 0 auto;
+            padding: 30px;
+            font-size: 1.1rem;
             font-family: "Noto Serif TC", serif;
+            line-height: 1.8;
+            background-repeat: repeat;
+            background-color: transparent;
+            overflow-x: hidden;
         }
 
-        .form-container {
-            max-width: 50%;
-            margin: 80px auto;
-        }
-
-        .form-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            /* 淡透明背景 */
-            padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
-        }
-
-        .form-card h3 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        label {
+        h3 {
+            margin: 20px 0;
             font-weight: bold;
         }
 
-        .btn-block {
-            width: 100%;
+        .icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px;
+            display: inline-block;
         }
 
-        .alert {
-            margin-top: 20px;
-        }
-
-        /* 自訂按鈕顏色 */
-        .btn-custom {
-            background-color: rgb(136, 184, 209);
+        .card {
+            background-color: #f8f9fa;
             padding: 10px 30px;
-            color: white;
+            border-radius: 25px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
             font-weight: bold;
-            transition: all 0.3s ease;
-            border-radius: 30px;
+            font-size: 1.1rem;
+            color: #333;
+            border: 1px solid var(--bs-border-color-translucent);
+            transition: transform 0.3s ease;
         }
 
-        .btn-custom:hover {
-            background-color: rgb(83, 127, 164);
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .btn-custom:focus,
-        .btn-custom:active {
-            outline: none;
-            box-shadow: none;
+        .card-title {
+            font-weight: bold;
+            color: rgb(0, 102, 255);
         }
 
-        /* 完全移除頁腳區塊 */
-        footer {
-            display: none;
+        .card-body {
+            position: relative;
+        }
+
+        .content-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .content-text {
+            white-space: pre-wrap;
+            min-width: 0;
+            margin-right: 140px; /* 預留空間讓浮動的按鈕不會擋住文字 */
+            flex: 1;
+        }
+
+        .action-buttons {
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-buttons .btn-edit,
+        .action-buttons .btn-delete {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            padding: 8px 50px;
+            font-weight: bold;
+            transition: 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background-color:rgb(156, 219, 84);
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color:rgb(132, 228, 228);
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background-color:rgb(231, 66, 66);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color:rgb(132, 228, 228);
+            transform: scale(1.05);
         }
     </style>
 </head>
 
 <body>
-    <div class="container form-container">
-        <div class="form-card">
-            <h3>發佈公告</h3>
+    <h3><i class="icon fa-solid fa-bell"></i> 所有公告</h3>
+    <div class="row row-cols-1 g-4">
+        <?php
+        $news_result->data_seek(0);
+        while ($row = $news_result->fetch_assoc()) {
+            echo "<div class='col'>";
+            echo "<div class='card'>";
+            echo "<div class='card-body'>";
+            echo "<p><h5 class='card-title'><i class='icon fa-solid fa-bullhorn icon'></i>" . htmlspecialchars($row['News_Title']) . "</h5></p>";
 
-            <!-- 錯誤提示訊息 -->
-            <?php if (!empty($errorMessage)) : ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($errorMessage) ?>
-                </div>
-            <?php endif; ?>
-            <form action="fundingsuggestion.php" method="POST">
-                <div class="mb-3">
-                    <label for="suggestion_id" class="form-label">公告標題：</label>
-                    <select name="suggestion_id" id="suggestion_id" class="form-select" required>
-                        <option value="">選擇建言</option>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<option value='" . $row['Suggestion_ID'] . "'>" . htmlspecialchars($row['Title']) . "</option>";
-                            }
-                        } else {
-                            echo "<option disabled>無可選建言</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+            echo "<div class='content-row'>";
 
-                <div class="mb-3">
-                    <label for="required_amount" class="form-label">公告內容：</label>
-                    <input type="number" name="required_amount" id="required_amount" class="form-control" required min="0" step="1000">
-                </div>
+            // 左側內容
+            echo "<p class='content-text'>" . htmlspecialchars($row['News_Content']) . "</p>";
 
-                <div class="mb-4">
-                    <label for="status" class="form-label">設置建言募款狀態：</label>
-                    <select name="status" id="status" class="form-select" required>
-                        <option value="募款中">募款中</option>
-                    </select>
-                </div>
+            // 右側按鈕（僅管理員）
+            if ($is_admin) {
+                echo "<div class='action-buttons'>";
+                echo "<a href='edit_news.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-edit'>編輯</a>";
+                echo "<a href='delete_news.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-delete' onclick='return confirm(\"確定要刪除這則公告嗎？\")'>刪除</a>";
+                echo "</div>";
+            }
 
-                <button type="submit" class="btn btn-custom btn-block">確認發佈</button>
-            </form>
-        </div>
+            echo "</div>"; // content-row
+
+            echo "<p class='card-text mt-3'><small class='text-muted'>更新時間：" . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
+
+            echo "</div>"; // card-body
+            echo "</div>"; // card
+            echo "</div>"; // col
+        }
+        ?>
     </div>
 
-    <?php $conn->close(); ?>
-
-    <!-- 載入 Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
