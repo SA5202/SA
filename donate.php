@@ -135,6 +135,10 @@ if ($result->num_rows > 0) {
 </head>
 
 <body>
+    <script>
+        const isLoggedIn = <?= isset($_SESSION['User_ID']) ? 'true' : 'false' ?>;
+    </script>
+
     <div class="container">
 
         <!-- 正在進行 -->
@@ -166,7 +170,8 @@ if ($result->num_rows > 0) {
                             <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
                                 <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
                                 <div class="text-center mt-3">
-                                    <i class="fas fa-piggy-bank donate-label" onclick="alert('即將開啟捐款功能')">點我捐款</i>
+                                    <i class="fas fa-piggy-bank donate-label" onclick="handleDonate(<?= $row['Funding_ID'] ?>)">點我捐款</i>
+
                                 </div>
                             </div>
                         </div>
@@ -286,6 +291,19 @@ if ($result->num_rows > 0) {
             } ?>
         </div>
     </div>
+    <script>
+        function handleDonate(fundingID) {
+            if (!isLoggedIn) {
+                // 顯示自訂警告框（Bootstrap Modal or confirm）
+                if (confirm("請先登入才能捐款。\n是否前往登入頁面？")) {
+                    window.location.href = "login.php"; // 更換成你的登入頁面路徑
+                }
+            } else {
+                window.location.href = "donation_page.php?funding_id=" + fundingID;
+            }
+        }
+    </script>
+
 </body>
 
 </html>
