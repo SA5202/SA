@@ -68,7 +68,7 @@ if ($result->num_rows > 0) {
             font-family: "Noto Serif TC", serif;
         }
 
-        h3 {
+        h2 {
             margin-top: 20px 0;
             font-weight: bold;
         }
@@ -163,7 +163,7 @@ if ($result->num_rows > 0) {
     <div class="container">
 
         <!-- 正在進行 -->
-        <h2><i class="fas fa-coins me-2"></i>募款進行中</h2>
+        <h2><i class="fas fa-coins me-2"style="font-size: 2rem;"></i>募款進行中</h2>
 
         <div class="donation-progress">
             <?php if (!empty($ongoing)) {
@@ -183,8 +183,8 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="right-card d-flex justify-content-between">
                             <div class="amount-section">
-                                <p>募款目標：<?= number_format($row["Required_Amount"]) ?> 元</p>
-                                <p>目前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
+                                <p>目標金額： NT$ <?= number_format($row["Required_Amount"]) ?></p>
+                                <p>當前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
                                 <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
                                 <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
                             </div>
@@ -239,7 +239,8 @@ if ($result->num_rows > 0) {
             } ?>
         </div>
         <!-- 暫停中的募款建言 -->
-        <h3><i class="icon fas fa-pause-circle me-2 text-warning"></i> 暫停中的募款建言</h3>
+        <h2><i class="icon fas fa-pause-circle me-2 text-warning" style="font-size: 2rem;"></i> 暫停中的募款建言</h2>
+
         <div class="donation-progress">
             <?php if (empty($paused)) : ?>
                 <p>目前沒有暫停中的募款建言。</p>
@@ -308,7 +309,7 @@ if ($result->num_rows > 0) {
             <?php endif; ?>
         </div>
         <!-- 已結束 -->
-        <h2><i class="fas fa-check-circle me-2 text-success"></i>募款已完成</h2>
+        <h2><i class="fas fa-check-circle me-2 text-success"style="font-size: 2rem;"></i>募款已完成</h2>
 
         <div class="donation-progress">
             <?php if (!empty($completed)) {
@@ -328,8 +329,8 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="right-card d-flex justify-content-between">
                             <div class="amount-section">
-                                <p>募款目標：<?= number_format($row["Required_Amount"]) ?> 元</p>
-                                <p>目前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
+                                <p>目標金額：<?= number_format($row["Required_Amount"]) ?> 元</p>
+                                <p>當前募得：<?= number_format($row["Raised_Amount"]) ?> 元</p>
                                 <p class="status" style="color: green;">狀態：已完成</p>
                                 <p class="text-muted">更新時間：<?= date("Y-m-d H:i:s", strtotime($row["Updated_At"])) ?></p>
                             </div>
