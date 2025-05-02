@@ -56,7 +56,7 @@ if ($user_id) {
 
 <head>
     <meta charset="UTF-8">
-    <title><?= htmlspecialchars($row['Title']) ?> | 建言詳情</title>
+    <title>建言詳情 | <?= htmlspecialchars($row['Title']) ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <style>
@@ -257,6 +257,7 @@ if ($user_id) {
         </ul>
     </div>
 </body>
+
 <script>
     const button = document.getElementById('like-button');
     const heartIcon = document.getElementById('heart-icon');
@@ -315,11 +316,5 @@ if ($user_id) {
             .catch(error => console.error('錯誤:', error));
     });
 </script>
-
-
-
-
-
-
 
 </html>

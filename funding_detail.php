@@ -66,7 +66,7 @@ if ($result->num_rows > 0) {
             font-family: "Noto Serif TC", serif;
         }
 
-        h2 {
+        h3 {
             margin-top: 20px 0;
             font-weight: bold;
         }
@@ -186,7 +186,7 @@ if ($result->num_rows > 0) {
 
 <body>
     <!-- 正在進行 -->
-    <h2><i class="icon fas fa-coins me-2"style="font-size: 2rem;"></i> 進行中的募款建言</h2>
+    <h3><i class="icon fas fa-coins me-2"></i> 進行中的募款建言</h3>
 
     <div class="donation-progress">
         <?php if (!empty($ongoing)) {
@@ -212,8 +212,8 @@ if ($result->num_rows > 0) {
                         <div class="amount-section">
                             <p>目標金額： NT$ <?= number_format($row["Required_Amount"]) ?></p>
                             <p>當前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
-                            <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
-                            <p class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
+                            <p class="status">狀態： <?= htmlspecialchars($row["Status"]) ?></p>
+                            <p class="text-muted">更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
                         </div>
                         <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
                             <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
@@ -268,7 +268,7 @@ if ($result->num_rows > 0) {
         } ?>
     </div>
     <!-- 暫停中的募款建言 -->
-    <h2><i class="icon fas fa-pause-circle me-2 text-warning" style="font-size: 2rem;"></i> 暫停中的募款建言</h2>
+    <h3><i class="icon fas fa-pause-circle me-2 text-warning"></i> 暫停中的募款建言</h3>
 
     <div class="donation-progress">
         <?php if (empty($paused)) : ?>
@@ -344,7 +344,7 @@ if ($result->num_rows > 0) {
         <?php endif; ?>
     </div>
     <!-- 已結束 -->
-    <h2><i class="icon fas fa-check-circle me-2 text-success"style="font-size: 2rem;"></i> 已完成的募款建言</h2>
+    <h3><i class="icon fas fa-check-circle me-2 text-success"></i> 已完成的募款建言</h3>
 
     <div class="donation-progress">
         <?php if (empty($completed)) : ?>

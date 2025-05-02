@@ -6,7 +6,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 require_once "db_connect.php";
 
 // 查詢公告資料
-$news_sql = "SELECT News_Title, News_Content, Update_At FROM News ORDER BY Update_At DESC LIMIT 5";
+$news_sql = "SELECT News_ID, News_Title, News_Content, Update_At FROM News ORDER BY Update_At DESC LIMIT 5";
 $news_result = $link->query($news_sql);
 
 // 最新建言（依照時間）
@@ -243,8 +243,8 @@ $popular_result = $link->query($popular_sql);
                 $max_length = 75;
                 $content_full = htmlspecialchars($row['News_Content']);
                 $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
-                    ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='#' class='see-more' data-bs-toggle='modal' data-bs-target='#newsModal$carousel_index'>查看更多</a>"
-                    : $content_full;
+                ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='see-more'>查看更多</a>"
+                : $content_full;
             ?>
                 <div class="carousel-item<?= $active_class ?>">
                     <div class="announcement-card">
@@ -253,7 +253,7 @@ $popular_result = $link->query($popular_sql);
                         </div>
                         <div class="announcement-card-body">
                             <p class="card-text"><?= $content_short ?></p>
-                            <p class="card-text"><small class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row['Update_At'])) ?></small></p>
+                            <p class="card-text"><small class="text-muted">更新時間： <?= date("Y-m-d H:i", strtotime($row['Update_At'])) ?></small></p>
                         </div>
                     </div>
                 </div>

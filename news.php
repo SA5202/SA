@@ -6,8 +6,14 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 require_once "db_connect.php";
 
 // 查詢公告資料
-$news_sql = "SELECT News_ID, News_Title, News_Content, Update_At FROM News ORDER BY Update_At DESC LIMIT 5";
+$news_sql = "SELECT News_ID, News_Title, News_Content, Update_At FROM News ORDER BY Update_At DESC";
 $news_result = $link->query($news_sql);
+
+// 顯示刪除成功訊息
+$success_message = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '';
+if ($success_message) {
+    unset($_SESSION['success_message']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,6 +53,15 @@ $news_result = $link->query($news_sql);
             display: inline-block;
         }
 
+        .cards {
+            margin: 40px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit; /* 保留父元素的文字顏色 */
+        }
+
         .card {
             background-color: #f8f9fa;
             padding: 10px 30px;
@@ -82,7 +97,7 @@ $news_result = $link->query($news_sql);
         .content-text {
             white-space: pre-wrap;
             min-width: 0;
-            margin-right: 140px; /* 預留空間讓浮動的按鈕不會擋住文字 */
+            margin-right: 160px;
             flex: 1;
         }
 
@@ -111,61 +126,59 @@ $news_result = $link->query($news_sql);
         }
 
         .btn-edit {
-            background-color:rgb(156, 219, 84);
+            background-color: rgb(156, 219, 84);
             color: white;
         }
 
         .btn-edit:hover {
-            background-color:rgb(132, 228, 228);
+            background-color: rgb(132, 228, 228);
             transform: scale(1.05);
         }
 
         .btn-delete {
-            background-color:rgb(231, 66, 66);
+            background-color: rgb(231, 66, 66);
             color: white;
         }
 
         .btn-delete:hover {
-            background-color:rgb(132, 228, 228);
+            background-color: rgb(132, 228, 228);
             transform: scale(1.05);
         }
     </style>
 </head>
 
 <body>
-    <h3><i class="icon fa-solid fa-bell"></i> 所有公告</h3>
-    <div class="row row-cols-1 g-4">
-        <?php
-        $news_result->data_seek(0);
-        while ($row = $news_result->fetch_assoc()) {
-            echo "<div class='col'>";
-            echo "<div class='card'>";
-            echo "<div class='card-body'>";
-            echo "<p><h5 class='card-title'><i class='icon fa-solid fa-bullhorn icon'></i>" . htmlspecialchars($row['News_Title']) . "</h5></p>";
-
-            echo "<div class='content-row'>";
-
-            // 左側內容
-            echo "<p class='content-text'>" . htmlspecialchars($row['News_Content']) . "</p>";
-
-            // 右側按鈕（僅管理員）
-            if ($is_admin) {
-                echo "<div class='action-buttons'>";
-                echo "<a href='edit_news.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-edit'>編輯</a>";
-                echo "<a href='delete_news.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-delete' onclick='return confirm(\"確定要刪除這則公告嗎？\")'>刪除</a>";
-                echo "</div>";
+    <div class="cards">
+        <div class="row row-cols-1 g-4">
+            <?php
+            $news_result->data_seek(0);
+            while ($row = $news_result->fetch_assoc()) {
+                echo "<div class='col'>";
+                
+                // 整個卡片區域包裹在 <a> 標籤內，指向公告的詳細頁面
+                echo "<a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='text-decoration-none'>";
+                echo "<div class='card'>";
+                echo "<div class='card-body'>";
+                echo "<p><h5 class='card-title'><i class='icon fa-solid fa-bullhorn icon'></i>" . htmlspecialchars($row['News_Title']) . "</h5></p>";
+                echo "<div class='content-row'>";
+                // 左側內容
+                echo "<p class='content-text'>" . mb_substr(htmlspecialchars($row['News_Content']), 0, 75, 'UTF-8') . "...</p>";
+                // 右側按鈕（僅管理員）
+                if ($is_admin) {
+                    echo "<div class='action-buttons'>";
+                    echo "<a href='news_edit.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-edit'>編輯</a>";
+                    echo "<a href='news_delete.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-delete' onclick='return confirm(\"確定要刪除這則公告嗎？\")'>刪除</a>";
+                    echo "</div>";
+                }
+                echo "</div>"; // content-row
+                echo "<p class='card-text mt-3'><small class='text-muted'>更新時間： " . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
+                echo "</div>"; // card-body
+                echo "</div>"; // card
+                echo "</a>"; // 包裹卡片區域的 <a> 標籤
+                echo "</div>"; // col
             }
-
-            echo "</div>"; // content-row
-
-            echo "<p class='card-text mt-3'><small class='text-muted'>更新時間：" . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
-
-            echo "</div>"; // card-body
-            echo "</div>"; // card
-            echo "</div>"; // col
-        }
-        ?>
+            ?>
+        </div>
     </div>
-
 </body>
 </html>
