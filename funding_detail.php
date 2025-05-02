@@ -297,7 +297,7 @@ if ($result->num_rows > 0) {
                         <div class="amount-section">
                             <p>目標金額： NT$ <?= number_format($row["Required_Amount"]) ?></p>
                             <p>當前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
-                            <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
+                            <p class="status"style="color: red;">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
                             <p class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
                         </div>
                         <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
@@ -371,7 +371,7 @@ if ($result->num_rows > 0) {
                             <div class="amount-section">
                                 <p>募款目標： NT$ <?= number_format($row["Required_Amount"]) ?></p>
                                 <p>目前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
-                                <p class="status">狀態：已完成</p>
+                                <p class="status" style="color: green;">狀態：已完成</p>
                                 <p class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
                             </div>
                             <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
