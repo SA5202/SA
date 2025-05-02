@@ -169,6 +169,7 @@ if (isset($_GET['funding_id'])) {
                     <label for="status" class="form-label">募款狀態：</label>
                     <select class="form-select" id="status" name="status" required>
                         <option value="進行中" <?= $row['Status'] === '進行中' ? 'selected' : '' ?>>進行中</option>
+                        <option value="暫停" <?= $row['Status'] === '暫停' ? 'selected' : '' ?>>暫停</option>
                         <option value="已完成" <?= $row['Status'] === '已完成' ? 'selected' : '' ?>>已完成</option>
                     </select>
                 </div>
