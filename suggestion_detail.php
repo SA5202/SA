@@ -62,7 +62,7 @@ if ($user_id) {
     <style>
         body {
             max-width: 80%;
-            margin: 80px auto;
+            margin: 60px auto;
             padding: 20px;
             font-family: "Noto Serif TC", serif;
             background-color: transparent;
@@ -72,13 +72,19 @@ if ($user_id) {
         .card {
             background: white;
             border-radius: 40px;
-            padding: 40px 50px;
+            padding: 30px 60px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             display: flex;
             gap: 40px;
             /* 讓內容和進度條有間距 */
+            transition: transform 0.2s ease-in-out;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         h3 {
@@ -88,7 +94,7 @@ if ($user_id) {
         }
 
         .meta {
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #666;
             margin-bottom: 1.5rem;
@@ -108,9 +114,14 @@ if ($user_id) {
 
         a.back {
             display: inline-block;
-            margin-top: 2rem;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
             text-decoration: none;
             color: #3498db;
+        }
+
+        a.back:hover {
+            color: #2980b9;
         }
 
         .timeline {
@@ -118,6 +129,7 @@ if ($user_id) {
             flex: 1;
             /* 右邊占 1 的比例 */
             position: relative;
+            top: 20px;
             margin: 0;
             padding: 0;
             list-style: none;
@@ -181,8 +193,6 @@ if ($user_id) {
             transition: background-color 0.3s, color 0.3s, transform 0.2s;
         }
 
-
-
         .like-btn.liked {
             color: #cc3333;
             border-color: rgb(147, 188, 205);
@@ -236,7 +246,6 @@ if ($user_id) {
 
                 </div>
             <?php endif; ?>
-
 
             <a href="suggestions.php" class="back"><b>⬅ 回建言總覽</b></a>
         </div>

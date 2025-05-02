@@ -10,12 +10,18 @@ if (!isset($_GET['id'])) {
 $news_id = intval($_GET['id']);
 
 // 查詢公告資料
-$news_sql = "SELECT News_Title, News_Content, Update_At FROM News WHERE News_ID = ?";
+$news_sql = "SELECT News_Title, News_Content, Update_At, suggestion_id FROM News WHERE News_ID = ?";
 $stmt = $link->prepare($news_sql);
+
+// 檢查 prepare 是否成功
+if ($stmt === false) {
+    die('MySQL prepare error: ' . $link->error);
+}
+
 $stmt->bind_param("i", $news_id);
 $stmt->execute();
 $stmt->store_result();
-$stmt->bind_result($news_title, $news_content, $update_at);
+$stmt->bind_result($news_title, $news_content, $update_at, $suggestion_id);
 $stmt->fetch();
 $stmt->close();
 
@@ -23,6 +29,20 @@ $stmt->close();
 if (!$news_title) {
     die("公告未找到");
 }
+
+// 查詢對應的建言
+$suggestions_sql = "SELECT Suggestion_ID, Title FROM Suggestion WHERE Suggestion_ID = ?";
+$suggestions_stmt = $link->prepare($suggestions_sql);
+
+// 檢查 prepare 是否成功
+if ($suggestions_stmt === false) {
+    die('MySQL prepare error: ' . $link->error);
+}
+
+$suggestions_stmt->bind_param("i", $suggestion_id);
+$suggestions_stmt->execute();
+$suggestions_result = $suggestions_stmt->get_result();
+$suggestions_stmt->close();
 ?>
 
 <!DOCTYPE html>
@@ -61,12 +81,18 @@ if (!$news_title) {
             font-size: 1.1rem;
             color: #333;
             border: 1px solid var(--bs-border-color-translucent);
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease-in-out;
         }
 
         .card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-muted {
+            margin: 30px 0;
+            color: #6c757d;
+            font-size: 1.05rem;
         }
 
         a {
@@ -76,16 +102,30 @@ if (!$news_title) {
 </head>
 
 <body>
-    <div class="container mt-4">
+    <div class="container mt-5">
         <h2><?= htmlspecialchars($news_title) ?></h2>
-        <p class="text-muted"><b>更新時間： <?= date("Y-m-d H:i", strtotime($update_at)) ?></b></p>
+        <p class="text-muted"><b>
+            更新時間： <?= date("Y-m-d H:i", strtotime($update_at)) ?><br>
+
+            <!-- 顯示相關建言 -->
+            <?php if ($suggestions_result->num_rows > 0): ?>
+                相關建言：
+                <?php while ($suggestion = $suggestions_result->fetch_assoc()): ?>
+                    <a href="suggestion_detail.php?id=<?= $suggestion['Suggestion_ID'] ?>" class="text-decoration-none"><?= htmlspecialchars($suggestion['Title']) ?></a>
+                <?php endwhile; ?>
+            <?php else: ?>
+                相關建言： 目前沒有與此公告相關的建言。
+            <?php endif; ?>
+        </b></p>
+
         <div class="card mt-4 mb-4">
             <div class="card-body">
                 <p><?= nl2br(htmlspecialchars($news_content)) ?></p>
             </div>
         </div>
+
         <a href="news.php" class="back"><b>⬅ 返回上一頁</b></a>
     </div>
-    
 </body>
+
 </html>

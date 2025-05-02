@@ -65,18 +65,18 @@ if ($success_message) {
         .card {
             background-color: #f8f9fa;
             padding: 10px 30px;
-            border-radius: 25px;
+            border-radius: 30px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
             font-weight: bold;
             font-size: 1.1rem;
             color: #333;
             border: 1px solid var(--bs-border-color-translucent);
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease-in-out;
         }
 
         .card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .card-title {
