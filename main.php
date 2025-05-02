@@ -169,6 +169,8 @@ $popular_result = $link->query($popular_sql);
         }
 
         .carousel-item {
+            height: 230px; /* 可自行調整固定高度 */
+            overflow-y: auto; /* 若內容超過則可滾動 */
             position: relative;
             background-color: #f8f9fa;
             padding: 30px 50px;
@@ -208,20 +210,27 @@ $popular_result = $link->query($popular_sql);
     <!-- 公告卡片 -->
     <h3><i class="icon fa-solid fa-bell"></i> 最新公告</h3>
     <div id="announcementCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <!-- 進度條 -->
+        <!-- 進度條（動態產生） -->
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#announcementCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="公告 1"></button>
-            <button type="button" data-bs-target="#announcementCarousel" data-bs-slide-to="1" aria-label="公告 2"></button>
+            <?php
+            $news_result->data_seek(0);
+            $indicator_index = 0;
+            while ($news_result->fetch_assoc()) {
+                $active_class = ($indicator_index == 0) ? "active" : "";
+                echo "<button type='button' data-bs-target='#announcementCarousel' data-bs-slide-to='$indicator_index' class='$active_class' aria-label='公告 " . ($indicator_index + 1) . "'></button>";
+                $indicator_index++;
+            }
+            ?>
         </div>
 
-        <!-- 輪播內容 -->
+        <!-- 輪播內容（動態產生） -->
         <div class="carousel-inner">
             <?php
             $news_result->data_seek(0);
             $carousel_index = 0;
             while ($row = $news_result->fetch_assoc()) {
                 $active_class = ($carousel_index == 0) ? " active" : "";
-                echo "<div class='carousel-item" . $active_class . "'>";
+                echo "<div class='carousel-item$active_class'>";
                 echo "<div class='announcement-card'>";
                 echo "<div class='announcement-card-header'>";
                 echo "<p><i class='icon fa-solid fa-bullhorn'></i> " . htmlspecialchars($row['News_Title']) . "</p>";
@@ -237,6 +246,7 @@ $popular_result = $link->query($popular_sql);
             ?>
         </div>
     </div>
+
 
     <h3><i class="icon fa-solid fa-list"></i> 建言一覽</h3>
     <div class="row">
