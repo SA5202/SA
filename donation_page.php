@@ -104,7 +104,7 @@
             background-color: var(--secondary-color);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 10px;
             font-size: 18px;
             border-radius: 0.5rem;
             cursor: pointer;
