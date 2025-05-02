@@ -169,8 +169,7 @@ $popular_result = $link->query($popular_sql);
         }
 
         .carousel-item {
-            height: 230px; /* 可自行調整固定高度 */
-            overflow-y: auto; /* 若內容超過則可滾動 */
+            height: 200px;
             position: relative;
             background-color: #f8f9fa;
             padding: 30px 50px;
@@ -195,12 +194,23 @@ $popular_result = $link->query($popular_sql);
         .carousel-indicators [data-bs-target] {
             background-color: #999;
             width: 40px;
-            height: 4px;
+            height: 3px;
             transition: background-color 0.3s ease;
         }
 
         .carousel-indicators .active {
             background-color:rgb(0, 174, 225);
+        }
+
+        .see-more {
+            color: #007bff;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .see-more:hover {
+            color: #0056b3;
+            text-decoration: none;
         }
 
     </style>
@@ -228,21 +238,43 @@ $popular_result = $link->query($popular_sql);
             <?php
             $news_result->data_seek(0);
             $carousel_index = 0;
-            while ($row = $news_result->fetch_assoc()) {
+            while ($row = $news_result->fetch_assoc()):
                 $active_class = ($carousel_index == 0) ? " active" : "";
-                echo "<div class='carousel-item$active_class'>";
-                echo "<div class='announcement-card'>";
-                echo "<div class='announcement-card-header'>";
-                echo "<p><i class='icon fa-solid fa-bullhorn'></i> " . htmlspecialchars($row['News_Title']) . "</p>";
-                echo "</div>";
-                echo "<div class='announcement-card-body'>";
-                echo "<p class='card-text'>" . htmlspecialchars($row['News_Content']) . "</p>";
-                echo "<p class='card-text'><small class='text-muted'>更新時間： " . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
-                echo "</div>";
-                echo "</div>";
-                echo "</div>";
-                $carousel_index++;
-            }
+                $max_length = 75;
+                $content_full = htmlspecialchars($row['News_Content']);
+                $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
+                    ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='#' class='see-more' data-bs-toggle='modal' data-bs-target='#newsModal$carousel_index'>查看更多</a>"
+                    : $content_full;
+            ?>
+                <div class="carousel-item<?= $active_class ?>">
+                    <div class="announcement-card">
+                        <div class="announcement-card-header">
+                            <p><i class="icon fa-solid fa-bullhorn"></i> <?= htmlspecialchars($row['News_Title']) ?></p>
+                        </div>
+                        <div class="announcement-card-body">
+                            <p class="card-text"><?= $content_short ?></p>
+                            <p class="card-text"><small class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row['Update_At'])) ?></small></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for full content -->
+                <div class="modal fade" id="newsModal<?= $carousel_index ?>" tabindex="-1" aria-labelledby="newsModalLabel<?= $carousel_index ?>" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="newsModalLabel<?= $carousel_index ?>"><?= htmlspecialchars($row['News_Title']) ?></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <?= nl2br($content_full) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php
+            $carousel_index++;
+            endwhile;
             ?>
         </div>
     </div>
