@@ -61,14 +61,24 @@ if ($result->num_rows > 0) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
+            max-width: 85%;
+            margin: 20px auto;
+            padding: 30px;
             background-color: transparent !important;
             font-family: "Noto Serif TC", serif;
         }
 
-        h2 {
-            font-weight: 750;
-            text-align: left;
-            margin-top: 30px;
+        h3 {
+            margin-top: 20px 0;
+            font-weight: bold;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px;
+            display: inline-block;
         }
 
         .donation-card {
@@ -76,10 +86,10 @@ if ($result->num_rows > 0) {
             flex-direction: row;
             justify-content: space-between;
             align-items: stretch;
-            margin-bottom: 20px;
-            border-radius: 12px;
+            margin: 30px 0;
+            border-radius: 30px;
             padding: 20px;
-            background-color: rgb(224, 235, 241);
+            background-color: rgba(241, 244, 249, 0.9);
             border: 1px solid #ddd;
             transition: transform 0.3s ease;
         }
@@ -94,14 +104,18 @@ if ($result->num_rows > 0) {
             flex: 1;
             padding: 20px;
             margin: 10px;
-            border-radius: 12px;
+            border-radius: 30px;
             background-color: transparent;
         }
 
         .right-card {
-            background-color: rgba(108, 139, 157, 0.29);
+            background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             align-items: center;
+        }
+
+        .left-card h4 {
+            font-weight: bold;
         }
 
         .description {
@@ -115,11 +129,11 @@ if ($result->num_rows > 0) {
 
         .amount-section p {
             margin: 5px 0;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         .amount-section .status {
-            font-weight: bold;
             color: rgb(55, 78, 116);
         }
 
@@ -133,6 +147,10 @@ if ($result->num_rows > 0) {
             color: #d63384;
             font-size: 1.1rem;
             cursor: pointer;
+        }
+
+        .action-btn {
+            margin-top: 10px;
         }
     </style>
 </head>
