@@ -23,23 +23,26 @@ $sql = "
 $result = $conn->query($sql);
 
 $ongoing = [];
+$paused = [];
 $completed = [];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        // 判斷是否達標或已結束
+        // 判斷是否為已完成
         $isCompleted = ($row["Raised_Amount"] >= $row["Required_Amount"]) || $row["Status"] === "已結束";
 
-        // 如果已達標，更新資料庫中的狀態為 '已完成'
         if ($isCompleted) {
-            // 更新狀態為已完成
+            // 自動更新為已完成
             $updateSql = "UPDATE FundingSuggestion SET Status = '已完成' WHERE Funding_ID = " . $row["Funding_ID"];
             $conn->query($updateSql);
 
-            // 將已完成的建議加入 completed 陣列
+            $row["Status"] = "已完成"; // 確保畫面顯示正確
             $completed[] = $row;
+
+        } elseif ($row["Status"] === "暫停") {
+            $paused[] = $row;
+
         } else {
-            // 進行中的募款
             $ongoing[] = $row;
         }
     }
@@ -217,7 +220,75 @@ if ($result->num_rows > 0) {
                 echo "<p class='text-center'>目前沒有進行中的募款建言。</p>";
             } ?>
         </div>
+        <!-- 暫停中的募款建言 -->
+        <h3><i class="icon fas fa-pause-circle me-2 text-warning"></i> 暫停中的募款建言</h3>
+        <div class="donation-progress">
+            <?php if (empty($paused)) : ?>
+                <p>目前沒有暫停中的募款建言。</p>
+            <?php else : ?>
+                <?php foreach ($paused as $row) :
+                    $progress = ($row["Required_Amount"] > 0)
+                        ? ($row["Raised_Amount"] / $row["Required_Amount"]) * 100 : 0;
+                    $progress = round($progress, 2);
+                ?>
+                    <div class="donation-card">
+                        <div class="left-card">
+                            <h4><?= htmlspecialchars($row["Title"]) ?></h4>
+                            <?php
+                            $desc = $row["Description"];
+                            $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '...' : $desc;
+                            ?>
+                            <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
+                        </div>
+                        <div class="right-card d-flex justify-content-between">
+                            <div class="amount-section">
+                                <p>目標金額： NT$ <?= number_format($row["Required_Amount"]) ?></p>
+                                <p>當前募得： NT$ <?= number_format($row["Raised_Amount"]) ?></p>
+                                <p class="status">狀態：<?= htmlspecialchars($row["Status"]) ?></p>
+                                <p class="text-muted">更新時間：<?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?></p>
+                            </div>
+                            <div class="chart-container" style="flex: 0 0 auto; margin-left: 20px;">
+                                <canvas id="chart<?= $row["Funding_ID"] ?>" width="150" height="150"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        const ctx<?= $row["Funding_ID"] ?> = document.getElementById('chart<?= $row["Funding_ID"] ?>').getContext('2d');
+                        let progress<?= $row["Funding_ID"] ?> = <?= $progress ?>;
+                        let color<?= $row["Funding_ID"] ?> = '#28a745';
+                        if (progress<?= $row["Funding_ID"] ?> >= 75) color<?= $row["Funding_ID"] ?> = '#e60000';
+                        else if (progress<?= $row["Funding_ID"] ?> >= 50) color<?= $row["Funding_ID"] ?> = '#ff6600';
+                        else if (progress<?= $row["Funding_ID"] ?> >= 25) color<?= $row["Funding_ID"] ?> = '#ffcc00';
 
+                        new Chart(ctx<?= $row["Funding_ID"] ?>, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['已募得', '剩餘'],
+                                datasets: [{
+                                    data: [progress<?= $row["Funding_ID"] ?>, 100 - progress<?= $row["Funding_ID"] ?>],
+                                    backgroundColor: [color<?= $row["Funding_ID"] ?>, '#e0e0e0'],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                responsive: false,
+                                cutout: '70%',
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(t) {
+                                                return t.label + ': ' + t.raw + '%';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
         <!-- 已結束 -->
         <h2><i class="fas fa-check-circle me-2 text-success"></i>募款已完成</h2>
 
