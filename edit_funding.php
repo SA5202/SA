@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = $_POST['status'];
 
     // 更新募款金額資料
-    $update_sql = "UPDATE FundingSuggestion SET Required_Amount = ?, Raised_Amount = ?, Status = ? WHERE Funding_ID = ?";
+    $update_sql = "UPDATE FundingSuggestion SET Required_Amount = ?, Raised_Amount = ?, Status = ?, Updated_At = NOW() WHERE Funding_ID = ?";
     $stmt = $conn->prepare($update_sql);
     $stmt->bind_param("ddsi", $required_amount, $raised_amount, $status, $funding_id);
 

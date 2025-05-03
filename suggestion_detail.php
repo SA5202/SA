@@ -21,7 +21,7 @@ FROM Suggestion s
 JOIN Facility f ON s.Facility_ID = f.Facility_ID
 JOIN Building b ON s.Building_ID = b.Building_ID
 JOIN Useraccount u ON s.User_ID = u.User_ID
-WHERE s.Suggestion_ID = ?
+WHERE s.Suggestion_ID = ? 
 ";
 
 $stmt = $link->prepare($sql);
@@ -47,9 +47,7 @@ if ($user_id) {
     $hasLiked = $like_result->num_rows > 0;
 }
 
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -62,7 +60,7 @@ if ($user_id) {
     <style>
         body {
             max-width: 80%;
-            margin: 60px auto;
+            margin: 80px auto;
             padding: 20px;
             font-family: "Noto Serif TC", serif;
             background-color: transparent;
@@ -76,7 +74,6 @@ if ($user_id) {
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             display: flex;
             gap: 40px;
-            /* 讓內容和進度條有間距 */
             transition: transform 0.2s ease-in-out;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
@@ -103,13 +100,20 @@ if ($user_id) {
         .description {
             font-size: 1.05rem;
             line-height: 1.8;
-
         }
 
         .likes {
             margin-top: 1.5rem;
             font-size: 1rem;
             color: #cc3333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .likes-info {
+            display: inline-flex;
+            align-items: center;
         }
 
         a.back {
@@ -125,9 +129,8 @@ if ($user_id) {
         }
 
         .timeline {
-            height: 50vh; /* 佔螢幕高度的 50% */
+            height: 50vh;
             flex: 1;
-            /* 右邊占 1 的比例 */
             position: relative;
             top: 20px;
             margin: 0;
@@ -135,7 +138,6 @@ if ($user_id) {
             list-style: none;
             border-left: 3px solid #ccc;
         }
-
 
         .timeline li {
             position: relative;
@@ -157,7 +159,6 @@ if ($user_id) {
 
         .timeline li.active::before {
             background: #4CAF50;
-            /* 綠色表示完成 */
         }
 
         .timeline li .timestamp {
@@ -174,32 +175,44 @@ if ($user_id) {
         .container {
             display: flex;
             gap: 40px;
-            /* 左右間距 */
         }
 
         .content {
             flex: 3;
-            /* 左邊占 3 的比例 */
+        }
+
+        .likes {
+            font-size: 1.05rem;
+            font-weight: 600;
         }
 
         .like-btn {
             background-color: #fff;
-            border: 2px solid rgb(147, 188, 205);
             color: #cc3333;
             font-size: 1rem;
-            padding: 8px 16px;
-            border-radius: 30px;
+            margin-top: 4px;
+            margin-right: 5px;
             cursor: pointer;
+            border: none;
             transition: background-color 0.3s, color 0.3s, transform 0.2s;
         }
 
         .like-btn.liked {
             color: #cc3333;
-            border-color: rgb(147, 188, 205);
+            border: none;
         }
 
         .like-btn.liked #heart-icon {
             color: #cc3333;
+            border: none;
+        }
+
+        .like-count {
+            margin-right: 5px;
+        }
+
+        #like-count {
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -223,29 +236,26 @@ if ($user_id) {
                 </div>
             <?php endif; ?>
 
-
             <div class="description">
                 <?= nl2br(htmlspecialchars($row['Description'])) ?>
             </div>
 
             <div class="likes">
-                ❤️ <span id="like-count"><?= $row['LikeCount'] ?></span> 人喜歡這則建言
+                <div class="likes-info">
+                    <?php if (!$is_admin): ?>
+                        <button id="like-button" class="like-btn <?= $hasLiked ? 'liked' : '' ?>"
+                            data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>"
+                            data-liked="<?= $hasLiked ? 'true' : 'false' ?>">
+                            <?php
+                            $heartClass = $hasLiked ? 'fas' : 'far';
+                            ?>
+                            <i class="<?= $heartClass ?> fa-heart" id="heart-icon"></i>
+                        </button>
+                    <?php endif; ?>
+                    <span id="like-count"><?= $row['LikeCount'] ?></span>人喜歡這則建言
+                </div>
             </div>
             <br>
-            <?php if (!$is_admin): ?>
-                <div class="likes">
-                    <button id="like-button" class="like-btn <?= $hasLiked ? 'liked' : '' ?>"
-                        data-suggestion-id="<?= intval($row['Suggestion_ID']) ?>"
-                        data-liked="<?= $hasLiked ? 'true' : 'false' ?>">
-
-                        <?php
-                        $heartClass = $hasLiked ? 'fas' : 'far';
-                        ?>
-                        <i class="<?= $heartClass ?> fa-heart" id="heart-icon"></i>
-                    </button>
-
-                </div>
-            <?php endif; ?>
 
             <a href="suggestions.php" class="back"><b>⬅ 回建言總覽</b></a>
         </div>

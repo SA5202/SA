@@ -87,7 +87,13 @@ $popular_result = $link->query($popular_sql);
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 20px;
+            transition: transform 0.2s ease-in-out;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .honor-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .honor-item h5 {
@@ -194,12 +200,20 @@ $popular_result = $link->query($popular_sql);
         .carousel-indicators [data-bs-target] {
             background-color: #999;
             width: 40px;
-            height: 3px;
+            height: 2.5px;
             transition: background-color 0.3s ease;
         }
 
         .carousel-indicators .active {
             background-color:rgb(0, 174, 225);
+        }
+
+        .card-text {
+            display: -webkit-box;         /* 使用 flexbox 模擬多行文本 */
+            -webkit-line-clamp: 1;        /* 限制顯示一行 */
+            -webkit-box-orient: vertical; /* 垂直排列 */
+            overflow: hidden;             /* 超出部分隱藏 */
+            text-overflow: ellipsis;      /* 省略號 */
         }
 
         .see-more {
@@ -243,7 +257,7 @@ $popular_result = $link->query($popular_sql);
                 $max_length = 75;
                 $content_full = htmlspecialchars($row['News_Content']);
                 $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
-                ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='see-more'>查看更多</a>"
+                ? mb_substr($content_full, 0, $max_length-7, 'UTF-8') . "... <a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='see-more'>查看更多</a>"
                 : $content_full;
             ?>
                 <div class="carousel-item<?= $active_class ?>">

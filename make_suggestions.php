@@ -120,9 +120,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         .suggestion-form {
-            max-width: 75%;
-            margin: 50px auto;
-            padding: 30px;
+            max-width: 70%;
+            margin: 30px auto;
+            padding: 40px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 25px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
@@ -162,11 +162,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .btn-submit {
             background-color:rgb(120, 174, 215);
             color: white;
-            padding: 6px 30px;
+            padding: 5px 40px;
             border: none;
-            border-radius: 10px;
+            border-radius: 20px;
             transition: background-color 0.3s, transform 0.3s;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 700;
         }
 
@@ -178,11 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .btn-reset {
             background-color:rgb(224, 107, 107);
             color: white;
-            padding: 6px 30px;
+            padding: 5px 40px;
             border: none;
-            border-radius: 10px;
+            border-radius: 20px;
             transition: background-color 0.3s, transform 0.3s;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 700;
         }
 

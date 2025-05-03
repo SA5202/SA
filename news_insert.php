@@ -62,7 +62,7 @@ $result = $conn->query($sql);
         }
 
         .form-container {
-            max-width: 50%;
+            max-width: 55%;
             margin: 80px auto;
         }
 
@@ -71,9 +71,14 @@ $result = $conn->query($sql);
             /* 淡透明背景 */
             padding: 40px;
             border-radius: 30px;
+            transition: transform 0.3s;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+        }
+
+        .form-card:hover {
+            transform: scale(1.02);
         }
 
         .form-card h3 {
