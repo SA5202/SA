@@ -223,7 +223,7 @@ if ($user_id) {
             <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php if ($is_admin): ?>
                 <div class="meta">
-                    發佈者： <?= htmlspecialchars($row['User_Name']) ?><br>
+                    發佈者： <a href="user_profile.php?id=<?= $row['User_ID'] ?>" class="back"><?= htmlspecialchars($row['User_Name']) ?></a><br>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
