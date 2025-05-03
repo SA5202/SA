@@ -86,32 +86,46 @@
     if (!isset($_SESSION['User_Name'])) {
         die("請先登入！");
     }
-
-    $User_Name = $_SESSION['User_Name'];
-
+    
     $link = mysqli_connect('localhost', 'root', '', 'SA');
     if (!$link) {
         die("資料庫連線失敗：" . mysqli_connect_error());
     }
-
-    $sql = "SELECT * FROM useraccount WHERE User_Name='$User_Name'";
-    $result = mysqli_query($link, $sql);
-
-    if ($row = mysqli_fetch_assoc($result)) {
+    
+    // 如果是管理員修改別人的帳號
+    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true && isset($_GET['User_Name'])) {
+        $User_Name = $_GET['User_Name'];
+    } else {
+        // 一般使用者修改自己帳號
+        $User_Name = $_SESSION['User_Name'];
+    }
+    
+    $sql = "SELECT * FROM useraccount WHERE User_Name = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("s", $User_Name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($row = $result->fetch_assoc()) {
         $Email = $row['Email'];
     } else {
         die("找不到使用者資料！");
     }
-    mysqli_close($link);
+    
+    $stmt->close();
+    $link->close();
     ?>
 
     <h2>修改帳號資訊</h2>
     <div class="form-container">
         <form action="dblink.php?method=update" method="post">
             <table>
-                <tr>
-                    <td>帳號</td>
-                    <td><input type="text" name="User_Name" value="<?php echo $User_Name; ?>" readonly></td>
+            <tr>
+                <td>帳號</td>
+                <td>
+                    <input type="text" name="User_Name" value="<?= htmlspecialchars($User_Name) ?>" 
+                    <?= (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) ? '' : 'readonly' ?>>
+                </td>
                 </tr>
                 <tr>
                     <td>Email</td>
@@ -123,6 +137,7 @@
                 </tr>
                 <tr>
                     <td colspan="2" class="button-row">
+                        <input type="hidden" name="Old_User_Name" value="<?= htmlspecialchars($User_Name) ?>">
                         <input type="submit" value="更新資料">
                         <input type="reset" value="重設">
                     </td>
