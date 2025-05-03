@@ -128,6 +128,17 @@ if ($user_id) {
             color: #2980b9;
         }
 
+        a.author-link {
+        color: #444; /* 比黑淡一點的深灰 */
+        font-weight: 500;
+        text-decoration: none;
+        }
+
+        a.author-link:hover {
+        color: #2980b9; /* 保留 hover 回饋感 */
+        text-decoration: underline;
+        }
+
         .timeline {
             height: 50vh;
             flex: 1;
@@ -223,7 +234,7 @@ if ($user_id) {
             <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php if ($is_admin): ?>
                 <div class="meta">
-                    發佈者： <a href="user_profile.php?id=<?= $row['User_ID'] ?>" class="back"><?= htmlspecialchars($row['User_Name']) ?></a><br>
+                    發佈者： <a href="user_profile.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
