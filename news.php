@@ -1,6 +1,6 @@
 <?php
 session_start();
-$is_logged_in = isset($_SESSION['username']);
+$is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 require_once "db_connect.php";
@@ -156,7 +156,11 @@ if ($success_message) {
                 echo "<div class='col'>";
                 
                 // 整個卡片區域包裹在 <a> 標籤內，指向公告的詳細頁面
-                echo "<a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='text-decoration-none'>";
+                if ($is_logged_in) {
+                    echo "<a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='text-decoration-none'>";
+                } else {
+                    echo "<a href='login.php' class='text-decoration-none'>";
+                }
                 echo "<div class='card'>";
                 echo "<div class='card-body'>";
                 echo "<p><h5 class='card-title'><i class='icon fa-solid fa-bullhorn icon'></i>" . htmlspecialchars($row['News_Title']) . "</h5></p>";
