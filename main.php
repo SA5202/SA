@@ -1,6 +1,6 @@
 <?php
 session_start();
-$is_logged_in = isset($_SESSION['username']);
+$is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 require_once "db_connect.php";
@@ -209,11 +209,11 @@ $popular_result = $link->query($popular_sql);
         }
 
         .card-text {
-            display: -webkit-box;         /* 使用 flexbox 模擬多行文本 */
-            -webkit-line-clamp: 1;        /* 限制顯示一行 */
-            -webkit-box-orient: vertical; /* 垂直排列 */
-            overflow: hidden;             /* 超出部分隱藏 */
-            text-overflow: ellipsis;      /* 省略號 */
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .see-more {
@@ -234,7 +234,6 @@ $popular_result = $link->query($popular_sql);
     <!-- 公告卡片 -->
     <h3><i class="icon fa-solid fa-bell"></i> 最新公告</h3>
     <div id="announcementCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <!-- 進度條（動態產生） -->
         <div class="carousel-indicators">
             <?php
             $news_result->data_seek(0);
@@ -247,7 +246,6 @@ $popular_result = $link->query($popular_sql);
             ?>
         </div>
 
-        <!-- 輪播內容（動態產生） -->
         <div class="carousel-inner">
             <?php
             $news_result->data_seek(0);
@@ -256,9 +254,12 @@ $popular_result = $link->query($popular_sql);
                 $active_class = ($carousel_index == 0) ? " active" : "";
                 $max_length = 75;
                 $content_full = htmlspecialchars($row['News_Content']);
+                $link_target = $is_logged_in
+                    ? "news_detail.php?id=" . urlencode($row['News_ID'])
+                    : "login.php";
                 $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
-                ? mb_substr($content_full, 0, $max_length-7, 'UTF-8') . "... <a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='see-more'>查看更多</a>"
-                : $content_full;
+                    ? mb_substr($content_full, 0, $max_length-7, 'UTF-8') . "... <a href='$link_target' class='see-more'>查看更多</a>"
+                    : $content_full;
             ?>
                 <div class="carousel-item<?= $active_class ?>">
                     <div class="announcement-card">
@@ -271,28 +272,12 @@ $popular_result = $link->query($popular_sql);
                         </div>
                     </div>
                 </div>
-
-                <!-- Modal for full content -->
-                <div class="modal fade" id="newsModal<?= $carousel_index ?>" tabindex="-1" aria-labelledby="newsModalLabel<?= $carousel_index ?>" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="newsModalLabel<?= $carousel_index ?>"><?= htmlspecialchars($row['News_Title']) ?></h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <?= nl2br($content_full) ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             <?php
             $carousel_index++;
             endwhile;
             ?>
         </div>
     </div>
-
 
     <h3><i class="icon fa-solid fa-list"></i> 建言一覽</h3>
     <div class="row">
@@ -305,7 +290,7 @@ $popular_result = $link->query($popular_sql);
                         <div class="suggestion-item">
                             <div class="suggestion-title"><?= htmlspecialchars($row['Title']) ?></div>
                             <div class="suggestion-meta">更新時間：<?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?></div>
-                            <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
+                            <a href="<?= $is_logged_in ? 'suggestion_detail.php?id=' . $row['Suggestion_ID'] : 'login.php' ?>" class="btn btn-view">查看建言</a>
                         </div>
                     <?php endwhile; ?>
                 </div>
@@ -321,7 +306,7 @@ $popular_result = $link->query($popular_sql);
                         <div class="suggestion-item">
                             <div class="suggestion-title"><?= htmlspecialchars($row['Title']) ?></div>
                             <div class="suggestion-meta">已經在網站上獲得了 <?= $row['LikeCount'] ?> 個 ❤️</div>
-                            <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
+                            <a href="<?= $is_logged_in ? 'suggestion_detail.php?id=' . $row['Suggestion_ID'] : 'login.php' ?>" class="btn btn-view">查看建言</a>
                         </div>
                     <?php endwhile; ?>
                 </div>
