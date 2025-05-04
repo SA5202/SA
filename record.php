@@ -12,13 +12,16 @@ if ($link->connect_error) {
 
 $userID = $_SESSION['User_ID'];
 $sql = "
-    SELECT s.title, s.description, s.updated_at, s.upvoted_amount,
-           f.facility_type, b.building_name
-    FROM suggestion s
-    JOIN facility f ON s.facility_id = f.facility_id
-    JOIN building b ON s.building_id = b.building_id
-    WHERE s.User_ID = ?
-    ORDER BY s.updated_at DESC
+SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, u.User_Name,
+       f.Facility_Type, b.Building_Name,
+       (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount,
+       (SELECT Status FROM Progress p WHERE p.Suggestion_ID = s.Suggestion_ID ORDER BY Updated_At DESC LIMIT 1) AS LatestStatus
+FROM Suggestion s
+JOIN Facility f ON s.Facility_ID = f.Facility_ID
+JOIN Building b ON s.Building_ID = b.Building_ID
+JOIN Useraccount u ON s.User_ID = u.User_ID
+WHERE s.User_ID = ?
+ORDER BY s.Updated_At DESC
 ";
 
 $stmt = $link->prepare($sql);
@@ -39,6 +42,7 @@ $result = $stmt->get_result();
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
 
     <style>
+        /* 你的 CSS 原樣保留 */
         body {
             max-width: 85%;
             margin: 0 auto;
@@ -54,14 +58,10 @@ $result = $stmt->get_result();
 
         .icon {
             font-size: 1.5rem;
-            /* 設定圖示的基本大小 */
             width: 1.5rem;
-            /* 設定寬度 */
             height: 1.5rem;
-            /* 設定高度 */
             margin-right: 10px;
             display: inline-block;
-            /* 確保圖示作為區塊顯示 */
         }
 
         h3 {
@@ -76,7 +76,6 @@ $result = $stmt->get_result();
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
-            /* 加這行才會顯示框線 */
         }
 
         .table th {
@@ -116,36 +115,25 @@ $result = $stmt->get_result();
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
-            /* 加這行才會顯示框線 */
         }
 
         .table {
             width: 100%;
-            /* 保證表格填滿容器 */
             border-radius: 15px;
-            /* 內部表格圓角 */
             border: 2px solid #ddd;
-            /* 設置表格邊框 */
             border-collapse: separate;
-            /* 確保圓角有效 */
             overflow: hidden;
-            /* 讓表格內容不超出圓角範圍 */
             border-spacing: 0;
-            /* 去除單元格間的間隔 */
         }
 
-        /* 設置單元格的圓角邊框 */
         .table th,
         .table td {
             padding: 10px 30px;
             border-radius: 0px;
-            /* 單元格的圓角 */
         }
-
 
         .table-primary {
             background-color: #e9f5ff;
-            /* 可調整表頭顏色 */
         }
 
         .pretty-btn {
@@ -185,19 +173,22 @@ $result = $stmt->get_result();
                 <?php
                 $current_User_Name = $_SESSION['User_Name'];
 
-                $link = mysqli_connect('localhost', 'root', '', 'SA');
-                if (!$link) {
+                $link_user = mysqli_connect('localhost', 'root', '', 'sa');
+                if (!$link_user) {
                     die("資料庫連線失敗：" . mysqli_connect_error());
                 }
 
-                $sql = "SELECT * FROM useraccount WHERE User_Name = '$current_User_Name'";
-                $result_user = mysqli_query($link, $sql);
+                $sql_user = "SELECT * FROM useraccount WHERE User_Name = ?";
+                $stmt_user = $link_user->prepare($sql_user);
+                $stmt_user->bind_param("s", $current_User_Name);
+                $stmt_user->execute();
+                $result_user = $stmt_user->get_result();
 
-                if ($row = mysqli_fetch_assoc($result_user)) {
+                if ($row = $result_user->fetch_assoc()) {
                     $password = htmlspecialchars($row['Password']);
 
-                    echo
-                    "<tr>
+                    echo "
+                    <tr>
                         <td rowspan='5'>
                             <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7'  style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
@@ -230,7 +221,7 @@ $result = $stmt->get_result();
                     echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
                 }
 
-                mysqli_close($link);
+                mysqli_close($link_user);
                 ?>
             </tbody>
         </table>
@@ -252,26 +243,27 @@ $result = $stmt->get_result();
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
-                            <td><b><?= htmlspecialchars($row['title']) ?></b></td>
-                            <td><?= date('Y-m-d', strtotime($row['updated_at'])) ?></td>
+                            <td><b><?= htmlspecialchars($row['Title']) ?></b></td>
+                            <td><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></td>
                             <td>
-                                <span class="badge bg-success fs-6"><?= htmlspecialchars($row['upvoted_amount']) ?> ❤️</span>
+                                <span class="badge bg-success fs-6">
+                                    <?= $row['LikeCount'] ?> ❤️
+                                </span>
                             </td>
                             <td>
-                                <button class="pretty-btn">
+                                <a href="#update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
                                     <i class="fas fa-pen-to-square"></i> 修改
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6" class="text-center text-muted">尚未有建言紀錄。</td>
+                        <td colspan="4" class="text-center text-muted">尚未有建言紀錄。</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
         </table>
-    </div>
     </div>
 
     <br>
