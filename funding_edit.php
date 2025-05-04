@@ -22,27 +22,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $raised_amount = $_POST['raised_amount'];
     $status = $_POST['status'];
 
-    // 更新募款金額資料
-    $update_sql = "UPDATE FundingSuggestion SET Required_Amount = ?, Raised_Amount = ?, Status = ?, Updated_At = NOW() WHERE Funding_ID = ?";
-    $stmt = $conn->prepare($update_sql);
-    $stmt->bind_param("ddsi", $required_amount, $raised_amount, $status, $funding_id);
-
-    if ($stmt->execute()) {
-        // 如果募款金額已達目標，更新狀態
-        if ($status === '已完成' || $raised_amount >= $required_amount) {
-            $updateStatusSql = "UPDATE FundingSuggestion SET Status = '已完成' WHERE Funding_ID = ?";
-            $stmtStatus = $conn->prepare($updateStatusSql);
-            $stmtStatus->bind_param("i", $funding_id);
-            $stmtStatus->execute();
-        }
-        // 跳轉回募款列表頁面
-        header("Location: funding_detail.php");
-        exit();
+    // ✅ 檢查已募得金額不能大於目標金額
+    if ($raised_amount > $required_amount) {
+        $errorMessage = "當前已募得金額不可超過募款目標金額！";
     } else {
-        $errorMessage = "更新失敗，請稍後再試！";
-    }
+        // 更新募款金額資料
+        $update_sql = "UPDATE FundingSuggestion SET Required_Amount = ?, Raised_Amount = ?, Status = ?, Updated_At = NOW() WHERE Funding_ID = ?";
+        $stmt = $conn->prepare($update_sql);
+        $stmt->bind_param("ddsi", $required_amount, $raised_amount, $status, $funding_id);
 
-    $stmt->close();
+        if ($stmt->execute()) {
+            // 如果募款金額已達目標，更新狀態
+            if ($status === '已完成' || $raised_amount >= $required_amount) {
+                $updateStatusSql = "UPDATE FundingSuggestion SET Status = '已完成' WHERE Funding_ID = ?";
+                $stmtStatus = $conn->prepare($updateStatusSql);
+                $stmtStatus->bind_param("i", $funding_id);
+                $stmtStatus->execute();
+            }
+            header("Location: funding_detail.php");
+            exit();
+        } else {
+            $errorMessage = "更新失敗，請稍後再試！";
+        }
+
+        $stmt->close();
+    }
 }
 
 // 查詢募款資訊
@@ -75,7 +79,6 @@ if (isset($_GET['funding_id'])) {
     <style>
         body {
             background-color: transparent;
-            /* 設置透明背景 */
             font-family: "Noto Serif TC", serif;
         }
 
@@ -86,7 +89,6 @@ if (isset($_GET['funding_id'])) {
 
         .form-card {
             background-color: rgba(255, 255, 255, 0.9);
-            /* 淡透明背景 */
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -113,7 +115,6 @@ if (isset($_GET['funding_id'])) {
             margin-top: 20px;
         }
 
-        /* 自訂按鈕顏色 */
         .btn-custom {
             background-color: rgb(136, 184, 209);
             padding: 10px 30px;
@@ -133,7 +134,6 @@ if (isset($_GET['funding_id'])) {
             box-shadow: none;
         }
 
-        /* 完全移除頁腳區塊 */
         footer {
             display: none;
         }
@@ -170,7 +170,6 @@ if (isset($_GET['funding_id'])) {
                     <select class="form-select" id="status" name="status" required>
                         <option value="進行中" <?= $row['Status'] === '進行中' ? 'selected' : '' ?>>進行中</option>
                         <option value="暫停" <?= $row['Status'] === '暫停' ? 'selected' : '' ?>>暫停</option>
-                        <option value="已完成" <?= $row['Status'] === '已完成' ? 'selected' : '' ?>>已完成</option>
                     </select>
                 </div>
 
@@ -182,6 +181,19 @@ if (isset($_GET['funding_id'])) {
     <?php $conn->close(); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ✅ JavaScript 驗證 -->
+    <script>
+        document.querySelector("form").addEventListener("submit", function(e) {
+            const requiredAmount = parseFloat(document.getElementById("required_amount").value);
+            const raisedAmount = parseFloat(document.getElementById("raised_amount").value);
+
+            if (raisedAmount > requiredAmount) {
+                alert("當前已募得金額不可超過募款目標金額！");
+                e.preventDefault();
+            }
+        });
+    </script>
 </body>
 
 </html>
