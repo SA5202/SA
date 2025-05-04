@@ -157,13 +157,13 @@ if (isset($_GET['suggestion_id'])) {
                 <div class="mb-3">
                     <label for="title" class="form-label">建言標題：</label>
                     <input type="text" class="form-control" id="title" name="title"
-                        value="<?= htmlspecialchars($row['Title']) ?>" required>
+                        value="<?= htmlspecialchars($row['Title']) ?>" readonly>
                 </div>
 
                 <div class="mb-3">
                     <label for="description" class="form-label">建言內容：</label>
                     <textarea class="form-control" id="description" name="description" rows="5"
-                        required><?= htmlspecialchars($row['Description']) ?></textarea>
+                        readonly><?= htmlspecialchars($row['Description']) ?></textarea>
                 </div>
 
                 <div class="mb-3">

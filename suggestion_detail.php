@@ -183,6 +183,48 @@ if ($user_id) {
             font-weight: bold;
         }
 
+        .custom-select {
+            padding: 8px 16px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            background-color: #f8f8f8;
+            font-size: 1rem;
+            font-family: "Noto Serif TC", serif;
+            color: #333;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+            transition: border-color 0.3s ease;
+        }
+
+        .custom-select:hover {
+            border-color: #999;
+        }
+
+        .custom-select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 20px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #3e8e41;
+        }
+
         .container {
             display: flex;
             gap: 40px;
@@ -318,13 +360,13 @@ if ($user_id) {
             <form method="POST" action="update_progress.php" style="display: flex; align-items: center; gap: 10px;">
                 <input type="hidden" name="suggestion_id" value="<?= $id ?>">
                 <label for="new_status"><b>變更進度狀態：</b></label>
-                <select name="new_status" id="new_status" class="form-select" required>
+                <select name="new_status" id="new_status" class="custom-select" required>
                     <option value="">-- 請選擇 --</option>
                     <option value="未處理">未處理</option>
                     <option value="處理中">處理中</option>
                     <option value="已完成">已完成</option>
                 </select>
-                <button type="submit" class="btn btn-sm btn-primary">儲存</button>
+                <button type="submit" class="btn btn-primary">儲存</button>
             </form>
         </div>
         <?php endif; ?>
