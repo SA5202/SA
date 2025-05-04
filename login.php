@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>使用者登入</title>
-    
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Noto Serif TC", serif;
-            
         }
 
         .wrapper {
@@ -20,14 +19,16 @@
             width: 400px;
             max-width: 700px;
             margin-top: 100px;
-            margin-left: auto;  /* 水平居中 */
-            margin-right: auto; /* 水平居中 */
-            display: block;     /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
+            margin-left: auto;
+            /* 水平居中 */
+            margin-right: auto;
+            /* 水平居中 */
+            display: block;
+            /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
             padding: 40px;
             border-radius: 25px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            
         }
 
         .wrapper h2 {
@@ -43,7 +44,8 @@
 
         .input-box input {
             width: 100%;
-            padding: 12px 40px 12px 40px; /* Adjust padding to make space for icon */
+            padding: 12px 40px 12px 40px;
+            /* Adjust padding to make space for icon */
             border: 1px solid #ddd;
             border-radius: 10px;
             outline: none;
@@ -52,7 +54,7 @@
         }
 
         .input-box input:focus {
-            border-color:rgb(173, 231, 248);
+            border-color: rgb(173, 231, 248);
             box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
         }
 
@@ -62,6 +64,16 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 18px;
+            color: #666;
+        }
+
+        .show-password-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            cursor: pointer;
             color: #666;
         }
 
@@ -117,7 +129,10 @@
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                <input type="password" name="Password" placeholder="密碼" required>
+                <input type="password" id="password" name="Password" placeholder="密碼" required>
+                <span class="show-password-btn" onclick="togglePassword()">
+                    <ion-icon id="eye-icon" name="eye-off-outline"></ion-icon>
+                </span>
             </div>
             <button type="submit" class="btn">登入</button>
             <div class="login-register">
@@ -128,8 +143,20 @@
             </div>
         </form>
     </div>
+
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById("password");
+            var eyeIcon = document.getElementById("eye-icon");
+            var type = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = type;
+            // Toggle the eye icon
+            eyeIcon.name = type === "password" ? "eye-off-outline" : "eye-outline";
+        }
+    </script>
 </body>
 
 </html>
