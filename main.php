@@ -252,13 +252,13 @@ $popular_result = $link->query($popular_sql);
             $carousel_index = 0;
             while ($row = $news_result->fetch_assoc()):
                 $active_class = ($carousel_index == 0) ? " active" : "";
-                $max_length = 75;
+                $max_length = 45;
                 $content_full = htmlspecialchars($row['News_Content']);
                 $link_target = $is_logged_in
                     ? "news_detail.php?id=" . urlencode($row['News_ID'])
                     : "login.php";
                 $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
-                    ? mb_substr($content_full, 0, $max_length-7, 'UTF-8') . "... <a href='$link_target' class='see-more'>查看更多</a>"
+                    ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='$link_target' class='see-more'>查看更多</a>"
                     : $content_full;
             ?>
                 <div class="carousel-item<?= $active_class ?>">

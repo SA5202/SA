@@ -72,6 +72,11 @@ if ($success_message) {
             color: #333;
             border: 1px solid var(--bs-border-color-translucent);
             transition: transform 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* 讓卡片自適應內容的高度 */
+            max-height: 300px; /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden; /* 隱藏超過的內容 */
         }
 
         .card:hover {
@@ -85,7 +90,10 @@ if ($success_message) {
         }
 
         .card-body {
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%; /* 確保內容區域充滿整個卡片 */
         }
 
         .content-row {
@@ -97,14 +105,23 @@ if ($success_message) {
         .content-text {
             white-space: pre-wrap;
             min-width: 0;
-            margin-right: 160px;
+            margin-right: 180px;
             flex: 1;
+            overflow: hidden; /* 確保文字不會超出 */
+            text-overflow: ellipsis; /* 使用省略號來處理過長的文字 */
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* 限制顯示三行 */
+            -webkit-box-orient: vertical;
+        }
+
+        .content-text.cover-buttons {
+            margin-right: 0;
         }
 
         .action-buttons {
             position: absolute;
             top: 50%;
-            right: 30px;
+            right: 50px;
             transform: translateY(-50%);
             display: flex;
             flex-direction: column;
@@ -144,6 +161,10 @@ if ($success_message) {
             background-color: rgb(132, 228, 228);
             transform: scale(1.05);
         }
+
+        .action-buttons.hidden {
+            display: none; /* 當不是管理員時隱藏按鈕 */
+        }
     </style>
 </head>
 
@@ -166,16 +187,15 @@ if ($success_message) {
                 echo "<p><h5 class='card-title'><i class='icon fa-solid fa-bullhorn icon'></i>" . htmlspecialchars($row['News_Title']) . "</h5></p>";
                 echo "<div class='content-row'>";
                 // 左側內容
-                echo "<p class='content-text'>" . mb_substr(htmlspecialchars($row['News_Content']), 0, 75, 'UTF-8') . "...</p>";
+                echo "<p class='content-text " . (!$is_admin ? 'cover-buttons' : '') . "'>" . mb_substr(htmlspecialchars($row['News_Content']), 0, 80, 'UTF-8') . "...</p>";
+                
                 // 右側按鈕（僅管理員）
-                if ($is_admin) {
-                    echo "<div class='action-buttons'>";
-                    echo "<a href='news_edit.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-edit'>編輯</a>";
-                    echo "<a href='news_delete.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-delete' onclick='return confirm(\"確定要刪除這則公告嗎？\")'>刪除</a>";
-                    echo "</div>";
-                }
+                echo "<div class='action-buttons " . (!$is_admin ? 'hidden' : '') . "'>";
+                echo "<a href='news_edit.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-edit'>編輯</a>";
+                echo "<a href='news_delete.php?id=" . urlencode($row['News_ID']) . "' class='btn btn-delete' onclick='return confirm(\"確定要刪除這則公告嗎？\")'>刪除</a>";
+                echo "</div>";
                 echo "</div>"; // content-row
-                echo "<p class='card-text mt-3'><small class='text-muted'>更新時間： " . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
+                echo "<p class='card-text mt-3 mb-3'><small class='text-muted'>更新時間： " . date("Y-m-d H:i", strtotime($row['Update_At'])) . "</small></p>";
                 echo "</div>"; // card-body
                 echo "</div>"; // card
                 echo "</a>"; // 包裹卡片區域的 <a> 標籤
