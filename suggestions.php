@@ -2,6 +2,9 @@
 session_start();
 require_once "db_connect.php";
 
+$is_logged_in = isset($_SESSION['User_Name']);
+
+
 $keyword = $_GET['keyword'] ?? '';
 $facility = $_GET['facility'] ?? '';
 $building = $_GET['building'] ?? '';
@@ -57,7 +60,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-       * {
+        * {
             box-sizing: border-box;
         }
 
@@ -95,7 +98,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
             /* 更深的灰色背景，與卡片內容區區分 */
             background: rgba(241, 244, 249, 0.7);
-            backdrop-filter: blur(8px); /* 稍微減弱模糊效果 */
+            backdrop-filter: blur(8px);
+            /* 稍微減弱模糊效果 */
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(200, 200, 200, 0.4);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
@@ -107,18 +111,18 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
         }
 
-        form > div {
+        form>div {
             display: flex;
             flex-direction: column;
             flex: 1;
             min-width: 10px;
         }
 
-        form > div:nth-child(4) {
+        form>div:nth-child(4) {
             flex: 1.5;
         }
 
-        form > div:last-child {
+        form>div:last-child {
             flex: 0 0 auto;
         }
 
@@ -126,7 +130,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             font-weight: 750;
             font-size: 0.95rem;
             margin-bottom: 0.4rem;
-            color: #4c5b63; /* 深灰藍色 */
+            color: #4c5b63;
+            /* 深灰藍色 */
         }
 
         input[type="text"],
@@ -152,7 +157,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 按鈕樣式 */
         button {
             padding: 0.4rem 25px;
-            background-color:rgb(120, 128, 130); /* 深灰色 */
+            background-color: rgb(120, 128, 130);
+            /* 深灰色 */
             color: white;
             border: none;
             border-radius: 10px;
@@ -164,7 +170,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         button:hover {
-            background-color: #5a6268; /* 深灰色 */
+            background-color: #5a6268;
+            /* 深灰色 */
             transform: translateY(-2px);
         }
 
@@ -223,9 +230,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         .card-description {
-            overflow-wrap: break-word; /* 換行長字串 */
-            word-break: break-word;    /* 進一步保險，即使中英文混排 */
-            white-space: normal;       /* 確保會換行 */
+            overflow-wrap: break-word;
+            /* 換行長字串 */
+            word-break: break-word;
+            /* 進一步保險，即使中英文混排 */
+            white-space: normal;
+            /* 確保會換行 */
             margin-bottom: 1em;
             font-size: 1.05rem;
             line-height: 1.6;
@@ -278,7 +288,6 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             color: #cc3333;
             margin-right: 5px;
         }
-
     </style>
 </head>
 
@@ -335,7 +344,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                     更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
                 </div>
                 <div class="actions">
-                    <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
+                    <?php if ($is_logged_in): ?>
+                        <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
+                    <?php else: ?>
+                        <a href="login.php" class="btn" onclick="return alert('請先登入才能查看完整建言');">查看完整建言</a>
+                    <?php endif; ?>
+
                     <span class="likes"><?= $row['LikeCount'] ?></span>
                 </div>
             </div>

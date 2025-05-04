@@ -141,6 +141,8 @@
             <div class="login-register">
                 <p>沒有帳號 ? <a href="register.php">點擊註冊</a></p>
             </div>
+            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_GET['redirect'] ?? '') ?>">
+
         </form>
     </div>
 
