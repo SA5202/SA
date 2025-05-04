@@ -336,22 +336,16 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-wrench"></i></i><span><b> 公告管理</b></span></a>
             <a href="news_insert.php" target="contentFrame"><i class="icon fa-solid fa-notes-medical"></i><span><b> 新增公告</b></span></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言進度管理</b></span></a>
-            <a href="edit_suggestion.php" target="contentFrame">
-                <i class="icon fas fa-cogs"></i><span><b> 建言管理</b></span>
-            </a>
-            <a href="fundingsuggestion.php" target="contentFrame">
-                <i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span>
-            </a>
-            <a href="funding_detail.php" target="contentFrame">
-                <i class="icon fas fa-donate"></i><span><b> 募款建言管理</b></span>
-            </a>
+            <a href="suggestion_edit.php" target="contentFrame"><i class="icon fas fa-cogs"></i><span><b> 建言管理</b></span></a>
+            <a href="funding_detail.php" target="contentFrame"><i class="icon fas fa-donate"></i><span><b> 募款建言管理</b></span></a>
+            <a href="fundingsuggestion.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span></a>
 
         <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
             <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
             <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-bell"></i></i><span><b> 公告</b></span></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
-            <a href="make_suggestions.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
+            <a href="suggestions_make.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
             <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
             <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span></a>
             <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span></a>

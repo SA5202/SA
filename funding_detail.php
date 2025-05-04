@@ -204,7 +204,7 @@ if ($result->num_rows > 0) {
                         ?>
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">
-                            <button class="btn btn-warning" onclick="window.location.href='edit_funding.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款建言</button>
+                            <button class="btn btn-warning" onclick="window.location.href='funding_edit.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款建言</button>
                             <button class="btn btn-danger" onclick="deleteFunding(<?= $row['Funding_ID'] ?>)">刪除</button>
                         </div>
                     </div>
@@ -258,7 +258,7 @@ if ($result->num_rows > 0) {
 
                     function deleteFunding(fundingID) {
                         if (confirm('確定要刪除這筆募款建言嗎？')) {
-                            window.location.href = 'delete_funding.php?funding_id=' + fundingID;
+                            window.location.href = 'funding_delete.php?funding_id=' + fundingID;
                         }
                     }
                 </script>
@@ -288,7 +288,7 @@ if ($result->num_rows > 0) {
                         ?>
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">
-                            <button class="btn btn-warning" onclick="window.location.href='edit_funding.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款建言</button>
+                            <button class="btn btn-warning" onclick="window.location.href='funding_edit.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款建言</button>
                             <button class="btn btn-danger" onclick="deleteFunding(<?= $row['Funding_ID'] ?>)">刪除</button>
                         </div>
                     </div>
@@ -364,7 +364,7 @@ if ($result->num_rows > 0) {
                         ?>
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">
-                            <button class="btn btn-warning" onclick="window.location.href='edit_funding.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款進度</button>
+                            <button class="btn btn-warning" onclick="window.location.href='funding_edit.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款進度</button>
                             <button class="btn btn-danger" onclick="deleteFunding(<?= $row['Funding_ID'] ?>)">刪除</button>
                         </div>
                     </div>
