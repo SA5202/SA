@@ -231,7 +231,15 @@ if ($user_id) {
 <body>
     <div class="card">
         <div class="content">
+        <?php if ($is_admin): ?>
+            <h3>
+                <a href="edit_suggestion.php?id=<?= $row['Suggestion_ID'] ?>" style="text-decoration: none; color: #2c3e50;">
+                    <?= htmlspecialchars($row['Title']) ?>
+                </a>
+            </h3>
+        <?php else: ?>
             <h3><?= htmlspecialchars($row['Title']) ?></h3>
+        <?php endif; ?>
             <?php if ($is_admin): ?>
                 <div class="meta">
                     發佈者： <a href="user_profile.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
