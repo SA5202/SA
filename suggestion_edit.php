@@ -39,13 +39,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // 寫入 Progress 表
             $admin_id = $_SESSION['User_ID'];
             $progress_sql = "INSERT INTO Progress (Suggestion_ID, Status, Updated_At, Updated_By)
-                             VALUES (?, ?, NOW(), ?)
-                             ON DUPLICATE KEY UPDATE Status = VALUES(Status), Updated_At = NOW(), Updated_By = VALUES(Updated_By)";
+                             VALUES (?, ?, NOW(), ?)";
             $progress_stmt = $conn->prepare($progress_sql);
             $progress_stmt->bind_param("isi", $suggestion_id, $status, $admin_id);
             $progress_stmt->execute();
 
-            $shouldRedirect = true; // ✅ 成功儲存，稍後觸發跳轉
+            $shouldRedirect = true;
         } else {
             $errorMessage = "更新失敗，請稍後再試。";
         }
@@ -171,9 +170,9 @@ if (isset($_GET['suggestion_id'])) {
                     <label for="status" class="form-label">處理進度：</label>
                     <select class="form-select" id="status" name="status" required>
                         <option value="">-- 請選擇 --</option>
-                        <option value="建言已受理" <?= ($row['Status'] ?? '') === '建言已受理' ? 'selected' : '' ?>>建言已受理</option>
-                        <option value="處理中" <?= ($row['Status'] ?? '') === '處理中' ? 'selected' : '' ?>>處理中</option>
-                        <option value="處理完成" <?= ($row['Status'] ?? '') === '處理完成' ? 'selected' : '' ?>>處理完成</option>
+                        <option value="未處理">未處理</option>
+                        <option value="處理中">處理中</option>
+                        <option value="已完成">已完成</option>
                     </select>
                 </div>
 

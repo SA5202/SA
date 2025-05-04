@@ -140,7 +140,7 @@ if ($user_id) {
         }
 
         .timeline {
-            height: 50vh;
+            height: 30%;
             flex: 1;
             position: relative;
             top: 20px;
@@ -279,20 +279,56 @@ if ($user_id) {
             <a href="suggestions.php" class="back"><b>⬅ 回建言總覽</b></a>
         </div>
 
+                <!-- 動態產生進度紀錄 Timeline -->
         <ul class="timeline">
-            <li class="active">
-                <div class="timestamp">2025/04/14 14:56</div>
-                <div class="status">建言已受理</div>
+        <?php
+        // 抓取最新進度狀態
+        $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At DESC LIMIT 1";
+        $progress_stmt = $link->prepare($progress_sql);
+        $progress_stmt->bind_param("i", $id);
+        $progress_stmt->execute();
+        $progress_result = $progress_stmt->get_result();
+        $latest_status = null;
+        $latest_time = null;
+
+        if ($progress_row = $progress_result->fetch_assoc()) {
+            $latest_status = $progress_row['Status'];
+            $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
+        }
+
+        // 定義固定三階段
+        $stages = ['未處理', '處理中', '已完成'];
+        $status_index = array_search($latest_status, $stages);
+
+        // 產生 timeline
+        foreach ($stages as $i => $stage) {
+            $is_active = ($status_index !== false && $i <= $status_index) ? 'active' : '';
+            $timestamp = ($i === $status_index && $latest_time) ? $latest_time : '';
+            echo "
+            <li class='{$is_active}'>
+                <div class='timestamp'>{$timestamp}</div>
+                <div class='status'>{$stage}</div>
             </li>
-            <li class="active">
-                <div class="timestamp">2025/04/17 05:50</div>
-                <div class="status">處理中</div>
-            </li>
-            <li>
-                <div class="timestamp">2025/04/18 09:10</div>
-                <div class="status">處理完成</div>
-            </li>
+            ";
+        }
+        ?>
         </ul>
+        <?php if ($is_admin): ?>
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc;">
+            <form method="POST" action="update_progress.php" style="display: flex; align-items: center; gap: 10px;">
+                <input type="hidden" name="suggestion_id" value="<?= $id ?>">
+                <label for="new_status"><b>變更進度狀態：</b></label>
+                <select name="new_status" id="new_status" class="form-select" required>
+                    <option value="">-- 請選擇 --</option>
+                    <option value="未處理">未處理</option>
+                    <option value="處理中">處理中</option>
+                    <option value="已完成">已完成</option>
+                </select>
+                <button type="submit" class="btn btn-sm btn-primary">儲存</button>
+            </form>
+        </div>
+        <?php endif; ?>
+
     </div>
 </body>
 
