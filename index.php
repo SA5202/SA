@@ -336,8 +336,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-wrench"></i></i><span><b> 公告管理</b></span></a>
             <a href="news_insert.php" target="contentFrame"><i class="icon fa-solid fa-notes-medical"></i><span><b> 新增公告</b></span></a>
             <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言進度管理</b></span></a>
-            <a href="funding_detail.php" target="contentFrame">
-                <i class="icon fas fa-cogs"></i><span><b> 募款建言管理</b></span>
+            <a href="edit_suggestion.php" target="contentFrame">
+                <i class="icon fas fa-cogs"></i><span><b> 建言管理</b></span>
             </a>
             <a href="fundingsuggestion.php" target="contentFrame">
                 <i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span>
