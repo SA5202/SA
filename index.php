@@ -342,7 +342,9 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <a href="fundingsuggestion.php" target="contentFrame">
                 <i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span>
             </a>
-
+            <a href="funding_detail.php" target="contentFrame">
+                <i class="icon fas fa-donate"></i><span><b> 募款建言管理</b></span>
+            </a>
 
         <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
