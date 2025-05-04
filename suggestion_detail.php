@@ -233,7 +233,7 @@ if ($user_id) {
         <div class="content">
         <?php if ($is_admin): ?>
             <h3>
-                <a href="edit_suggestion.php?suggestion_id=<?= $row['Suggestion_ID'] ?>" style="text-decoration: none; color: #2c3e50;">
+                <a href="suggestion_edit.php?suggestion_id=<?= $row['Suggestion_ID'] ?>" style="text-decoration: none; color: #2c3e50;">
                     <?= htmlspecialchars($row['Title']) ?>
                 </a>
             </h3>
