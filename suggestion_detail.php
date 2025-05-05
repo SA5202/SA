@@ -400,7 +400,7 @@ if ($user_id) {
             $progress_stmt->execute();
             $progress_result = $progress_stmt->get_result();
 
-            // 設置時區為 Asia/Taipei（UTC +8）
+            // 設置時區為 Asia/Taipei (UTC +8)
             date_default_timezone_set('Asia/Taipei');
 
             // 檢查資料庫是否有相關紀錄

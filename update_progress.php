@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin_id = $_SESSION['User_ID'];
 
     // 合法狀態清單（更新為包含所有狀態）
-    $allowed_statuses = ['未受理', '審核中', '未處理', '處理中', '已完成'];
+    $allowed_statuses = ['未受理', '審核中', '處理中', '已完成'];
     
     // 檢查 suggestion_id 和狀態是否有效
     if ($suggestion_id <= 0 || !in_array($status, $allowed_statuses)) {
