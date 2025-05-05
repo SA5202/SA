@@ -418,8 +418,11 @@ if ($user_id) {
     } else {
         // 如果有進度紀錄，則抓取最新的狀態
         $progress_row = $progress_result->fetch_assoc();
-        $latest_status = $progress_row['Status'];
+        $latest_status = mb_convert_encoding($progress_row['Status'], 'UTF-8', 'auto'); // 確保 Status 是 UTF-8 編碼
         $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
+
+        // 如果需要將時間也處理為 UTF-8 格式
+        $latest_time = mb_convert_encoding($latest_time, 'UTF-8', 'auto');
     }
 
     // 定義狀態
