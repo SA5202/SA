@@ -192,6 +192,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             -webkit-backdrop-filter: blur(14px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* 讓卡片自適應內容的高度 */
+            max-height: 300px; /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden; /* 隱藏超過的內容 */
         }
 
         .card:hover {
@@ -230,12 +235,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         .card-description {
-            overflow-wrap: break-word;
-            /* 換行長字串 */
-            word-break: break-word;
-            /* 進一步保險，即使中英文混排 */
-            white-space: normal;
-            /* 確保會換行 */
+            overflow: hidden; /* 確保文字不會超出 */
+            text-overflow: ellipsis; /* 使用省略號來處理過長的文字 */
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* 限制顯示三行 */
+            -webkit-box-orient: vertical;
             margin-bottom: 1em;
             font-size: 1.05rem;
             line-height: 1.6;
@@ -338,7 +342,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">
                 <h4><i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?></h4>
-                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 120, "...") ?></p>
+                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "...") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
