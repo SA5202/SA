@@ -323,10 +323,11 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         /* 側邊欄項目選中時的樣式 */
+        /* 側邊欄項目選中時的樣式 */
         .sidebar-link.active {
-            background-color: rgba(255, 255, 255, 0.25);
+            background-color:rgba(255, 255, 255, 0.33);
             /* 背景顏色變為灰色 */
-            color: rgb(245, 249, 196);
+            color:rgb(254, 251, 199);
             /* 文字顏色變為藍色 */
             font-weight: bold;
             /* 字體加粗 */
@@ -335,9 +336,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 </head>
 
 <body>
-
     <div class="sidebar" id="sidebar">
-        <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+        <a href="main.php" target="contentFrame" class="sidebar-link active" onclick="setActive(this)">
             <h1>FJU I-Money</h1>
         </a>
         <?php if ($is_admin): ?>
@@ -390,6 +390,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <button class="toggle-btn" onclick="toggleSidebar(this)">
         <i class="fas fa-chevron-left"></i>
     </button>
+
 
 
     <!-- 登入/登出 -->
@@ -473,7 +474,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             var currentPath = window.location.pathname;
             var links = document.querySelectorAll('.sidebar-link');
             links.forEach(function(link) {
-                if (link.href.includes(currentPath)) {
+                if (link.href.includes(currentPath) && !link.classList.contains('active')) {
                     link.classList.add('active');
                 }
             });
