@@ -469,16 +469,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             element.classList.add('active');
         }
 
-        // 頁面加載時自動設置當前頁面的 active 類別
         document.addEventListener('DOMContentLoaded', function() {
             var currentPath = window.location.pathname;
             var links = document.querySelectorAll('.sidebar-link');
             links.forEach(function(link) {
-                if (link.href.includes(currentPath) && !link.classList.contains('active')) {
+                var linkPath = new URL(link.href).pathname;
+                if (linkPath === currentPath && !link.classList.contains('active')) {
                     link.classList.add('active');
                 }
             });
         });
+
     </script>
 </body>
 
