@@ -14,8 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = isset($_POST['new_status']) ? trim($_POST['new_status']) : '';
     $admin_id = $_SESSION['User_ID'];
 
-    // 合法狀態清單
-    $allowed_statuses = ['未處理', '處理中', '已完成'];
+    // 合法狀態清單（更新為包含所有狀態）
+    $allowed_statuses = ['未受理', '審核中', '未處理', '處理中', '已完成'];
+    
+    // 檢查 suggestion_id 和狀態是否有效
     if ($suggestion_id <= 0 || !in_array($status, $allowed_statuses)) {
         echo "無效請求";
         exit;
@@ -38,3 +40,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: suggestion_detail.php?id=$suggestion_id");
     exit;
 }
+?>
