@@ -321,34 +321,68 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 opacity: 1;
             }
         }
+
+        /* 側邊欄項目選中時的樣式 */
+        .sidebar-link.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            /* 背景顏色變為灰色 */
+            color: rgb(245, 249, 196);
+            /* 文字顏色變為藍色 */
+            font-weight: bold;
+            /* 字體加粗 */
+        }
     </style>
 </head>
 
 <body>
 
     <div class="sidebar" id="sidebar">
-        <a href="main.php" target="contentFrame">
+        <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
             <h1>FJU I-Money</h1>
         </a>
         <?php if ($is_admin): ?>
             <!-- 管理者的側邊欄 -->
-            <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-wrench"></i></i><span><b> 公告管理</b></span></a>
-            <a href="news_insert.php" target="contentFrame"><i class="icon fa-solid fa-notes-medical"></i><span><b> 新增公告</b></span></a>
-            <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-cogs"></i><span><b> 建言進度管理</b></span></a>
-            <a href="funding_detail.php" target="contentFrame"><i class="icon fas fa-donate"></i><span><b> 募款建言管理</b></span></a>
-            <a href="fundingsuggestion.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span></a>
-
+            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-home"></i><span><b> 首頁</b></span>
+            </a>
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-wrench"></i><span><b> 公告管理</b></span>
+            </a>
+            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-notes-medical"></i><span><b> 新增公告</b></span>
+            </a>
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-cogs"></i><span><b> 建言進度管理</b></span>
+            </a>
+            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-donate"></i><span><b> 募款建言管理</b></span>
+            </a>
+            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span>
+            </a>
         <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
-            <a href="main.php" target="contentFrame"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="news.php" target="contentFrame"><i class="icon fa-solid fa-bell"></i></i><span><b> 公告</b></span></a>
-            <a href="suggestions.php" target="contentFrame"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
-            <a href="suggestions_make.php" target="contentFrame"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
-            <a href="donate.php" target="contentFrame"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
-            <a href="honor.php" target="contentFrame"><i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span></a>
-            <a href="contact.php" target="contentFrame"><i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span></a>
-            <!-- 其他一般使用者的選單 -->
+            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-home"></i><span><b> 首頁</b></span>
+            </a>
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-bell"></i><span><b> 公告</b></span>
+            </a>
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span>
+            </a>
+            <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span>
+            </a>
+            <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span>
+            </a>
+            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span>
+            </a>
+            <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span>
+            </a>
         <?php endif; ?>
     </div>
 
@@ -356,6 +390,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <button class="toggle-btn" onclick="toggleSidebar(this)">
         <i class="fas fa-chevron-left"></i>
     </button>
+
 
     <!-- 登入/登出 -->
     <?php if ($is_logged_in): ?>
@@ -421,7 +456,29 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             }
         }
     </script>
+    <script>
+        function setActive(element) {
+            // 移除所有側邊欄項目的 active 類別
+            var links = document.querySelectorAll('.sidebar-link');
+            links.forEach(function(link) {
+                link.classList.remove('active');
+            });
 
+            // 為當前點擊的項目添加 active 類別
+            element.classList.add('active');
+        }
+
+        // 頁面加載時自動設置當前頁面的 active 類別
+        document.addEventListener('DOMContentLoaded', function() {
+            var currentPath = window.location.pathname;
+            var links = document.querySelectorAll('.sidebar-link');
+            links.forEach(function(link) {
+                if (link.href.includes(currentPath)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
