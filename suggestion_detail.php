@@ -60,7 +60,7 @@ if ($user_id) {
     <style>
         body {
             max-width: 80%;
-            margin: 80px auto;
+            margin: 60px auto;
             padding: 20px;
             font-family: "Noto Serif TC", serif;
             background-color: transparent;
