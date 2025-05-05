@@ -256,7 +256,7 @@ $row_user = $result_user->fetch_assoc();
                             </td>
                             <td>
                                 <?php if ($viewUserID === $sessionUserID): ?>
-                                    <a href="update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
+                                    <a href="#update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
                                         <i class="fas fa-pen-to-square"></i> 修改
                                     </a>
                                 <?php else: ?>
