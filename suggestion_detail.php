@@ -400,22 +400,25 @@ if ($user_id) {
     $progress_stmt->execute();
     $progress_result = $progress_stmt->get_result();
 
-    // 如果沒有進度紀錄，設置預設狀態為 "未處理"
+    // 設置時區為 Asia/Taipei（UTC +8）
+    date_default_timezone_set('Asia/Taipei');
+
+    // 檢查資料庫是否有相關紀錄
     if ($progress_result->num_rows == 0) {
         // 插入預設的「未處理」狀態紀錄
         $default_status = '未處理';
-        $default_time = date("Y/m/d H:i");
+        $default_time = date("Y/m/d H:i");  // 這裡會自動根據設定的時區返回當前時間
         
         // 插入預設狀態
         $insert_sql = "INSERT INTO Progress (Suggestion_ID, Status, Updated_At) VALUES (?, ?, ?)";
         $insert_stmt = $link->prepare($insert_sql);
-        $insert_stmt->bind_param("iss", $id, $default_status, $default_time);
+        $insert_stmt->bind_param("iss", $id, $default_status, $default_time);  // 不需要進行 mb_convert_encoding
         $insert_stmt->execute();
         
         // 設置最新狀態為「未處理」
         $latest_status = $default_status;
-        $latest_time = $default_time;
-    } else {
+        $latest_time = $default_time;  // 使用設定時區的時間
+    }else {
         // 如果有進度紀錄，則抓取最新的狀態
         $progress_row = $progress_result->fetch_assoc();
         $latest_status = mb_convert_encoding($progress_row['Status'], 'UTF-8', 'auto'); // 確保 Status 是 UTF-8 編碼
