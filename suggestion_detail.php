@@ -392,44 +392,62 @@ if ($user_id) {
         <!-- 動態產生進度紀錄 Timeline -->
         <!-- 進度狀態時間軸（點擊進度直接更新） -->
         <ul class="timeline">
-            <?php
-            $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At DESC LIMIT 1";
-            $progress_stmt = $link->prepare($progress_sql);
-            $progress_stmt->bind_param("i", $id);
-            $progress_stmt->execute();
-            $progress_result = $progress_stmt->get_result();
+    <?php
+    // 檢查是否已有進度紀錄
+    $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At DESC LIMIT 1";
+    $progress_stmt = $link->prepare($progress_sql);
+    $progress_stmt->bind_param("i", $id);
+    $progress_stmt->execute();
+    $progress_result = $progress_stmt->get_result();
 
-            $latest_status = null;
-            $latest_time = null;
+    // 如果沒有進度紀錄，設置預設狀態為 "未處理"
+    if ($progress_result->num_rows == 0) {
+        // 插入預設的「未處理」狀態紀錄
+        $default_status = '未處理';
+        $default_time = date("Y/m/d H:i");
+        
+        // 插入預設狀態
+        $insert_sql = "INSERT INTO Progress (Suggestion_ID, Status, Updated_At) VALUES (?, ?, ?)";
+        $insert_stmt = $link->prepare($insert_sql);
+        $insert_stmt->bind_param("iss", $id, $default_status, $default_time);
+        $insert_stmt->execute();
+        
+        // 設置最新狀態為「未處理」
+        $latest_status = $default_status;
+        $latest_time = $default_time;
+    } else {
+        // 如果有進度紀錄，則抓取最新的狀態
+        $progress_row = $progress_result->fetch_assoc();
+        $latest_status = $progress_row['Status'];
+        $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
+    }
 
-            if ($progress_row = $progress_result->fetch_assoc()) {
-                $latest_status = $progress_row['Status'];
-                $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
-            }
+    // 定義狀態
+    $stages = ['未處理', '處理中', '已完成'];
+    $status_index = array_search($latest_status, $stages);
 
-            $stages = ['未處理', '處理中', '已完成'];
-            $status_index = array_search($latest_status, $stages);
+    // 顯示進度條
+    foreach ($stages as $i => $stage) {
+        $is_active = ($status_index !== false && $i <= $status_index) ? 'active' : '';
+        $timestamp = ($i === $status_index && $latest_time) ? $latest_time : '';
+        echo "<li class='{$is_active}'>";
+        echo "  <div class='timestamp'>{$timestamp}</div>";
+        echo "  <div class='status'>";
+        if ($is_admin) {
+            echo "<form method='POST' action='update_progress.php' style='display:inline;'>";
+            echo "  <input type='hidden' name='suggestion_id' value='{$id}'>";
+            echo "  <input type='hidden' name='new_status' value='{$stage}'>";
+            echo "  <button type='submit' style='background:none; border:none; color:#2c3e50; font-weight:bold; cursor:pointer;'>{$stage}</button>";
+            echo "</form>";
+        } else {
+            echo $stage;
+        }
+        echo "  </div>";
+        echo "</li>";
+    }
+    ?>
+</ul>
 
-            foreach ($stages as $i => $stage) {
-                $is_active = ($status_index !== false && $i <= $status_index) ? 'active' : '';
-                $timestamp = ($i === $status_index && $latest_time) ? $latest_time : '';
-                echo "<li class='{$is_active}'>";
-                echo "  <div class='timestamp'>{$timestamp}</div>";
-                echo "  <div class='status'>";
-                if ($is_admin) {
-                    echo "<form method='POST' action='update_progress.php' style='display:inline;'>";
-                    echo "  <input type='hidden' name='suggestion_id' value='{$id}'>";
-                    echo "  <input type='hidden' name='new_status' value='{$stage}'>";
-                    echo "  <button type='submit' style='background:none; border:none; color:#2c3e50; font-weight:bold; cursor:pointer;'>{$stage}</button>";
-                    echo "</form>";
-                } else {
-                    echo $stage;
-                }
-                echo "  </div>";
-                echo "</li>";
-            }
-            ?>
-        </ul>
 
     </div>
 </body>
