@@ -10,7 +10,18 @@ if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
 }
 
-$userID = $_SESSION['User_ID'];
+$sessionUserID = $_SESSION['User_ID'];
+$sessionUserType = $_SESSION['User_Type'];
+
+if (isset($_GET['id'])) {
+    $viewUserID = intval($_GET['id']);
+    if ($viewUserID !== $sessionUserID && $sessionUserType !== 'admin') {
+        die('無權限查看此使用者資訊。');
+    }
+} else {
+    $viewUserID = $sessionUserID;
+}
+
 $sql = "
 SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, u.User_Name,
        f.Facility_Type, b.Building_Name,
@@ -25,9 +36,16 @@ ORDER BY s.Updated_At DESC
 ";
 
 $stmt = $link->prepare($sql);
-$stmt->bind_param("i", $userID);
+$stmt->bind_param("i", $viewUserID);
 $stmt->execute();
 $result = $stmt->get_result();
+
+$sql_user = "SELECT * FROM useraccount WHERE User_ID = ?";
+$stmt_user = $link->prepare($sql_user);
+$stmt_user->bind_param("i", $viewUserID);
+$stmt_user->execute();
+$result_user = $stmt_user->get_result();
+$row_user = $result_user->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -35,12 +53,9 @@ $result = $stmt->get_result();
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人檔案 | 輔仁大學愛校建言捐款系統</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
-
     <style>
         /* 你的 CSS 原樣保留 */
         body {
@@ -165,70 +180,61 @@ $result = $stmt->get_result();
 </head>
 
 <body>
-
-    <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
+    <?php if ($sessionUserType == 'admin'): ?>
+        <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的基本資訊</h3>
+    <?php else: ?>
+        <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
+    <?php endif; ?>
     <div class="table-responsive">
         <table>
             <tbody>
-                <?php
-                $current_User_Name = $_SESSION['User_Name'];
-
-                $link_user = mysqli_connect('localhost', 'root', '', 'sa');
-                if (!$link_user) {
-                    die("資料庫連線失敗：" . mysqli_connect_error());
-                }
-
-                $sql_user = "SELECT * FROM useraccount WHERE User_Name = ?";
-                $stmt_user = $link_user->prepare($sql_user);
-                $stmt_user->bind_param("s", $current_User_Name);
-                $stmt_user->execute();
-                $result_user = $stmt_user->get_result();
-
-                if ($row = $result_user->fetch_assoc()) {
-                    $password = htmlspecialchars($row['Password']);
-
-                    echo "
+                <?php if ($row_user): ?>
                     <tr>
                         <td rowspan='5'>
-                            <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7'  style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
+                            <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7' style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
-                        <td class='left'>用戶名稱： {$row['User_Name']}</td>
+                        <td class='left'>用戶名稱： <?= htmlspecialchars($row_user['User_Name']) ?></td>
                     </tr>
                     <tr>
-                        <td class='left'>使用者ID： 0000000000{$row['User_ID']}</td>
+                        <td class='left'>使用者ID： 0000000000<?= $row_user['User_ID'] ?></td>
                     </tr>
                     <tr>
-                        <td class='left'>Email： {$row['Email']}</td>
+                        <td class='left'>Email： <?= htmlspecialchars($row_user['Email']) ?></td>
                     </tr>
                     <tr>
                         <td class='left'>
-                            密碼：
-                            <span id='password' style='font-weight: bold;'>••••••••••</span>
+                            密碼： <span id='password' style='font-weight: bold;'>••••••••••</span>
                             <button id='togglePassword' onclick='togglePassword()' style='border: none; background: none; cursor: pointer;'>
                                 <i id='eyeIcon' class='fa fa-eye'></i>
                             </button>
-                            <span id='realPassword' style='display: none;'>{$password}</span>
+                            <span id='realPassword' style='display: none;'><?= htmlspecialchars($row_user['Password']) ?></span>
                         </td>
                     </tr>
+                    <?php if ($viewUserID === $sessionUserID): ?>
+                        <tr>
+                            <td colspan='2' class='left'>
+                                <a href='update.php?method=update&User_Name=<?= urlencode($row_user['User_Name']) ?>' class='custom-btn'>
+                                    <i class='fas fa-pen-to-square'></i> 修改資料
+                                </a>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                <?php else: ?>
                     <tr>
-                        <td colspan='2' class='left'>
-                            <a href='update.php?method=update&User_Name={$row['User_Name']}' class='custom-btn'>
-                                <i class='fas fa-pen-to-square'></i> 修改資料
-                            </a>
-                        </td>
-                    </tr>";
-                } else {
-                    echo "<tr><td colspan='2' align='center'>找不到使用者資料</td></tr>";
-                }
-
-                mysqli_close($link_user);
-                ?>
+                        <td colspan='2' align='center'>找不到使用者資料</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
 
-    <br>
-    <h3><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h3>
+    <?php if ($sessionUserType == 'admin'): ?>
+        <h3><i class="icon fas fa-clipboard-list"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的建言記錄</h3>
+    <?php else: ?>
+        <h3><i class="icon fas fa-clipboard-list"></i> 建言紀錄</h3>
+    <?php endif; ?>
+
+
     <div class="table-container">
         <table class="table">
             <thead class="table-primary">
@@ -246,14 +252,16 @@ $result = $stmt->get_result();
                             <td><b><?= htmlspecialchars($row['Title']) ?></b></td>
                             <td><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></td>
                             <td>
-                                <span class="badge bg-success fs-6">
-                                    <?= $row['LikeCount'] ?> ❤️
-                                </span>
+                                <span class="badge bg-success fs-6"> <?= $row['LikeCount'] ?> ❤️ </span>
                             </td>
                             <td>
-                                <a href="#update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
-                                    <i class="fas fa-pen-to-square"></i> 修改
-                                </a>
+                                <?php if ($viewUserID === $sessionUserID): ?>
+                                    <a href="update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
+                                        <i class="fas fa-pen-to-square"></i> 修改
+                                    </a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endwhile; ?>
@@ -266,23 +274,20 @@ $result = $stmt->get_result();
         </table>
     </div>
 
-    <br>
-    <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
-
     <script>
         function togglePassword() {
-            let passwordField = document.getElementById("password");
-            let realPasswordField = document.getElementById("realPassword");
-            let eyeIcon = document.getElementById("eyeIcon");
+            const pw = document.getElementById("password");
+            const real = document.getElementById("realPassword");
+            const eye = document.getElementById("eyeIcon");
 
-            if (passwordField.style.display === "none") {
-                passwordField.style.display = "inline";
-                realPasswordField.style.display = "none";
-                eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+            if (pw.style.display === "none") {
+                pw.style.display = "inline";
+                real.style.display = "none";
+                eye.classList.replace("fa-eye-slash", "fa-eye");
             } else {
-                passwordField.style.display = "none";
-                realPasswordField.style.display = "inline";
-                eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+                pw.style.display = "none";
+                real.style.display = "inline";
+                eye.classList.replace("fa-eye", "fa-eye-slash");
             }
         }
     </script>
