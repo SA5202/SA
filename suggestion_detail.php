@@ -183,8 +183,10 @@ if ($user_id) {
 
         .timeline li .timestamp {
             font-size: 12px;
+            font-weight: bold;
             color: #999;
             margin-top: 10px;  /* 讓時間顯示距離進度點一些距離 */
+            margin-left: 15px;
             position: absolute;
             bottom: -18px;  /* 固定顯示在進度條下方，無論狀態在哪 */
         }
@@ -193,6 +195,7 @@ if ($user_id) {
             font-size: 16px;
             font-weight: bold;
             color: #2c3e50; /* 保持文字顏色 */
+            margin-left: 15px;
             margin-bottom: 5px;
         }
 
@@ -201,7 +204,6 @@ if ($user_id) {
         }
 
         .timeline li.active {
-            padding-left: 30px;
             transition: padding 0.3s ease; /* 當狀態變化時，動畫效果 */
         }
 
@@ -352,7 +354,7 @@ if ($user_id) {
             <?php endif; ?>
             <?php if ($is_admin): ?>
                 <div class="meta">
-                    發佈者： <a href="user_profile.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
+                    發佈者： <a href="record.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
