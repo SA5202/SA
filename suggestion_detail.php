@@ -60,7 +60,7 @@ if ($user_id) {
     <style>
         body {
             max-width: 80%;
-            margin: 60px auto;
+            margin: 80px auto;
             padding: 20px;
             font-family: "Noto Serif TC", serif;
             background-color: transparent;
@@ -129,14 +129,16 @@ if ($user_id) {
         }
 
         a.author-link {
-        color: #444; /* 比黑淡一點的深灰 */
-        font-weight: 500;
-        text-decoration: none;
+            color: #444;
+            /* 比黑淡一點的深灰 */
+            font-weight: 500;
+            text-decoration: none;
         }
 
         a.author-link:hover {
-        color: #2980b9; /* 保留 hover 回饋感 */
-        text-decoration: underline;
+            color: #2980b9;
+            /* 保留 hover 回饋感 */
+            text-decoration: underline;
         }
 
         .timeline {
@@ -267,21 +269,35 @@ if ($user_id) {
         #like-count {
             margin-right: 5px;
         }
+
+        .timeline li button {
+            font: inherit;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            color: #2980b9;
+            cursor: pointer;
+        }
+
+        .timeline li button:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
 <body>
     <div class="card">
         <div class="content">
-        <?php if ($is_admin): ?>
-            <h3>
-                <a href="suggestion_edit.php?suggestion_id=<?= $row['Suggestion_ID'] ?>" style="text-decoration: none; color: #2c3e50;">
-                    <?= htmlspecialchars($row['Title']) ?>
-                </a>
-            </h3>
-        <?php else: ?>
-            <h3><?= htmlspecialchars($row['Title']) ?></h3>
-        <?php endif; ?>
+            <?php if ($is_admin): ?>
+                <h3>
+                    <a href="suggestion_edit.php?suggestion_id=<?= $row['Suggestion_ID'] ?>" style="text-decoration: none; color: #2c3e50;">
+                        <?= htmlspecialchars($row['Title']) ?>
+                    </a>
+                </h3>
+            <?php else: ?>
+                <h3><?= htmlspecialchars($row['Title']) ?></h3>
+            <?php endif; ?>
             <?php if ($is_admin): ?>
                 <div class="meta">
                     發佈者： <a href="user_profile.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
@@ -321,55 +337,47 @@ if ($user_id) {
             <a href="suggestions.php" class="back"><b>⬅ 回建言總覽</b></a>
         </div>
 
-                <!-- 動態產生進度紀錄 Timeline -->
+        <!-- 動態產生進度紀錄 Timeline -->
+        <!-- 進度狀態時間軸（點擊進度直接更新） -->
         <ul class="timeline">
-        <?php
-        // 抓取最新進度狀態
-        $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At DESC LIMIT 1";
-        $progress_stmt = $link->prepare($progress_sql);
-        $progress_stmt->bind_param("i", $id);
-        $progress_stmt->execute();
-        $progress_result = $progress_stmt->get_result();
-        $latest_status = null;
-        $latest_time = null;
+            <?php
+            $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At DESC LIMIT 1";
+            $progress_stmt = $link->prepare($progress_sql);
+            $progress_stmt->bind_param("i", $id);
+            $progress_stmt->execute();
+            $progress_result = $progress_stmt->get_result();
 
-        if ($progress_row = $progress_result->fetch_assoc()) {
-            $latest_status = $progress_row['Status'];
-            $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
-        }
+            $latest_status = null;
+            $latest_time = null;
 
-        // 定義固定三階段
-        $stages = ['未處理', '處理中', '已完成'];
-        $status_index = array_search($latest_status, $stages);
+            if ($progress_row = $progress_result->fetch_assoc()) {
+                $latest_status = $progress_row['Status'];
+                $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
+            }
 
-        // 產生 timeline
-        foreach ($stages as $i => $stage) {
-            $is_active = ($status_index !== false && $i <= $status_index) ? 'active' : '';
-            $timestamp = ($i === $status_index && $latest_time) ? $latest_time : '';
-            echo "
-            <li class='{$is_active}'>
-                <div class='timestamp'>{$timestamp}</div>
-                <div class='status'>{$stage}</div>
-            </li>
-            ";
-        }
-        ?>
+            $stages = ['未處理', '處理中', '已完成'];
+            $status_index = array_search($latest_status, $stages);
+
+            foreach ($stages as $i => $stage) {
+                $is_active = ($status_index !== false && $i <= $status_index) ? 'active' : '';
+                $timestamp = ($i === $status_index && $latest_time) ? $latest_time : '';
+                echo "<li class='{$is_active}'>";
+                echo "  <div class='timestamp'>{$timestamp}</div>";
+                echo "  <div class='status'>";
+                if ($is_admin) {
+                    echo "<form method='POST' action='update_progress.php' style='display:inline;'>";
+                    echo "  <input type='hidden' name='suggestion_id' value='{$id}'>";
+                    echo "  <input type='hidden' name='new_status' value='{$stage}'>";
+                    echo "  <button type='submit' style='background:none; border:none; color:#2c3e50; font-weight:bold; cursor:pointer;'>{$stage}</button>";
+                    echo "</form>";
+                } else {
+                    echo $stage;
+                }
+                echo "  </div>";
+                echo "</li>";
+            }
+            ?>
         </ul>
-        <?php if ($is_admin): ?>
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc;">
-            <form method="POST" action="update_progress.php" style="display: flex; align-items: center; gap: 10px;">
-                <input type="hidden" name="suggestion_id" value="<?= $id ?>">
-                <label for="new_status"><b>變更進度狀態：</b></label>
-                <select name="new_status" id="new_status" class="custom-select" required>
-                    <option value="">-- 請選擇 --</option>
-                    <option value="未處理">未處理</option>
-                    <option value="處理中">處理中</option>
-                    <option value="已完成">已完成</option>
-                </select>
-                <button type="submit" class="btn btn-primary">儲存</button>
-            </form>
-        </div>
-        <?php endif; ?>
 
     </div>
 </body>
