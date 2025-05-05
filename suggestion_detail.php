@@ -142,7 +142,7 @@ if ($user_id) {
         }
 
         .timeline {
-            height: 190px;
+            height: 250px;
             flex: 1;
             position: relative;
             top: 20px;
@@ -154,7 +154,7 @@ if ($user_id) {
 
         .timeline li {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
             padding-left: 20px;
             display: flex;
             flex-direction: column;
@@ -192,7 +192,7 @@ if ($user_id) {
         }
 
         .timeline li .status {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: #2c3e50; /* 保持文字顏色 */
             margin-left: 15px;
@@ -228,57 +228,6 @@ if ($user_id) {
             font-weight: bold;
             cursor: pointer;
             transition: color 0.3s ease;
-        }
-
-        .timeline li .status button:hover {
-            color: #4CAF50; /* 滑鼠移過去的效果 */
-        }
-
-        .timeline li .status button:focus {
-            outline: none;
-        }
-
-
-        .custom-select {
-            padding: 8px 16px;
-            border: 1px solid #ccc;
-            border-radius: 30px;
-            background-color: #f8f8f8;
-            font-size: 1rem;
-            font-family: "Noto Serif TC", serif;
-            color: #333;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 12px;
-            transition: border-color 0.3s ease;
-        }
-
-        .custom-select:hover {
-            border-color: #999;
-        }
-
-        .custom-select:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
-        }
-
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 8px 20px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #3e8e41;
         }
 
         .container {
@@ -445,7 +394,8 @@ if ($user_id) {
                     echo "<form method='POST' action='update_progress.php' style='display:inline;'>";
                     echo "  <input type='hidden' name='suggestion_id' value='{$id}'>";
                     echo "  <input type='hidden' name='new_status' value='{$stage}'>";
-                    echo "  <button type='submit' style='background:none; border:none; color:#2c3e50; font-weight:bold; cursor:pointer;'>{$stage}</button>";
+                    echo "  <button type='submit' style='background:none; border:none; color:#2c3e50; font-weight:bold; cursor:pointer; text-decoration:none; transition: color 0.3s;' 
+                    onmouseover=\"this.style.color='#6495ED';\" onmouseout=\"this.style.color='#2c3e50';\">{$stage}</button>";
                     echo "</form>";
                 } else {
                     echo $stage;
