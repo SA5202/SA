@@ -194,9 +194,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            height: 100%; /* 讓卡片自適應內容的高度 */
-            max-height: 300px; /* 設定一個最大高度，超過時會被限制 */
-            overflow: hidden; /* 隱藏超過的內容 */
+            height: 100%;
+            /* 讓卡片自適應內容的高度 */
+            max-height: 300px;
+            /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden;
+            /* 隱藏超過的內容 */
         }
 
         .card:hover {
@@ -235,10 +238,13 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         .card-description {
-            overflow: hidden; /* 確保文字不會超出 */
-            text-overflow: ellipsis; /* 使用省略號來處理過長的文字 */
+            overflow: hidden;
+            /* 確保文字不會超出 */
+            text-overflow: ellipsis;
+            /* 使用省略號來處理過長的文字 */
             display: -webkit-box;
-            -webkit-line-clamp: 3; /* 限制顯示三行 */
+            -webkit-line-clamp: 3;
+            /* 限制顯示三行 */
             -webkit-box-orient: vertical;
             margin-bottom: 1em;
             font-size: 1.05rem;
@@ -348,12 +354,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                     更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
                 </div>
                 <div class="actions">
-                    <?php if ($is_logged_in): ?>
-                        <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
-                    <?php else: ?>
-                        <a href="login.php" class="btn" onclick="return alert('請先登入才能查看完整建言');">查看完整建言</a>
-                    <?php endif; ?>
-
+                    <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
                     <span class="likes"><?= $row['LikeCount'] ?></span>
                 </div>
             </div>
