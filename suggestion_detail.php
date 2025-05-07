@@ -94,6 +94,7 @@ if ($user_id) {
             font-size: 1rem;
             font-weight: 600;
             color: #666;
+            line-height: 1.5;
             margin-bottom: 1.5rem;
         }
 
@@ -303,7 +304,7 @@ if ($user_id) {
             <?php endif; ?>
             <?php if ($is_admin): ?>
                 <div class="meta">
-                    發佈者： <a href="record.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
+                    發布者： <a href="record.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
@@ -344,49 +345,49 @@ if ($user_id) {
         <!-- 進度狀態時間軸（點擊進度直接更新） -->
         <ul class="timeline">
             <?php
-            // 檢查是否已有進度紀錄
-            $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At DESC LIMIT 1";
+            // 設置時區為 Asia/Taipei (UTC +8)
+            date_default_timezone_set('Asia/Taipei');
+
+            // 取得所有進度紀錄
+            $progress_sql = "SELECT Status, Updated_At FROM Progress WHERE Suggestion_ID = ? ORDER BY Updated_At ASC";
             $progress_stmt = $link->prepare($progress_sql);
             $progress_stmt->bind_param("i", $id);
             $progress_stmt->execute();
             $progress_result = $progress_stmt->get_result();
 
-            // 設置時區為 Asia/Taipei (UTC +8)
-            date_default_timezone_set('Asia/Taipei');
-
-            // 檢查資料庫是否有相關紀錄
+            // 檢查是否有紀錄，若無則新增「未受理」
             if ($progress_result->num_rows == 0) {
-                // 插入預設的「未受理」狀態紀錄
                 $default_status = '未受理';
-                $default_time = date("Y/m/d H:i");  // 這裡會自動根據設定的時區返回當前時間
-                
-                // 插入預設狀態
+                $default_time = date("Y/m/d H:i", strtotime($row['Updated_At']));
+
                 $insert_sql = "INSERT INTO Progress (Suggestion_ID, Status, Updated_At) VALUES (?, ?, ?)";
                 $insert_stmt = $link->prepare($insert_sql);
-                $insert_stmt->bind_param("iss", $id, $default_status, $default_time);  // 不需要進行 mb_convert_encoding
+                $insert_stmt->bind_param("iss", $id, $default_status, $default_time);
                 $insert_stmt->execute();
-                
-                // 設置最新狀態為「未受理」
-                $latest_status = $default_status;
-                $latest_time = $default_time;  // 使用設定時區的時間
-            }else {
-                // 如果有進度紀錄，則抓取最新的狀態
-                $progress_row = $progress_result->fetch_assoc();
-                $latest_status = mb_convert_encoding($progress_row['Status'], 'UTF-8', 'auto'); // 確保 Status 是 UTF-8 編碼
-                $latest_time = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
 
-                // 如果需要將時間也處理為 UTF-8 格式
-                $latest_time = mb_convert_encoding($latest_time, 'UTF-8', 'auto');
+                // 模擬紀錄
+                $status_times = [$default_status => $default_time];
+            } else {
+                // 整理所有狀態對應的時間（只保留每階段的最後一次紀錄）
+                $status_times = [];
+                while ($progress_row = $progress_result->fetch_assoc()) {
+                    $status = trim($progress_row['Status']);
+                    $timestamp = date("Y/m/d H:i", strtotime($progress_row['Updated_At']));
+                    $status_times[$status] = $timestamp;
+                }
             }
 
-            // 定義狀態
+            // 定義狀態階段順序
             $stages = ['未受理', '審核中', '處理中', '已完成'];
+
+            // 找出目前最新的狀態索引
+            $latest_status = array_key_last($status_times);
             $status_index = array_search($latest_status, $stages);
 
-            // 顯示進度條
+            // 顯示時間軸
             foreach ($stages as $i => $stage) {
                 $is_active = ($status_index !== false && $i <= $status_index) ? 'active' : '';
-                $timestamp = ($i === $status_index && $latest_time) ? $latest_time : '';
+                $timestamp = isset($status_times[$stage]) ? $status_times[$stage] : '';
                 echo "<li class='{$is_active}'>";
                 echo "  <div class='timestamp'>{$timestamp}</div>";
                 echo "  <div class='status'>";
@@ -395,7 +396,7 @@ if ($user_id) {
                     echo "  <input type='hidden' name='suggestion_id' value='{$id}'>";
                     echo "  <input type='hidden' name='new_status' value='{$stage}'>";
                     echo "  <button type='submit' style='background:none; border:none; color:#2c3e50; font-weight:bold; cursor:pointer; text-decoration:none; transition: color 0.3s;' 
-                    onmouseover=\"this.style.color='#6495ED';\" onmouseout=\"this.style.color='#2c3e50';\">{$stage}</button>";
+                            onmouseover=\"this.style.color='#6495ED';\" onmouseout=\"this.style.color='#2c3e50';\">{$stage}</button>";
                     echo "</form>";
                 } else {
                     echo $stage;

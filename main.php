@@ -290,8 +290,7 @@ $popular_result = $link->query($popular_sql);
                         <div class="suggestion-item">
                             <div class="suggestion-title"><?= htmlspecialchars($row['Title']) ?></div>
                             <div class="suggestion-meta">更新時間：<?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?></div>
-                            <a href="<?= 'suggestion_detail.php?id=' . $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
-
+                            <a href="<?="suggestion_detail.php?id=" . $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
                         </div>
                     <?php endwhile; ?>
                 </div>
@@ -307,7 +306,7 @@ $popular_result = $link->query($popular_sql);
                         <div class="suggestion-item">
                             <div class="suggestion-title"><?= htmlspecialchars($row['Title']) ?></div>
                             <div class="suggestion-meta">已經在網站上獲得了 <?= $row['LikeCount'] ?> 個 ❤️</div>
-                            <a href="<?='suggestion_detail.php?id=' . $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
+                            <a href="<?="suggestion_detail.php?id=" . $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
                         </div>
                     <?php endwhile; ?>
                 </div>

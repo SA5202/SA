@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = $_POST['description'] ?? '';
     $userID = $_SESSION['User_ID'] ?? null;
 
-    // 檢查必填欄位，並收集錯誤訊息
     if (empty($title)) {
         $errorMessages[] = "請輸入標題";
     }
@@ -60,26 +59,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($errorMessages)) {
         $success = false;
 
-        // 只有錯誤時才輸出 POST 資料
         echo "<pre>";
         var_dump($_POST);
         echo "</pre>";
 
-        // 顯示錯誤訊息
         echo "<div style='color: red;'><ul>";
         foreach ($errorMessages as $msg) {
             echo "<li>$msg</li>";
         }
         echo "</ul></div>";
     } else {
-        // 取得當前的 UTC 時間，並將其轉換為台北時間
-        $updatedAt = new DateTime('now', new DateTimeZone('UTC')); // 當前時間（UTC）
-        $updatedAt->setTimezone(new DateTimeZone('Asia/Taipei')); // 轉換為台北時間
-        $updatedAt = $updatedAt->format('Y-m-d H:i:s'); // 格式化為資料庫可以接受的格式
+        $updatedAt = new DateTime('now', new DateTimeZone('UTC'));
+        $updatedAt->setTimezone(new DateTimeZone('Asia/Taipei'));
+        $updatedAt = $updatedAt->format('Y-m-d H:i:s');
 
         $upvotedAmount = 0;
 
-        // 插入資料
         $stmt = $link->prepare("INSERT INTO suggestion (title, facility_id, building_id, description, updated_at, upvoted_amount, User_ID) VALUES (?, ?, ?, ?, ?, ?, ?)");
         if ($stmt === false) {
             die('準備語句失敗: ' . $link->error);
@@ -91,11 +86,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die('資料插入失敗: ' . $stmt->error);
         }
 
-        $success = true;
+        $suggestion_id = $stmt->insert_id;
         $stmt->close();
-    }
 
-    $link->close();
+        // 自動插入預設進度紀錄
+        $default_status = '未受理';
+        $progress_stmt = $link->prepare("INSERT INTO Progress (Suggestion_ID, Status, Updated_At) VALUES (?, ?, ?)");
+        if ($progress_stmt) {
+            $progress_stmt->bind_param("iss", $suggestion_id, $default_status, $updatedAt);
+            $progress_stmt->execute();
+            $progress_stmt->close();
+        }
+
+        $success = true;
+        $link->close();
+    }
 }
 ?>
 
@@ -129,7 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             transition: transform 0.3s;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
-            /* 加這行才會顯示框線 */
         }
 
         .suggestion-form:hover {

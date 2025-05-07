@@ -92,7 +92,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             gap: 1.2rem;
             margin-bottom: 2rem;
             padding: 1.5rem;
-            border-radius: 20px;
+            border-radius: 25px;
             align-items: flex-end;
             overflow-x: auto;
 
@@ -184,8 +184,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 卡片樣式：帶漸層+玻璃感+陰影 */
         .card {
-            padding: 2rem;
-            border-radius: 20px;
+            padding: 2.5rem;
+            border-radius: 25px;
             border: 1px solid rgba(200, 200, 200, 0.3);
             background-color: white;
             backdrop-filter: blur(14px);
@@ -194,12 +194,9 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            height: 100%;
-            /* 讓卡片自適應內容的高度 */
-            max-height: 300px;
-            /* 設定一個最大高度，超過時會被限制 */
-            overflow: hidden;
-            /* 隱藏超過的內容 */
+            height: 100%; /* 讓卡片自適應內容的高度 */
+            max-height: 300px; /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden; /* 隱藏超過的內容 */
         }
 
         .card:hover {
@@ -211,8 +208,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         .card h4 {
             font-size: 1.2rem;
             color: #fff;
-            margin: -2rem -2rem 1rem;
-            padding: 1rem 2rem;
+            margin: -2.5rem -2.5rem 0.5rem;
+            padding: 1rem 2.5rem;
             background-color: rgba(85, 164, 186, 0.8);
             border-bottom: 1px solid #ddd;
             border-top-left-radius: 20px;
@@ -238,13 +235,10 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         .card-description {
-            overflow: hidden;
-            /* 確保文字不會超出 */
-            text-overflow: ellipsis;
-            /* 使用省略號來處理過長的文字 */
+            overflow: hidden; /* 確保文字不會超出 */
+            text-overflow: ellipsis; /* 使用省略號來處理過長的文字 */
             display: -webkit-box;
-            -webkit-line-clamp: 3;
-            /* 限制顯示三行 */
+            -webkit-line-clamp: 1; /* 限制顯示三行 */
             -webkit-box-orient: vertical;
             margin-bottom: 1em;
             font-size: 1.05rem;

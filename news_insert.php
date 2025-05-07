@@ -52,7 +52,7 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>新增公告 | 輔仁大學愛校建言捐款系統</title>
+    <title>發布公告 | 輔仁大學愛校建言捐款系統</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <style>
@@ -164,7 +164,7 @@ $result = $conn->query($sql);
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-custom btn-block">確認發佈</button>
+                <button type="submit" class="btn btn-custom btn-block">確認發布</button>
             </form>
         </div>
     </div>
