@@ -163,7 +163,7 @@ if ($result->num_rows > 0) {
     <div class="container">
 
         <!-- 正在進行 -->
-        <h3><i class="fas fa-coins me-2"></i> 進行中的募款建言</h3>
+        <h3><i class="icon fas fa-coins me-2"></i> 進行中的募款建言</h3>
 
         <div class="donation-progress">
             <?php if (!empty($ongoing)) {

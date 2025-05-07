@@ -128,7 +128,7 @@ $result = $conn->query($sql);
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h3>發佈公告</h3>
+            <h3>發布公告</h3>
 
             <?php if (!empty($errorMessage)) : ?>
                 <div class="alert alert-danger" role="alert">
@@ -148,17 +148,17 @@ $result = $conn->query($sql);
                 </div>
 
                 <div class="mb-4">
-                    <label for="suggestion_id" class="form-label">公告關聯建言：</label>
+                    <label for="suggestion_id" class="form-label">公告相關建言：</label>
                     <select name="suggestion_id" id="suggestion_id" class="form-select" required>
                         <option value="">選擇建言</option>
-                        <option value="0">無關聯建言</option>
+                        <option value="0">本公告無相關建言</option>
                         <?php
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<option value='" . $row['Suggestion_ID'] . "'>" . htmlspecialchars($row['Title']) . "</option>";
                             }
                         } else {
-                            echo "<option disabled>無可選建言</option>";
+                            echo "<option disabled>目前沒有建言可以選擇</option>";
                         }
                         ?>
                     </select>
