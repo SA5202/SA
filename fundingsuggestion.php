@@ -39,8 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // 查詢建言列表
-$sql = "SELECT Suggestion_ID, Title FROM Suggestion";
+// 僅顯示「從未設置過募款」的建言
+$sql = "
+    SELECT s.Suggestion_ID, s.Title
+    FROM Suggestion s
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM FundingSuggestion f
+        WHERE f.Suggestion_ID = s.Suggestion_ID
+    )
+";
 $result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -153,8 +163,11 @@ $result = $conn->query($sql);
                     <input type="number" name="required_amount" id="required_amount" class="form-control" required min="0" step="1000">
                 </div>
                 <input type="hidden" name="status" value="募款中">
-
-
+                <!--如果要顯示募款中但不能選擇，就把上面那行改成這個就好
+                <div class="mb-4">
+                    <label for="status" class="form-label">設置建言募款狀態：</label>
+                    <input type="text" name="status" id="status" class="form-control" value="募款中" readonly>
+                </div> -->
                 <button type="submit" class="btn btn-custom btn-block">提交募款建言</button>
             </form>
         </div>
