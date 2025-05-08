@@ -148,18 +148,12 @@ $result = $conn->query($sql);
                         ?>
                     </select>
                 </div>
-
                 <div class="mb-3">
                     <label for="required_amount" class="form-label">預期目標金額：</label>
                     <input type="number" name="required_amount" id="required_amount" class="form-control" required min="0" step="1000">
                 </div>
+                <input type="hidden" name="status" value="募款中">
 
-                <div class="mb-4">
-                    <label for="status" class="form-label">設置建言募款狀態：</label>
-                    <select name="status" id="status" class="form-select" required>
-                        <option value="募款中">募款中</option>
-                    </select>
-                </div>
 
                 <button type="submit" class="btn btn-custom btn-block">提交募款建言</button>
             </form>
