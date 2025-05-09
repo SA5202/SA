@@ -177,11 +177,9 @@ if ($success_message) {
                 echo "<div class='col'>";
                 
                 // 整個卡片區域包裹在 <a> 標籤內，指向公告的詳細頁面
-                if ($is_logged_in) {
-                    echo "<a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='text-decoration-none'>";
-                } else {
-                    echo "<a href='login.php' class='text-decoration-none'>";
-                }
+                
+                echo "<a href='news_detail.php?id=" . urlencode($row['News_ID']) . "' class='text-decoration-none'>";
+                
                 echo "<div class='card'>";
                 echo "<div class='card-body'>";
                 echo "<p><h5 class='card-title'><i class='icon fa-solid fa-bullhorn icon'></i>" . htmlspecialchars($row['News_Title']) . "</h5></p>";
