@@ -194,9 +194,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
-            height: 100%; /* 讓卡片自適應內容的高度 */
-            max-height: 300px; /* 設定一個最大高度，超過時會被限制 */
-            overflow: hidden; /* 隱藏超過的內容 */
+            height: 100%;
+            /* 讓卡片自適應內容的高度 */
+            max-height: 300px;
+            /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden;
+            /* 隱藏超過的內容 */
         }
 
         .card:hover {
@@ -235,10 +238,13 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         .card-description {
-            overflow: hidden; /* 確保文字不會超出 */
-            text-overflow: ellipsis; /* 使用省略號來處理過長的文字 */
+            overflow: hidden;
+            /* 確保文字不會超出 */
+            text-overflow: ellipsis;
+            /* 使用省略號來處理過長的文字 */
             display: -webkit-box;
-            -webkit-line-clamp: 1; /* 限制顯示三行 */
+            -webkit-line-clamp: 1;
+            /* 限制顯示三行 */
             -webkit-box-orient: vertical;
             margin-bottom: 1em;
             font-size: 1.05rem;
@@ -326,6 +332,15 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                 <option value="latest" <?= $sort == "latest" ? "selected" : "" ?>>由最新到最舊</option>
                 <option value="oldest" <?= $sort == "oldest" ? "selected" : "" ?>>由最舊到最新</option>
                 <option value="likes" <?= $sort == "likes" ? "selected" : "" ?>>最多人點讚</option>
+            </select>
+        </div>
+        <div>
+            <label>處理進度</label>
+            <select name="progress">
+                <option value="unprocessed" <?= $sort == "unprocessed" ? "selected" : "" ?>>未受理</option>
+                <option value="reviewing" <?= $sort == "reviewing" ? "selected" : "" ?>>審核中</option>
+                <option value="processing" <?= $sort == "processing" ? "selected" : "" ?>>處理中</option>
+                <option value="completed" <?= $sort == "completed" ? "selected" : "" ?>>已完成</option>
             </select>
         </div>
         <div>
