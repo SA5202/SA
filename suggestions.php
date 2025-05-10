@@ -11,15 +11,57 @@ $building = $_GET['building'] ?? '';
 $sort = $_GET['sort'] ?? 'latest';
 
 $sql = "
-SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,
-       f.Facility_Type,
-       b.Building_Name,
-       (SELECT COUNT(*) FROM Upvote u WHERE u.Suggestion_ID = s.Suggestion_ID AND u.Is_Upvoted = 1) AS LikeCount
+SELECT 
+    s.Suggestion_ID, 
+    s.Title, 
+    s.Description, 
+    s.Updated_At,
+    f.Facility_Type,
+    b.Building_Name,
+    (
+        SELECT COUNT(*) 
+        FROM Upvote u 
+        WHERE u.Suggestion_ID = s.Suggestion_ID 
+        AND u.Is_Upvoted = 1
+    ) AS LikeCount,
+    (
+        SELECT p1.Status
+        FROM Progress p1
+        WHERE p1.Suggestion_ID = s.Suggestion_ID
+        ORDER BY p1.Updated_At DESC
+        LIMIT 1
+    ) AS CurrentStatus
 FROM Suggestion s
 JOIN Facility f ON s.Facility_ID = f.Facility_ID
 JOIN Building b ON s.Building_ID = b.Building_ID
 WHERE 1=1
 ";
+
+
+$progress_enum = [
+    'unprocessed' => '未受理',
+    'reviewing'   => '審核中',
+    'processing'  => '處理中',
+    'completed'   => '已完成',
+];
+
+$progress = $_GET['progress'] ?? '';
+if (!empty($progress) && isset($progress_enum[$progress])) {
+    $status_str = $progress_enum[$progress];
+    $sql .= "
+        AND (
+            SELECT p1.Status
+            FROM Progress p1
+            WHERE p1.Suggestion_ID = s.Suggestion_ID
+            ORDER BY p1.Updated_At DESC
+            LIMIT 1
+        ) = '{$status_str}'
+    ";
+}
+
+
+
+
 
 if (!empty($keyword)) {
     $sql .= " AND (s.Title LIKE '%$keyword%' OR s.Description LIKE '%$keyword%')";
@@ -30,6 +72,7 @@ if (!empty($facility)) {
 if (!empty($building)) {
     $sql .= " AND b.Building_Name = '$building'";
 }
+
 
 // 根據選擇的排序條件修改 SQL 查詢
 if ($sort == 'oldest') {
@@ -337,10 +380,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         <div>
             <label>處理進度</label>
             <select name="progress">
-                <option value="unprocessed" <?= $sort == "unprocessed" ? "selected" : "" ?>>未受理</option>
-                <option value="reviewing" <?= $sort == "reviewing" ? "selected" : "" ?>>審核中</option>
-                <option value="processing" <?= $sort == "processing" ? "selected" : "" ?>>處理中</option>
-                <option value="completed" <?= $sort == "completed" ? "selected" : "" ?>>已完成</option>
+                <option value="unprocessed" <?= $progress == "unprocessed" ? "selected" : "" ?>>未受理</option>
+                <option value="reviewing" <?= $progress == "reviewing" ? "selected" : "" ?>>審核中</option>
+                <option value="processing" <?= $progress == "processing" ? "selected" : "" ?>>處理中</option>
+                <option value="completed" <?= $progress == "completed" ? "selected" : "" ?>>已完成</option>
+
             </select>
         </div>
         <div>
