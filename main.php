@@ -254,9 +254,7 @@ $popular_result = $link->query($popular_sql);
                 $active_class = ($carousel_index == 0) ? " active" : "";
                 $max_length = 45;
                 $content_full = htmlspecialchars($row['News_Content']);
-                $link_target = $is_logged_in
-                    ? "news_detail.php?id=" . urlencode($row['News_ID'])
-                    : "login.php";
+                $link_target = "news_detail.php?id=" . urlencode($row['News_ID']);
                 $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
                     ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='$link_target' class='see-more'>查看更多</a>"
                     : $content_full;

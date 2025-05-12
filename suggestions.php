@@ -39,6 +39,7 @@ WHERE 1=1
 
 
 $progress_enum = [
+    'all' => '所有進度',
     'unprocessed' => '未受理',
     'reviewing'   => '審核中',
     'processing'  => '處理中',
@@ -46,7 +47,7 @@ $progress_enum = [
 ];
 
 $progress = $_GET['progress'] ?? '';
-if (!empty($progress) && isset($progress_enum[$progress])) {
+if (!empty($progress) && $progress !== 'all' && isset($progress_enum[$progress])) {
     $status_str = $progress_enum[$progress];
     $sql .= "
         AND (
@@ -58,9 +59,6 @@ if (!empty($progress) && isset($progress_enum[$progress])) {
         ) = '{$status_str}'
     ";
 }
-
-
-
 
 
 if (!empty($keyword)) {
@@ -157,12 +155,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         form>div {
             display: flex;
             flex-direction: column;
-            flex: 1;
+            flex: 1.2;
             min-width: 10px;
         }
 
-        form>div:nth-child(4) {
-            flex: 1.5;
+        form>div:nth-child(5) {
+            flex: 1.6;
         }
 
         form>div:last-child {
@@ -199,7 +197,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 按鈕樣式 */
         button {
-            padding: 0.4rem 25px;
+            padding: 0.4rem 20px;
             background-color: rgb(120, 128, 130);
             /* 深灰色 */
             color: white;
@@ -380,6 +378,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         <div>
             <label>處理進度</label>
             <select name="progress">
+                <option value="all" <?= $progress == "all" ? "selected" : "" ?>>所有進度</option>
                 <option value="unprocessed" <?= $progress == "unprocessed" ? "selected" : "" ?>>未受理</option>
                 <option value="reviewing" <?= $progress == "reviewing" ? "selected" : "" ?>>審核中</option>
                 <option value="processing" <?= $progress == "processing" ? "selected" : "" ?>>處理中</option>
