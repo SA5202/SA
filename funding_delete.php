@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
     $funding_id = $_GET['funding_id'];
 
-    // 更新募款建議的狀態為“已隱藏”
+    // 更新募款建議的狀態為「已隱藏」
     $updateSql = "UPDATE FundingSuggestion SET Status = '已隱藏' WHERE Funding_ID = ?";
     $stmt = $conn->prepare($updateSql);
     $stmt->bind_param("i", $funding_id);
@@ -38,6 +38,7 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                     height: 100vh;
                     margin: 0;
                     background-color: transparent !important;
+                    animation: fadeIn 0.8s ease-in;
                 }
 
                 .alert-card {
@@ -93,6 +94,18 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
 
                 .close-btn:hover {
                     color: #666;
+                }
+                
+                @keyframes fadeIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
             </style>
         </head>
@@ -193,8 +206,8 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
         <body>
             <div class='alert-card error'>
                 <button class='close-btn' onclick='closeAlert()'>×</button>
-                <div class='alert-title'>發生錯誤！</div>
-                <div class='alert-message'>刪除失敗，請稍後再試。</div>
+                <div class='alert-title'>操作失敗！</div>
+                <div class='alert-message'>發生錯誤，請稍後再試。</div>
             </div>
             <script>
                 setTimeout(function() {

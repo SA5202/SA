@@ -13,10 +13,9 @@
             font-family: "Noto Serif TC", serif;
         }
 
-
         .wrapper {
             background: #fff;
-            width: 400px;
+            width: 500px;
             max-width: 700px;
             margin-top: 100px;
             margin-left: auto;
@@ -27,10 +26,16 @@
             /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
             padding: 40px;
             border-radius: 25px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: transform 0.2s ease-in-out;
         }
 
+        .wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
         .wrapper h2 {
             margin-bottom: 20px;
             font-weight: 750;
@@ -54,7 +59,7 @@
         }
 
         .input-box input:focus {
-            border-color: rgb(160, 205, 86);
+            border-color: rgb(173, 231, 248);
             box-shadow: 0 0 8px rgba(93, 101, 72, 0.88);
         }
 
@@ -64,6 +69,16 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 18px;
+            color: #666;
+        }
+
+        .show-password-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            cursor: pointer;
             color: #666;
         }
 
@@ -119,16 +134,22 @@
                     <input type="text" name='User_Name' placeholder="請輸入帳號" required>
                 </div>
                 <div class="input-box">
-                    <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-                    <input type="text" name="Nickname" placeholder="請輸入暱稱 (如果不設定，預設為帳號)">
-                </div>
-                <div class="input-box">
                     <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
                     <input type="email" name='Email' placeholder="請輸入 EMAIL" required>
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                    <input type="password" name='Password' placeholder="請輸入密碼" required>
+                    <input type="password" id='password' name='Password' placeholder="請輸入密碼" required>
+                    <span class="show-password-btn" onclick="togglePassword('password', 'eye-icon')">
+                        <ion-icon id="eye-icon" name="eye-off-outline"></ion-icon>
+                    </span>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
+                    <input type="password" id='confirm_password' name='Confirm_Password' placeholder="請再次輸入密碼" required>
+                    <span class="show-password-btn" onclick="togglePassword('confirm_password', 'confirm-eye-icon')">
+                        <ion-icon id="confirm-eye-icon" name="eye-off-outline"></ion-icon>
+                    </span>
                 </div>
                 <button type="submit" class="btn">註冊</button>
 
@@ -143,6 +164,28 @@
     <!--ionicons-->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    
+    <script>
+        function togglePassword() {
+            // 取得密碼欄位
+            var passwordField = document.getElementById("password");
+            var confirmPasswordField = document.getElementById("confirm_password");
+
+            // 取得眼睛圖示
+            var eyeIcon = document.getElementById("eye-icon");
+            var confirmEyeIcon = document.getElementById("confirm-eye-icon");
+
+            // 切換顯示/隱藏密碼
+            var type = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = type;
+            confirmPasswordField.type = type;
+
+            // 切換眼睛圖示
+            eyeIcon.name = type === "password" ? "eye-off-outline" : "eye-outline";
+            confirmEyeIcon.name = type === "password" ? "eye-off-outline" : "eye-outline";
+        }
+    </script>
+
 </body>
 
 </html>

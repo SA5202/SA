@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>使用者登入</title>
-
     <style>
         * {
             margin: 0;
@@ -18,7 +17,7 @@
             background: #fff;
             width: 400px;
             max-width: 700px;
-            margin-top: 100px;
+            margin-top: 130px;
             margin-left: auto;
             /* 水平居中 */
             margin-right: auto;
@@ -27,8 +26,14 @@
             /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
             padding: 40px;
             border-radius: 25px;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .wrapper h2 {
@@ -105,9 +110,13 @@
             color: rgb(146, 49, 22);
             text-decoration: none;
         }
+        
+        .login-register {
+            margin-top: 30px;
+        }
 
         .login-register p {
-            margin-top: 15px;
+            margin: 0.5rem;
             font-size: 14px;
         }
 
@@ -125,11 +134,11 @@
         <form action="logincheck.php" method="POST">
             <div class="input-box">
                 <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
-                <input type="text" name="User_Name" placeholder="使用者名稱" required>
+                <input type="text" name="User_Name" placeholder="請輸入帳號" required>
             </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                <input type="password" id="password" name="Password" placeholder="密碼" required>
+                <input type="password" id="password" name="Password" placeholder="請輸入密碼" required>
                 <span class="show-password-btn" onclick="togglePassword()">
                     <ion-icon id="eye-icon" name="eye-off-outline"></ion-icon>
                 </span>
@@ -137,8 +146,6 @@
             <button type="submit" class="btn">登入</button>
             <div class="login-register">
                 <p>忘記密碼 ? <a href="password.php">點擊復原</a></p>
-            </div>
-            <div class="login-register">
                 <p>沒有帳號 ? <a href="register.php">點擊註冊</a></p>
             </div>
             <input type="hidden" name="redirect" value="<?= htmlspecialchars($_GET['redirect'] ?? '') ?>">
