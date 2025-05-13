@@ -31,7 +31,7 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
             <title>刪除提示</title>
             <style>
                 body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-family: 'Noto Serif TC', serif;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -41,10 +41,10 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                 }
 
                 .alert-card {
-                    width: 90%;
-                    max-width: 500px;
+                    width: 100%;
+                    max-width: 700px;
                     background-color: #fff;
-                    border-radius: 10px;
+                    border-radius: 15px;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                     padding: 25px;
                     box-sizing: border-box;
@@ -53,21 +53,22 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                 }
 
                 .alert-card.success {
-                    border-left: 8px solid rgb(147, 194, 90);
+                    border-left: 12px solid rgb(147, 194, 90);
                 }
 
                 .alert-card.error {
-                    border-left: 8px solid rgb(205, 89, 87);
+                    border-left: 12px solid rgb(205, 89, 87);
                 }
 
                 .alert-title {
                     font-size: 20px;
                     font-weight: bold;
-                    margin-bottom: 10px;
+                    margin-bottom: 15px;
                 }
 
                 .alert-message {
-                    font-size: 16px;
+                    font-size: 18px;
+                    font-weight: bold;
                     color: #555;
                 }
 
@@ -83,7 +84,7 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                     position: absolute;
                     top: 15px;
                     right: 15px;
-                    font-size: 20px;
+                    font-size: 24px;
                     background: none;
                     border: none;
                     color: #aaa;
@@ -98,8 +99,8 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
         <body>
             <div class='alert-card success'>
                 <button class='close-btn' onclick='closeAlert()'>×</button>
-                <div class='alert-title'>成功！</div>
-                <div class='alert-message'>募款建議已成功刪除。</div>
+                <div class='alert-title'>操作成功！</div>
+                <div class='alert-message'>此筆募款建言已成功刪除。</div>
             </div>
             <script>
                 setTimeout(function() {
@@ -121,10 +122,10 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
         <head>
             <meta charset='UTF-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>隱藏提示</title>
+            <title>刪除提示</title>
             <style>
                 body {
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    font-family: 'Noto Serif TC', serif;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -134,10 +135,10 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                 }
 
                 .alert-card {
-                    width: 90%;
-                    max-width: 500px;
+                    width: 100%;
+                    max-width: 700px;
                     background-color: #fff;
-                    border-radius: 10px;
+                    border-radius: 15px;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                     padding: 25px;
                     box-sizing: border-box;
@@ -146,11 +147,11 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                 }
 
                 .alert-card.success {
-                    border-left: 8px solid rgb(147, 194, 90);
+                    border-left: 12px solid rgb(147, 194, 90);
                 }
 
                 .alert-card.error {
-                    border-left: 8px solid rgb(205, 89, 87);
+                    border-left: 12px solid rgb(205, 89, 87);
                 }
 
                 .alert-title {
@@ -160,7 +161,8 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                 }
 
                 .alert-message {
-                    font-size: 16px;
+                    font-size: 18px;
+                    font-weight: bold;
                     color: #555;
                 }
 
@@ -176,7 +178,7 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
                     position: absolute;
                     top: 15px;
                     right: 15px;
-                    font-size: 20px;
+                    font-size: 24px;
                     background: none;
                     border: none;
                     color: #aaa;
@@ -191,7 +193,7 @@ if (isset($_GET['funding_id']) && is_numeric($_GET['funding_id'])) {
         <body>
             <div class='alert-card error'>
                 <button class='close-btn' onclick='closeAlert()'>×</button>
-                <div class='alert-title'>錯誤！</div>
+                <div class='alert-title'>發生錯誤！</div>
                 <div class='alert-message'>刪除失敗，請稍後再試。</div>
             </div>
             <script>
