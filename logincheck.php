@@ -11,6 +11,7 @@ if ($record = mysqli_fetch_assoc($result)) {
     $_SESSION['User_Name'] = $record['User_Name'];
     $_SESSION['User_ID'] = $record['User_ID'];
     $_SESSION['User_Type'] = $record['User_Type'];
+    $_SESSION['Nickname'] = $record['Nickname'];
 
     // 根據使用者類型判斷是否為管理員
     $_SESSION['is_admin'] = ($record['User_Type'] === 'admin');

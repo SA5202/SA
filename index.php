@@ -325,7 +325,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         /* 側邊欄項目選中時的樣式 */
         /* 側邊欄項目選中時的樣式 */
         .sidebar-link.active {
-            background-color:rgba(255, 255, 255, 0.33);
+            background-color: rgba(255, 255, 255, 0.33);
             /* 背景顏色變為灰色 */
             color: rgb(254, 251, 199);
             /* 文字顏色變為藍色 */
@@ -372,7 +372,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <?php if ($is_logged_in): ?>
         <div class="user-info-logout btn-position">
             <img src="https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="頭像" class="avatar">
-            <a href="record.php" target="contentFrame" style="text-decoration: none;"><span class="username"><b><?= htmlspecialchars($_SESSION['User_Name']) ?></b></span></a>
+            <a href="record.php" target="contentFrame" style="text-decoration: none;"><span class="Nickname"><b><?= htmlspecialchars($_SESSION['Nickname']) ?></b></span></a>
             <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
         </div>
 
@@ -454,7 +454,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 }
             });
         });
-
     </script>
 </body>
 

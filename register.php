@@ -19,9 +19,12 @@
             width: 400px;
             max-width: 700px;
             margin-top: 100px;
-            margin-left: auto;  /* 水平居中 */
-            margin-right: auto; /* 水平居中 */
-            display: block;     /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
+            margin-left: auto;
+            /* 水平居中 */
+            margin-right: auto;
+            /* 水平居中 */
+            display: block;
+            /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
             padding: 40px;
             border-radius: 25px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
@@ -41,7 +44,8 @@
 
         .input-box input {
             width: 100%;
-            padding: 12px 40px 12px 40px; /* Adjust padding to make space for icon */
+            padding: 12px 40px 12px 40px;
+            /* Adjust padding to make space for icon */
             border: 1px solid #ddd;
             border-radius: 10px;
             outline: none;
@@ -113,6 +117,10 @@
                 <div class="input-box">
                     <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
                     <input type="text" name='User_Name' placeholder="請輸入帳號" required>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="person-outline"></ion-icon></span>
+                    <input type="text" name="Nickname" placeholder="請輸入暱稱 (如果不設定，預設為帳號)">
                 </div>
                 <div class="input-box">
                     <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
