@@ -190,10 +190,13 @@ $row_user = $result_user->fetch_assoc();
             <tbody>
                 <?php if ($row_user): ?>
                     <tr>
-                        <td rowspan='5'>
+                        <td rowspan='6'>
                             <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7' style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
-                        <td class='left'>用戶名稱： <?= htmlspecialchars($row_user['User_Name']) ?></td>
+                        <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
+                    </tr>
+                    <tr>
+                        <td class='left'>#暱稱： <?= htmlspecialchars($row_user['User_Name']) ?></td>
                     </tr>
                     <tr>
                         <td class='left'>使用者ID： 0000000000<?= $row_user['User_ID'] ?></td>
