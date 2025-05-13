@@ -423,7 +423,7 @@ if ($result->num_rows > 0) {
                     function hideFunding(fundingID) {
                         if (confirm('確定要刪除這筆募款建言嗎？')) {
                             // 執行 AJAX 請求來更新募款建議狀態為“已隱藏”
-                            window.location.href = 'funding_hide.php?funding_id=' + fundingID;
+                            window.location.href = 'funding_delete.php?funding_id=' + fundingID;
                         }
                     }
                 </script>
