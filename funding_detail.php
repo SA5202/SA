@@ -18,6 +18,7 @@ $sql = "
     SELECT f.Funding_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
     FROM FundingSuggestion f
     JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
+    WHERE f.Status != '已隱藏'  -- 排除已隱藏的建議
     ORDER BY f.Updated_At DESC
 ";
 $result = $conn->query($sql);
@@ -365,7 +366,7 @@ if ($result->num_rows > 0) {
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">
                             <button class="btn btn-warning" onclick="window.location.href='funding_edit.php?funding_id=<?= $row['Funding_ID'] ?>'">編輯募款進度</button>
-                            <button class="btn btn-danger" onclick="deleteFunding(<?= $row['Funding_ID'] ?>)">刪除</button>
+                            <button class="btn btn-danger" onclick="hideFunding(<?= $row['Funding_ID'] ?>)">刪除</button>
                         </div>
                     </div>
                     <div class="right-card d-flex justify-content-between">
@@ -415,6 +416,16 @@ if ($result->num_rows > 0) {
                             }
                         }
                     });
+
+                </script>
+
+                <script>
+                    function hideFunding(fundingID) {
+                        if (confirm('確定要刪除這筆募款建言嗎？')) {
+                            // 執行 AJAX 請求來更新募款建議狀態為“已隱藏”
+                            window.location.href = 'funding_hide.php?funding_id=' + fundingID;
+                        }
+                    }
                 </script>
             <?php endforeach; ?>
         <?php endif; ?>
