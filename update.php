@@ -65,11 +65,11 @@
 
         input[type="submit"],
         input[type="reset"] {
-            background-color: rgb(126, 189, 84);
+            background-color: #84c684;
             color: white;
             padding: 10px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 100px;
             cursor: pointer;
             margin: 5px;
             font-size: 16px;

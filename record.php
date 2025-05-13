@@ -176,6 +176,17 @@ $row_user = $result_user->fetch_assoc();
             padding: 0.3em 1em;
             font-size: 0.5rem;
         }
+
+        .custom-badge {
+            background-color:rgb(148, 190, 218);
+            /* 你想要的自訂背景色 */
+            color: white;
+            /* 文字顏色 */
+            font-size: 1rem;
+            padding: 0.5em 0.75em;
+            border-radius: 12px;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -255,8 +266,9 @@ $row_user = $result_user->fetch_assoc();
                             <td><b><?= htmlspecialchars($row['Title']) ?></b></td>
                             <td><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></td>
                             <td>
-                                <span class="badge bg-success fs-6"> <?= $row['LikeCount'] ?> ❤️ </span>
+                                <span class="badge custom-badge fs-6"> <?= $row['LikeCount'] ?> ❤️ </span>
                             </td>
+
                             <td>
                                 <?php if ($viewUserID === $sessionUserID): ?>
                                     <a href="#update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
