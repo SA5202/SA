@@ -173,39 +173,47 @@ if ($user_id) {
             border-radius: 50%;
             background: #ccc;
             border: 2px solid #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 微妙的陰影效果 */
-            transition: all 0.3s ease; /* 添加平滑過渡 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            /* 微妙的陰影效果 */
+            transition: all 0.3s ease;
+            /* 添加平滑過渡 */
         }
 
         .timeline li.active::before {
             background: #4CAF50;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* 更強烈的陰影效果，讓進度點有立體感 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            /* 更強烈的陰影效果，讓進度點有立體感 */
         }
 
         .timeline li .timestamp {
             font-size: 12px;
             font-weight: bold;
             color: #999;
-            margin-top: 10px;  /* 讓時間顯示距離進度點一些距離 */
+            margin-top: 10px;
+            /* 讓時間顯示距離進度點一些距離 */
             margin-left: 15px;
             position: absolute;
-            bottom: -18px;  /* 固定顯示在進度條下方，無論狀態在哪 */
+            bottom: -18px;
+            /* 固定顯示在進度條下方，無論狀態在哪 */
         }
 
         .timeline li .status {
             font-size: 18px;
             font-weight: bold;
-            color: #2c3e50; /* 保持文字顏色 */
+            color: #2c3e50;
+            /* 保持文字顏色 */
             margin-left: 15px;
             margin-bottom: 5px;
         }
 
         .timeline li:not(.active) .status {
-            color: #aaa; /* 非活躍狀態下文字顏色改為淡灰色 */
+            color: #aaa;
+            /* 非活躍狀態下文字顏色改為淡灰色 */
         }
 
         .timeline li.active {
-            transition: padding 0.3s ease; /* 當狀態變化時，動畫效果 */
+            transition: padding 0.3s ease;
+            /* 當狀態變化時，動畫效果 */
         }
 
         .timeline li.active .status {
@@ -215,7 +223,8 @@ if ($user_id) {
 
         /* 調整整體邊框的細節，讓進度條線條看起來更精緻 */
         .timeline li::before {
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 內陰影讓圓點看起來更加立體 */
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            /* 內陰影讓圓點看起來更加立體 */
         }
 
         .timeline li:last-child {
@@ -383,6 +392,7 @@ if ($user_id) {
             // 找出目前最新的狀態索引
             $latest_status = array_key_last($status_times);
             $status_index = array_search($latest_status, $stages);
+
 
             // 顯示時間軸
             foreach ($stages as $i => $stage) {
