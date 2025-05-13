@@ -159,8 +159,8 @@ $result = $conn->query($sql);
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="required_amount" class="form-label">預期目標金額：</label>
-                    <input type="number" name="required_amount" id="required_amount" class="form-control" required min="0" step="1000">
+                    <label for="required_amount" class="form-label">預期目標金額(最小為1000)：</label>
+                    <input type="text" name="required_amount" id="required_amount" class="form-control" required>
                 </div>
                 <input type="hidden" name="status" value="募款中">
                 <!--如果要顯示募款中但不能選擇，就把上面那行改成這個就好
@@ -172,7 +172,17 @@ $result = $conn->query($sql);
             </form>
         </div>
     </div>
+    <script>
+        document.querySelector("form").addEventListener("submit", function(e) {
+            const requiredAmount = document.querySelector("#required_amount").value;
 
+            // 檢查輸入是否為有效的整數，並且大於等於 1000
+            if (!/^\d+$/.test(requiredAmount) || requiredAmount < 1000) {
+                alert("請輸入大於或等於 1000 的整數！");
+                e.preventDefault();  // 阻止表單提交
+            }
+        });
+    </script>
     <?php $conn->close(); ?>
 
     <!-- 載入 Bootstrap JS -->
