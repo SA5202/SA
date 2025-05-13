@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修改密碼</title>
+    <title>修改密碼及暱稱</title>
     <style>
         body {
             font-family: "Noto Serif TC", serif;
@@ -114,6 +114,7 @@
 
     if ($row = $result->fetch_assoc()) {
         $Email = $row['Email'];
+        $Nickname = $row['Nickname']; // 取得暱稱
     } else {
         die("找不到使用者資料！");
     }
@@ -122,7 +123,7 @@
     $link->close();
     ?>
 
-    <h2>修改密碼</h2>
+    <h2>修改密碼及暱稱</h2>
     <div class="card">
         <form action="dblink.php?method=update" method="post">
             <table>
@@ -139,15 +140,21 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>暱稱</td>
+                    <td>
+                        <input type="text" name="Nickname" value="<?= htmlspecialchars($Nickname) ?>">
+                    </td>
+                </tr>
+                <tr>
                     <td>新密碼</td>
                     <td>
-                        <input type="password" name="Password" required>
+                        <input type="password" name="Password">
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="button-row">
                         <input type="hidden" name="Old_User_Name" value="<?= htmlspecialchars($User_Name) ?>">
-                        <input type="submit" value="更新密碼">
+                        <input type="submit" value="更新資料">
                         <input type="reset" value="重設">
                     </td>
                 </tr>

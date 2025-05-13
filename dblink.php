@@ -19,14 +19,14 @@
     }
 
     if ($method == 'update') {
-        // 只檢查密碼欄位
-        if (isset($_POST['Password'], $_POST['Old_User_Name'])) {
-            $Password = mysqli_real_escape_string($link, $_POST['Password']);
+        // 只檢查 Nickname 欄位
+        if (isset($_POST['Nickname'], $_POST['Old_User_Name'])) {
+            $Nickname = mysqli_real_escape_string($link, $_POST['Nickname']);
             $Old_User_Name = mysqli_real_escape_string($link, $_POST['Old_User_Name']);
 
-            // 更新密碼 SQL 語句
+            // 更新 Nickname SQL 語句
             $sql = "UPDATE useraccount SET 
-                    Password = '$Password'
+                    Nickname = '$Nickname'
                 WHERE User_Name = '$Old_User_Name'";
 
             if (mysqli_query($link, $sql)) {
