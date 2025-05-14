@@ -17,7 +17,7 @@
             background: #fff;
             width: 500px;
             max-width: 700px;
-            margin-top: 100px;
+            margin-top: 90px;
             margin-left: auto;
             /* 水平居中 */
             margin-right: auto;
@@ -25,7 +25,7 @@
             display: block;
             /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
             padding: 40px;
-            border-radius: 25px;
+            border-radius: 40px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: transform 0.2s ease-in-out;
