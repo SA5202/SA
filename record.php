@@ -186,7 +186,6 @@ $row_user = $result_user->fetch_assoc();
             padding: 0.5em 0.75em;
             border-radius: 12px;
             font-weight: 600;
-            /*測試*/
         }
     </style>
 </head>
