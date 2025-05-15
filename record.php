@@ -57,7 +57,6 @@ $row_user = $result_user->fetch_assoc();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <style>
-        /* 你的 CSS 原樣保留 */
         body {
             max-width: 85%;
             margin: 0 auto;
@@ -80,14 +79,14 @@ $row_user = $result_user->fetch_assoc();
         }
 
         h3 {
-            margin: 20px 0;
+            margin: 30px 0;
             font-weight: bold;
         }
 
         .table-responsive {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px 20px;
-            border-radius: 25px;
+            border-radius: 30px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
@@ -105,22 +104,45 @@ $row_user = $result_user->fetch_assoc();
             text-align: left;
         }
 
+        .password-display-wrapper {
+            position: relative;
+            width: 200px; /* 或改成 auto 看實際需求 */
+        }
+
+        #passwordDisplay {
+            width: 100%;
+            padding-right: 35px;
+            font-weight: bold;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #333;
+            pointer-events: none;
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
         .custom-btn {
             display: inline-block;
             padding: 4px 40px;
             font-size: 1rem;
             font-weight: 750;
-            background: linear-gradient(to right, #84c684, #6fb36f);
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
             color: #fff;
             border-radius: 15px;
             text-decoration: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .custom-btn:hover {
-            background: linear-gradient(to right, #84c684, #6fb36f, 0.5);
-            box-shadow: 0 0 10px rgba(111, 179, 111, 0.4);
-            transform: translateY(-2px);
+            opacity: 0.7;
         }
 
         .table-container {
@@ -134,7 +156,7 @@ $row_user = $result_user->fetch_assoc();
 
         .table {
             width: 100%;
-            border-radius: 15px;
+            border-radius: 25px;
             border: 2px solid #ddd;
             border-collapse: separate;
             overflow: hidden;
@@ -143,7 +165,7 @@ $row_user = $result_user->fetch_assoc();
 
         .table th,
         .table td {
-            padding: 10px 30px;
+            padding: 10px 40px;
             border-radius: 0px;
         }
 
@@ -151,21 +173,24 @@ $row_user = $result_user->fetch_assoc();
             background-color: #e9f5ff;
         }
 
+        .update {
+            font-size: 1rem;
+            font-weight: bold;
+            color: gray;
+        }
+
         .pretty-btn {
-            background: linear-gradient(to right, #84c684, #6fb36f);
+            background: linear-gradient(to right, #6dd5ed, #2193b0);
             border: none;
             color: white;
-            padding: 4px 20px;
+            padding: 5px 20px;
             border-radius: 10px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 750;
-            transition: background 0.3s ease;
         }
 
         .pretty-btn:hover {
-            background: linear-gradient(to right, #84c684, #6fb36f, 0.5);
-            box-shadow: 0 0 10px rgba(111, 179, 111, 0.4);
-            transform: translateY(-2px);
+            opacity: 0.7;
         }
 
         .pretty-btn i {
@@ -178,12 +203,10 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .custom-badge {
-            background-color: rgb(148, 190, 218);
-            /* 你想要的自訂背景色 */
-            color: white;
-            /* 文字顏色 */
-            font-size: 1rem;
-            padding: 0.5em 0.75em;
+            background: linear-gradient(to right, #d0e8f2, #e6f4fa);
+            color: #2a4d69;
+            font-size: 0.9rem;
+            padding: 0.5em 1em;
             border-radius: 12px;
             font-weight: 600;
         }
@@ -205,31 +228,35 @@ $row_user = $result_user->fetch_assoc();
                             <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7') ?>"
                                 style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
-                        <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
+                        <td class='left'><b>帳號： </b><?= htmlspecialchars($row_user['User_Name']) ?></td>
                     </tr>
                     <tr>
-                        <td class='left'>暱稱： <?= htmlspecialchars($row_user['Nickname']) ?></td>
+                        <td class='left'><b>暱稱： </b><?= htmlspecialchars($row_user['Nickname']) ?></td>
                     </tr>
                     <tr>
-                        <td class='left'>使用者ID： 0000000000<?= $row_user['User_ID'] ?></td>
+                        <td class='left'><b>使用者 ID： </b>0000000000<?= $row_user['User_ID'] ?></td>
                     </tr>
                     <tr>
-                        <td class='left'>Email： <?= htmlspecialchars($row_user['Email']) ?></td>
+                        <td class='left'><b>Email： </b><?= htmlspecialchars($row_user['Email']) ?></td>
                     </tr>
                     <tr>
-                        <td class='left'>
-                            密碼： <span id='password' style='font-weight: bold;'>••••••••••</span>
-                            <button id='togglePassword' onclick='togglePassword()' style='border: none; background: none; cursor: pointer;'>
-                                <i id='eyeIcon' class='fa fa-eye'></i>
-                            </button>
-                            <span id='realPassword' style='display: none;'><?= htmlspecialchars($row_user['Password']) ?></span>
+                        <td class="left">
+                            <div class="d-flex align-items-center" style="gap: 10px;">
+                                <span><b>密碼： </b></span>
+                                <div class="password-display-wrapper">
+                                    <input type="text" id="passwordDisplay" value="••••••••••" readonly>
+                                    <button type="button" id="togglePassword" onclick="togglePassword()">
+                                        <i id="eyeIcon" class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     <?php if ($viewUserID === $sessionUserID): ?>
                         <tr>
                             <td colspan='2' class='left'>
                                 <a href='update.php?method=update&User_Name=<?= urlencode($row_user['User_Name']) ?>' class='custom-btn'>
-                                    <i class='fas fa-pen-to-square'></i> 修改資料
+                                    <i class='fas fa-pen-to-square'></i> 編輯個人檔案
                                 </a>
                             </td>
                         </tr>
@@ -254,7 +281,7 @@ $row_user = $result_user->fetch_assoc();
             <tr>
                 <th class="fw-bold">建言標題</th>
                 <th class="fw-bold">發佈時間</th>
-                <th class="fw-bold">按讚數</th>
+                <th class="fw-bold">獲得讚數</th>
                 <th class="fw-bold">編輯建言</th>
             </tr>
         </thead>
@@ -263,7 +290,7 @@ $row_user = $result_user->fetch_assoc();
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
                         <td><b><?= htmlspecialchars($row['Title']) ?></b></td>
-                        <td><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></td>
+                        <td><span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span></td>
                         <td>
                             <span class="badge custom-badge fs-6"> <?= $row['LikeCount'] ?> ❤️ </span>
                         </td>
@@ -274,7 +301,7 @@ $row_user = $result_user->fetch_assoc();
                                     <i class="fas fa-pen-to-square"></i> 修改
                                 </a>
                             <?php else: ?>
-                                -
+                                - 
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -288,43 +315,28 @@ $row_user = $result_user->fetch_assoc();
     </table>
     <h3><i class="icon fas fa-donate"></i> 捐款紀錄</h3>
 
-
-
     <?php
     $stmt->close();
     $link->close();
     ?>
 
     <script>
-        window.onload = function() {
-            const real = document.getElementById("realPassword");
-            const pw = document.getElementById("password");
-            const eye = document.getElementById("eyeIcon");
-
-            // 設定密碼文字
-            pw.textContent = "••••••••••";
-            real.textContent = "<?= htmlspecialchars($row_user['Password']) ?>";
-
-            // 初始顯示為隱藏
-            pw.style.display = "inline";
-            real.style.display = "none";
-            eye.classList.replace("fa-eye", "fa-eye-slash");
-        };
-
+        let isVisible = false;
         function togglePassword() {
-            const pw = document.getElementById("password");
-            const real = document.getElementById("realPassword");
-            const eye = document.getElementById("eyeIcon");
+            const passwordInput = document.getElementById('passwordDisplay');
+            const eyeIcon = document.getElementById('eyeIcon');
+            const realPassword = "<?= htmlspecialchars($row_user['Password']) ?>";
 
-            if (real.style.display === "none") {
-                pw.style.display = "none";
-                real.style.display = "inline";
-                eye.classList.replace("fa-eye-slash", "fa-eye");
+            if (isVisible) {
+                passwordInput.value = "••••••••••";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
             } else {
-                pw.style.display = "inline";
-                real.style.display = "none";
-                eye.classList.replace("fa-eye", "fa-eye-slash");
+                passwordInput.value = realPassword;
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
             }
+            isVisible = !isVisible;
         }
     </script>
 

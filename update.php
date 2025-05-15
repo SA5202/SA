@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修改密碼及暱稱</title>
+    <title>編輯個人檔案</title>
     <style>
         body {
             font-family: "Noto Serif TC", serif;
@@ -18,7 +18,7 @@
         }
 
         .card {
-            max-width: 600px;
+            max-width: 750px;
             background-color: #fff;
             margin: 80px auto;
             padding: 15px 50px;
@@ -38,8 +38,8 @@
         }
 
         td {
-            padding: 12px 10px;
-            font-size: 16px;
+            padding: 10px;
+            font-size: 18px;
             font-weight: bold;
             color: #444;
         }
@@ -48,10 +48,12 @@
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 8px 15px;
             font-size: 16px;
+            font-weight: 600;
+            font-family: "Noto Serif TC", serif;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
             box-sizing: border-box;
         }
 
@@ -60,8 +62,39 @@
         }
 
         input:focus {
+            outline: none;
             border-color: rgb(173, 231, 248);
             box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        #nicknameCounter {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #888;
+            pointer-events: none;
+        }
+
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .show-password-btn {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
         }
 
         .button-row {
@@ -73,11 +106,11 @@
         input[type="reset"] {
             background-color: #84c684;
             color: white;
-            padding: 10px 40px;
+            padding: 10px 50px;
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            margin: 15px 5px;
+            margin: 10px 5px;
             font-size: 16px;
             font-weight: bold;
             font-family: "Noto Serif TC", serif;
@@ -94,10 +127,10 @@
 
         .custom-file-btn {
             display: inline-block;
-            background-color: #999;
+            background-color: #bbb;
             color: white;
-            padding: 4px 30px;
-            border-radius: 5px;
+            padding: 5px 40px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
             text-align: center;
@@ -146,7 +179,7 @@
     ?>
 
     <div class="card">
-        <form action="dblink.php?method=update_avatar" method="post" enctype="multipart/form-data">
+        <form id="profileForm" action="dblink.php?method=update_avatar" method="post" enctype="multipart/form-data">
         <h2>編輯個人檔案</h2>
             <table>
                 <tr>
@@ -164,17 +197,36 @@
                 <tr>
                     <td>暱稱</td>
                     <td>
-                        <input type="text" name="Nickname" value="<?= htmlspecialchars($Nickname) ?>">
+                        <div class="input-wrapper">
+                            <input type="text" name="Nickname" id="nicknameInput" value="<?= htmlspecialchars($Nickname) ?>" maxlength="10">
+                            <span id="nicknameCounter">0 / 10</span>
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td>新密碼</td>
+                    <td>設置新密碼</td>
                     <td>
-                        <input type="password" name="Password">
+                        <div class="password-wrapper">
+                            <input type="password" name="Password" id="password">
+                            <span class="show-password-btn" onclick="togglePassword('password', 'eye-icon')">
+                                <ion-icon id="eye-icon" name="eye-off-outline"></ion-icon>
+                            </span>
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <td>頭像圖片</td>
+                    <td>確認新密碼</td>
+                    <td>
+                        <div class="password-wrapper">
+                            <input type="password" name="Confirm_Password" id="confirm_password">
+                            <span class="show-password-btn" onclick="togglePassword('confirm_password', 'confirm-eye-icon')">
+                                <ion-icon id="confirm-eye-icon" name="eye-off-outline"></ion-icon>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>設置頭像</td>
                     <td>
                         <input type="file" name="Avatar" id="avatarInput" accept="image/*" style="display: none;">
                         <label for="avatarInput" class="custom-file-btn">選擇圖片</label>
@@ -193,18 +245,68 @@
         </form>
 
     </div>
-</body>
-<script>
-    const input = document.getElementById('avatarInput');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
 
-    input.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            fileNameDisplay.textContent = this.files[0].name;
-        } else {
-            fileNameDisplay.textContent = '';
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        const nicknameInput = document.getElementById('nicknameInput');
+        const nicknameCounter = document.getElementById('nicknameCounter');
+
+        nicknameInput.addEventListener('input', function () {
+            nicknameCounter.textContent = `${this.value.length} / 10`;
+        });
+
+        function togglePassword() {
+            // 取得密碼欄位
+            var passwordField = document.getElementById("password");
+            var confirmPasswordField = document.getElementById("confirm_password");
+
+            // 取得眼睛圖示
+            var eyeIcon = document.getElementById("eye-icon");
+            var confirmEyeIcon = document.getElementById("confirm-eye-icon");
+
+            // 切換顯示/隱藏密碼
+            var type = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = type;
+            confirmPasswordField.type = type;
+
+            // 切換眼睛圖示
+            eyeIcon.name = type === "password" ? "eye-off-outline" : "eye-outline";
+            confirmEyeIcon.name = type === "password" ? "eye-off-outline" : "eye-outline";
         }
-    });
-</script>
+
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirm_password').value.trim();
+
+            // 如果其中一個欄位有填，但另一個沒填
+            if ((password && !confirmPassword) || (!password && confirmPassword)) {
+                event.preventDefault();
+                alert("請完整填寫密碼與確認密碼欄位！");
+                return;
+            }
+
+            // 如果兩個欄位都有填，但不一致
+            if (password && confirmPassword && password !== confirmPassword) {
+                event.preventDefault();
+                alert("兩次輸入的密碼不一致！");
+                return;
+            }
+        });
+
+        const input = document.getElementById('avatarInput');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+        input.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileNameDisplay.textContent = this.files[0].name;
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        });
+    </script>
+
+</body>
 
 </html>

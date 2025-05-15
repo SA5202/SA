@@ -154,9 +154,7 @@
                 <button type="submit" class="btn">註冊</button>
 
                 <div class="login-register">
-                    <p>已經擁有帳號 ?<a href="login.php" class="regist-link">
-                            登入
-                        </a></p>
+                    <p>已經擁有帳號 ?<a href="login.php" class="regist-link">登入</a></p>
                 </div>
             </form>
         </div>
