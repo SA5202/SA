@@ -1,78 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+session_start();
+$method = $_GET['method'] ?? null;
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>帳號處理</title>
-</head>
+// 連接資料庫
+$link = mysqli_connect('localhost', 'root', '', 'SA');
+if (!$link) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-<body>
-    <?php
-    session_start();
-    $method = $_GET['method'] ?? null;
+// === 同時處理暱稱與密碼 ===
+if ($method === 'update') {
+    if (isset($_POST['Nickname'], $_POST['Old_User_Name'])) {
+        $Nickname = mysqli_real_escape_string($link, $_POST['Nickname']);
+        $Old_User_Name = mysqli_real_escape_string($link, $_POST['Old_User_Name']);
+        $Password = $_POST['Password']; // 可能為空
 
-    // 連接資料庫
-    $link = mysqli_connect('localhost', 'root', '', 'SA');
-    if (!$link) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
+        // 更新 SQL 動態處理
+        if (!empty($Password)) {
+            $Password = mysqli_real_escape_string($link, $Password);
+            $sql = "UPDATE useraccount SET Nickname = '$Nickname', Password = '$Password' WHERE User_Name = '$Old_User_Name'";
+        } else {
+            $sql = "UPDATE useraccount SET Nickname = '$Nickname' WHERE User_Name = '$Old_User_Name'";
+        }
 
-    if ($method == 'update') {
-        // 只檢查 Nickname 欄位
-        if (isset($_POST['Nickname'], $_POST['Old_User_Name'])) {
-            $Nickname = mysqli_real_escape_string($link, $_POST['Nickname']);
-            $Old_User_Name = mysqli_real_escape_string($link, $_POST['Old_User_Name']);
+        if (mysqli_query($link, $sql)) {
+            $_SESSION['Nickname'] = $Nickname; // 同步更新 session
 
-            // 更新 Nickname SQL 語句
-            $sql = "UPDATE useraccount SET 
-                    Nickname = '$Nickname'
-                WHERE User_Name = '$Old_User_Name'";
+            $query = "SELECT User_ID FROM useraccount WHERE User_Name = '$Old_User_Name'";
+            $result = mysqli_query($link, $query);
 
-            if (mysqli_query($link, $sql)) {
-                // 查詢更新後的 User_ID
-                $query = "SELECT User_ID FROM useraccount WHERE User_Name = '$Old_User_Name'";
-                $result = mysqli_query($link, $query);
-
-                if ($row = mysqli_fetch_assoc($result)) {
-                    $User_ID = $row['User_ID'];
-                    echo "更新成功";
-
-                    // 根據身分跳轉
-                    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
-                        echo "<meta http-equiv='refresh' content='1;url=user_profile.php?id=$User_ID'>";
-                    } else {
-                        echo "<meta http-equiv='refresh' content='1;url=record.php'>";
+            if ($row = mysqli_fetch_assoc($result)) {
+                $User_ID = $row['User_ID'];
+                echo "<script>
+                    alert('更新成功!!!');
+                    if(window.parent) {
+                        window.parent.location.reload();
                     }
-                } else {
-                    echo "更新成功但找不到使用者 ID。";
-                }
+                </script>";
             } else {
-                echo "錯誤: " . mysqli_error($link);
+                echo "更新成功但找不到使用者 ID。";
             }
         } else {
-            echo "缺少必要欄位。";
+            echo "更新失敗...: " . mysqli_error($link);
         }
+    } else {
+        echo "缺少必要欄位";
     }
+}
 
-    // 刪除操作
-    elseif ($method == 'delete') {
-        if (isset($_GET['User_Name'])) {
-            $User_Name = mysqli_real_escape_string($link, $_GET['User_Name']);
-            $sql = "DELETE FROM useraccount WHERE User_Name='$User_Name'";
-
-            if (mysqli_query($link, $sql)) {
-                echo "刪除成功", "<br>";
-            } else {
-                echo "刪除失敗", "<br>";
-            }
-        } else {
-            echo "缺少使用者名稱。";
-        }
-    }
-
-    mysqli_close($link);
-    ?>
-</body>
-
-</html>
+mysqli_close($link);
