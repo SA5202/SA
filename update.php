@@ -14,22 +14,22 @@
 
         h2 {
             text-align: center;
-            color: #333;
-            margin-top: 40px;
+            color: #2c3e50;
         }
 
         .card {
-            max-width: 500px;
+            max-width: 600px;
             background-color: #fff;
-            margin: 40px auto;
-            padding: 30px 40px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            margin: 80px auto;
+            padding: 15px 50px;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
         }
 
         .card:hover {
             transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         table {
@@ -40,6 +40,7 @@
         td {
             padding: 12px 10px;
             font-size: 16px;
+            font-weight: bold;
             color: #444;
         }
 
@@ -48,7 +49,7 @@
         input[type="password"] {
             width: 100%;
             padding: 10px;
-            font-size: 15px;
+            font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
@@ -56,6 +57,11 @@
 
         input[readonly] {
             background-color: #eee;
+        }
+
+        input:focus {
+            border-color: rgb(173, 231, 248);
+            box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
         }
 
         .button-row {
@@ -67,12 +73,13 @@
         input[type="reset"] {
             background-color: #84c684;
             color: white;
-            padding: 10px 25px;
+            padding: 10px 40px;
             border: none;
-            border-radius: 100px;
+            border-radius: 20px;
             cursor: pointer;
-            margin: 5px;
+            margin: 15px 5px;
             font-size: 16px;
+            font-weight: bold;
             font-family: "Noto Serif TC", serif;
         }
 
@@ -82,23 +89,22 @@
 
         input[type="submit"]:hover,
         input[type="reset"]:hover {
-            opacity: 0.9;
+            opacity: 0.7;
         }
 
         .custom-file-btn {
             display: inline-block;
-            background-color:#ccc;
+            background-color: #999;
             color: white;
-            padding: 7px 10px;
-            border-radius:5px;
+            padding: 4px 30px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
-            font-family: "Noto Serif TC", serif;
             text-align: center;
         }
 
         .custom-file-btn:hover {
-            opacity: 0.9;
+            opacity: 0.7;
         }
     </style>
 </head>
@@ -139,9 +145,9 @@
     $link->close();
     ?>
 
-    <h2>修改密碼及暱稱</h2>
     <div class="card">
         <form action="dblink.php?method=update_avatar" method="post" enctype="multipart/form-data">
+        <h2>編輯個人檔案</h2>
             <table>
                 <tr>
                     <td>帳號</td>
@@ -179,7 +185,7 @@
                 <tr>
                     <td colspan="2" class="button-row">
                         <input type="hidden" name="Old_User_Name" value="<?= htmlspecialchars($User_Name) ?>">
-                        <input type="submit" value="更新資料">
+                        <input type="submit" value="儲存變更">
                         <input type="reset" value="重設">
                     </td>
                 </tr>
