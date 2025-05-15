@@ -269,7 +269,7 @@ $row_user = $result_user->fetch_assoc();
 
                         <td>
                             <?php if ($viewUserID === $sessionUserID): ?>
-                                <a href="#update_suggestion.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
+                                <a href="suggestion_update.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
                                     <i class="fas fa-pen-to-square"></i> 修改
                                 </a>
                             <?php else: ?>
@@ -293,23 +293,7 @@ $row_user = $result_user->fetch_assoc();
     $stmt->close();
     $link->close();
     ?>
-    <tr>
-        <td class="left">
-            密碼：
-            <div style="display: inline-flex; align-items: center; position: relative; min-width: 120px;">
-                <!-- 密碼區塊 -->
-                <div style="position: relative; width: 100px; height: 24px;">
-                    <span id="password" style="position: absolute; top: 0; left: 0;"></span>
-                    <span id="realPassword" style="position: absolute; top: 0; left: 0;"></span>
-                </div>
-
-                <!-- 眼睛圖示 -->
-                <button onclick="togglePassword()" style="border: none; background: none; cursor: pointer; margin-left: 10px;">
-                    <i id="eyeIcon" class="fa fa-eye-slash"></i>
-                </button>
-            </div>
-        </td>
-    </tr>
+    
     <script>
         window.onload = function() {
             const real = document.getElementById("realPassword");
