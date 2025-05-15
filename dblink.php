@@ -51,6 +51,7 @@ if ($method === 'update_avatar') {
                 $_SESSION['Avatar'] = $avatarPath; // 存完整相對路徑，不要用 basename()
             }
             echo "<script>alert('更新成功'); window.location.href='record.php';</script>";
+            exit;
         } else {
             die("更新失敗: " . mysqli_error($link));
         }

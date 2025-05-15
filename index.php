@@ -342,7 +342,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .nickname-link:hover {
-            color:rgb(1, 47, 92);
+            color: rgb(1, 47, 92);
             /* 滑鼠懸停時的顏色，可自行調整 */
         }
     </style>
@@ -381,10 +381,11 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
 
 
-    <!-- 登入/登出 -->
     <?php if ($is_logged_in): ?>
         <div class="user-info-logout btn-position">
-            <img src="https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="頭像" class="avatar">
+            <a href="record.php" target="contentFrame">
+                <img src="<?= !empty($_SESSION['Avatar']) ? htmlspecialchars($_SESSION['Avatar']) : '/default_avatar.jpg' ?>" alt="頭像" class="avatar" style="cursor:pointer;">
+            </a>
             <a href="record.php" target="contentFrame" class="nickname-link">
                 <span class="Nickname"><b><?= htmlspecialchars($_SESSION['Nickname']) ?></b></span>
             </a>
@@ -397,6 +398,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             </button>
         </a>
     <?php endif; ?>
+
 
 
     <div class="content">
@@ -469,6 +471,15 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 }
             });
         });
+    </script>
+    <script>
+        function refreshAvatar(newAvatarPath) {
+            const avatarImg = document.querySelector('.avatar');
+            if (avatarImg) {
+                // 加一個時間戳避免快取
+                avatarImg.src = newAvatarPath + '?t=' + new Date().getTime();
+            }
+        }
     </script>
 </body>
 
