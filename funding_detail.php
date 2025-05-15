@@ -15,10 +15,10 @@ if ($conn->connect_error) {
 
 // 查詢所有募款建議
 $sql = "
-    SELECT f.Funding_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
+    SELECT f.Funding_ID, s.Suggestion_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
     FROM FundingSuggestion f
     JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
-    WHERE f.Status != '已隱藏'  -- 排除已隱藏的建議
+    WHERE f.Status != '已隱藏'  -- 排除已隱藏的建言
     ORDER BY f.Updated_At DESC
 ";
 $result = $conn->query($sql);
@@ -90,12 +90,19 @@ if ($result->num_rows > 0) {
             padding: 20px;
             background-color: rgba(241, 244, 249, 0.9);
             border: 1px solid #ddd;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            /* 讓卡片自適應內容的高度 */
+            max-height: 300px;
+            /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden;
+            /* 隱藏超過的內容 */
         }
 
         .donation-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .left-card,
@@ -113,11 +120,21 @@ if ($result->num_rows > 0) {
             align-items: center;
         }
 
-        .left-card h4 {
+        .left-card h4 a {
             font-weight: bold;
+            text-decoration: none;
+            color: rgb(0, 76, 148);
         }
 
         .description {
+            overflow: hidden;
+            /* 確保文字不會超出 */
+            text-overflow: ellipsis;
+            /* 使用省略號來處理過長的文字 */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* 限制顯示行數 */
+            -webkit-box-orient: vertical;
             font-size: 1rem;
             color: #555;
             margin-top: 25px;
@@ -155,7 +172,7 @@ if ($result->num_rows > 0) {
         /* 自定義按鈕樣式 */
         .action-btn button {
             border: none;
-            margin: 10px 0;
+            margin-top: 15px;
             padding: 10px 20px;
             font-size: 1rem;
             font-weight: bold;
@@ -198,10 +215,14 @@ if ($result->num_rows > 0) {
         ?>
                 <div class="donation-card">
                     <div class="left-card">
-                        <h4><?= htmlspecialchars($row["Title"]) ?></h4>
+                        <h4>
+                            <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </h4>
                         <?php
                         $desc = $row["Description"];
-                        $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '...' : $desc;
+                        $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '⋯' : $desc;
                         ?>
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">
@@ -268,6 +289,7 @@ if ($result->num_rows > 0) {
             echo "<p>目前沒有進行中的募款建言。</p>";
         } ?>
     </div>
+    
     <!-- 暫停中的募款建言 -->
     <h3><i class="icon fas fa-pause-circle me-2 text-warning"></i> 暫停中的募款建言</h3>
 
@@ -282,10 +304,14 @@ if ($result->num_rows > 0) {
             ?>
                 <div class="donation-card">
                     <div class="left-card">
-                        <h4><?= htmlspecialchars($row["Title"]) ?></h4>
+                        <h4>
+                            <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </h4>
                         <?php
                         $desc = $row["Description"];
-                        $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '...' : $desc;
+                        $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '⋯' : $desc;
                         ?>
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">
@@ -344,6 +370,7 @@ if ($result->num_rows > 0) {
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
+    
     <!-- 已結束 -->
     <h3><i class="icon fas fa-check-circle me-2 text-success"></i> 已完成的募款建言</h3>
 
@@ -358,10 +385,14 @@ if ($result->num_rows > 0) {
             ?>
                 <div class="donation-card">
                     <div class="left-card">
-                        <h3><?= htmlspecialchars($row["Title"]) ?></h3>
+                        <h4>
+                            <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </h4>
                         <?php
                         $desc = $row["Description"];
-                        $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '...' : $desc;
+                        $short = mb_strlen($desc) > 120 ? mb_substr($desc, 0, 120) . '⋯' : $desc;
                         ?>
                         <p class="description"><?= nl2br(htmlspecialchars($short)) ?></p>
                         <div class="action-btn">

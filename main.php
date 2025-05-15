@@ -111,7 +111,7 @@ $popular_result = $link->query($popular_sql);
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
-            border-radius: 20px;
+            border-radius: 25px;
             background-color: white;
             height: auto;
             min-height: 350px;
@@ -123,8 +123,8 @@ $popular_result = $link->query($popular_sql);
             font-weight: bold;
             font-size: 1.3rem;
             padding: 20px 30px;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
         }
 
         .card-body {
@@ -155,6 +155,7 @@ $popular_result = $link->query($popular_sql);
 
         .suggestion-meta {
             font-size: 0.9rem;
+            font-weight: bold;
             color: gray;
         }
 
@@ -186,6 +187,12 @@ $popular_result = $link->query($popular_sql);
             color: #333;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+            height: 100%;
+            /* 讓卡片自適應內容的高度 */
+            max-height: 300px;
+            /* 設定一個最大高度，超過時會被限制 */
+            overflow: hidden;
+            /* 隱藏超過的內容 */
         }
 
         .carousel-inner {
@@ -209,11 +216,14 @@ $popular_result = $link->query($popular_sql);
         }
 
         .card-text {
+            overflow: hidden;
+            /* 確保文字不會超出 */
+            text-overflow: ellipsis;
+            /* 使用省略號來處理過長的文字 */
             display: -webkit-box;
             -webkit-line-clamp: 1;
+            /* 限制顯示行數 */
             -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         .see-more {
@@ -252,11 +262,11 @@ $popular_result = $link->query($popular_sql);
             $carousel_index = 0;
             while ($row = $news_result->fetch_assoc()):
                 $active_class = ($carousel_index == 0) ? " active" : "";
-                $max_length = 45;
+                $max_length = 50;
                 $content_full = htmlspecialchars($row['News_Content']);
                 $link_target = "news_detail.php?id=" . urlencode($row['News_ID']);
                 $content_short = (mb_strlen($content_full, 'UTF-8') > $max_length)
-                    ? mb_substr($content_full, 0, $max_length, 'UTF-8') . "... <a href='$link_target' class='see-more'>查看更多</a>"
+                    ? mb_substr($content_full, 0, $max_length-7, 'UTF-8') . "⋯ <a href='$link_target' class='see-more'>查看更多</a>"
                     : $content_full;
             ?>
                 <div class="carousel-item<?= $active_class ?>">

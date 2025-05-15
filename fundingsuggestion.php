@@ -71,8 +71,8 @@ $result = $conn->query($sql);
         }
 
         .form-container {
-            max-width: 50%;
-            margin: 80px auto;
+            max-width: 55%;
+            margin: 120px auto;
         }
 
         .form-card {
@@ -80,9 +80,15 @@ $result = $conn->query($sql);
             /* 淡透明背景 */
             padding: 40px;
             border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+        }
+
+        .form-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .form-card h3 {
@@ -153,13 +159,13 @@ $result = $conn->query($sql);
                                 echo "<option value='" . $row['Suggestion_ID'] . "'>" . htmlspecialchars($row['Title']) . "</option>";
                             }
                         } else {
-                            echo "<option disabled>無可選建言</option>";
+                            echo "<option disabled>沒有可選的建言</option>";
                         }
                         ?>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="required_amount" class="form-label">預期目標金額(最小為1000)：</label>
+                    <label for="required_amount" class="form-label">預期目標金額 (最低為NT$1000)：</label>
                     <input type="text" name="required_amount" id="required_amount" class="form-control" required>
                 </div>
                 <input type="hidden" name="status" value="募款中">
@@ -168,7 +174,7 @@ $result = $conn->query($sql);
                     <label for="status" class="form-label">設置建言募款狀態：</label>
                     <input type="text" name="status" id="status" class="form-control" value="募款中" readonly>
                 </div> -->
-                <button type="submit" class="btn btn-custom btn-block">提交募款建言</button>
+                <button type="submit" class="btn btn-custom btn-block">確認新增</button>
             </form>
         </div>
     </div>

@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: funding_detail.php");
             exit();
         } else {
-            $errorMessage = "更新失敗，請稍後再試！";
+            $errorMessage = "操作失敗，請稍後再試！";
         }
 
         $stmt->close();
@@ -83,17 +83,23 @@ if (isset($_GET['funding_id'])) {
         }
 
         .form-container {
-            max-width: 50%;
-            margin: 80px auto;
+            max-width: 55%;
+            margin: 100px auto;
         }
 
         .form-card {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 40px;
             border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+        }
+
+        .form-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .form-card h3 {
@@ -156,7 +162,7 @@ if (isset($_GET['funding_id'])) {
                 <input type="hidden" name="funding_id" value="<?= htmlspecialchars($row['Funding_ID']) ?>">
 
                 <div class="mb-3">
-                    <label for="required_amount" class="form-label">募款目標金額：</label>
+                    <label for="required_amount" class="form-label">預期目標金額：</label>
                     <input type="number" class="form-control" id="required_amount" name="required_amount" value="<?= htmlspecialchars($row['Required_Amount']) ?>" required>
                 </div>
 

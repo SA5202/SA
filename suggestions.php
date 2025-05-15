@@ -144,11 +144,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(200, 200, 200, 0.4);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-            transition: all 0.3s ease;
+            transition: transform 0.2s ease-in-out;
         }
 
         form:hover {
-            transform: translateY(-4px);
+            transform: scale(1.02);
             box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
         }
 
@@ -231,8 +231,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             background-color: white;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
+            transition: transform 0.2s ease-in-out;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             height: 100%;
@@ -244,7 +244,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: scale(1.02);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
@@ -285,7 +285,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             /* 使用省略號來處理過長的文字 */
             display: -webkit-box;
             -webkit-line-clamp: 1;
-            /* 限制顯示三行 */
+            /* 限制顯示行數 */
             -webkit-box-orient: vertical;
             margin-bottom: 1em;
             font-size: 1.05rem;
@@ -400,7 +400,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         <?php while ($row = $result->fetch_assoc()): ?>
             <div class="card">
                 <h4><i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?></h4>
-                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "...") ?></p>
+                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "⋯") ?></p>
                 <div class="meta">
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
