@@ -186,6 +186,7 @@ $row_user = $result_user->fetch_assoc();
             padding: 0.5em 0.75em;
             border-radius: 12px;
             font-weight: 600;
+            /*測試*/
         }
     </style>
 </head>
@@ -201,7 +202,7 @@ $row_user = $result_user->fetch_assoc();
             <tbody>
                 <?php if ($row_user): ?>
                     <tr>
-                        <td rowspan='6'>
+                        <td rowspan='6'> 
                             <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7') ?>"
                                 style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
