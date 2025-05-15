@@ -202,7 +202,8 @@ $row_user = $result_user->fetch_assoc();
                 <?php if ($row_user): ?>
                     <tr>
                         <td rowspan='6'>
-                            <img src='https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7' style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
+                            <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7') ?>"
+                                style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
                         <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
                     </tr>
@@ -293,7 +294,7 @@ $row_user = $result_user->fetch_assoc();
     $stmt->close();
     $link->close();
     ?>
-    
+
     <script>
         window.onload = function() {
             const real = document.getElementById("realPassword");
