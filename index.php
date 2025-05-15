@@ -332,6 +332,19 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             font-weight: bold;
             /* 字體加粗 */
         }
+
+        .nickname-link {
+            text-decoration: none;
+            color: rgb(7, 78, 150);
+            /* 正常狀態的顏色，可自行調整 */
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nickname-link:hover {
+            color:rgb(1, 47, 92);
+            /* 滑鼠懸停時的顏色，可自行調整 */
+        }
     </style>
 </head>
 
@@ -372,10 +385,11 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <?php if ($is_logged_in): ?>
         <div class="user-info-logout btn-position">
             <img src="https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" alt="頭像" class="avatar">
-            <a href="record.php" target="contentFrame" style="text-decoration: none;"><span class="Nickname"><b><?= htmlspecialchars($_SESSION['Nickname']) ?></b></span></a>
+            <a href="record.php" target="contentFrame" class="nickname-link">
+                <span class="Nickname"><b><?= htmlspecialchars($_SESSION['Nickname']) ?></b></span>
+            </a>
             <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
         </div>
-
     <?php else: ?>
         <a href="login.php" target="contentFrame">
             <button class="btn btn-custom btn-outline-success btn-position">
@@ -383,6 +397,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             </button>
         </a>
     <?php endif; ?>
+
 
     <div class="content">
         <iframe name="contentFrame" src="main.php" allowtransparency="true"></iframe>
