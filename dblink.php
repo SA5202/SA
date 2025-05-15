@@ -35,11 +35,10 @@ if ($method === 'update_avatar') {
 
         $sql = "UPDATE useraccount SET Nickname = '$Nickname'";
         if (!empty($Password)) {
-            // 密碼用 password_hash 儲存，安全性提升
-            $hashedPassword = password_hash($Password, PASSWORD_DEFAULT);
-            $hashedPassword = mysqli_real_escape_string($link, $hashedPassword);
-            $sql .= ", Password = '$hashedPassword'";
+            $Password = mysqli_real_escape_string($link, $Password);
+            $sql .= ", Password = '$Password'";
         }
+
         if ($avatarPath !== null) {
             $avatarPathEscaped = mysqli_real_escape_string($link, $avatarPath);
             $sql .= ", Avatar = '$avatarPathEscaped'";
