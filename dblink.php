@@ -1,50 +1,60 @@
 <?php
 session_start();
 $method = $_GET['method'] ?? null;
-
-// 連接資料庫
 $link = mysqli_connect('localhost', 'root', '', 'SA');
 if (!$link) {
-    die("Connection failed: " . mysqli_connect_error());
+    die("資料庫連線失敗：" . mysqli_connect_error());
 }
 
-// === 同時處理暱稱與密碼 ===
-if ($method === 'update') {
+if ($method === 'update_avatar') {
     if (isset($_POST['Nickname'], $_POST['Old_User_Name'])) {
         $Nickname = mysqli_real_escape_string($link, $_POST['Nickname']);
         $Old_User_Name = mysqli_real_escape_string($link, $_POST['Old_User_Name']);
-        $Password = $_POST['Password']; // 可能為空
+        $Password = $_POST['Password']; // 可空
 
-        // 更新 SQL 動態處理
-        if (!empty($Password)) {
-            $Password = mysqli_real_escape_string($link, $Password);
-            $sql = "UPDATE useraccount SET Nickname = '$Nickname', Password = '$Password' WHERE User_Name = '$Old_User_Name'";
-        } else {
-            $sql = "UPDATE useraccount SET Nickname = '$Nickname' WHERE User_Name = '$Old_User_Name'";
+        $avatarPath = null;
+
+        // 處理圖片上傳
+        if (isset($_FILES['Avatar']) && $_FILES['Avatar']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = 'uploads/avatars/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $tmpName = $_FILES['Avatar']['tmp_name'];
+            $ext = strtolower(pathinfo($_FILES['Avatar']['name'], PATHINFO_EXTENSION)); // 小寫副檔名
+            $newFileName = uniqid('avatar_') . '.' . $ext;
+            $destination = $uploadDir . $newFileName;
+
+            if (move_uploaded_file($tmpName, $destination)) {
+                $avatarPath = $destination; // 相對於網站根目錄的路徑
+            } else {
+                die("頭像上傳失敗");
+            }
         }
+
+        $sql = "UPDATE useraccount SET Nickname = '$Nickname'";
+        if (!empty($Password)) {
+            // 密碼用 password_hash 儲存，安全性提升
+            $hashedPassword = password_hash($Password, PASSWORD_DEFAULT);
+            $hashedPassword = mysqli_real_escape_string($link, $hashedPassword);
+            $sql .= ", Password = '$hashedPassword'";
+        }
+        if ($avatarPath !== null) {
+            $avatarPathEscaped = mysqli_real_escape_string($link, $avatarPath);
+            $sql .= ", Avatar = '$avatarPathEscaped'";
+        }
+        $sql .= " WHERE User_Name = '$Old_User_Name'";
 
         if (mysqli_query($link, $sql)) {
-            $_SESSION['Nickname'] = $Nickname; // 同步更新 session
-
-            $query = "SELECT User_ID FROM useraccount WHERE User_Name = '$Old_User_Name'";
-            $result = mysqli_query($link, $query);
-
-            if ($row = mysqli_fetch_assoc($result)) {
-                $User_ID = $row['User_ID'];
-                echo "<script>
-                    alert('更新成功!!!');
-                    if(window.parent) {
-                        window.parent.location.reload();
-                    }
-                </script>";
-            } else {
-                echo "更新成功但找不到使用者 ID。";
+            $_SESSION['Nickname'] = $Nickname;
+            if ($avatarPath !== null) {
+                $_SESSION['Avatar'] = $avatarPath; // 存完整相對路徑，不要用 basename()
             }
+            echo "<script>alert('更新成功'); window.location.href='record.php';</script>";
         } else {
-            echo "更新失敗...: " . mysqli_error($link);
+            die("更新失敗: " . mysqli_error($link));
         }
-    } else {
-        echo "缺少必要欄位";
     }
 }
 

@@ -84,6 +84,22 @@
         input[type="reset"]:hover {
             opacity: 0.9;
         }
+
+        .custom-file-btn {
+            display: inline-block;
+            background-color:#ccc;
+            color: white;
+            padding: 7px 10px;
+            border-radius:5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: "Noto Serif TC", serif;
+            text-align: center;
+        }
+
+        .custom-file-btn:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 
@@ -125,7 +141,7 @@
 
     <h2>修改密碼及暱稱</h2>
     <div class="card">
-        <form action="dblink.php?method=update" method="post">
+        <form action="dblink.php?method=update_avatar" method="post" enctype="multipart/form-data">
             <table>
                 <tr>
                     <td>帳號</td>
@@ -152,6 +168,15 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>頭像圖片</td>
+                    <td>
+                        <input type="file" name="Avatar" id="avatarInput" accept="image/*" style="display: none;">
+                        <label for="avatarInput" class="custom-file-btn">選擇圖片</label>
+                        <span id="fileNameDisplay" style="margin-left:10px; color:#555;"></span>
+                    </td>
+                </tr>
+
+                <tr>
                     <td colspan="2" class="button-row">
                         <input type="hidden" name="Old_User_Name" value="<?= htmlspecialchars($User_Name) ?>">
                         <input type="submit" value="更新資料">
@@ -160,7 +185,20 @@
                 </tr>
             </table>
         </form>
+
     </div>
 </body>
+<script>
+    const input = document.getElementById('avatarInput');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    input.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            fileNameDisplay.textContent = this.files[0].name;
+        } else {
+            fileNameDisplay.textContent = '';
+        }
+    });
+</script>
 
 </html>
