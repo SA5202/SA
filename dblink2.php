@@ -57,15 +57,21 @@
             $stmt2->execute();
             $stmt2->close();
 
-            // 最後刪除 suggestion 表資料
-            $stmt3 = $link->prepare("DELETE FROM suggestion WHERE Suggestion_ID = ?");
+            // 再刪除 fundingsuggestion 表中相關資料
+            $stmt3 = $link->prepare("DELETE FROM fundingsuggestion WHERE Suggestion_ID = ?");
             $stmt3->bind_param("i", $Suggestion_ID);
+            $stmt3->execute();
+            $stmt3->close();
 
-            if ($stmt3->execute()) {
+            // 最後刪除 suggestion 表資料
+            $stmt4 = $link->prepare("DELETE FROM suggestion WHERE Suggestion_ID = ?");
+            $stmt4->bind_param("i", $Suggestion_ID);
+
+            if ($stmt4->execute()) {
                 echo "建言及相關資料刪除成功！";
                 echo "<meta http-equiv='refresh' content='1;url=record.php'>";
             } else {
-                echo "刪除失敗：" . $stmt3->error;
+                echo "刪除失敗：" . $stmt4->error;
             }
 
             $stmt3->close();
