@@ -204,80 +204,87 @@ $popular_result = $link->query($popular_sql);
         }
 
 
-        /*榮譽標章*/
-        /* 榮譽榜容器 */
+       /* 榮譽標章 */
+        /* 榮譽標章容器 */
         .honor-wrapper {
             margin: 50px auto;
-            padding: 40px 30px;
+            padding: 20px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
-        /* 頒獎台的排列 */
+        /* 頒獎台排列方式 */
         .award-stand {
             display: flex;
+            padding-top: 50px;
             justify-content: center;
-            align-items: flex-start;
-            gap: 40px; /* 項目之間的間距 */
-            margin-top: 60px;
+            align-items: flex-end;  /* 將項目對齊到底部 */
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        /* 獎項的外觀設計 */
+        /* 獎項外觀 */
         .award-item {
-            width: 180px;
-            height: 250px;
-            padding: 30px;
-            background: linear-gradient(to bottom, #ffffff, #e2e2e2);
-            border-radius: 15px;
+            width: auto;
+            height: auto;
+            max-width: 250px;
+            min-width: 120px;
+            padding: 20px;
+            background: transparent;
             color: #333;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
-            transform: translateY(0);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            transition: width 0.3s ease, height 0.3s ease;
+            border-radius: 10px;
+            box-sizing: border-box;
         }
 
-        /* 懸停效果：獎項放大並增強陰影 */
-        .award-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        /* 獎項內容區 */
+        .award-content {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(to bottom, #ffffff, #e2e2e2);
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            border-radius: 15px;
+            max-height: 200px;
+            min-height: 100px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        /* 獎項的圖標 */
-        .honor-icon {
-            font-size: 30px;
-            color: #f1c40f; /* 金色圖標 */
-            margin-bottom: 15px;
+        /* 底座設計（不再使用絕對定位） */
+        .award-base {
+            height: 10px;
+            border-radius: 5px;
+            width: 100%;
         }
 
-        /* 獎項標題的樣式 */
-        .award-item h5 {
-            font-weight: bold;
-            font-size: 20px;
-            margin-bottom: 10px;
+        /* 金獎底座 */
+        .award-base.gold {
+            background-color: #FFD700;
+            height: 80px;
+
         }
 
-        /* 金獎的特殊樣式 */
-        .award-item.gold {
-            background: linear-gradient(to bottom, #f9d71c, #f39c12);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
-            transform: translateY(-15px); /* 顯示金獎時稍微突出 */
+        /* 銀獎底座 */
+        .award-base.silver {
+            background-color: #C0C0C0;
+            height: 50px;
+
         }
 
-        /* 銀獎的特殊樣式 */
-        .award-item.silver {
-            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
-            box-shadow: 0 10px 30px rgba(192, 192, 192, 0.6);
-            transform: translateY(-10px); /* 顯示銀獎時稍微突出 */
-        }
-
-        /* 銅獎的特殊樣式 */
-        .award-item.bronze {
-            background: linear-gradient(to bottom, #cd7f32, #e67e22);
-            box-shadow: 0 10px 30px rgba(205, 127, 50, 0.6);
-            transform: translateY(-5px); /* 顯示銅獎時稍微突出 */
+        /* 銅獎底座 */
+        .award-base.bronze {
+            background-color: #CD7F32;
+            height: 30px;
         }
 
     </style>
@@ -364,51 +371,106 @@ $popular_result = $link->query($popular_sql);
             </div>
         </div>
     </div>
-
+    <h3><i class="icon fas fa-medal"></i> 榮耀捐款者</h3>
     <!-- 榮譽榜 -->
     <div class="honor-wrapper">
-        <h3><i class="icon fas fa-medal"></i> 榮譽榜</h3>
-        <div class="award-stand">
-            <?php
-            // 引入資料庫連線設定檔
-            require_once "db_connect.php"; // 請確保路徑正確
+    <div class="award-stand">
+        <?php
+        require_once "db_connect.php";
 
-            // 查詢「第一等級」榮譽標章的 SQL 語句，並從 UserAccount 表格中獲取 User_Name
-            $honor_sql = "
+        // 查詢捐款金額前 3 名的第一等級用戶
+        $honor_sql = "
+            SELECT h.Honor_Type, u.User_Name, SUM(d.Donation_Amount) AS Total_Donated
+            FROM HonorTag h
+            JOIN UserAccount u ON h.User_ID = u.User_ID
+            LEFT JOIN Donation d ON h.User_ID = d.User_ID
+            WHERE h.Honor_Type = '第一等級'
+            GROUP BY h.User_ID
+            ORDER BY Total_Donated DESC
+            LIMIT 3;
+        ";
+
+        $honors_result = $link->query($honor_sql);
+
+        if ($honors_result === false) {
+            die("資料庫查詢錯誤: " . $link->error);
+        }
+
+        $honors = [];
+
+        // 儲存前 3 名（或缺席名次）
+        while ($row = $honors_result->fetch_assoc()) {
+            $honors[] = $row;
+        }
+
+        // 若不足 3 位，就補隨機資料
+        if (count($honors) < 3) {
+            $remaining = 3 - count($honors);
+
+            // 找出尚未在前3名的第一等級用戶來補位
+            $filled_ids = array_map(function ($h) {
+                return "'" . $h['User_Name'] . "'";
+            }, $honors);
+
+            $exclude_clause = count($filled_ids) > 0 ? "AND u.User_Name NOT IN (" . implode(",", $filled_ids) . ")" : "";
+
+            $fallback_sql = "
                 SELECT h.Honor_Type, u.User_Name
                 FROM HonorTag h
                 JOIN UserAccount u ON h.User_ID = u.User_ID
-                WHERE h.Honor_Type = '第一等級'  -- 只查詢「第一等級」
-                ORDER BY h.Honor_ID ASC  -- 以 ID 排序，顯示順序
+                WHERE h.Honor_Type = '第一等級' $exclude_clause
+                ORDER BY RAND()
+                LIMIT $remaining;
             ";
-            
-            // 執行查詢並取得結果
-            $honors_result = $link->query($honor_sql);
 
-            // 檢查 SQL 查詢是否成功
-            if ($honors_result === false) {
-                die("資料庫查詢錯誤: " . $link->error);
+            $fallback_result = $link->query($fallback_sql);
+            while ($row = $fallback_result->fetch_assoc()) {
+                $honors[] = $row;
             }
+        }
 
-            // 檢查查詢結果是否有資料
-            if ($honors_result->num_rows > 0) {
-                // 顯示每個「第一等級」的獎項
-                while ($honor = $honors_result->fetch_assoc()) {
-                    // 設置背景顏色
-                    $background_color = '#FFD700'; // 金色背景
+        // 固定順序：銅（金銀銅顯示位置），但名次仍是「第一名」「第二名」「第三名」
+        $positions = [
+            ['rank' => '第三名', 'color' => 'bronze'],
+            ['rank' => '第一名', 'color' => 'gold'],
+            ['rank' => '第二名', 'color' => 'silver'],
+        ];
 
-                    // 顯示每個名次的獎項
-                    echo '<div class="award-item" style="background-color: ' . $background_color . ';">';
-                    echo '<h5><i class="fas fa-trophy honor-icon"></i> ' . htmlspecialchars($honor['Honor_Type']) . '</h5>';
-                    echo '<p>' . htmlspecialchars($honor['User_Name']) . ' ！</p>';
-                    echo '</div>';
+        // 實際顯示順序：左-銅，中-金，右-銀
+        for ($i = 0; $i < 3; $i++) {
+            // 金→銀→銅 對應資料順序：$honors[0], $honors[1], $honors[2]
+            $dataIndex = match ($i) {
+                0 => 2, // 左邊顯示第三名（銅）
+                1 => 0, // 中間顯示第一名（金）
+                2 => 1, // 右邊顯示第二名（銀）
+            };
+
+            $data = $honors[$dataIndex] ?? null;
+            $rank_name = $positions[$i]['rank'];
+            $color_class = $positions[$i]['color'];
+
+            echo '<div class="award-item">';
+            echo '<div class="award-content">';
+            echo '<h5>' . $rank_name . '</h5>';
+
+            if ($data) {
+                echo '<p>' . htmlspecialchars($data['User_Name']) . '！</p>';
+                if (isset($data['Total_Donated'])) {
+                    echo '<p>捐款總額：' . (empty($data['Total_Donated']) ? '無捐款紀錄' : htmlspecialchars($data['Total_Donated']) . ' 元') . '</p>';
                 }
             } else {
-                echo '<p>目前沒有任何「第一等級」榮譽標章。</p>';
+                echo '<p>尚未有人</p>';
             }
-            ?>
-        </div>
+
+            echo '</div>';
+            echo '<div class="award-base ' . $color_class . '"><i class="fas fa-trophy honor-icon"></i> ' . $rank_name . '</div>';
+            echo '</div>';
+        }
+        ?>
     </div>
+</div>
+
+
 
 
 
