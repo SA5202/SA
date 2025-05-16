@@ -91,7 +91,7 @@ if ($user_id) {
         }
 
         .meta {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #666;
             line-height: 1.5;
@@ -303,11 +303,7 @@ if ($user_id) {
     <div class="card">
         <div class="content">
             <?php if ($is_admin): ?>
-                <h3>
-                    <a href="suggestion_edit.php?suggestion_id=<?= $row['Suggestion_ID'] ?>" style="text-decoration: none; color: #2c3e50;">
-                        <?= htmlspecialchars($row['Title']) ?>
-                    </a>
-                </h3>
+                <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php else: ?>
                 <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php endif; ?>

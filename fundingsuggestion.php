@@ -71,14 +71,14 @@ $result = $conn->query($sql);
         }
 
         .form-container {
-            max-width: 55%;
-            margin: 120px auto;
+            max-width: 70%;
+            margin: 160px auto;
         }
 
         .form-card {
             background-color: rgba(255, 255, 255, 0.9);
             /* 淡透明背景 */
-            padding: 40px;
+            padding: 50px;
             border-radius: 30px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s;
@@ -91,14 +91,8 @@ $result = $conn->query($sql);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .form-card h3 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
         label {
+            color: #555;
             font-weight: bold;
         }
 
@@ -140,7 +134,6 @@ $result = $conn->query($sql);
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h3>新增募款建言</h3>
 
             <!-- 錯誤提示訊息 -->
             <?php if (!empty($errorMessage)) : ?>
@@ -165,7 +158,7 @@ $result = $conn->query($sql);
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="required_amount" class="form-label">預期目標金額 (最低為NT$1000)：</label>
+                    <label for="required_amount" class="form-label">預期目標金額 (最低金額為 NT$1000)：</label>
                     <input type="text" name="required_amount" id="required_amount" class="form-control" required>
                 </div>
                 <input type="hidden" name="status" value="募款中">

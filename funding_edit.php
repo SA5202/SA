@@ -83,13 +83,13 @@ if (isset($_GET['funding_id'])) {
         }
 
         .form-container {
-            max-width: 55%;
-            margin: 100px auto;
+            max-width: 70%;
+            margin: 120px auto;
         }
 
         .form-card {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px;
+            padding: 50px;
             border-radius: 30px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s;
@@ -102,14 +102,8 @@ if (isset($_GET['funding_id'])) {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .form-card h3 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
         label {
+            color: #555;
             font-weight: bold;
         }
 
@@ -149,7 +143,6 @@ if (isset($_GET['funding_id'])) {
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h3>編輯募款建言</h3>
 
             <!-- 顯示錯誤訊息 -->
             <?php if (!empty($errorMessage)) : ?>

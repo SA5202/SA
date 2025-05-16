@@ -97,7 +97,6 @@
             // 設置時區為 Asia/Taipei (UTC +8)
             date_default_timezone_set('Asia/Taipei');
             $updatedAt = date("Y-m-d H:i:s");
-
             $stmt = $link->prepare("UPDATE suggestion SET Title = ?, Facility_ID = ?, Building_ID = ?, Description = ?, Updated_At = ? WHERE Suggestion_ID = ?");
             $stmt->bind_param("siisss", $Title, $Facility_ID, $Building_ID, $Description, $updatedAt, $Suggestion_ID);
 
@@ -128,7 +127,7 @@
 
             if (!$row) {
                 echo "<div class='message'>查無此筆建言。</div>";
-                echo "<meta http-equiv='refresh' content='2;url=record.php'>";
+                exit;
             }
 
             $ownerUserID = $row['User_ID'];
@@ -136,13 +135,13 @@
             // ✅ 權限檢查：只有本人或管理員能刪除
             if ($ownerUserID != $sessionUserID && $sessionUserType !== 'admin') {
                 echo "<div class='message'>您沒有權限刪除此筆建言。</div>";
-                echo "<meta http-equiv='refresh' content='2;url=record.php'>";
+                exit;
             }
 
             // ✅ 鎖定狀態檢查
             if (is_locked($link, $Suggestion_ID)) {
                 echo "<div class='message'>此建言已進入處理階段，無法刪除。</div>";
-                echo "<meta http-equiv='refresh' content='2;url=record.php'>";
+                exit;
             }
 
             // 刪除 progress 表中相關資料

@@ -36,7 +36,7 @@
             padding: 10px;
             font-size: 18px;
             font-weight: bold;
-            color: #444;
+            color: #555;
         }
 
         input[type="text"],
@@ -136,6 +136,12 @@
         .custom-file-btn:hover {
             opacity: 0.7;
         }
+
+        #fileNameDisplay {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #555;
+        }
     </style>
 </head>
 
@@ -229,7 +235,7 @@
                         <label for="avatarInput" class="custom-file-btn">選擇圖片</label>
                         <button type="button" class="custom-file-btn" style="margin-left: 10px;" onclick="deleteAvatar()">恢復預設</button>
 
-                        <span id="fileNameDisplay" style="margin-left: 10px; color: #555;"></span>
+                        <span id="fileNameDisplay"></span>
                     </td>
                 </tr>
 

@@ -77,13 +77,13 @@ $result = $conn->query($sql);
         }
 
         .form-container {
-            max-width: 55%;
-            margin: 80px auto;
+            max-width: 70%;
+            margin: 100px auto;
         }
 
         .form-card {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px;
+            padding: 50px;
             border-radius: 30px;
             transition: transform 0.3s;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -95,14 +95,8 @@ $result = $conn->query($sql);
             transform: scale(1.02);
         }
 
-        .form-card h3 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
         label {
+            color: #555;
             font-weight: bold;
         }
 
@@ -136,7 +130,6 @@ $result = $conn->query($sql);
 <body>
     <div class="container form-container">
         <div class="form-card">
-            <h3>編輯公告</h3>
 
             <?php if (!empty($errorMessage)) : ?>
                 <div class="alert alert-danger" role="alert">

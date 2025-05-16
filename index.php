@@ -201,7 +201,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .btn-position {
             position: fixed;
-            top: 20px;
+            top: 25px;
             right: 40px;
             z-index: 200;
         }
@@ -210,18 +210,16 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(190, 225, 230);
             color: midnightblue;
             border-radius: 25px;
-            padding: 5px 20px;
+            padding: 0.5rem 25px;
             font-size: 1rem;
             transition: 0.3s;
             border: none;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .btn-custom:hover {
             background-color: #002b5b;
             color: white;
             transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .footer {
@@ -272,7 +270,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             padding: 8px 20px;
             font-size: 1rem;
             font-weight: bold;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .user-info-logout .avatar {

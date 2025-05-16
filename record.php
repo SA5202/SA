@@ -95,7 +95,7 @@ $row_user = $result_user->fetch_assoc();
 
         .table th {
             background-color: #f1f3f5;
-            color: #2c3e50;
+            color: #555;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
@@ -105,6 +105,8 @@ $row_user = $result_user->fetch_assoc();
         .left {
             text-align: left;
             font-size: 1.05rem;
+            font-weight: 600;
+            color: #555;
         }
 
         .password-display-wrapper {
@@ -147,7 +149,7 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .custom-btn:hover {
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .table-container {
@@ -178,6 +180,12 @@ $row_user = $result_user->fetch_assoc();
             background-color: #e9f5ff;
         }
 
+        .title {
+            color: #003153;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
         .update {
             font-size: 0.9rem;
             font-weight: bold;
@@ -196,7 +204,7 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .pretty-btn:hover {
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .pretty-btn i {
@@ -246,21 +254,21 @@ $row_user = $result_user->fetch_assoc();
                                 style='border-radius: 50%; width: 200px; height: 200px; margin: 20px 50px;'>
                         </td>
 
-                        <td class='left'><b>帳號： </b><?= htmlspecialchars($row_user['User_Name']) ?></td>
+                        <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
                     </tr>
                     <tr>
-                        <td class='left'><b>暱稱： </b><?= htmlspecialchars($row_user['Nickname']) ?></td>
+                        <td class='left'>暱稱： <?= htmlspecialchars($row_user['Nickname']) ?></td>
                     </tr>
                     <tr>
-                        <td class='left'><b>使用者 ID： </b>0000000000<?= $row_user['User_ID'] ?></td>
+                        <td class='left'>使用者 ID： 0000000000<?= $row_user['User_ID'] ?></td>
                     </tr>
                     <tr>
-                        <td class='left'><b>Email： </b><?= htmlspecialchars($row_user['Email']) ?></td>
+                        <td class='left'>Email： <?= htmlspecialchars($row_user['Email']) ?></td>
                     </tr>
                     <tr>
                         <td class="left">
                             <div class="d-flex align-items-center" style="gap: 10px;">
-                                <span><b>密碼： </b></span>
+                                <span>密碼： </span>
                                 <div class="password-display-wrapper">
                                     <input type="text" id="passwordDisplay" value="••••••••••" readonly>
                                     <button type="button" id="togglePassword" onclick="togglePassword()">
@@ -307,7 +315,11 @@ $row_user = $result_user->fetch_assoc();
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
-                        <td><b><?= htmlspecialchars($row['Title']) ?></b></td>
+                        <td>
+                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </td>
                         <td><span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span></td>
                         <td>
                             <span class="badge custom-badge fs-6"> <?= $row['LikeCount'] ?> ❤️ </span>
@@ -362,6 +374,8 @@ $row_user = $result_user->fetch_assoc();
                 eyeIcon.classList.add("fa-eye-slash");
             }
             isVisible = !isVisible;
+
+            passwordDisplay.style.color = '#555';
         }
     </script>
 

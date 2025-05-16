@@ -37,7 +37,7 @@
             padding: 10px;
             font-size: 18px;
             font-weight: bold;
-            color: #444;
+            color: #555;
         }
 
         input[type="text"],

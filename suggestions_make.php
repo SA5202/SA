@@ -203,6 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         label {
+            color: #555;
             font-weight: bold;
         }
 
