@@ -106,7 +106,8 @@ $row_user = $result_user->fetch_assoc();
 
         .password-display-wrapper {
             position: relative;
-            width: 200px; /* 或改成 auto 看實際需求 */
+            width: 200px;
+            /* 或改成 auto 看實際需求 */
         }
 
         #passwordDisplay {
@@ -135,7 +136,7 @@ $row_user = $result_user->fetch_assoc();
             padding: 4px 40px;
             font-size: 1rem;
             font-weight: 750;
-            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            background: linear-gradient(to right, rgb(139, 186, 224), rgb(69, 109, 133));
             color: #fff;
             border-radius: 15px;
             text-decoration: none;
@@ -180,7 +181,7 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .pretty-btn {
-            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            background: linear-gradient(to right, rgb(139, 186, 224), rgb(69, 109, 133));
             border: none;
             color: white;
             padding: 5px 20px;
@@ -203,7 +204,7 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .custom-badge {
-            background: linear-gradient(to right, #d0e8f2, #e6f4fa);
+            background: linear-gradient(to right, rgb(197, 226, 239), rgb(218, 240, 249));
             color: #2a4d69;
             font-size: 0.9rem;
             padding: 0.5em 1em;
@@ -224,7 +225,7 @@ $row_user = $result_user->fetch_assoc();
             <tbody>
                 <?php if ($row_user): ?>
                     <tr>
-                        <td rowspan='6'> 
+                        <td rowspan='6'>
                             <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7') ?>"
                                 style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
@@ -301,7 +302,7 @@ $row_user = $result_user->fetch_assoc();
                                     <i class="fas fa-pen-to-square"></i> 修改
                                 </a>
                             <?php else: ?>
-                                - 
+                                -
                             <?php endif; ?>
                         </td>
                     </tr>
@@ -322,6 +323,7 @@ $row_user = $result_user->fetch_assoc();
 
     <script>
         let isVisible = false;
+
         function togglePassword() {
             const passwordInput = document.getElementById('passwordDisplay');
             const eyeIcon = document.getElementById('eyeIcon');
