@@ -35,6 +35,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            font-family: "Noto Serif TC", serif;
         }
 
         td {
@@ -51,6 +52,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            font-family: "Noto Serif TC", serif;
         }
 
         .button-row {
