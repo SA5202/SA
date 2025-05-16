@@ -13,9 +13,9 @@
         }
 
         .card {
-            max-width: 750px;
+            max-width: 70%;
             background-color: #fff;
-            margin: 80px auto;
+            margin: 100px auto;
             padding: 40px 50px;
             border-radius: 40px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -43,7 +43,7 @@
         input[type="email"],
         input[type="password"] {
             width: 100%;
-            padding: 8px 15px;
+            padding: 0.4rem 15px;
             font-size: 16px;
             font-family: "Noto Serif TC", serif;
             border: 1px solid #ccc;
@@ -127,11 +127,11 @@
             border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            font-family: "Noto Serif TC", serif;
             text-align: center;
             border: none;
-            /* 新增：移除邊框 */
         }
-
 
         .custom-file-btn:hover {
             opacity: 0.7;
@@ -227,9 +227,9 @@
                     <td>
                         <input type="file" name="Avatar" id="avatarInput" accept="image/*" style="display: none;">
                         <label for="avatarInput" class="custom-file-btn">選擇圖片</label>
-                        <button type="button" class="custom-file-btn" onclick="deleteAvatar()">恢復預設</button>
+                        <button type="button" class="custom-file-btn" style="margin-left: 10px;" onclick="deleteAvatar()">恢復預設</button>
 
-                        <span id="fileNameDisplay" style="margin-left:10px; color:#555;"></span>
+                        <span id="fileNameDisplay" style="margin-left: 10px; color: #555;"></span>
                     </td>
                 </tr>
 

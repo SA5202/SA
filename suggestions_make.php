@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <?php if ($success !== null): ?>
         <div class="message <?php echo ($success ? 'success' : 'error'); ?>">
-            <?php echo $success ? "建言發送成功！" : "發送失敗，請確認所有欄位已填寫"; ?>
+            <?php echo $success ? "建言發布成功！" : "操作失敗，請確認所有欄位已填寫"; ?>
         </div>
     <?php endif; ?>
 

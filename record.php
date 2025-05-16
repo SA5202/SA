@@ -95,6 +95,7 @@ $row_user = $result_user->fetch_assoc();
 
         .table th {
             background-color: #f1f3f5;
+            color: #2c3e50;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
@@ -103,6 +104,7 @@ $row_user = $result_user->fetch_assoc();
 
         .left {
             text-align: left;
+            font-size: 1.05rem;
         }
 
         .password-display-wrapper {
@@ -134,7 +136,8 @@ $row_user = $result_user->fetch_assoc();
 
         .custom-btn {
             display: inline-block;
-            padding: 4px 40px;
+            margin-top: 10px;
+            padding: 5px 40px;
             font-size: 1rem;
             font-weight: 750;
             background: linear-gradient(to right, rgb(139, 186, 224), rgb(69, 109, 133));
@@ -176,17 +179,18 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .update {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: gray;
         }
 
         .pretty-btn {
             background: linear-gradient(to right, rgb(139, 186, 224), rgb(69, 109, 133));
+            text-decoration: none;
             border: none;
             color: white;
             padding: 5px 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 750;
         }
@@ -208,7 +212,7 @@ $row_user = $result_user->fetch_assoc();
             background: linear-gradient(to right, rgb(218, 240, 249), rgb(197, 226, 239));
             color: #2a4d69;
             font-size: 0.9rem;
-            padding: 0.5em 1em;
+            padding: 0.5em 1.3em;
             border-radius: 12px;
             font-weight: 600;
         }
@@ -239,7 +243,7 @@ $row_user = $result_user->fetch_assoc();
                         <td rowspan='6'>
                             <img src="<?= $avatar_url ?>"
                                 onerror="this.src='<?= $default_avatar ?>'"
-                                style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
+                                style='border-radius: 50%; width: 200px; height: 200px; margin: 20px 50px;'>
                         </td>
 
                         <td class='left'><b>帳號： </b><?= htmlspecialchars($row_user['User_Name']) ?></td>
@@ -287,14 +291,14 @@ $row_user = $result_user->fetch_assoc();
     <?php if ($sessionUserType == 'admin'): ?>
         <h3><i class="icon fas fa-clipboard-list"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的建言記錄</h3>
     <?php else: ?>
-        <h3><i class="icon fas fa-clipboard-list"></i> 建言紀錄</h3>
+        <h3><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h3>
     <?php endif; ?>
 
     <table class="table">
         <thead class="table-primary">
             <tr>
                 <th class="fw-bold">建言標題</th>
-                <th class="fw-bold">發佈時間</th>
+                <th class="fw-bold">更新時間</th>
                 <th class="fw-bold">獲得讚數</th>
                 <th class="fw-bold">編輯建言</th>
             </tr>
@@ -333,7 +337,7 @@ $row_user = $result_user->fetch_assoc();
             <?php endif; ?>
         </tbody>
     </table>
-    <h3><i class="icon fas fa-donate"></i> 捐款紀錄</h3>
+    <h3><i class="icon fas fa-donate"></i> 我的捐款紀錄</h3>
 
     <?php
     $stmt->close();

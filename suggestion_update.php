@@ -13,7 +13,7 @@
         }
 
         .card {
-            max-width: 900px;
+            max-width: 75%;
             background-color: #fff;
             margin: 100px auto;
             padding: 40px;
@@ -96,11 +96,10 @@
         }
 
         .message {
-            width: 100%;
-            max-width: 800px;
-            margin: 240px auto;
+            width: 75%;
+            margin: 280px auto;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             background-color: #fff;
             color: red;
             border-radius: 15px;
