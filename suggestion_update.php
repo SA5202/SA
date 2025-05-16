@@ -131,6 +131,19 @@
     // 撈建築物資料
     $building_result = mysqli_query($link, "SELECT Building_ID, Building_Name FROM Building");
 
+    //撈此建言最新狀態
+    $status = '';
+    $stmt2 = $link->prepare("SELECT Status FROM Progress WHERE Suggestion_ID = ? ORDER BY Progress_ID DESC LIMIT 1");
+    $stmt2->bind_param("i", $Suggestion_ID);
+    $stmt2->execute();
+    $stmt2->bind_result($status);
+    $stmt2->fetch();
+    $stmt2->close();
+
+    //是否鎖定
+    $is_locked = in_array($status, ['審核中', '處理中', '已完成']);
+
+
     $stmt->close();
     $link->close();
     ?>
@@ -138,70 +151,74 @@
 
     <h2>修改建言</h2>
     <div class="card">
-        <form action="dblink2.php?method=update" method="post">
-            <table>
-                <tr>
-                    <td>建言標題</td>
-                    <td><input type="text" name="title" value="<?= htmlspecialchars($Title) ?>" readonly></td>
-                </tr>
-                <tr>
-                    <td>相關設施</td>
-                    <td>
-                        <?php
-                        // 找出當前設施的顯示名稱
-                        mysqli_data_seek($facility_result, 0); // 重置資料指標
-                        $facility_name = '';
-                        while ($fac = mysqli_fetch_assoc($facility_result)) {
-                            if ($fac['Facility_ID'] == $Facility_ID) {
-                                $facility_name = $fac['Facility_Type'];
-                                break;
+        <?php if (!$is_locked): ?>
+            <form action="dblink2.php?method=update" method="post">
+                <table>
+                    <tr>
+                        <td>建言標題</td>
+                        <td><input type="text" name="title" value="<?= htmlspecialchars($Title) ?>" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>相關設施</td>
+                        <td>
+                            <?php
+                            // 找出當前設施的顯示名稱
+                            mysqli_data_seek($facility_result, 0); // 重置資料指標
+                            $facility_name = '';
+                            while ($fac = mysqli_fetch_assoc($facility_result)) {
+                                if ($fac['Facility_ID'] == $Facility_ID) {
+                                    $facility_name = $fac['Facility_Type'];
+                                    break;
+                                }
                             }
-                        }
-                        ?>
-                        <input type="text" value="<?= htmlspecialchars($facility_name) ?>" readonly>
-                        <input type="hidden" name="facility" value="<?= htmlspecialchars($Facility_ID) ?>">
-                    </td>
-                </tr>
-                <tr>
-                    <td>相關建築物</td>
-                    <td>
-                        <?php
-                        // 找出當前建築的顯示名稱
-                        mysqli_data_seek($building_result, 0); // 重置資料指標
-                        $building_name = '';
-                        while ($bld = mysqli_fetch_assoc($building_result)) {
-                            if ($bld['Building_ID'] == $Building_ID) {
-                                $building_name = $bld['Building_Name'];
-                                break;
+                            ?>
+                            <input type="text" value="<?= htmlspecialchars($facility_name) ?>" readonly>
+                            <input type="hidden" name="facility" value="<?= htmlspecialchars($Facility_ID) ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>相關建築物</td>
+                        <td>
+                            <?php
+                            // 找出當前建築的顯示名稱
+                            mysqli_data_seek($building_result, 0); // 重置資料指標
+                            $building_name = '';
+                            while ($bld = mysqli_fetch_assoc($building_result)) {
+                                if ($bld['Building_ID'] == $Building_ID) {
+                                    $building_name = $bld['Building_Name'];
+                                    break;
+                                }
                             }
-                        }
-                        ?>
-                        <input type="text" value="<?= htmlspecialchars($building_name) ?>" readonly>
-                        <input type="hidden" name="building" value="<?= htmlspecialchars($Building_ID) ?>">
-                    </td>
-                </tr>
+                            ?>
+                            <input type="text" value="<?= htmlspecialchars($building_name) ?>" readonly>
+                            <input type="hidden" name="building" value="<?= htmlspecialchars($Building_ID) ?>">
+                        </td>
+                    </tr>
 
-                <tr>
-                    <td>建言內容</td>
-                    <td><textarea name="description" rows="4"><?= htmlspecialchars($Description) ?></textarea></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="button-row">
-                        <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
-                        <input type="submit" value="更新建言" class="btn btn-primary">
-                        <input type="reset" value="重設" class="btn btn-reset">
-                    </td>
-                </tr>
-            </table>
-        </form>
+                    <tr>
+                        <td>建言內容</td>
+                        <td><textarea name="description" rows="4"><?= htmlspecialchars($Description) ?></textarea></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="button-row">
+                            <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
+                            <input type="submit" value="更新建言" class="btn btn-primary">
+                            <input type="reset" value="重設" class="btn btn-reset">
+                        </td>
+                    </tr>
+                </table>
+            </form>
 
-        <!-- 刪除按鈕獨立出來 -->
-        <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('確定要刪除這個建言嗎？');">
-            <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
-            <div class="button-row">
-                <input type="submit" value="刪除建言" class="btn btn-danger">
-            </div>
-        </form>
+            <!-- 刪除按鈕獨立出來 -->
+            <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('確定要刪除這個建言嗎？');">
+                <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
+                <div class="button-row">
+                    <input type="submit" value="刪除建言" class="btn btn-danger">
+                </div>
+            </form>
+        <?php else: ?>
+            <p style="color: red; text-align: center;">此建言已進入處理階段「<?= htmlspecialchars($status) ?>」，無法修改或刪除。</p>
+        <?php endif; ?>
 
     </div>
 </body>

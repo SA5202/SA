@@ -17,10 +17,39 @@
         die("資料庫連線失敗: " . mysqli_connect_error());
     }
 
+    function is_locked($link, $Suggestion_ID)
+    {
+        // 抓最新的一筆進度資料（Progress_ID 最大）
+        $sql = "SELECT Status FROM progress 
+            WHERE Suggestion_ID = ? 
+            ORDER BY Progress_ID DESC 
+            LIMIT 1";
+
+        $stmt = $link->prepare($sql);
+        $stmt->bind_param("i", $Suggestion_ID);
+        $stmt->execute();
+        $stmt->bind_result($status);
+
+        if ($stmt->fetch()) {
+            $stmt->close();
+            return in_array($status, ['審核中', '處理中', '已完成']);
+        }
+
+        $stmt->close();
+        return false; // 沒有進度紀錄，代表可以修改
+    }
+
+
     if ($method === 'update') {
-        // 對應 HTML 表單欄位名稱
         if (isset($_POST['suggestion_id'], $_POST['title'], $_POST['facility'], $_POST['building'], $_POST['description'])) {
             $Suggestion_ID = $_POST['suggestion_id'];
+
+            // ✅ 鎖定檢查放這裡
+            if (is_locked($link, $Suggestion_ID)) {
+                echo "此建言已進入處理階段，無法修改。";
+                exit;
+            }
+
             $Title = $_POST['title'];
             $Facility_ID = $_POST['facility'];
             $Building_ID = $_POST['building'];
@@ -40,24 +69,29 @@
         } else {
             echo "缺少必要欄位。";
         }
-    }
-    elseif ($method === 'delete') {
+    } elseif ($method === 'delete') {
         if (isset($_POST['suggestion_id'])) {
             $Suggestion_ID = $_POST['suggestion_id'];
 
-            // 先刪除 progress 表中相關資料
+            // ✅ 鎖定檢查放這裡
+            if (is_locked($link, $Suggestion_ID)) {
+                echo "此建言已進入處理階段，無法刪除。";
+                exit;
+            }
+
+            // 刪除 progress 表中相關資料
             $stmt1 = $link->prepare("DELETE FROM progress WHERE Suggestion_ID = ?");
             $stmt1->bind_param("i", $Suggestion_ID);
             $stmt1->execute();
             $stmt1->close();
 
-            // 再刪除 upvote 表中相關資料
+            // 刪除 upvote 表中相關資料
             $stmt2 = $link->prepare("DELETE FROM upvote WHERE Suggestion_ID = ?");
             $stmt2->bind_param("i", $Suggestion_ID);
             $stmt2->execute();
             $stmt2->close();
 
-            // 再刪除 fundingsuggestion 表中相關資料
+            // 刪除 fundingsuggestion 表中相關資料
             $stmt3 = $link->prepare("DELETE FROM fundingsuggestion WHERE Suggestion_ID = ?");
             $stmt3->bind_param("i", $Suggestion_ID);
             $stmt3->execute();
@@ -74,12 +108,11 @@
                 echo "刪除失敗：" . $stmt4->error;
             }
 
-            $stmt3->close();
+            $stmt4->close();
         } else {
             echo "缺少建言 ID。";
         }
     }
-
 
     mysqli_close($link);
     ?>
