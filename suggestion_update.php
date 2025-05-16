@@ -58,7 +58,7 @@
             padding-top: 10px;
         }
 
-        
+
         .btn {
             font-family: "Noto Serif TC", serif;
             font-size: 16px;
@@ -92,44 +92,45 @@
 <body>
     <?php
     session_start();
-    $method = $_GET['method'] ?? null;
+    if (!isset($_SESSION['User_Name'])) {
+        die("請先登入！");
+    }
 
     $link = mysqli_connect('localhost', 'root', '', 'SA');
     if (!$link) {
-        die("資料庫連線失敗: " . mysqli_connect_error());
+        die("資料庫連線失敗：" . mysqli_connect_error());
     }
 
-    if ($method === 'update') {
-        if (isset($_POST['suggestion_id'], $_POST['title'], $_POST['facility'], $_POST['building'], $_POST['description'])) {
-            $suggestion_id = $_POST['suggestion_id'];
-            $title = $_POST['title'];
-            $facility = $_POST['facility'];
-            $building = $_POST['building'];
-            $description = $_POST['description'];
-
-            // 使用 prepared statement 更安全
-            $stmt = $link->prepare("UPDATE suggestions SET title=?, facility=?, building=?, description=? WHERE suggestion_id=?");
-            $stmt->bind_param("ssssi", $title, $facility, $building, $description, $suggestion_id);
-
-            if ($stmt->execute()) {
-                echo "建言更新成功！";
-                // 根據身份轉跳
-                if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
-                    echo "<meta http-equiv='refresh' content='1;url=admin_suggestions.php'>";
-                } else {
-                    echo "<meta http-equiv='refresh' content='1;url=record.php'>";
-                }
-            } else {
-                echo "更新失敗：" . $stmt->error;
-            }
-
-            $stmt->close();
-        } else {
-            echo "缺少建言 ID 或其他欄位。";
-        }
+    $Suggestion_ID = $_GET['Suggestion_ID'] ?? null;
+    if (!$Suggestion_ID) {
+        die("未提供建言 ID");
     }
 
-    mysqli_close($link);
+
+    $sql = "SELECT * FROM suggestion WHERE Suggestion_ID = ?";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("i", $Suggestion_ID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $Suggestion_ID = $row['Suggestion_ID'];
+        $Title = $row['Title'];
+        $Building_ID = $row['Building_ID'];
+        $Facility_ID = $row['Facility_ID'];
+        $Description = $row['Description'];
+    } else {
+        die("找不到建言資料！");
+    }
+
+    // 撈設施資料
+    $facility_result = mysqli_query($link, "SELECT Facility_ID, Facility_Type FROM Facility");
+
+    // 撈建築物資料
+    $building_result = mysqli_query($link, "SELECT Building_ID, Building_Name FROM Building");
+
+    $stmt->close();
+    $link->close();
     ?>
 
 
@@ -139,23 +140,52 @@
             <table>
                 <tr>
                     <td>建言標題</td>
-                    <td><input type="text" name="title" value="<?= htmlspecialchars($Title) ?>"></td>
+                    <td><input type="text" name="title" value="<?= htmlspecialchars($Title) ?>" readonly></td>
                 </tr>
                 <tr>
-                    <td>關聯設施</td>
-                    <td><input type="text" name="facility" value="<?= htmlspecialchars($Facility) ?>"></td>
+                    <td>相關設施</td>
+                    <td>
+                        <?php
+                        // 找出當前設施的顯示名稱
+                        mysqli_data_seek($facility_result, 0); // 重置資料指標
+                        $facility_name = '';
+                        while ($fac = mysqli_fetch_assoc($facility_result)) {
+                            if ($fac['Facility_ID'] == $Facility_ID) {
+                                $facility_name = $fac['Facility_Type'];
+                                break;
+                            }
+                        }
+                        ?>
+                        <input type="text" value="<?= htmlspecialchars($facility_name) ?>" readonly>
+                        <input type="hidden" name="facility" value="<?= htmlspecialchars($Facility_ID) ?>">
+                    </td>
                 </tr>
                 <tr>
-                    <td>關聯建築物</td>
-                    <td><input type="text" name="building" value="<?= htmlspecialchars($Building) ?>"></td>
+                    <td>相關建築物</td>
+                    <td>
+                        <?php
+                        // 找出當前建築的顯示名稱
+                        mysqli_data_seek($building_result, 0); // 重置資料指標
+                        $building_name = '';
+                        while ($bld = mysqli_fetch_assoc($building_result)) {
+                            if ($bld['Building_ID'] == $Building_ID) {
+                                $building_name = $bld['Building_Name'];
+                                break;
+                            }
+                        }
+                        ?>
+                        <input type="text" value="<?= htmlspecialchars($building_name) ?>" readonly>
+                        <input type="hidden" name="building" value="<?= htmlspecialchars($Building_ID) ?>">
+                    </td>
                 </tr>
+
                 <tr>
                     <td>建言內容</td>
                     <td><textarea name="description" rows="4"><?= htmlspecialchars($Description) ?></textarea></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="button-row">
-                        <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($suggestion_id) ?>">
+                        <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
                         <input type="submit" value="更新建言" class="btn btn-primary">
                         <input type="reset" value="重設" class="btn btn-reset">
                     </td>
@@ -165,14 +195,12 @@
 
         <!-- 刪除按鈕獨立出來 -->
         <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('確定要刪除這個建言嗎？');">
-            <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($suggestion_id) ?>">
+            <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
             <div class="button-row">
                 <input type="submit" value="刪除建言" class="btn btn-danger">
             </div>
         </form>
 
-        </table>
-        </form>
     </div>
 </body>
 
