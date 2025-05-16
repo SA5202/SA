@@ -298,7 +298,7 @@ $row_user = $result_user->fetch_assoc();
                         </td>
 
                         <td>
-                            <?php if ($row['User_ID'] === $sessionUserID): ?>
+                            <?php if ($row['User_ID'] == $sessionUserID): ?>
                                 <!-- 本人：只顯示編輯按鈕（編輯頁中包含刪除功能） -->
                                 <a href="suggestion_update.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
                                     <i class="fas fa-pen-to-square"></i> 修改
@@ -307,7 +307,7 @@ $row_user = $result_user->fetch_assoc();
                                 <!-- 管理員：只能刪除 -->
                                 <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('管理員確定要刪除這個建言嗎？');" style="display:inline;">
                                     <input type="hidden" name="suggestion_id" value="<?= $row['Suggestion_ID'] ?>">
-                                    <input type="submit" value="刪除" class="btn btn-danger">
+                                    <input type="submit" value="刪除" class="pretty-btn">
                                 </form>
                             <?php endif; ?>
                         </td>
