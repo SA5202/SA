@@ -159,8 +159,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .form-select:focus,
         textarea:focus {
             outline: none;
-            border-color: rgb(109, 140, 60);
-            box-shadow: 0 0 5px rgba(111, 140, 60, 0.5);
+            border-color: rgb(173, 231, 248);
+            box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
         }
 
         .btn-submit {

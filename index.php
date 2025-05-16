@@ -333,6 +333,13 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             /* 字體加粗 */
         }
 
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
         .nickname-link {
             text-decoration: none;
             color: rgb(7, 78, 150);
@@ -384,7 +391,10 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <?php if ($is_logged_in): ?>
         <div class="user-info-logout btn-position">
             <a href="record.php" target="contentFrame">
-                <img src="<?= !empty($_SESSION['Avatar']) ? htmlspecialchars($_SESSION['Avatar']) : '/default_avatar.jpg' ?>" alt="頭像" class="avatar" style="cursor:pointer;">
+                <?php
+                $avatar = !empty($_SESSION['Avatar']) ? htmlspecialchars($_SESSION['Avatar']) : '/images/default_avatar.png';
+                ?>
+                <img src="<?= !empty($_SESSION['Avatar']) ? htmlspecialchars($_SESSION['Avatar']) : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShFRnyk1VVqSK9opbWzukDkKH-T9frEauKnQ&s' ?>" alt="頭像" class="avatar" style="cursor:pointer;">
             </a>
             <a href="record.php" target="contentFrame" class="nickname-link">
                 <span class="Nickname"><b><?= htmlspecialchars($_SESSION['Nickname']) ?></b></span>

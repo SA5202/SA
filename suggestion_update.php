@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>修改建言</title>
+    <title>修改建言 | 輔仁大學愛校建言捐款系統</title>
     <style>
         body {
             font-family: "Noto Serif TC", serif;
@@ -12,24 +12,19 @@
             padding: 0;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-top: 40px;
-        }
-
         .card {
-            max-width: 500px;
+            max-width: 800px;
             background-color: #fff;
-            margin: 40px auto;
-            padding: 30px 40px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            margin: 80px auto;
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
         }
 
         .card:hover {
             transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         table {
@@ -39,20 +34,28 @@
         }
 
         td {
-            padding: 12px 10px;
-            font-size: 16px;
+            padding: 10px;
+            font-size: 18px;
+            font-weight: bold;
             color: #444;
         }
 
         input[type="text"],
-        textarea {
+        textarea,
+        select {
             width: 100%;
-            padding: 10px;
-            font-size: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
+            padding: 8px 15px;
+            font-size: 16px;
             font-family: "Noto Serif TC", serif;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: rgb(173, 231, 248);
+            box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
         }
 
         .button-row {
@@ -60,13 +63,13 @@
             padding-top: 10px;
         }
 
-
         .btn {
             font-family: "Noto Serif TC", serif;
             font-size: 16px;
-            padding: 10px 25px;
+            font-weight: bold;
+            padding: 8px 50px;
             border: none;
-            border-radius: 100px;
+            border-radius: 20px;
             cursor: pointer;
             margin: 5px;
             color: white;
@@ -74,7 +77,7 @@
         }
 
         .btn:hover {
-            opacity: 0.9;
+            opacity: 0.6;
         }
 
         .btn-primary {
@@ -82,11 +85,11 @@
         }
 
         .btn-reset {
-            background-color: rgb(189, 84, 76);
+            background-color: rgb(76, 144, 189);
         }
 
         .btn-danger {
-            background-color: rgb(189, 84, 76);
+            background-color:rgb(224, 107, 107);
         }
     </style>
 </head>
@@ -148,8 +151,6 @@
     $link->close();
     ?>
 
-
-    <h2>修改建言</h2>
     <div class="card">
         <?php if (!$is_locked): ?>
             <form action="dblink2.php?method=update" method="post">
@@ -158,40 +159,40 @@
                         <td>建言標題</td>
                         <td><input type="text" name="title" value="<?= htmlspecialchars($Title) ?>" readonly></td>
                     </tr>
+                    
                     <tr>
                         <td>相關設施</td>
                         <td>
-                            <?php
-                            // 找出當前設施的顯示名稱
-                            mysqli_data_seek($facility_result, 0); // 重置資料指標
-                            $facility_name = '';
-                            while ($fac = mysqli_fetch_assoc($facility_result)) {
-                                if ($fac['Facility_ID'] == $Facility_ID) {
-                                    $facility_name = $fac['Facility_Type'];
-                                    break;
-                                }
-                            }
-                            ?>
-                            <input type="text" value="<?= htmlspecialchars($facility_name) ?>" readonly>
-                            <input type="hidden" name="facility" value="<?= htmlspecialchars($Facility_ID) ?>">
+                            <select id="facility" name="facility" class="form-select" required>
+                                <option value="">請選擇設施</option>
+                                <?php
+                                mysqli_data_seek($facility_result, 0); // 重置資料指標
+                                while ($f = mysqli_fetch_assoc($facility_result)):
+                                    $selected = ($f['Facility_ID'] == $Facility_ID) ? 'selected' : '';
+                                ?>
+                                    <option value="<?= htmlspecialchars($f['Facility_ID']) ?>" <?= $selected ?>>
+                                        <?= htmlspecialchars($f['Facility_Type']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
                         </td>
                     </tr>
+
                     <tr>
                         <td>相關建築物</td>
                         <td>
-                            <?php
-                            // 找出當前建築的顯示名稱
-                            mysqli_data_seek($building_result, 0); // 重置資料指標
-                            $building_name = '';
-                            while ($bld = mysqli_fetch_assoc($building_result)) {
-                                if ($bld['Building_ID'] == $Building_ID) {
-                                    $building_name = $bld['Building_Name'];
-                                    break;
-                                }
-                            }
-                            ?>
-                            <input type="text" value="<?= htmlspecialchars($building_name) ?>" readonly>
-                            <input type="hidden" name="building" value="<?= htmlspecialchars($Building_ID) ?>">
+                            <select id="building" name="building" class="form-select" required>
+                                <option value="">請選擇建築物</option>
+                                <?php
+                                mysqli_data_seek($building_result, 0); // 重置資料指標
+                                while ($b = mysqli_fetch_assoc($building_result)):
+                                    $selected = ($b['Building_ID'] == $Building_ID) ? 'selected' : '';
+                                ?>
+                                    <option value="<?= htmlspecialchars($b['Building_ID']) ?>" <?= $selected ?>>
+                                        <?= htmlspecialchars($b['Building_Name']) ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
                         </td>
                     </tr>
 
@@ -202,8 +203,8 @@
                     <tr>
                         <td colspan="2" class="button-row">
                             <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
-                            <input type="submit" value="更新建言" class="btn btn-primary">
-                            <input type="reset" value="重設" class="btn btn-reset">
+                            <input type="submit" value="儲存變更" class="btn btn-primary">
+                            <input type="reset" value="一鍵清空" class="btn btn-reset">
                         </td>
                     </tr>
                 </table>

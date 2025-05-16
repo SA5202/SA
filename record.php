@@ -226,7 +226,7 @@ $row_user = $result_user->fetch_assoc();
                 <?php if ($row_user): ?>
                     <tr>
                         <td rowspan='6'>
-                            <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://th.bing.com/th/id/OIP.sL-PTY6gaFaZu6VVwZgqaQHaHQ?w=178&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7') ?>"
+                            <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShFRnyk1VVqSK9opbWzukDkKH-T9frEauKnQ&s') ?>"
                                 style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
                         <td class='left'><b>帳號： </b><?= htmlspecialchars($row_user['User_Name']) ?></td>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>編輯個人檔案</title>
+    <title>編輯個人檔案 | 輔仁大學愛校建言捐款系統</title>
     <style>
         body {
             font-family: "Noto Serif TC", serif;
