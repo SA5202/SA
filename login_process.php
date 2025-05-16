@@ -1,35 +1,35 @@
 <?php
 session_start();
-$User_Name = $_POST['User_Name'];
-$Password = $_POST['Password'];
 
+$User_Name = $_POST['User_Name'] ?? null;
+$Password = $_POST['Password'] ?? null;
 
-if (isset($_POST['User_Name']) && isset($_POST['Password'])) {
-
-    // 假設 admin 是管理員帳號，密碼為 admin_password
-    if ($User_Name == "admin" && $Password == "admin_password") {
-        $_SESSION['User_Name'] = $User_Name;
-        $_SESSION['is_admin'] = true; // 設置為管理員
-        // 登入成功，刷新父頁面並關閉當前 iframe 頁面
-        echo '<script>
-                parent.location.reload();
-              </script>';
-        exit();
+if ($User_Name && $Password) {
+    $link = new mysqli('localhost', 'root', '', 'SA');
+    if ($link->connect_error) {
+        die("資料庫連線失敗: " . $link->connect_error);
     }
-    // 查詢資料庫，找出用戶資料
 
-    // 普通用戶登入
-    elseif ($User_Name == "root" && $Password == "password") {
-        $_SESSION['User_Name'] = $User_Name;
-        $_SESSION['is_admin'] = false; // 非管理員
-        // 登入成功，刷新父頁面並關閉當前 iframe 頁面
-        echo '<script>
-                parent.location.reload();
-              </script>';
+    // 查詢使用者
+    $stmt = $link->prepare("SELECT * FROM useraccount WHERE User_Name = ? AND Password = ?");
+    $stmt->bind_param("ss", $User_Name, $Password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($user = $result->fetch_assoc()) {
+        $_SESSION['User_Name'] = $user['User_Name'];
+        $_SESSION['Nickname'] = $user['Nickname'] ?? $user['User_Name'];
+        $_SESSION['Avatar'] = !empty($user['Avatar']) ? $user['Avatar'] : null;
+
+        // ✅ 登入成功後刷新父頁面
+        echo '<script>parent.location.reload();</script>';
         exit();
     } else {
-        echo "登入失敗";
+        echo "登入失敗，帳號或密碼錯誤";
     }
+
+    $stmt->close();
+    $link->close();
 } else {
-    echo "請填寫帳號和密碼";
+    echo "請填寫帳號與密碼";
 }

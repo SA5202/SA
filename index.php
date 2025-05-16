@@ -385,19 +385,36 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <button class="toggle-btn" onclick="toggleSidebar(this)">
         <i class="fas fa-chevron-left"></i>
     </button>
+    <?php if ($is_logged_in && isset($_SESSION['User_Name'])): ?>
+        <?php
+        $link = new mysqli('localhost', 'root', '', 'SA');
+        if ($link->connect_error) {
+            die("資料庫連線失敗: " . $link->connect_error);
+        }
 
+        $User_Name = $_SESSION['User_Name'];
+        $stmt = $link->prepare("SELECT Nickname, Avatar FROM useraccount WHERE User_Name = ?");
+        $stmt->bind_param("s", $User_Name);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
 
+        $nickname = htmlspecialchars($user['Nickname'] ?? $User_Name);
 
-    <?php if ($is_logged_in): ?>
+        // ✅ 自訂預設頭像（你提供的網址）
+        $defaultAvatar = "https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg";
+
+        // ✅ 如果資料庫沒有頭像就用預設
+        $avatarPath = !empty($user['Avatar']) ? htmlspecialchars($user['Avatar']) : $defaultAvatar;
+        $avatarWithTimestamp = $avatarPath . '?t=' . time(); // 防快取
+        ?>
         <div class="user-info-logout btn-position">
             <a href="record.php" target="contentFrame">
-                <?php
-                $avatar = !empty($_SESSION['Avatar']) ? htmlspecialchars($_SESSION['Avatar']) : '/images/default_avatar.png';
-                ?>
-                <img src="<?= !empty($_SESSION['Avatar']) ? htmlspecialchars($_SESSION['Avatar']) : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShFRnyk1VVqSK9opbWzukDkKH-T9frEauKnQ&s' ?>" alt="頭像" class="avatar" style="cursor:pointer;">
+                <img src="<?= $avatarWithTimestamp ?>" alt="頭像" class="avatar" style="cursor:pointer;"
+                    onerror="this.src='<?= $defaultAvatar ?>';">
             </a>
             <a href="record.php" target="contentFrame" class="nickname-link">
-                <span class="Nickname"><b><?= htmlspecialchars($_SESSION['Nickname']) ?></b></span>
+                <span class="Nickname"><b><?= $nickname ?></b></span>
             </a>
             <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
         </div>
@@ -408,7 +425,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             </button>
         </a>
     <?php endif; ?>
-
 
 
     <div class="content">
@@ -460,37 +476,26 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
     </script>
     <script>
-        function setActive(element) {
-            // 移除所有側邊欄項目的 active 類別
-            var links = document.querySelectorAll('.sidebar-link');
-            links.forEach(function(link) {
-                link.classList.remove('active');
-            });
+        document.getElementById("avatarForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
 
-            // 為當前點擊的項目添加 active 類別
-            element.classList.add('active');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var currentPath = window.location.pathname;
-            var links = document.querySelectorAll('.sidebar-link');
-            links.forEach(function(link) {
-                var linkPath = new URL(link.href).pathname;
-                if (linkPath === currentPath && !link.classList.contains('active')) {
-                    link.classList.add('active');
-                }
-            });
+            fetch("upload_avatar.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(".avatar").src = data.avatar + "?t=" + new Date().getTime(); // 避免快取
+                    } else {
+                        alert("上傳失敗：" + data.message);
+                    }
+                });
         });
     </script>
-    <script>
-        function refreshAvatar(newAvatarPath) {
-            const avatarImg = document.querySelector('.avatar');
-            if (avatarImg) {
-                // 加一個時間戳避免快取
-                avatarImg.src = newAvatarPath + '?t=' + new Date().getTime();
-            }
-        }
-    </script>
+
+
 </body>
 
 </html>

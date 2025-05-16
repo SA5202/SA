@@ -48,9 +48,20 @@ if ($method === 'update_avatar') {
         if (mysqli_query($link, $sql)) {
             $_SESSION['Nickname'] = $Nickname;
             if ($avatarPath !== null) {
-                $_SESSION['Avatar'] = $avatarPath; // 存完整相對路徑，不要用 basename()
+                $_SESSION['Avatar'] = $avatarPath; // 寫入 session
             }
-            echo "<script>alert('更新成功'); window.location.href='record.php';</script>";
+
+            echo "<script>
+    alert('更新成功');
+    if (window.top && window.top.document) {
+        const avatarImg = window.top.document.querySelector('.avatar');
+        if (avatarImg) {
+            avatarImg.src = '" . $avatarPath . "?t=' + new Date().getTime(); // 加上時間戳避免快取
+        }
+    }
+    window.location.href='record.php';
+</script>";
+
             exit;
         } else {
             die("更新失敗: " . mysqli_error($link));

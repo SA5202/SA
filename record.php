@@ -226,10 +226,22 @@ $row_user = $result_user->fetch_assoc();
             <tbody>
                 <?php if ($row_user): ?>
                     <tr>
+                        <?php
+                        $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+
+                        $avatar_url = !empty($row_user['Avatar'])
+                            ? htmlspecialchars($row_user['Avatar'])
+                            : $default_avatar;
+
+                        // 加上時間戳防止快取
+                        $avatar_url .= '?t=' . time();
+                        ?>
                         <td rowspan='6'>
-                            <img src="<?= htmlspecialchars($row_user['Avatar'] ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShFRnyk1VVqSK9opbWzukDkKH-T9frEauKnQ&s') ?>"
+                            <img src="<?= $avatar_url ?>"
+                                onerror="this.src='<?= $default_avatar ?>'"
                                 style='border-radius: 30px; width: 250px; height: 250px; margin: 10px 40px;'>
                         </td>
+
                         <td class='left'><b>帳號： </b><?= htmlspecialchars($row_user['User_Name']) ?></td>
                     </tr>
                     <tr>

@@ -111,7 +111,7 @@
         }
 
         input[type="reset"] {
-            background-color:rgb(224, 107, 107);
+            background-color: rgb(224, 107, 107);
         }
 
         input[type="submit"]:hover,
@@ -128,7 +128,10 @@
             cursor: pointer;
             font-size: 16px;
             text-align: center;
+            border: none;
+            /* 新增：移除邊框 */
         }
+
 
         .custom-file-btn:hover {
             opacity: 0.7;
@@ -219,13 +222,17 @@
                     </td>
                 </tr>
                 <tr>
+                <tr>
                     <td>設置頭像</td>
                     <td>
                         <input type="file" name="Avatar" id="avatarInput" accept="image/*" style="display: none;">
                         <label for="avatarInput" class="custom-file-btn">選擇圖片</label>
+                        <button type="button" class="custom-file-btn" onclick="deleteAvatar()">恢復預設</button>
+
                         <span id="fileNameDisplay" style="margin-left:10px; color:#555;"></span>
                     </td>
                 </tr>
+
 
                 <tr>
                     <td colspan="2" class="button-row">
@@ -246,7 +253,7 @@
         const nicknameInput = document.getElementById('nicknameInput');
         const nicknameCounter = document.getElementById('nicknameCounter');
 
-        nicknameInput.addEventListener('input', function () {
+        nicknameInput.addEventListener('input', function() {
             nicknameCounter.textContent = `${this.value.length} / 10`;
         });
 
@@ -299,7 +306,46 @@
             }
         });
     </script>
+    <script>
+        function deleteAvatar() {
+            if (confirm("確定要刪除頭像並恢復為預設圖片嗎？")) {
+                fetch("delete_avatar.php", {
+                        method: "POST"
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            const defaultAvatar = "https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg";
 
+                            // 更新畫面上所有頭像為預設圖片，加時間戳避免快取
+                            document.querySelectorAll(".avatar").forEach(el => {
+                                el.src = defaultAvatar + "?t=" + new Date().getTime();
+                            });
+
+                            // 清除檔案選擇與檔名顯示
+                            document.getElementById("avatarInput").value = "";
+                            document.getElementById("fileNameDisplay").textContent = "";
+
+                            alert("頭像已刪除並恢復為預設圖片");
+                        } else {
+                            alert("刪除失敗：" + (data.message || "請稍後再試"));
+                        }
+                    })
+                    .catch(error => {
+                        console.error("錯誤：", error);
+                        alert("發生錯誤，請稍後再試");
+                    });
+            }
+        }
+    </script>
+    <script>
+        function updateAvatarToDefault() {
+            const defaultAvatar = "https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg";
+            document.querySelectorAll("img[style*='width: 250px'][style*='height: 250px']").forEach(img => {
+                img.src = defaultAvatar + "?t=" + new Date().getTime();
+            });
+        }
+    </script>
 </body>
 
 </html>
