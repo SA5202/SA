@@ -141,5 +141,29 @@
     }
   </script>
 
+<div class="award-item">
+  <div class="award-content">
+    <!-- 內容 -->
+  </div>
+  <div class="award-base gold">
+    <div class="base-layer base-front"></div>
+    <div class="base-layer base-top"></div>
+  </div>
+</div>
+<style>
+  /* 加厚效果模擬立體層 */
+.base-layer.base-front {
+    background-color: rgba(0,0,0,0.1);
+    height: 10px;
+    margin-top: -10px;
+    border-radius: 0 0 5px 5px;
+}
+
+.base-layer.base-top {
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px 8px 0 0;
+}
+</style>
 </body>
 </html>

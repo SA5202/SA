@@ -204,8 +204,7 @@ $popular_result = $link->query($popular_sql);
         }
 
 
-       /* 榮譽標章 */
-        /* 榮譽標章容器 */
+       /* 榮譽標章容器 */
         .honor-wrapper {
             margin: 50px auto;
             padding: 20px;
@@ -217,18 +216,33 @@ $popular_result = $link->query($popular_sql);
 
         /* 頒獎台排列方式 */
         .award-stand {
+            position: relative;
             display: flex;
             padding-top: 50px;
             justify-content: center;
-            align-items: flex-end;  /* 將項目對齊到底部 */
+            align-items: flex-end;
             gap: 20px;
             margin-top: 20px;
         }
 
+        /* 頒獎台平台 */
+        .award-stand::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 20px;
+            background: #555;
+            border-radius: 5px 5px 0 0;
+            z-index: 1;
+        }
+
         /* 獎項外觀 */
         .award-item {
+            position: relative;
             width: auto;
-            height: auto;
             max-width: 250px;
             min-width: 120px;
             padding: 20px;
@@ -238,11 +252,17 @@ $popular_result = $link->query($popular_sql);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            margin-bottom: 5px;
-            transition: width 0.3s ease, height 0.3s ease;
-            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-sizing: border-box;
+
+            /* 載入時從下往上淡入 */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: rise 0.6s ease-out forwards;
         }
+        .award-item:nth-child(1) { animation-delay: 0.4s; }
+        .award-item:nth-child(2) { animation-delay: 0.6s; }
+        .award-item:nth-child(3) { animation-delay: 0.8s; }
 
         /* 獎項內容區 */
         .award-content {
@@ -260,33 +280,68 @@ $popular_result = $link->query($popular_sql);
             box-sizing: border-box;
         }
 
-        /* 底座設計（不再使用絕對定位） */
+        /* 底座共通樣式 */
         .award-base {
-            height: 10px;
-            border-radius: 5px;
             width: 100%;
+            padding: 12px 8px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+            box-shadow:
+                inset 0 4px 8px rgba(0, 0, 0, 0.2),  /* 內陰影讓平台有厚度 */
+                0 4px 10px rgba(0, 0, 0, 0.1);       /* 外陰影讓平台立體 */
+            position: relative;
+            z-index: 1;
         }
 
-        /* 金獎底座 */
+        /* 金獎：最高中間台階 */
         .award-base.gold {
-            background-color: #FFD700;
-            height: 80px;
-
+            height: 100px;
+            background: linear-gradient(to top, #cfa700, #ffd700);
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
-        /* 銀獎底座 */
+        /* 銀獎：右側第二高 */
         .award-base.silver {
-            background-color: #C0C0C0;
-            height: 50px;
-
+            height: 70px;
+            background: linear-gradient(to top, #a8a8a8, #e0e0e0);
+            animation: glow 2.5s ease-in-out infinite alternate;
         }
 
-        /* 銅獎底座 */
+        /* 銅獎：左側最矮 */
         .award-base.bronze {
-            background-color: #CD7F32;
-            height: 30px;
+            height: 50px;
+            background: linear-gradient(to top, #8a4f2c, #cd7f32);
+            animation: glow 3s ease-in-out infinite alternate;
         }
 
+        /* 閃爍效果 */
+        @keyframes glow {
+            from {
+                box-shadow:
+                    inset 0 4px 8px rgba(0, 0, 0, 0.2),
+                    0 0 8px rgba(255, 255, 255, 0.2);
+            }
+            to {
+                box-shadow:
+                    inset 0 4px 8px rgba(0, 0, 0, 0.3),
+                    0 0 16px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        /* 小圖示樣式 */
+        .honor-icon {
+            margin-right: 6px;
+            color: white;
+        }
+
+
+        /* — 動畫定義 — */
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 
