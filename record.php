@@ -205,7 +205,7 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .custom-badge {
-            background: linear-gradient(to right, rgb(197, 226, 239), rgb(218, 240, 249));
+            background: linear-gradient(to right, rgb(218, 240, 249), rgb(197, 226, 239));
             color: #2a4d69;
             font-size: 0.9rem;
             padding: 0.5em 1em;
