@@ -5,6 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>建言修改處理</title>
+    <style>
+        body {
+            font-family: 'Noto Serif TC', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: transparent;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .message {
+            width: 100%;
+            max-width: 800px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #fff;
+            color: rgb(205, 89, 87);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            border-left: 12px solid rgb(205, 89, 87);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -46,7 +86,7 @@
 
             // ✅ 鎖定檢查放這裡
             if (is_locked($link, $Suggestion_ID)) {
-                echo "此建言已進入處理階段，無法修改。";
+                echo "<div class='message'>此建言已進入處理階段，無法修改。</div>";
                 exit;
             }
 
@@ -59,15 +99,15 @@
             $stmt->bind_param("siisi", $Title, $Facility_ID, $Building_ID, $Description, $Suggestion_ID);
 
             if ($stmt->execute()) {
-                echo "建言更新成功！";
-                echo "<meta http-equiv='refresh' content='1;url=record.php'>";
+                echo "<div class='message'>建言已成功更新！";
+                echo "<meta http-equiv='refresh' content='2;url=record.php'>";
             } else {
-                echo "更新失敗：" . $stmt->error;
+                echo "<div class='message'>更新失敗：</div>" . $stmt->error;
             }
 
             $stmt->close();
         } else {
-            echo "缺少必要欄位。";
+            echo "<div class='message'>缺少必要欄位。</div>";
         }
     } elseif ($method === 'delete') {
         if (isset($_POST['suggestion_id'])) {
@@ -84,7 +124,7 @@
             $stmt_check->close();
 
             if (!$row) {
-                echo "查無此建言。";
+                echo "<div class='message'>查無此筆建言。</div>";
                 exit;
             }
 
@@ -92,13 +132,13 @@
 
             // ✅ 權限檢查：只有本人或管理員能刪除
             if ($ownerUserID != $sessionUserID && $sessionUserType !== 'admin') {
-                echo "您沒有權限刪除此建言。";
+                echo "<div class='message'>您沒有權限刪除此筆建言。</div>";
                 exit;
             }
 
             // ✅ 鎖定狀態檢查
             if (is_locked($link, $Suggestion_ID)) {
-                echo "此建言已進入處理階段，無法刪除。";
+                echo "<div class='message'>此建言已進入處理階段，無法刪除。</div>";
                 exit;
             }
 
@@ -125,15 +165,15 @@
             $stmt4->bind_param("i", $Suggestion_ID);
 
             if ($stmt4->execute()) {
-                echo "建言及相關資料刪除成功！";
-                echo "<meta http-equiv='refresh' content='1;url=record.php'>";
+                echo "<div class='message'>建言已成功刪除！</div>";
+                echo "<meta http-equiv='refresh' content='2;url=record.php'>";
             } else {
-                echo "刪除失敗：" . $stmt4->error;
+                echo "<div class='message'>刪除失敗：</div>" . $stmt4->error;
             }
 
             $stmt4->close();
         } else {
-            echo "缺少建言 ID。";
+            echo "<div class='message'>缺少建言 ID。</div>";
         }
     }
 

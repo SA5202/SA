@@ -13,9 +13,9 @@
         }
 
         .card {
-            max-width: 800px;
+            max-width: 900px;
             background-color: #fff;
-            margin: 80px auto;
+            margin: 100px auto;
             padding: 40px;
             border-radius: 40px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -41,8 +41,7 @@
         }
 
         input[type="text"],
-        textarea,
-        select {
+        textarea {
             width: 100%;
             padding: 8px 15px;
             font-size: 16px;
@@ -52,10 +51,18 @@
             box-sizing: border-box;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: rgb(173, 231, 248);
             box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
+        }
+
+        input[type="text"] {
+            background-color: #eee;
+        }
+
+        textarea {
+            resize: vertical;
         }
 
         .button-row {
@@ -68,10 +75,10 @@
             font-size: 16px;
             font-weight: bold;
             padding: 8px 50px;
+            margin: 0 5px;
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            margin: 5px;
             color: white;
             transition: opacity 0.3s ease;
         }
@@ -84,12 +91,38 @@
             background-color: #84c684;
         }
 
-        .btn-reset {
-            background-color: rgb(76, 144, 189);
-        }
-
         .btn-danger {
             background-color:rgb(224, 107, 107);
+        }
+
+        .message {
+            width: 100%;
+            max-width: 800px;
+            margin: 240px auto;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #fff;
+            color: red;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            border-left: 12px solid rgb(205, 89, 87);
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -134,7 +167,7 @@
     // 撈建築物資料
     $building_result = mysqli_query($link, "SELECT Building_ID, Building_Name FROM Building");
 
-    //撈此建言最新狀態
+    // 撈此建言最新狀態
     $status = '';
     $stmt2 = $link->prepare("SELECT Status FROM Progress WHERE Suggestion_ID = ? ORDER BY Progress_ID DESC LIMIT 1");
     $stmt2->bind_param("i", $Suggestion_ID);
@@ -143,7 +176,7 @@
     $stmt2->fetch();
     $stmt2->close();
 
-    //是否鎖定
+    // 是否鎖定
     $is_locked = in_array($status, ['審核中', '處理中', '已完成']);
 
 
@@ -151,8 +184,8 @@
     $link->close();
     ?>
 
-    <div class="card">
-        <?php if (!$is_locked): ?>
+    <?php if (!$is_locked): ?>
+        <div class="card">
             <form action="dblink2.php?method=update" method="post">
                 <table>
                     <tr>
@@ -161,38 +194,40 @@
                     </tr>
                     
                     <tr>
-                        <td>相關設施</td>
+                        <td>關聯設施</td>
                         <td>
-                            <select id="facility" name="facility" class="form-select" required>
-                                <option value="">請選擇設施</option>
-                                <?php
-                                mysqli_data_seek($facility_result, 0); // 重置資料指標
-                                while ($f = mysqli_fetch_assoc($facility_result)):
-                                    $selected = ($f['Facility_ID'] == $Facility_ID) ? 'selected' : '';
-                                ?>
-                                    <option value="<?= htmlspecialchars($f['Facility_ID']) ?>" <?= $selected ?>>
-                                        <?= htmlspecialchars($f['Facility_Type']) ?>
-                                    </option>
-                                <?php endwhile; ?>
-                            </select>
+                            <?php
+                            // 找出當前設施的顯示名稱
+                            mysqli_data_seek($facility_result, 0); // 重置資料指標
+                            $facility_name = '';
+                            while ($fac = mysqli_fetch_assoc($facility_result)) {
+                                if ($fac['Facility_ID'] == $Facility_ID) {
+                                    $facility_name = $fac['Facility_Type'];
+                                    break;
+                                }
+                            }
+                            ?>
+                            <input type="text" value="<?= htmlspecialchars($facility_name) ?>" readonly>
+                            <input type="hidden" name="facility" value="<?= htmlspecialchars($Facility_ID) ?>">
                         </td>
                     </tr>
 
                     <tr>
-                        <td>相關建築物</td>
+                        <td>關聯建築物</td>
                         <td>
-                            <select id="building" name="building" class="form-select" required>
-                                <option value="">請選擇建築物</option>
-                                <?php
-                                mysqli_data_seek($building_result, 0); // 重置資料指標
-                                while ($b = mysqli_fetch_assoc($building_result)):
-                                    $selected = ($b['Building_ID'] == $Building_ID) ? 'selected' : '';
-                                ?>
-                                    <option value="<?= htmlspecialchars($b['Building_ID']) ?>" <?= $selected ?>>
-                                        <?= htmlspecialchars($b['Building_Name']) ?>
-                                    </option>
-                                <?php endwhile; ?>
-                            </select>
+                            <?php
+                            // 找出當前建築的顯示名稱
+                            mysqli_data_seek($building_result, 0); // 重置資料指標
+                            $building_name = '';
+                            while ($bld = mysqli_fetch_assoc($building_result)) {
+                                if ($bld['Building_ID'] == $Building_ID) {
+                                    $building_name = $bld['Building_Name'];
+                                    break;
+                                }
+                            }
+                            ?>
+                            <input type="text" value="<?= htmlspecialchars($building_name) ?>" readonly>
+                            <input type="hidden" name="building" value="<?= htmlspecialchars($Building_ID) ?>">
                         </td>
                     </tr>
 
@@ -202,26 +237,31 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="button-row">
-                            <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
-                            <input type="submit" value="儲存變更" class="btn btn-primary">
-                            <input type="reset" value="一鍵清空" class="btn btn-reset">
+                            <div class="button-row">
+                                <form action="dblink2.php?method=update" method="post" style="display: inline;">
+                                    <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
+                                    <input type="submit" value="儲存變更" class="btn btn-primary">
+                                </form>
+
+                                <form action="dblink2.php?method=delete" method="post" style="display: inline;" onsubmit="return confirm('確定要刪除這個建言嗎？');">
+                                    <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
+                                    <input type="submit" value="刪除建言" class="btn btn-danger">
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </table>
             </form>
+        </div>
 
-            <!-- 刪除按鈕獨立出來 -->
-            <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('確定要刪除這個建言嗎？');">
-                <input type="hidden" name="suggestion_id" value="<?= htmlspecialchars($Suggestion_ID) ?>">
-                <div class="button-row">
-                    <input type="submit" value="刪除建言" class="btn btn-danger">
-                </div>
-            </form>
-        <?php else: ?>
-            <p style="color: red; text-align: center;">此建言已進入處理階段「<?= htmlspecialchars($status) ?>」，無法修改或刪除。</p>
-        <?php endif; ?>
-
-    </div>
+    <?php else: ?>
+        <p class="message">此建言已進入處理階段：「<?= htmlspecialchars($status) ?>」，無法修改或刪除。</p>
+        <script>
+            setTimeout(function () {
+                window.history.back();
+            }, 3000);
+        </script>
+    <?php endif; ?>
 </body>
 
 </html>

@@ -12,16 +12,11 @@
             padding: 0;
         }
 
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-        }
-
         .card {
             max-width: 750px;
             background-color: #fff;
             margin: 80px auto;
-            padding: 15px 50px;
+            padding: 40px 50px;
             border-radius: 40px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s ease-in-out;
@@ -50,7 +45,6 @@
             width: 100%;
             padding: 8px 15px;
             font-size: 16px;
-            font-weight: 600;
             font-family: "Noto Serif TC", serif;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -106,23 +100,23 @@
         input[type="reset"] {
             background-color: #84c684;
             color: white;
-            padding: 10px 50px;
+            padding: 8px 50px;
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            margin: 10px 5px;
+            margin: 10px 5px 0 5px;
             font-size: 16px;
             font-weight: bold;
             font-family: "Noto Serif TC", serif;
         }
 
         input[type="reset"] {
-            background-color: rgb(189, 84, 76);
+            background-color:rgb(224, 107, 107);
         }
 
         input[type="submit"]:hover,
         input[type="reset"]:hover {
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .custom-file-btn {
@@ -180,7 +174,6 @@
 
     <div class="card">
         <form id="profileForm" action="dblink.php?method=update_avatar" method="post" enctype="multipart/form-data">
-        <h2>編輯個人檔案</h2>
             <table>
                 <tr>
                     <td>帳號</td>
