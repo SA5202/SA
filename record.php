@@ -23,7 +23,7 @@ if (isset($_GET['id'])) {
 }
 
 $sql = "
-SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, u.User_Name,
+SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
        f.Facility_Type, b.Building_Name,
        (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount,
        (SELECT Status FROM Progress p WHERE p.Suggestion_ID = s.Suggestion_ID ORDER BY Updated_At DESC LIMIT 1) AS LatestStatus
@@ -34,6 +34,7 @@ JOIN Useraccount u ON s.User_ID = u.User_ID
 WHERE s.User_ID = ?
 ORDER BY s.Updated_At DESC
 ";
+
 
 $stmt = $link->prepare($sql);
 $stmt->bind_param("i", $viewUserID);
@@ -297,14 +298,20 @@ $row_user = $result_user->fetch_assoc();
                         </td>
 
                         <td>
-                            <?php if ($viewUserID === $sessionUserID): ?>
+                            <?php if ($row['User_ID'] === $sessionUserID): ?>
+                                <!-- 本人：只顯示編輯按鈕（編輯頁中包含刪除功能） -->
                                 <a href="suggestion_update.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
                                     <i class="fas fa-pen-to-square"></i> 修改
                                 </a>
-                            <?php else: ?>
-                                -
+                            <?php elseif ($sessionUserType === 'admin'): ?>
+                                <!-- 管理員：只能刪除 -->
+                                <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('管理員確定要刪除這個建言嗎？');" style="display:inline;">
+                                    <input type="hidden" name="suggestion_id" value="<?= $row['Suggestion_ID'] ?>">
+                                    <input type="submit" value="刪除" class="btn btn-danger">
+                                </form>
                             <?php endif; ?>
                         </td>
+
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>

@@ -71,9 +71,32 @@
         }
     } elseif ($method === 'delete') {
         if (isset($_POST['suggestion_id'])) {
-            $Suggestion_ID = $_POST['suggestion_id'];
+            $Suggestion_ID = intval($_POST['suggestion_id']);
+            $sessionUserID = $_SESSION['User_ID'] ?? null;
+            $sessionUserType = $_SESSION['User_Type'] ?? null;
 
-            // ✅ 鎖定檢查放這裡
+            // 取得該建言的擁有者 User_ID
+            $stmt_check = $link->prepare("SELECT User_ID FROM suggestion WHERE Suggestion_ID = ?");
+            $stmt_check->bind_param("i", $Suggestion_ID);
+            $stmt_check->execute();
+            $result = $stmt_check->get_result();
+            $row = $result->fetch_assoc();
+            $stmt_check->close();
+
+            if (!$row) {
+                echo "查無此建言。";
+                exit;
+            }
+
+            $ownerUserID = $row['User_ID'];
+
+            // ✅ 權限檢查：只有本人或管理員能刪除
+            if ($ownerUserID != $sessionUserID && $sessionUserType !== 'admin') {
+                echo "您沒有權限刪除此建言。";
+                exit;
+            }
+
+            // ✅ 鎖定狀態檢查
             if (is_locked($link, $Suggestion_ID)) {
                 echo "此建言已進入處理階段，無法刪除。";
                 exit;
@@ -113,6 +136,7 @@
             echo "缺少建言 ID。";
         }
     }
+
 
     mysqli_close($link);
     ?>
