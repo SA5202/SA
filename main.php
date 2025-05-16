@@ -71,40 +71,6 @@ $popular_result = $link->query($popular_sql);
             display: inline-block;
         }
 
-        .honor-wrapper {
-            width: 100%;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
-        }
-
-        .honor-item {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            transition: transform 0.2s ease-in-out;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .honor-item:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .honor-item h5 {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .honor-icon {
-            color: #ffc107;
-            margin-right: 10px;
-        }
 
         .card {
             display: flex;
@@ -237,6 +203,83 @@ $popular_result = $link->query($popular_sql);
             text-decoration: none;
         }
 
+
+        /*榮譽標章*/
+        /* 榮譽榜容器 */
+        .honor-wrapper {
+            margin: 50px auto;
+            padding: 40px 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* 頒獎台的排列 */
+        .award-stand {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px; /* 項目之間的間距 */
+            margin-top: 60px;
+        }
+
+        /* 獎項的外觀設計 */
+        .award-item {
+            width: 180px;
+            height: 250px;
+            padding: 30px;
+            background: linear-gradient(to bottom, #ffffff, #e2e2e2);
+            border-radius: 15px;
+            color: #333;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        /* 懸停效果：獎項放大並增強陰影 */
+        .award-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 獎項的圖標 */
+        .honor-icon {
+            font-size: 30px;
+            color: #f1c40f; /* 金色圖標 */
+            margin-bottom: 15px;
+        }
+
+        /* 獎項標題的樣式 */
+        .award-item h5 {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* 金獎的特殊樣式 */
+        .award-item.gold {
+            background: linear-gradient(to bottom, #f9d71c, #f39c12);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
+            transform: translateY(-15px); /* 顯示金獎時稍微突出 */
+        }
+
+        /* 銀獎的特殊樣式 */
+        .award-item.silver {
+            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
+            box-shadow: 0 10px 30px rgba(192, 192, 192, 0.6);
+            transform: translateY(-10px); /* 顯示銀獎時稍微突出 */
+        }
+
+        /* 銅獎的特殊樣式 */
+        .award-item.bronze {
+            background: linear-gradient(to bottom, #cd7f32, #e67e22);
+            box-shadow: 0 10px 30px rgba(205, 127, 50, 0.6);
+            transform: translateY(-5px); /* 顯示銅獎時稍微突出 */
+        }
+
     </style>
 </head>
 
@@ -325,15 +368,50 @@ $popular_result = $link->query($popular_sql);
     <!-- 榮譽榜 -->
     <div class="honor-wrapper">
         <h3><i class="icon fas fa-medal"></i> 榮譽榜</h3>
-        <div class="honor-item">
-            <h5><i class="fas fa-trophy honor-icon"></i> 卓越貢獻獎</h5>
-            <p>感謝李珍校友捐贈百萬 為輔大永續發展注入愛與希望</p>
-        </div>
-        <div class="honor-item">
-            <h5><i class="fas fa-trophy honor-icon"></i> 卓越貢獻獎</h5>
-            <p>感謝張氏家庭百萬美金捐贈化學系及民生學院 助力輔大教育永續發展</p>
+        <div class="award-stand">
+            <?php
+            // 引入資料庫連線設定檔
+            require_once "db_connect.php"; // 請確保路徑正確
+
+            // 查詢「第一等級」榮譽標章的 SQL 語句，並從 UserAccount 表格中獲取 User_Name
+            $honor_sql = "
+                SELECT h.Honor_Type, u.User_Name
+                FROM HonorTag h
+                JOIN UserAccount u ON h.User_ID = u.User_ID
+                WHERE h.Honor_Type = '第一等級'  -- 只查詢「第一等級」
+                ORDER BY h.Honor_ID ASC  -- 以 ID 排序，顯示順序
+            ";
+            
+            // 執行查詢並取得結果
+            $honors_result = $link->query($honor_sql);
+
+            // 檢查 SQL 查詢是否成功
+            if ($honors_result === false) {
+                die("資料庫查詢錯誤: " . $link->error);
+            }
+
+            // 檢查查詢結果是否有資料
+            if ($honors_result->num_rows > 0) {
+                // 顯示每個「第一等級」的獎項
+                while ($honor = $honors_result->fetch_assoc()) {
+                    // 設置背景顏色
+                    $background_color = '#FFD700'; // 金色背景
+
+                    // 顯示每個名次的獎項
+                    echo '<div class="award-item" style="background-color: ' . $background_color . ';">';
+                    echo '<h5><i class="fas fa-trophy honor-icon"></i> ' . htmlspecialchars($honor['Honor_Type']) . '</h5>';
+                    echo '<p>' . htmlspecialchars($honor['User_Name']) . ' ！</p>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<p>目前沒有任何「第一等級」榮譽標章。</p>';
+            }
+            ?>
         </div>
     </div>
+
+
+
 </body>
 
 </html>
