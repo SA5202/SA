@@ -471,8 +471,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 icon.classList.add('fa-chevron-left'); // 收起 icon
             }
         }
-    </script>
-    <script>
+
+        // 新增的 setActive 函數
+        function setActive(link) {
+            const links = document.querySelectorAll('.sidebar-link');
+            links.forEach(function(link) {
+                link.classList.remove('active');
+            });
+
+            link.classList.add('active');
+        }
+
         document.getElementById("avatarForm").addEventListener("submit", function(e) {
             e.preventDefault();
             const formData = new FormData(this);
@@ -491,7 +500,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 });
         });
     </script>
-
 
 </body>
 

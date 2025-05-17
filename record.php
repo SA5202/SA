@@ -62,7 +62,6 @@ $row_user = $result_user->fetch_assoc();
             max-width: 85%;
             margin: 0 auto;
             padding: 30px;
-            font-family: 'Poppins', sans-serif;
             font-size: 1.1rem;
             font-family: "Noto Serif TC", serif;
             line-height: 1.8;
