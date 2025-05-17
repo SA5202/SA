@@ -40,7 +40,7 @@ if ($result->num_rows > 0) {
             $row["Status"] = "已完成"; // 確保畫面顯示正確
             $completed[] = $row;
 
-        } elseif ($row["Status"] === "暫停") {
+        } elseif ($row["Status"] === "已暫停") {
             $paused[] = $row;
 
         } else {
