@@ -50,6 +50,7 @@ $row_user = $result_user->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 
 <head>
@@ -223,7 +224,99 @@ $row_user = $result_user->fetch_assoc();
             border-radius: 12px;
             font-weight: 600;
         }
+
+        .custom-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #003153;
+            margin-bottom: 30px;
+        }
+
+        .custom-table-container {
+            background-color: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: separate;
+            border-radius: 25px;
+            overflow: hidden;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+        }
+
+        .custom-table thead {
+            background-color: #f1f3f5;
+        }
+
+        .custom-table th {
+            padding: 15px 30px;
+            text-align: left;
+            color: #555;
+            background-color: #f1f3f5;
+            border-bottom: 2px solid #eee;
+        }
+
+        .custom-table td {
+            padding: 15px 30px;
+            text-align: left;
+            color: #333;
+            background-color: white;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* 強調建言標題欄 */
+        .custom-table td.highlight-title {
+            color: #003153;
+            /* 你可以改成想要的顏色 */
+            font-weight: bold;
+        }
+
+        .custom-table tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .no-record {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #888;
+            padding: 30px 0;
+        }
+
+        /* 募款狀態標籤樣式 */
+        .funding-status-label {
+            display: inline-block;
+            padding: 0.5em 1.3em;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 4px;
+            color: white;
+        }
+
+        /* 募款中 - 綠色 */
+        .funding-status-進行中 {
+            background: linear-gradient(90deg, rgb(192, 222, 132), rgb(139, 173, 79));
+        }
+
+        /* 暫停中 - 黃色 */
+        .funding-status-已暫停 {
+            background: linear-gradient(90deg, rgb(255, 237, 150), rgb(244, 212, 54));
+        }
+
+        /* 已結束 - 紅色 */
+        .funding-status-已完成 {
+            background: linear-gradient(90deg, rgb(240, 165, 165), rgb(210, 82, 82));
+        }
     </style>
+
+
 </head>
 
 <body>
@@ -348,7 +441,96 @@ $row_user = $result_user->fetch_assoc();
             <?php endif; ?>
         </tbody>
     </table>
+
+    <?php
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    require_once __DIR__ . '/db_connect.php'; // 使用 $link
+
+    if (!isset($_SESSION['User_ID'])) {
+        echo "請先登入以查看您的捐款紀錄。";
+        exit;
+    }
+
+    $user_id = $_SESSION['User_ID'];
+
+    $sql = "SELECT 
+    d.Donation_Amount,
+    d.Status AS Donation_Status,
+    d.Donation_Date,
+    s.Title AS Funding_Title,
+    pm.Method_Name AS Payment_Method,
+    fs.Required_Amount,
+    fs.Raised_Amount,
+    fs.Status AS Funding_Status,
+    fs.Updated_At
+FROM Donation d
+LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
+LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
+LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
+WHERE d.User_ID = ?
+ORDER BY d.Donation_Date DESC";
+
+
+    $stmt = $link->prepare($sql);
+    if (!$stmt) {
+        die("SQL 準備失敗: " . $link->error);
+    }
+
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    ?>
+
     <h3><i class="icon fas fa-donate"></i> 我的捐款紀錄</h3>
+
+    <?php if ($result->num_rows > 0): ?>
+
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>捐款項目</th>
+                    <th>金額</th>
+                    <th>付款方式</th>
+                    <th>狀態</th>
+                    <th>日期</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($row = $result->fetch_assoc()) :
+                    $status_class = 'status-' . preg_replace('/\s+/', '', $row['Donation_Status']);
+                ?>
+                    <tr>
+                        <td class="highlight-title"><?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?></td>
+                        <td>$<?= number_format($row['Donation_Amount'], 0) ?></td>
+                        <td><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
+                        <td>
+
+                            <?php
+                            $funding_status_class = 'funding-status-' . preg_replace('/\s+/', '', $row['Funding_Status']);
+                            ?>
+                            <small class="funding-status-label <?= htmlspecialchars($funding_status_class) ?>">
+                                <?= htmlspecialchars($row['Funding_Status'] ?? '') ?>
+                            </small>
+
+                        </td>
+                        <td>
+                            <?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
+                            <small class="update-date">更新於：<?= date('Y-m-d', strtotime($row['Updated_At'])) ?></small>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+
+            </tbody>
+        </table>
+
+    <?php else: ?>
+        <div class="no-record">目前沒有捐款紀錄。</div>
+    <?php endif; ?>
+
+
 
     <?php
     $stmt->close();
@@ -378,6 +560,5 @@ $row_user = $result_user->fetch_assoc();
         }
     </script>
 
-</body>
 
-</html>
+</body>
