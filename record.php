@@ -205,6 +205,13 @@ $row_user = $result_user->fetch_assoc();
             text-decoration: none;
         }
 
+        .table .update-time,
+        .table .like-count,
+        .table .edit-action {
+            text-align: center;
+            vertical-align: middle;
+        }
+        
         .update {
             font-size: 0.9rem;
             font-weight: bold;
@@ -327,9 +334,9 @@ $row_user = $result_user->fetch_assoc();
         <thead class="table-primary">
             <tr>
                 <th class="fw-bold">建言標題</th>
-                <th class="fw-bold">更新時間</th>
-                <th class="fw-bold">獲得讚數</th>
-                <th class="fw-bold">編輯建言</th>
+                <th class="fw-bold text-center">更新時間</th>
+                <th class="fw-bold text-center">獲得愛心數</th>
+                <th class="fw-bold text-center">編輯建言</th>
             </tr>
         </thead>
         <tbody>
@@ -341,16 +348,17 @@ $row_user = $result_user->fetch_assoc();
                                 <?= htmlspecialchars($row["Title"]) ?>
                             </a>
                         </td>
-                        <td><span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span></td>
-                        <td>
+                        <td class="text-center update-time">
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span>
+                        </td>
+                        <td class="text-center like-count">
                             <span class="custom-badge">
                                 <?= ($row['LikeCount'] >= 10000) 
-                                        ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
-                                        : $row['LikeCount'] . ' ❤️'; ?>
+                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
+                                    : $row['LikeCount'] . ' ❤️'; ?>
                             </span>
                         </td>
-
-                        <td>
+                        <td class="text-center edit-action">
                             <?php if ($row['User_ID'] == $sessionUserID): ?>
                                 <!-- 本人：只顯示編輯按鈕（編輯頁中包含刪除功能） -->
                                 <form action="suggestion_update.php" method="get" style="display:inline;">

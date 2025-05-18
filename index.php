@@ -211,6 +211,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(190, 225, 230);
             color: midnightblue;
             border-radius: 25px;
+            border: 1px solid #ccc !important;
             padding: 0.4rem 25px;
             font-size: 1rem;
             font-weight: bold;
@@ -269,6 +270,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(190, 225, 230, 0.95);
             color: midnightblue;
             border-radius: 25px;
+            border: 1px solid #ccc;
             padding: 0.4rem 20px;
             font-size: 1rem;
             font-weight: bold;
@@ -419,7 +421,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </div>
     <?php else: ?>
         <a href="login.php" target="contentFrame">
-            <button class="btn btn-custom btn-outline-success btn-position">
+            <button class="btn btn-custom btn-position">
                 <i class="fa-solid fa-circle-user"></i> 登入
             </button>
         </a>

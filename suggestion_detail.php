@@ -75,8 +75,7 @@ if ($user_id) {
             display: flex;
             gap: 40px;
             transition: transform 0.2s ease-in-out;
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
+            border: 1px solid #ccc;
         }
 
         .card:hover {

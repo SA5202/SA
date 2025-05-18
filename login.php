@@ -26,6 +26,7 @@
             /* 讓按鈕成為塊級元素，才能使用 margin: 0 auto */
             padding: 40px;
             border-radius: 40px;
+            border: 1px solid #ccc;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: transform 0.2s ease-in-out;

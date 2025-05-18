@@ -71,7 +71,7 @@ $result = $conn->query($sql);
         }
 
         .form-container {
-            max-width: 70%;
+            max-width: 60%;
             margin: 160px auto;
         }
 

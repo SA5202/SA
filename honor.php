@@ -211,11 +211,12 @@ if (!$suggestion_result) {
 
         /* Modal 外框 */
         .modal-dialog {
+            max-width: 75%;
+            top: 30px;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
             border-radius: 25px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            overflow: hidden; /* 確保圓角適用，並且內部內容不會外露 */
             display: flex;
             flex-direction: column;
         }
@@ -238,7 +239,7 @@ if (!$suggestion_result) {
         }
 
         .modal-header .modal-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 

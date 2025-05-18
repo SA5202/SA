@@ -142,7 +142,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             backdrop-filter: blur(8px);
             /* 稍微減弱模糊效果 */
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(200, 200, 200, 0.4);
+            border: 1px solid #ccc;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
             transition: transform 0.2s ease-in-out;
         }
@@ -227,7 +227,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         .card {
             padding: 2.5rem;
             border-radius: 25px;
-            border: 1px solid rgba(200, 200, 200, 0.3);
+            border: 1px solid #ccc;
             background-color: white;
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);

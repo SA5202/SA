@@ -59,7 +59,7 @@ $popular_result = $link->query($popular_sql);
         }
 
         h3 {
-            margin: 20px 0;
+            margin: 30px 0;
             font-weight: bold;
         }
 
@@ -206,10 +206,10 @@ $popular_result = $link->query($popular_sql);
 
        /* 榮譽標章容器 */
         .honor-wrapper {
-            margin: 50px auto;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 25px;
+            border-radius: 40px;
+            border: 1px solid #ccc;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
@@ -430,7 +430,7 @@ $popular_result = $link->query($popular_sql);
             </div>
         </div>
     </div>
-    <h3><i class="icon fas fa-medal"></i> 榮耀捐款者</h3>
+    <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3>
     <!-- 榮譽榜 -->
     <div class="honor-wrapper">
     <div class="award-stand">

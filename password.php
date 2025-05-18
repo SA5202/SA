@@ -16,7 +16,8 @@
             margin: 100px auto;
             padding: 40px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-            border-radius: 25px;
+            border-radius: 40px;
+            border: 1px solid #ccc;
             text-align: center;
         }
 
