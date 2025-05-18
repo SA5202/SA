@@ -60,7 +60,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .sidebar h1 {
             text-align: center;
             font-size: 2.5rem;
-            font-weight: 700;
+            font-weight: bold;
             transition: opacity 0.3s ease;
         }
 
@@ -77,6 +77,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             border-radius: 8px;
             margin: 10px 0;
             font-size: 20px;
+            font-weight: bold;
             transition: all 0.3s ease;
             white-space: nowrap;
             overflow: hidden;
@@ -210,8 +211,9 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(190, 225, 230);
             color: midnightblue;
             border-radius: 25px;
-            padding: 0.5rem 25px;
+            padding: 0.4rem 25px;
             font-size: 1rem;
+            font-weight: bold;
             transition: 0.3s;
             border: none;
         }
@@ -267,7 +269,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             background-color: rgba(190, 225, 230, 0.95);
             color: midnightblue;
             border-radius: 25px;
-            padding: 8px 20px;
+            padding: 0.4rem 20px;
             font-size: 1rem;
             font-weight: bold;
         }
@@ -359,22 +361,22 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         </a>
         <?php if ($is_admin): ?>
             <!-- 管理者的側邊欄 -->
-            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-wrench"></i><span><b> 管理公告</b></span></a>
-            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-notes-medical"></i><span><b> 發布公告</b></span></a>
-            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-cogs"></i><span><b> 管理建言進度</b></span></a>
-            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-donate"></i><span><b> 管理募款建言</b></span></a>
-            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span><b> 新增募款建言</b></span></a>
+            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-home"></i><span> 首頁</span></a>
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-wrench"></i><span> 管理公告</span></a>
+            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span></a>
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-cogs"></i><span> 管理建言進度</span></a>
+            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-donate"></i><span> 管理募款建言</span></a>
+            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span></a>
         <?php else: ?>
 
             <!-- 一般使用者的側邊欄 -->
-            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-home"></i><span><b> 首頁</b></span></a>
-            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-bell"></i><span><b> 公告</b></span></a>
-            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-scroll"></i><span><b> 建言總覽</b></span></a>
-            <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-comment-dots"></i><span><b> 提出建言</b></span></a>
-            <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span><b> 捐款進度</b></span></a>
-            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-medal"></i><span><b> 榮譽機制</b></span></a>
-            <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-phone-alt"></i><span><b> 聯絡我們</b></span></a>
+            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-home"></i><span> 首頁</span></a>
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-bell"></i><span> 公告</span></a>
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-scroll"></i><span> 建言總覽</span></a>
+            <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-comment-dots"></i><span> 提出建言</span></a>
+            <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span> 捐款進度</span></a>
+            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-medal"></i><span> 榮譽機制</span></a>
+            <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-phone-alt"></i><span> 聯絡我們</span></a>
         <?php endif; ?>
     </div>
 
@@ -418,7 +420,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <?php else: ?>
         <a href="login.php" target="contentFrame">
             <button class="btn btn-custom btn-outline-success btn-position">
-                <b><i class="fa-solid fa-circle-user"></i> 登入</b>
+                <i class="fa-solid fa-circle-user"></i> 登入
             </button>
         </a>
     <?php endif; ?>

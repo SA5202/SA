@@ -84,24 +84,6 @@ $row_user = $result_user->fetch_assoc();
             font-weight: bold;
         }
 
-        .table-responsive {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
-        }
-
-        .table th {
-            background-color: #f1f3f5;
-            color: #555;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f9f9f9;
-        }
-
         .left {
             text-align: left;
             font-size: 1.05rem;
@@ -112,7 +94,6 @@ $row_user = $result_user->fetch_assoc();
         .password-display-wrapper {
             position: relative;
             width: 200px;
-            /* 或改成 auto 看實際需求 */
         }
 
         #passwordDisplay {
@@ -152,54 +133,14 @@ $row_user = $result_user->fetch_assoc();
             opacity: 0.6;
         }
 
-        .table-container {
-            background-color: white;
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
-        }
-
-        .table {
-            width: 100%;
-            border-radius: 25px;
-            border: 2px solid #ddd;
-            border-collapse: separate;
-            overflow: hidden;
-            border-spacing: 0;
-        }
-
-        .table th,
-        .table td {
-            padding: 10px 40px;
-            border-radius: 0px;
-        }
-
-        .table-primary {
-            background-color: #e9f5ff;
-        }
-
-        .title {
-            color: #003153;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .update {
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: gray;
-        }
-
         .pretty-btn {
             background: linear-gradient(to right, rgb(139, 186, 224), rgb(69, 109, 133));
             text-decoration: none;
             border: none;
             color: white;
-            padding: 5px 20px;
+            padding: 0.3em 20px;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 750;
         }
 
@@ -219,77 +160,68 @@ $row_user = $result_user->fetch_assoc();
         .custom-badge {
             background: linear-gradient(to right, rgb(218, 240, 249), rgb(197, 226, 239));
             color: #2a4d69;
-            font-size: 0.9rem;
+            font-size: 0.5rem;
             padding: 0.5em 1.3em;
             border-radius: 12px;
             font-weight: 600;
         }
 
-        .custom-title {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #003153;
-            margin-bottom: 30px;
+        .table-responsive {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
         }
 
-        .custom-table-container {
-            background-color: white;
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            border: 1px solid #dee2e6;
-            overflow-x: auto;
-        }
-
-        .custom-table {
-            width: 100%;
-            border-spacing: 0;
-            border-collapse: separate;
-            border-radius: 25px;
-            overflow: hidden;
-            font-size: 1rem;
-            border: 2px solid #ddd;
-        }
-
-        .custom-table thead {
+        .table th {
             background-color: #f1f3f5;
-        }
-
-        .custom-table th {
-            padding: 15px 30px;
-            text-align: left;
             color: #555;
-            background-color: #f1f3f5;
-            border-bottom: 2px solid #eee;
         }
 
-        .custom-table td {
-            padding: 15px 30px;
-            text-align: left;
-            color: #333;
-            background-color: white;
-            border-bottom: 2px solid #eee;
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
         }
 
-        /* 強調建言標題欄 */
-        .custom-table td.highlight-title {
+        .table {
+            width: 100%;
+            border-radius: 25px;
+            border: 2px solid #dee2e6;
+            border-collapse: separate;
+            overflow: hidden;
+            border-spacing: 0;
+        }
+
+        .table th,
+        .table td {
+            padding: 10px 40px;
+            border-radius: 0px;
+            border-bottom: none;
+        }
+
+        .table-primary {
+            background-color: #e9f5ff;
+        }
+
+        .title {
             color: #003153;
-            /* 你可以改成想要的顏色 */
             font-weight: bold;
+            text-decoration: none;
         }
 
-        .custom-table tbody tr:nth-child(odd) {
-            background-color: white;
+        .update {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: gray;
         }
 
-        .no-record {
+        .text-muted {
             text-align: center;
-            font-size: 1.1rem;
-            color: #888;
-            padding: 30px 0;
+            font-size: 1.05rem;
+            font-weight: 600;
         }
 
-        /* 募款狀態標籤樣式 */
         .funding-status-label {
             display: inline-block;
             padding: 0.5em 1.3em;
@@ -300,19 +232,21 @@ $row_user = $result_user->fetch_assoc();
             color: white;
         }
 
-        /* 募款中 - 綠色 */
         .funding-status-進行中 {
             background: linear-gradient(90deg, rgb(192, 222, 132), rgb(139, 173, 79));
         }
 
-        /* 暫停中 - 黃色 */
         .funding-status-已暫停 {
             background: linear-gradient(90deg, rgb(255, 237, 150), rgb(244, 212, 54));
         }
 
-        /* 已結束 - 紅色 */
         .funding-status-已完成 {
             background: linear-gradient(90deg, rgb(240, 165, 165), rgb(210, 82, 82));
+        }
+
+        .table td.highlight-title {
+            color: #003153;
+            font-weight: bold;
         }
     </style>
 
@@ -420,14 +354,19 @@ $row_user = $result_user->fetch_assoc();
                         <td>
                             <?php if ($row['User_ID'] == $sessionUserID): ?>
                                 <!-- 本人：只顯示編輯按鈕（編輯頁中包含刪除功能） -->
-                                <a href="suggestion_update.php?Suggestion_ID=<?= $row['Suggestion_ID'] ?>" class="pretty-btn">
-                                    <i class="fas fa-pen-to-square"></i> 修改
-                                </a>
+                                <form action="suggestion_update.php" method="get" style="display:inline;">
+                                    <input type="hidden" name="Suggestion_ID" value="<?= $row['Suggestion_ID'] ?>">
+                                    <button type="submit" class="pretty-btn">
+                                        <i class="fas fa-pen-to-square"></i> 修改
+                                    </button>
+                                </form>
                             <?php elseif ($sessionUserType === 'admin'): ?>
                                 <!-- 管理員：只能刪除 -->
                                 <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('管理員確定要刪除這個建言嗎？');" style="display:inline;">
                                     <input type="hidden" name="suggestion_id" value="<?= $row['Suggestion_ID'] ?>">
-                                    <input type="submit" value="刪除" class="pretty-btn">
+                                    <button type="submit" class="pretty-btn">
+                                        <i class="fas fa-pen-to-square"></i> 刪除
+                                    </button>
                                 </form>
                             <?php endif; ?>
                         </td>
@@ -436,7 +375,7 @@ $row_user = $result_user->fetch_assoc();
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4" class="text-center text-muted">尚未有建言紀錄。</td>
+                    <td colspan="4" class="text-muted">目前沒有建言紀錄。</td>
                 </tr>
             <?php endif; ?>
         </tbody>
@@ -466,12 +405,12 @@ $row_user = $result_user->fetch_assoc();
     fs.Raised_Amount,
     fs.Status AS Funding_Status,
     fs.Updated_At
-FROM Donation d
-LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
-LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
-LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
-WHERE d.User_ID = ?
-ORDER BY d.Donation_Date DESC";
+    FROM Donation d
+    LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
+    LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
+    LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
+    WHERE d.User_ID = ?
+    ORDER BY d.Donation_Date DESC";
 
 
     $stmt = $link->prepare($sql);
@@ -484,37 +423,35 @@ ORDER BY d.Donation_Date DESC";
     $result = $stmt->get_result();
     ?>
 
-    <h3><i class="icon fas fa-donate"></i> 我的捐款紀錄</h3>
+    <?php if ($sessionUserType == 'admin'): ?>
+        <h3><i class="icon fas fa-donate"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的捐款紀錄</h3>
+    <?php else: ?>
+        <h3><i class="icon fas fa-donate"></i> 我的捐款紀錄</h3>
+    <?php endif; ?>
 
-    <?php if ($result->num_rows > 0): ?>
-
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>捐款項目</th>
-                    <th>金額</th>
-                    <th>付款方式</th>
-                    <th>狀態</th>
-                    <th>日期</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="table">
+        <thead class="table-primary">
+            <tr>
+                <th class="fw-bold">捐款項目</th>
+                <th class="fw-bold">金額</th>
+                <th class="fw-bold">付款方式</th>
+                <th class="fw-bold">狀態</th>
+                <th class="fw-bold">日期</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()) :
-                    $status_class = 'status-' . preg_replace('/\s+/', '', $row['Donation_Status']);
+                    $funding_status_class = 'funding-status-' . preg_replace('/\s+/', '', $row['Funding_Status']);
                 ?>
                     <tr>
                         <td class="highlight-title"><?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?></td>
                         <td>$<?= number_format($row['Donation_Amount'], 0) ?></td>
                         <td><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
                         <td>
-
-                            <?php
-                            $funding_status_class = 'funding-status-' . preg_replace('/\s+/', '', $row['Funding_Status']);
-                            ?>
                             <small class="funding-status-label <?= htmlspecialchars($funding_status_class) ?>">
                                 <?= htmlspecialchars($row['Funding_Status'] ?? '') ?>
                             </small>
-
                         </td>
                         <td>
                             <?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
@@ -522,20 +459,19 @@ ORDER BY d.Donation_Date DESC";
                         </td>
                     </tr>
                 <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5" class="text-muted">目前沒有捐款紀錄。</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-            </tbody>
-        </table>
 
-    <?php else: ?>
-        <div class="no-record">目前沒有捐款紀錄。</div>
-    <?php endif; ?>
-
-
-
-    <?php
-    $stmt->close();
-    $link->close();
-    ?>
+        <?php
+        $stmt->close();
+        $link->close();
+        ?>
 
     <script>
         let isVisible = false;

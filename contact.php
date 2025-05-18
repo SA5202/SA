@@ -20,7 +20,6 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <style>
         body {
             background-color: transparent;
-            /* 關鍵：讓 iframe 透出背景 */
             font-family: "Noto Serif TC", serif;
             font-size: 1.05rem;
             line-height: 1.8;
@@ -30,12 +29,12 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .contact-card {
-            max-width: 75%;
-            margin: 50px auto;
+            max-width: 80%;
+            margin: 40px auto;
             background-color: rgba(255, 255, 255, 0.9);
             /* 白色半透明背景 */
-            border-radius: 25px;
-            padding: 50px;
+            border-radius: 40px;
+            padding: 40px 60px;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
@@ -141,7 +140,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <p class="office-title">進修部辦公室（進修部大樓二樓 ES 201）</p>
             <p>學期中： 週一至週五 15:00–22:00</p>
             <p>寒暑假： 週一至週四 08:00–16:30</p>
-            <p class="note">（寒暑假作息請參照本校行事曆）</p>
+            <p class="note"><b>( 寒暑假作息請參照本校行事曆 )</b></p>
         </div>
     </div>
 </body>
