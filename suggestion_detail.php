@@ -338,7 +338,11 @@ if ($user_id) {
                             <i class="<?= $heartClass ?> fa-heart" id="heart-icon"></i>
                         </button>
                     <?php endif; ?>
-                    <span id="like-count"><?= $row['LikeCount'] ?></span>人喜歡這則建言
+                        <span id="like-count">
+                            <?= ($row['LikeCount'] >= 10000) 
+                                ? number_format($row['LikeCount'] / 10000, 1) . ' 萬' 
+                                : $row['LikeCount'] . ' '; ?>人喜歡這則建言
+                        </span>
                 </div>
             </div>
             <br>

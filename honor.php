@@ -190,6 +190,76 @@ if (!$suggestion_result) {
         #help-icon:hover {
             transform: scale(1.1);
         }
+
+        /* Modal 動畫效果 */
+        .modal.fade .modal-dialog {
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-in-out;
+        }
+
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Modal 背景遮罩透明 */
+        .modal-backdrop {
+            background-color: transparent !important;
+            opacity: 1 !important;
+        }
+
+        /* Modal 外框 */
+        .modal-dialog {
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden; /* 確保圓角適用，並且內部內容不會外露 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Modal 內容區模糊 */
+        .modal-content {
+            height: 100%; /* 確保內容區塊高度填滿 */
+            background-color: #fff;
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: none;
+        }
+
+        /* Modal 標題區 */
+        .modal-header {
+            background: linear-gradient(135deg, #55a4ba, #3793c1);
+            color: white;
+            border-bottom: none;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-header .modal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* Modal 內容區內推與圓角 */
+        .modal-body {
+            padding: 1.5rem 2rem;
+            border-radius: 25px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            flex-grow: 1; /* 自動擴展並填滿剩餘空間 */
+            overflow-y: auto; /* 內容區可以垂直滾動 */
+        }
+
+        .modal-body p {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body li {
+            font-size: 1.05rem;
+            margin-bottom: 0.6rem;
+        }
     </style>
 </head>
 <body>
@@ -285,22 +355,40 @@ if (!$suggestion_result) {
     <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="helpModalLabel">榮譽榜說明</h5>
+                <!-- 標題列 -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">
+                        <i class="fa-solid fa-circle-info me-2"></i> 榮譽機制與排名規則說明
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <!-- 主體內容 -->
                 <div class="modal-body">
-                    <p>歡迎使用輔仁大學愛校建言捐款系統的榮譽榜功能！</p>
-                    <ul>
-                    <li><strong>捐款金額排行榜：</strong>依照各用戶累積捐款金額排序，前十名將顯示在頁面上。</li>
-                    <li><strong>建言發布數排行榜：</strong>依照用戶提交建言的次數進行排序。</li>
-                    <li>若用戶上傳了個人頭像，將會一併顯示在排行榜中。</li>
-                    <li>點擊上方的「標籤頁籤」可以快速切換排行榜分類。</li>
+                    <p class="mb-3">🎉 歡迎使用 <strong>輔仁大學愛校建言捐款系統</strong> 的榮譽榜功能！以下是詳細說明：</p>
+
+                    <ul class="list-unstyled ps-4">
+                        <li class="mb-3">
+                            <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>
+                            <strong>捐款金額排行榜：</strong> 依照用戶累積捐款金額排序，顯示前 10 名。
+                        </li>
+                        <li class="mb-3">
+                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>
+                            <strong>建言發布數排行榜：</strong> 依照用戶提交建言次數排序。
+                        </li>
+                        <li class="mb-3">
+                            <i class="fa-solid fa-user-circle text-primary me-2"></i>
+                            上傳的個人頭像會顯示在排行榜中。
+                        </li>
+                        <li class="mb-3">
+                            <i class="fa-solid fa-layer-group text-info me-2"></i>
+                            使用上方的「分頁」可以快速切換排行榜分類。
+                        </li>
                     </ul>
-                    <p>此功能旨在表揚積極參與的同學與校友，感謝您的支持與貢獻！</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+
+                    <p class="mt-4 text-info-emphasis">
+                        ✨ <strong>此功能旨在表揚積極參與的同學與校友，感謝您的熱情與支持！</strong>
+                    </p>
                 </div>
             </div>
         </div>
