@@ -327,17 +327,12 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         /* 喜歡數樣式 */
         .likes {
-            font-size: 0.9rem;
-            color: #444;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #888;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-        }
-
-        .likes::before {
-            content: "❤️ ";
-            color: #cc3333;
-            margin-right: 5px;
         }
     </style>
 </head>
@@ -407,7 +402,11 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                 </div>
                 <div class="actions">
                     <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
-                    <span class="likes"><?= $row['LikeCount'] ?></span>
+                    <span class="likes">
+                        <?= ($row['LikeCount'] >= 10000) 
+                            ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
+                            : $row['LikeCount'] . ' ❤️'; ?>
+                    </span>
                 </div>
             </div>
         <?php endwhile; ?>

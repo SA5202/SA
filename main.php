@@ -121,8 +121,8 @@ $popular_result = $link->query($popular_sql);
 
         .suggestion-meta {
             font-size: 0.9rem;
-            font-weight: bold;
-            color: gray;
+            font-weight: 600;
+            color: #888;
         }
 
         .btn-view {
@@ -418,7 +418,11 @@ $popular_result = $link->query($popular_sql);
                     <?php while ($row = $popular_result->fetch_assoc()): ?>
                         <div class="suggestion-item">
                             <div class="suggestion-title"><?= htmlspecialchars($row['Title']) ?></div>
-                            <div class="suggestion-meta">已經在網站上獲得了 <?= $row['LikeCount'] ?> 個 ❤️</div>
+                            <div class="suggestion-meta">已經在網站上獲得了
+                                <?= ($row['LikeCount'] >= 10000) 
+                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬個 ❤️' 
+                                    : $row['LikeCount'] . ' 個 ❤️'; ?>
+                            </div>
                             <a href="<?="suggestion_detail.php?id=" . $row['Suggestion_ID'] ?>" class="btn btn-view">查看建言</a>
                         </div>
                     <?php endwhile; ?>

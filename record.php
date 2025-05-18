@@ -138,7 +138,7 @@ $row_user = $result_user->fetch_assoc();
             text-decoration: none;
             border: none;
             color: white;
-            padding: 0.3em 20px;
+            padding: 0.2rem 20px;
             border-radius: 12px;
             font-size: 0.9rem;
             font-weight: 750;
@@ -152,18 +152,13 @@ $row_user = $result_user->fetch_assoc();
             margin-right: 6px;
         }
 
-        .badge {
-            padding: 0.3em 1em;
-            font-size: 0.5rem;
-        }
-
         .custom-badge {
             background: linear-gradient(to right, rgb(218, 240, 249), rgb(197, 226, 239));
             color: #2a4d69;
-            font-size: 0.5rem;
-            padding: 0.5em 1.3em;
+            font-size: 0.9rem;
+            padding: 0.3rem 1.2rem;
             border-radius: 12px;
-            font-weight: 600;
+            font-weight: bold;
         }
 
         .table-responsive {
@@ -348,7 +343,11 @@ $row_user = $result_user->fetch_assoc();
                         </td>
                         <td><span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span></td>
                         <td>
-                            <span class="badge custom-badge fs-6"> <?= $row['LikeCount'] ?> ❤️ </span>
+                            <span class="custom-badge">
+                                <?= ($row['LikeCount'] >= 10000) 
+                                        ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
+                                        : $row['LikeCount'] . ' ❤️'; ?>
+                            </span>
                         </td>
 
                         <td>
