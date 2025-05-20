@@ -394,44 +394,62 @@ $popular_result = $link->query($popular_sql);
     <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3>
     <div class="honor-wrapper">
         <div class="row justify-content-center">
-            <!-- 第二名 -->
-            <div class="col-md-4 text-center">
-                <div class="rank-card rank-2">
-                    <div class="avatar-wrapper avatar-2">
-                        <img src="user2.jpg" alt="User 2" class="avatar">
-                    </div>
-                    <h5 class="user-name">用戶名稱 2</h5>
-                    <p class="user-score">捐贈金額：4500</p>
-                    <p class="rank-label rank-label-2">第二名</p>
-                </div>
-            </div>
+            <?php
+            // 連接資料庫
+            require_once "db_connect.php";
 
-            <!-- 第一名 -->
-            <div class="col-md-4 text-center">
-                <div class="rank-card rank-1">
-                    <div class="avatar-wrapper avatar-1">
-                        <img src="user1.jpg" alt="User 1" class="avatar">
-                    </div>
-                    <h5 class="user-name">用戶名稱 1</h5>
-                    <p class="user-score">捐贈金額：5000</p>
-                    <p class="rank-label rank-label-1">第一名</p>
-                </div>
-            </div>
+            // 查詢捐款金額最多的前三名用戶
+            $ranking_sql = "
+                SELECT u.User_Name, SUM(d.Donation_Amount) AS total_donation
+                FROM Donation d
+                JOIN UserAccount u ON d.User_ID = u.User_ID
+                WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE()) AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
+                GROUP BY u.User_Name
+                ORDER BY total_donation DESC
+                LIMIT 3;
+            ";
 
-            <!-- 第三名 -->
-            <div class="col-md-4 text-center">
-                <div class="rank-card rank-3">
-                    <div class="avatar-wrapper avatar-3">
-                        <img src="user3.jpg" alt="User 3" class="avatar">
-                    </div>
-                    <h5 class="user-name">用戶名稱 3</h5>
-                    <p class="user-score">捐贈金額：4000</p>
-                    <p class="rank-label rank-label-3">第三名</p>
-                </div>
-            </div>
+            // 執行查詢
+            $ranking_result = $link->query($ranking_sql);
+
+            // 檢查並顯示結果
+            if ($ranking_result && $ranking_result->num_rows > 0) {
+                $rank = 1;
+                while ($row = $ranking_result->fetch_assoc()) {
+                    $user_name = $row['User_Name'];
+                    $donation_amount = $row['total_donation'];
+                    // 動態填充每個排名的資料
+                    echo "<div class='col-md-4 text-center'>
+                            <div class='rank-card rank-{$rank}'>
+                                <div class='avatar-wrapper avatar-{$rank}'>
+                                    <img src='user{$rank}.jpg' alt='User {$rank}' class='avatar'>
+                                </div>
+                                <h5 class='user-name'>{$user_name}</h5>
+                                <p class='user-score'>捐贈金額：{$donation_amount}</p>
+                                <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
+                            </div>
+                        </div>";
+                    $rank++;
+                }
+            } else {
+                // 尚未有人捐款的情況
+                $default_image = 'no_donations.jpg'; // 預設圖片
+                for ($i = 1; $i <= 3; $i++) {
+                    echo "<div class='col-md-4 text-center'>
+                            <div class='rank-card rank-{$i}'>
+                                <div class='avatar-wrapper avatar-{$i}'>
+                                    <img src='{$default_image}' alt='No Donations' class='avatar'>
+                                </div>
+                                <h5 class='user-name'>尚未有人捐款</h5>
+                                <p class='user-score'>尚未有人捐款</p>
+                                <p class='rank-label rank-label-{$i}'>第{$i}名</p>
+                            </div>
+                        </div>";
+                }
+            }
+            ?>
         </div>
     </div>
-
 </body>
 
 </html>
