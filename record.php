@@ -491,7 +491,7 @@ $row_user = $result_user->fetch_assoc();
             <?php endif; ?>
         </tbody>
     </table>
-
+    <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
 
     <?php
     $stmt->close();
