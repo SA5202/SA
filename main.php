@@ -391,7 +391,7 @@ $popular_result = $link->query($popular_sql);
             </div>
         </div>
     </div>
-    <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3>
+    <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3> 
     <div class="honor-wrapper">
         <div class="row justify-content-center">
             <?php
@@ -412,12 +412,22 @@ $popular_result = $link->query($popular_sql);
             // 執行查詢
             $ranking_result = $link->query($ranking_sql);
 
+            // 顯示順序設定 (2, 1, 3)
+            $display_order = [1, 0, 2]; // 排序：第二名、第一名、第三名
+
             // 檢查並顯示結果
             if ($ranking_result && $ranking_result->num_rows > 0) {
-                $rank = 1;
+                // 儲存所有排名資料
+                $rankings = [];
                 while ($row = $ranking_result->fetch_assoc()) {
-                    $user_name = $row['User_Name'];
-                    $donation_amount = $row['total_donation'];
+                    $rankings[] = $row;
+                }
+
+                foreach ($display_order as $rank_index) {
+                    $user_name = $rankings[$rank_index]['User_Name'];
+                    $donation_amount = $rankings[$rank_index]['total_donation'];
+                    $rank = $rank_index + 1; // 排名從 1 開始
+
                     // 動態填充每個排名的資料
                     echo "<div class='col-md-4 text-center'>
                             <div class='rank-card rank-{$rank}'>
@@ -429,20 +439,21 @@ $popular_result = $link->query($popular_sql);
                                 <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
                             </div>
                         </div>";
-                    $rank++;
                 }
             } else {
                 // 尚未有人捐款的情況
                 $default_image = 'no_donations.jpg'; // 預設圖片
-                for ($i = 1; $i <= 3; $i++) {
+                // 即使沒有捐款，也按照 2, 1, 3 的順序顯示
+                for ($i = 0; $i < 3; $i++) {
+                    $rank = $display_order[$i] + 1; // 使用顯示順序中的排名
                     echo "<div class='col-md-4 text-center'>
-                            <div class='rank-card rank-{$i}'>
-                                <div class='avatar-wrapper avatar-{$i}'>
+                            <div class='rank-card rank-{$rank}'>
+                                <div class='avatar-wrapper avatar-{$rank}'>
                                     <img src='{$default_image}' alt='No Donations' class='avatar'>
                                 </div>
                                 <h5 class='user-name'>尚未有人捐款</h5>
                                 <p class='user-score'>尚未有人捐款</p>
-                                <p class='rank-label rank-label-{$i}'>第{$i}名</p>
+                                <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
                             </div>
                         </div>";
                 }
@@ -450,6 +461,7 @@ $popular_result = $link->query($popular_sql);
             ?>
         </div>
     </div>
+
 </body>
 
 </html>
