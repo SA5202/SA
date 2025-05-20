@@ -104,7 +104,7 @@ if (!$suggestion_result) {
         }
 
         .nav-link:hover {
-            background-color: #76c1e1;
+            background-color:rgb(77, 112, 128);
             color: #fff;
         }
 
