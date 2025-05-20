@@ -161,6 +161,17 @@ $row_user = $result_user->fetch_assoc();
             font-weight: bold;
         }
 
+        .table {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .table:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
         .table-responsive {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px 20px;
@@ -168,7 +179,14 @@ $row_user = $result_user->fetch_assoc();
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .table-responsive:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
 
         .table th {
             background-color: #f1f3f5;
@@ -211,7 +229,7 @@ $row_user = $result_user->fetch_assoc();
             text-align: center;
             vertical-align: middle;
         }
-        
+
         .update {
             font-size: 0.9rem;
             font-weight: bold;
@@ -353,8 +371,8 @@ $row_user = $result_user->fetch_assoc();
                         </td>
                         <td class="text-center like-count">
                             <span class="custom-badge">
-                                <?= ($row['LikeCount'] >= 10000) 
-                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
+                                <?= ($row['LikeCount'] >= 10000)
+                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️'
                                     : $row['LikeCount'] . ' ❤️'; ?>
                             </span>
                         </td>
@@ -475,10 +493,10 @@ $row_user = $result_user->fetch_assoc();
     </table>
 
 
-        <?php
-        $stmt->close();
-        $link->close();
-        ?>
+    <?php
+    $stmt->close();
+    $link->close();
+    ?>
 
     <script>
         let isVisible = false;

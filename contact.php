@@ -39,7 +39,17 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
             /* 加這行才會顯示框線 */
+
+            /* 加入浮動效果所需的過渡設定 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        /* 滑鼠懸停時浮起效果 */
+        .contact-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
 
         .contact-title {
             font-size: 1.8rem;
