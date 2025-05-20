@@ -204,115 +204,103 @@ $popular_result = $link->query($popular_sql);
         }
 
 
-       /* 榮譽標章容器 */
+       /* 榮譽榜容器樣式 */
         .honor-wrapper {
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 40px;
-            border: 1px solid #ccc;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.95); /* 淺色背景區別於白色 */
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin-top: 40px; /* 增加 margin 以便更好地與其他區塊分開 */
-            position: relative; /* 讓裡面的元素可以有靈活的位置 */
-        }
-
-        .podium {
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: flex-end; /* 讓台階在底部對齊 */
-            gap: 30px;
-            margin-top: 200px;
-        }
-
-        .step {
-            width: 160px;
             position: relative;
-            text-align: center;
-            color: white;
-            font-size: 48px;
+        }
+
+        /* 排名卡片的樣式 */
+        .rank-card {
+            background-color: transparent; /* 透明背景 */
+            border: none; /* 無邊框 */
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        /* 卡片的懸浮效果 */
+        .rank-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* 圖片內部的間隔 */
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(200, 200, 200, 0.7)); /* 輕微白色漸層 */
+            overflow: hidden;
+            margin-bottom: 15px;
+            padding: 5px; /* 圖片和外框之間的間隔 */
+        }
+
+        /* 外層容器新增一層包裹圖片 */
+        .avatar-wrapper img {
+            width: 90%; /* 保證圖片充滿容器 */
+            height: 90%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* 用戶名稱樣式 */
+        .user-name {
             font-weight: bold;
-            border-radius: 6px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
-        .step:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 16px 25px rgba(0, 0, 0, 0.3);
-        }
-
-        /* 數字置中 */
-        .step .number {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-        }
-
-        .step .crown {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: auto;
-        }
-
-        /* 台階的上蓋 */
-        .step::after {
-            content: "";
-            position: absolute;
-            top: -40px;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-        }
-
-        /* 第一名 */
-        .first {
-            height: 150px;
-            background: linear-gradient(to bottom right, #fff9c4, #fdd835);
-        }
-
-        .first::after {
-            background: #ffe066;
-        }
-
-        .first .number {
-            color: #d4a017;
-        }
-
-        /* 第二名 */
-        .second {
-            height: 100px;
-            background: linear-gradient(to bottom right, #f5f5f5, #b0bec5);
-        }
-
-        .second::after {
-            background: #e0e0e0;
-        }
-
-        .second .number {
+        /* 用戶得分樣式 */
+        .user-score {
+            font-size: 1rem;
             color: #888;
         }
 
+        /* 排名標籤 */
+        .rank-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* 第一名標籤 - 金色 */
+        .rank-label-1 {
+            color: #FFD700; /* 金色 */
+        }
+
+        /* 第二名標籤 - 銀色 */
+        .rank-label-2 {
+            color: #C0C0C0; /* 銀色 */
+        }
+
+        /* 第三名標籤 - 銅色 */
+        .rank-label-3 {
+            color: #CD7F32; /* 銅色 */
+        }
+
+        /* 排名卡片的透明背景設置（包括第一名） */
+        .rank-1, .rank-2, .rank-3 {
+            background-color: transparent; /* 透明背景 */
+        }
+
+        /* 第一名特殊樣式 (中間突出) */
+        .rank-1 {
+            background-color: transparent; /* 透明背景 */
+        }
+
+        /* 第二名 */
+        .rank-2 {
+            background-color: transparent; /* 透明背景 */
+        }
+
         /* 第三名 */
-        .third {
-            height: 80px;
-            background: linear-gradient(to bottom right, #ffccbc, #bc6c25);
-        }
-
-        .third::after {
-            background: #e49b68;
-        }
-
-        .third .number {
-            color: #8b4513;
+        .rank-3 {
+            background-color: transparent; /* 透明背景 */
         }
 
 
@@ -405,25 +393,45 @@ $popular_result = $link->query($popular_sql);
         </div>
     </div>
     <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3>
-    <!-- 榮譽榜 -->
     <div class="honor-wrapper">
-        <div class="podium">
-            <!-- 第二名 -->
-            <a href="#rank2" class="step second">
-            <div class="number">2</div>
-            </a>
+    <div class="row justify-content-center">
+        <!-- 第二名 -->
+        <div class="col-md-4 text-center">
+            <div class="rank-card rank-2">
+                <div class="avatar-wrapper avatar-2">
+                    <img src="user2.jpg" alt="User 2" class="avatar">
+                </div>
+                <h5 class="user-name">用戶名稱 2</h5>
+                <p class="user-score">得分：4500</p>
+                <p class="rank-label rank-label-2">第二名</p>
+            </div>
+        </div>
 
-            <!-- 第一名 -->
-            <a href="#rank1" class="step first">
-            <div class="number">1</div>
-            </a>
+        <!-- 第一名 -->
+        <div class="col-md-4 text-center">
+            <div class="rank-card rank-1">
+                <div class="avatar-wrapper avatar-1">
+                    <img src="user1.jpg" alt="User 1" class="avatar">
+                </div>
+                <h5 class="user-name">用戶名稱 1</h5>
+                <p class="user-score">得分：5000</p>
+                <p class="rank-label rank-label-1">第一名</p>
+            </div>
+        </div>
 
-            <!-- 第三名 -->
-            <a href="#rank3" class="step third">
-            <div class="number">3</div>
-            </a>
+        <!-- 第三名 -->
+        <div class="col-md-4 text-center">
+            <div class="rank-card rank-3">
+                <div class="avatar-wrapper avatar-3">
+                    <img src="user3.jpg" alt="User 3" class="avatar">
+                </div>
+                <h5 class="user-name">用戶名稱 3</h5>
+                <p class="user-score">得分：4000</p>
+                <p class="rank-label rank-label-3">第三名</p>
+            </div>
         </div>
     </div>
+</div>
 
 
 

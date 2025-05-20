@@ -205,142 +205,103 @@ $popular_result = $link->query($popular_sql);
 
 
        /* 榮譽標章容器 */
+        /* 榮譽榜容器樣式 */
         .honor-wrapper {
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 40px;
-            border: 1px solid #ccc;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.95); /* 淺色背景區別於白色 */
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-        }
-
-        /* 頒獎台排列方式 */
-        .award-stand {
             position: relative;
-            display: flex;
-            padding-top: 50px;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 20px;
-            margin-top: 20px;
         }
 
-        /* 頒獎台平台 */
-        .award-stand::before {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 20px;
-            background: #555;
-            border-radius: 5px 5px 0 0;
-            z-index: 1;
-        }
-
-        /* 獎項外觀 */
-        .award-item {
-            position: relative;
-            width: auto;
-            max-width: 250px;
-            min-width: 120px;
+        /* 排名卡片的樣式 */
+        .rank-card {
+            background-color: transparent; /* 透明背景 */
+            border: none; /* 無邊框 */
             padding: 20px;
-            background: transparent;
-            color: #333;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-sizing: border-box;
-
-            /* 載入時從下往上淡入 */
-            opacity: 0;
-            transform: translateY(30px);
-            animation: rise 0.6s ease-out forwards;
-        }
-        .award-item:nth-child(1) { animation-delay: 0.4s; }
-        .award-item:nth-child(2) { animation-delay: 0.6s; }
-        .award-item:nth-child(3) { animation-delay: 0.8s; }
-
-        /* 獎項內容區 */
-        .award-content {
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(to bottom, #ffffff, #e2e2e2);
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-grow: 1;
-            border-radius: 15px;
-            max-height: 200px;
-            min-height: 100px;
-            width: 100%;
-            box-sizing: border-box;
+            transition: transform 0.3s ease;
         }
 
-        /* 底座共通樣式 */
-        .award-base {
-            width: 100%;
-            padding: 12px 8px;
-            margin-top: 10px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 10px 10px 0 0;
-            box-shadow:
-                inset 0 4px 8px rgba(0, 0, 0, 0.2),  /* 內陰影讓平台有厚度 */
-                0 4px 10px rgba(0, 0, 0, 0.1);       /* 外陰影讓平台立體 */
+        /* 卡片的懸浮效果 */
+        .rank-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* 圖片內部的間隔 */
+        .avatar-wrapper {
             position: relative;
-            z-index: 1;
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(200, 200, 200, 0.7)); /* 輕微白色漸層 */
+            overflow: hidden;
+            margin-bottom: 15px;
+            padding: 5px; /* 圖片和外框之間的間隔 */
         }
 
-        /* 金獎：最高中間台階 */
-        .award-base.gold {
-            height: 100px;
-            background: linear-gradient(to top, #cfa700, #ffd700);
-            animation: glow 2s ease-in-out infinite alternate;
+        /* 外層容器新增一層包裹圖片 */
+        .avatar-wrapper img {
+            width: 90%; /* 保證圖片充滿容器 */
+            height: 90%;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
-        /* 銀獎：右側第二高 */
-        .award-base.silver {
-            height: 70px;
-            background: linear-gradient(to top, #a8a8a8, #e0e0e0);
-            animation: glow 2.5s ease-in-out infinite alternate;
+        /* 用戶名稱樣式 */
+        .user-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
-        /* 銅獎：左側最矮 */
-        .award-base.bronze {
-            height: 50px;
-            background: linear-gradient(to top, #8a4f2c, #cd7f32);
-            animation: glow 3s ease-in-out infinite alternate;
+        /* 用戶得分樣式 */
+        .user-score {
+            font-size: 1rem;
+            color: #888;
         }
 
-        /* 閃爍效果 */
-        @keyframes glow {
-            from {
-                box-shadow:
-                    inset 0 4px 8px rgba(0, 0, 0, 0.2),
-                    0 0 8px rgba(255, 255, 255, 0.2);
-            }
-            to {
-                box-shadow:
-                    inset 0 4px 8px rgba(0, 0, 0, 0.3),
-                    0 0 16px rgba(255, 255, 255, 0.4);
-            }
+        /* 排名標籤 */
+        .rank-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 10px;
         }
 
-        /* 小圖示樣式 */
-        .honor-icon {
-            margin-right: 6px;
-            color: white;
+        /* 第一名標籤 - 金色 */
+        .rank-label-1 {
+            color: #FFD700; /* 金色 */
         }
 
+        /* 第二名標籤 - 銀色 */
+        .rank-label-2 {
+            color: #C0C0C0; /* 銀色 */
+        }
 
-        /* — 動畫定義 — */
-        @keyframes rise {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
+        /* 第三名標籤 - 銅色 */
+        .rank-label-3 {
+            color: #CD7F32; /* 銅色 */
+        }
+
+        /* 排名卡片的透明背景設置（包括第一名） */
+        .rank-1, .rank-2, .rank-3 {
+            background-color: transparent; /* 透明背景 */
+        }
+
+        /* 第一名特殊樣式 (中間突出) */
+        .rank-1 {
+            background-color: transparent; /* 透明背景 */
+        }
+
+        /* 第二名 */
+        .rank-2 {
+            background-color: transparent; /* 透明背景 */
+        }
+
+        /* 第三名 */
+        .rank-3 {
+            background-color: transparent; /* 透明背景 */
         }
     </style>
 </head>
@@ -431,107 +392,45 @@ $popular_result = $link->query($popular_sql);
         </div>
     </div>
     <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3>
-    <!-- 榮譽榜 -->
     <div class="honor-wrapper">
-    <div class="award-stand">
-        <?php
-        require_once "db_connect.php";
+        <div class="row justify-content-center">
+            <!-- 第二名 -->
+            <div class="col-md-4 text-center">
+                <div class="rank-card rank-2">
+                    <div class="avatar-wrapper avatar-2">
+                        <img src="user2.jpg" alt="User 2" class="avatar">
+                    </div>
+                    <h5 class="user-name">用戶名稱 2</h5>
+                    <p class="user-score">捐贈金額：4500</p>
+                    <p class="rank-label rank-label-2">第二名</p>
+                </div>
+            </div>
 
-        // 查詢捐款金額前 3 名的第一等級用戶
-        $honor_sql = "
-            SELECT h.Honor_Type, u.User_Name, SUM(d.Donation_Amount) AS Total_Donated
-            FROM HonorTag h
-            JOIN UserAccount u ON h.User_ID = u.User_ID
-            LEFT JOIN Donation d ON h.User_ID = d.User_ID
-            WHERE h.Honor_Type = '第一等級'
-            GROUP BY h.User_ID
-            ORDER BY Total_Donated DESC
-            LIMIT 3;
-        ";
+            <!-- 第一名 -->
+            <div class="col-md-4 text-center">
+                <div class="rank-card rank-1">
+                    <div class="avatar-wrapper avatar-1">
+                        <img src="user1.jpg" alt="User 1" class="avatar">
+                    </div>
+                    <h5 class="user-name">用戶名稱 1</h5>
+                    <p class="user-score">捐贈金額：5000</p>
+                    <p class="rank-label rank-label-1">第一名</p>
+                </div>
+            </div>
 
-        $honors_result = $link->query($honor_sql);
-
-        if ($honors_result === false) {
-            die("資料庫查詢錯誤: " . $link->error);
-        }
-
-        $honors = [];
-
-        // 儲存前 3 名（或缺席名次）
-        while ($row = $honors_result->fetch_assoc()) {
-            $honors[] = $row;
-        }
-
-        // 若不足 3 位，就補隨機資料
-        if (count($honors) < 3) {
-            $remaining = 3 - count($honors);
-
-            // 找出尚未在前3名的第一等級用戶來補位
-            $filled_ids = array_map(function ($h) {
-                return "'" . $h['User_Name'] . "'";
-            }, $honors);
-
-            $exclude_clause = count($filled_ids) > 0 ? "AND u.User_Name NOT IN (" . implode(",", $filled_ids) . ")" : "";
-
-            $fallback_sql = "
-                SELECT h.Honor_Type, u.User_Name
-                FROM HonorTag h
-                JOIN UserAccount u ON h.User_ID = u.User_ID
-                WHERE h.Honor_Type = '第一等級' $exclude_clause
-                ORDER BY RAND()
-                LIMIT $remaining;
-            ";
-
-            $fallback_result = $link->query($fallback_sql);
-            while ($row = $fallback_result->fetch_assoc()) {
-                $honors[] = $row;
-            }
-        }
-
-        // 固定順序：銅（金銀銅顯示位置），但名次仍是「第一名」「第二名」「第三名」
-        $positions = [
-            ['rank' => '第三名', 'color' => 'bronze'],
-            ['rank' => '第一名', 'color' => 'gold'],
-            ['rank' => '第二名', 'color' => 'silver'],
-        ];
-
-        // 實際顯示順序：左-銅，中-金，右-銀
-        for ($i = 0; $i < 3; $i++) {
-            // 金→銀→銅 對應資料順序：$honors[0], $honors[1], $honors[2]
-            $dataIndex = match ($i) {
-                0 => 2, // 左邊顯示第三名（銅）
-                1 => 0, // 中間顯示第一名（金）
-                2 => 1, // 右邊顯示第二名（銀）
-            };
-
-            $data = $honors[$dataIndex] ?? null;
-            $rank_name = $positions[$i]['rank'];
-            $color_class = $positions[$i]['color'];
-
-            echo '<div class="award-item">';
-            echo '<div class="award-content">';
-            echo '<h5>' . $rank_name . '</h5>';
-
-            if ($data) {
-                echo '<p>' . htmlspecialchars($data['User_Name']) . '！</p>';
-                if (isset($data['Total_Donated'])) {
-                    echo '<p>捐款總額：' . (empty($data['Total_Donated']) ? '無捐款紀錄' : htmlspecialchars($data['Total_Donated']) . ' 元') . '</p>';
-                }
-            } else {
-                echo '<p>尚未有人</p>';
-            }
-
-            echo '</div>';
-            echo '<div class="award-base ' . $color_class . '"><i class="fas fa-trophy honor-icon"></i> ' . $rank_name . '</div>';
-            echo '</div>';
-        }
-        ?>
+            <!-- 第三名 -->
+            <div class="col-md-4 text-center">
+                <div class="rank-card rank-3">
+                    <div class="avatar-wrapper avatar-3">
+                        <img src="user3.jpg" alt="User 3" class="avatar">
+                    </div>
+                    <h5 class="user-name">用戶名稱 3</h5>
+                    <p class="user-score">捐贈金額：4000</p>
+                    <p class="rank-label rank-label-3">第三名</p>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-
-
-
 
 </body>
 
