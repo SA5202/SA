@@ -54,12 +54,12 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         .contact-title {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #6c713d;
+            color:rgb(70, 104, 131);
             margin-bottom: 30px;
         }
 
         .contact-title i {
-            color: #6c713d;
+            color:rgb(70, 104, 131);
             font-size: 1.8rem;
             /* 設定圖示的基本大小 */
             width: 1.5rem;
@@ -72,7 +72,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         .icon {
-            color: #6c713d;
+            color:rgb(70, 104, 131);
             font-size: 1.3rem;
             /* 設定圖示的基本大小 */
             width: 1.5rem;
@@ -97,7 +97,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         }
 
         a {
-            color: #3366cc;
+            color:rgb(31, 144, 210);
             text-decoration: none;
         }
 
@@ -112,7 +112,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 
         .note {
             font-size: 0.95rem;
-            color: #666;
+            color: rgb(165, 189, 109);
         }
     </style>
 </head>
@@ -132,7 +132,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         <div class="divider"></div>
 
         <div class="contact-section">
-            <p><b>承辦人： </b>邱小姐</p>
+            <p><b>承辦人： </b>陳小姐</p>
             <p><b>聯絡電話： </b><a href="tel:(02)2905-3031">(02) 2905-3031</a></p>
         </div>
 
