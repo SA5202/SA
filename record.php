@@ -161,25 +161,14 @@ $row_user = $result_user->fetch_assoc();
             font-weight: bold;
         }
 
-        .table {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .table:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
         .table-responsive {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px 20px;
-            border-radius: 30px;
+            border-radius: 40px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.2s ease-in-out;
         }
 
         .table-responsive:hover {
@@ -199,11 +188,18 @@ $row_user = $result_user->fetch_assoc();
 
         .table {
             width: 100%;
-            border-radius: 25px;
+            border-radius: 30px;
             border: 2px solid #dee2e6;
             border-collapse: separate;
             overflow: hidden;
             border-spacing: 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .table:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .table th,

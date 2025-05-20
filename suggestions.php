@@ -8,6 +8,7 @@ $is_logged_in = isset($_SESSION['User_Name']);
 $keyword = $_GET['keyword'] ?? '';
 $facility = $_GET['facility'] ?? '';
 $building = $_GET['building'] ?? '';
+$college = isset($_GET['college']) ? mysqli_real_escape_string($link, $_GET['college']) : '';
 $sort = $_GET['sort'] ?? 'latest';
 
 $sql = "
@@ -34,6 +35,7 @@ SELECT
 FROM Suggestion s
 JOIN Facility f ON s.Facility_ID = f.Facility_ID
 JOIN Building b ON s.Building_ID = b.Building_ID
+JOIN College c ON b.College_ID = c.College_ID
 WHERE 1=1
 ";
 
@@ -70,6 +72,9 @@ if (!empty($facility)) {
 if (!empty($building)) {
     $sql .= " AND b.Building_Name = '$building'";
 }
+if (!empty($college)) {
+    $sql .= " AND c.College_Name = '$college'";
+}
 
 
 // 根據選擇的排序條件修改 SQL 查詢
@@ -83,7 +88,8 @@ if ($sort == 'oldest') {
 
 $result = $link->query($sql);
 
-// 抓建築與設施選單
+// 取得學院、建築與設施選單
+$colleges = $link->query("SELECT DISTINCT College_Name FROM College ORDER BY College_ID");
 $buildings = $link->query("
     SELECT DISTINCT Building_Name 
     FROM Building 
@@ -106,8 +112,8 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         }
 
         body {
-            max-width: 85%;
-            margin: 50px auto;
+            max-width: 88%;
+            margin: 30px auto;
             padding: 30px;
             background-color: transparent;
             font-family: "Noto Serif TC", serif;
@@ -129,19 +135,13 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 表單區塊，應用玻璃效果 */
         form {
             display: flex;
-            flex-wrap: nowrap;
-            gap: 1.2rem;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            border-radius: 25px;
-            align-items: flex-end;
-            overflow-x: auto;
-
-            /* 更深的灰色背景，與卡片內容區區分 */
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            border-radius: 30px;
             background: rgba(241, 244, 249, 0.7);
             backdrop-filter: blur(8px);
-            /* 稍微減弱模糊效果 */
-            -webkit-backdrop-filter: blur(8px);
             border: 1px solid #ccc;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
             transition: transform 0.2s ease-in-out;
@@ -152,27 +152,58 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             box-shadow: 0 6px 28px rgba(0, 0, 0, 0.18);
         }
 
-        form>div {
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .form-row > div {
+            flex: 1 1 20%;
+            min-width: 200px;
             display: flex;
             flex-direction: column;
-            flex: 1.2;
-            min-width: 10px;
         }
 
-        form>div:nth-child(5) {
-            flex: 1.6;
+        .second-row {
+            display: flex;
+            gap: 1rem; /* 控制第二行兩個區域之間的間距 */
+            width: 100%;
         }
 
-        form>div:last-child {
-            flex: 0 0 auto;
+        .second-row > div:last-child {
+            flex: 1 1 50%; /* 排序依據占用較窄的空間 */
+        }
+
+        /* 將搜尋欄部分的佈局進行調整 */
+        .keyword-submit {
+            flex: 1 1 100%;
+        }
+
+        .search-group {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .keyword-submit input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .keyword-submit button {
+            flex-shrink: 0;
         }
 
         label {
             font-weight: 750;
             font-size: 0.95rem;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.2rem;
             color: #4c5b63;
-            /* 深灰藍色 */
         }
 
         input[type="text"],
@@ -226,7 +257,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         /* 卡片樣式：帶漸層+玻璃感+陰影 */
         .card {
             padding: 2.5rem;
-            border-radius: 25px;
+            border-radius: 30px;
             border: 1px solid #ccc;
             background-color: white;
             backdrop-filter: blur(14px);
@@ -340,53 +371,67 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 <body>
     <!-- 篩選表單 -->
     <form method="get">
-        <div>
-            <label>依設施分類</label>
-            <select name="facility">
-                <option value="">全部設施</option>
-                <?php while ($f = $facilities->fetch_assoc()): ?>
-                    <option value="<?= $f['Facility_Type'] ?>" <?= $facility == $f['Facility_Type'] ? "selected" : "" ?>>
-                        <?= $f['Facility_Type'] ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
+        <div class="form-row">
+            <div>
+                <label>依設施分類</label>
+                <select name="facility">
+                    <option value="">全部設施</option>
+                    <?php while ($f = $facilities->fetch_assoc()): ?>
+                        <option value="<?= $f['Facility_Type'] ?>" <?= $facility == $f['Facility_Type'] ? "selected" : "" ?>>
+                            <?= $f['Facility_Type'] ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <div>
+                <label>依建築物分類</label>
+                <select name="building">
+                    <option value="">全部建築物</option>
+                    <?php while ($b = $buildings->fetch_assoc()): ?>
+                        <option value="<?= $b['Building_Name'] ?>" <?= $building == $b['Building_Name'] ? "selected" : "" ?>>
+                            <?= $b['Building_Name'] ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+            <div>
+                <label>依學院分類</label>
+                <select name="college">
+                    <option value="">所有學院</option>
+                    <?php while ($c = $colleges->fetch_assoc()): ?>
+                        <option value="<?= $c['College_Name'] ?>" <?= $college == $c['College_Name'] ? "selected" : "" ?>>
+                            <?= $c['College_Name'] ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
         </div>
-        <div>
-            <label>依建築物分類</label>
-            <select name="building">
-                <option value="">全部建築物</option>
-                <?php while ($b = $buildings->fetch_assoc()): ?>
-                    <option value="<?= $b['Building_Name'] ?>" <?= $building == $b['Building_Name'] ? "selected" : "" ?>>
-                        <?= $b['Building_Name'] ?>
-                    </option>
-                <?php endwhile; ?>
-            </select>
-        </div>
-        <div>
-            <label>排序依據</label>
-            <select name="sort">
-                <option value="latest" <?= $sort == "latest" ? "selected" : "" ?>>由最新到最舊</option>
-                <option value="oldest" <?= $sort == "oldest" ? "selected" : "" ?>>由最舊到最新</option>
-                <option value="likes" <?= $sort == "likes" ? "selected" : "" ?>>最多人點讚</option>
-            </select>
-        </div>
-        <div>
-            <label>處理進度</label>
-            <select name="progress">
-                <option value="all" <?= $progress == "all" ? "selected" : "" ?>>所有進度</option>
-                <option value="unprocessed" <?= $progress == "unprocessed" ? "selected" : "" ?>>未受理</option>
-                <option value="reviewing" <?= $progress == "reviewing" ? "selected" : "" ?>>審核中</option>
-                <option value="processing" <?= $progress == "processing" ? "selected" : "" ?>>處理中</option>
-                <option value="completed" <?= $progress == "completed" ? "selected" : "" ?>>已完成</option>
-
-            </select>
-        </div>
-        <div>
-            <label>搜尋關鍵字</label>
-            <input type="text" name="keyword" value="<?= htmlspecialchars($keyword) ?>" placeholder="輸入標題或描述">
-        </div>
-        <div>
-            <button type="submit">查詢</button>
+        <div class="form-row second-row">
+            <div>
+                <label>排序依據</label>
+                <select name="sort">
+                    <option value="latest" <?= $sort == "latest" ? "selected" : "" ?>>由最新到最舊</option>
+                    <option value="oldest" <?= $sort == "oldest" ? "selected" : "" ?>>由最舊到最新</option>
+                    <option value="likes" <?= $sort == "likes" ? "selected" : "" ?>>最多人點讚</option>
+                </select>
+            </div>
+            <div>
+                <label>處理進度</label>
+                <select name="progress">
+                    <option value="all" <?= $progress == "all" ? "selected" : "" ?>>所有進度</option>
+                    <option value="unprocessed" <?= $progress == "unprocessed" ? "selected" : "" ?>>未受理</option>
+                    <option value="reviewing" <?= $progress == "reviewing" ? "selected" : "" ?>>審核中</option>
+                    <option value="processing" <?= $progress == "processing" ? "selected" : "" ?>>處理中</option>
+                    <option value="completed" <?= $progress == "completed" ? "selected" : "" ?>>已完成</option>
+                </select>
+            </div>
+            <div class="keyword-submit">
+                <label>搜尋關鍵字</label>
+                <div class="search-group">
+                    <input type="text" name="keyword" value="<?= htmlspecialchars($keyword) ?>" placeholder="輸入標題或描述">
+                    <button type="submit">查詢</button>
+                </div>
+            </div>
         </div>
     </form>
 
