@@ -409,16 +409,30 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
         $avatarPath = !empty($user['Avatar']) ? htmlspecialchars($user['Avatar']) : $defaultAvatar;
         $avatarWithTimestamp = $avatarPath . '?t=' . time(); // 防快取
         ?>
-        <div class="user-info-logout btn-position">
-            <a href="record.php" target="contentFrame">
-                <img src="<?= $avatarWithTimestamp ?>" alt="頭像" class="avatar" style="cursor:pointer;"
-                    onerror="this.src='<?= $defaultAvatar ?>';">
-            </a>
-            <a href="record.php" target="contentFrame" class="nickname-link">
-                <span class="Nickname"><b><?= $nickname ?></b></span>
-            </a>
-            <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
-        </div>
+        <?php if ($is_admin): ?>
+            <div class="user-info-logout btn-position">
+                <a href="record.php" target="contentFrame">
+                    <img src="<?= $avatarWithTimestamp ?>" alt="頭像" class="avatar" style="cursor:pointer;"
+                        onerror="this.src='<?= $defaultAvatar ?>';">
+                </a>
+                <a href="record_admin.php" target="contentFrame" class="nickname-link">
+                    <span class="Nickname"><b><?= $nickname ?></b></span>
+                </a>
+                <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
+            </div>
+        <?php else: ?>
+            <div class="user-info-logout btn-position">
+                <a href="record.php" target="contentFrame">
+                    <img src="<?= $avatarWithTimestamp ?>" alt="頭像" class="avatar" style="cursor:pointer;"
+                        onerror="this.src='<?= $defaultAvatar ?>';">
+                </a>
+                <a href="record.php" target="contentFrame" class="nickname-link">
+                    <span class="Nickname"><b><?= $nickname ?></b></span>
+                </a>
+                <a href="logout.php" target="contentFrame" class="btn btn-prussian logout-link">登出</a>
+            </div>
+        <?php endif; ?>
+
     <?php else: ?>
         <a href="login.php" target="contentFrame">
             <button class="btn btn-custom btn-position">
