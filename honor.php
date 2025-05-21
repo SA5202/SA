@@ -261,6 +261,78 @@ if (!$suggestion_result) {
             font-size: 1.05rem;
             margin-bottom: 0.6rem;
         }
+
+        /* 共用迷你錦旗基底 */
+        .mini-pennant {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 56px;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+        position: relative;
+        margin-right: 8px;
+        vertical-align: middle;
+        font-family: 'Microsoft JhengHei', sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        color: #c00;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* 頂部橫條 */
+        .mini-pennant::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 4px;
+        background: currentColor;
+        opacity: 0.6;
+        }
+
+        /* 底部流蘇 */
+        .mini-pennant::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background: repeating-linear-gradient(
+            to right,
+            rgba(255,255,255,0.7) 0 3px,
+            rgba(0,0,0,0.1) 3px 6px
+        );
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
+        }
+
+        /* 各等級變化 */
+        .mini-pennant.vip1 {
+        background: #ffeb3b;          /* 純黃色 */
+        color: #b8860b;              /* 文字深金色 */
+        }
+        .mini-pennant.vip2 {
+        background: linear-gradient(to bottom, #ffe600, #ff6600);
+        }
+        .mini-pennant.vip3 {
+        background: linear-gradient(to bottom, #ffe600, #ff6600);
+        }
+        .mini-pennant.vip4 {
+        background: linear-gradient(to bottom, #ffd700, #ff8c00);
+        box-shadow: 0 2px 6px rgba(255, 140, 0, 0.6), inset 0 0 8px rgba(255,255,255,0.5);
+        }
+        .mini-pennant.vip5 {
+        background: linear-gradient(to bottom, #ffec8b, #ff4500);
+        box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
+        animation: glow 2s infinite alternate;
+        }
+
+        /* 閃爍動畫 */
+        @keyframes glow {
+        from { box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7); }
+        to   { box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255,255,255,1); }
+        }
+
     </style>
 </head>
 <body>
@@ -364,8 +436,9 @@ if (!$suggestion_result) {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <!-- 主體內容 -->
+                
                 <div class="modal-body">
+                    <!-- 用法 
                     <p class="mb-3">🎉 歡迎使用 <strong>輔仁大學愛校建言捐款系統</strong> 的榮譽榜功能！以下是詳細說明：</p>
 
                     <ul class="list-unstyled ps-4">
@@ -389,11 +462,39 @@ if (!$suggestion_result) {
 
                     <p class="mt-4 text-info-emphasis">
                         ✨ <strong>此功能旨在表揚積極參與的同學與校友，感謝您的熱情與支持！</strong>
-                    </p>
+                    </p>-->
+                    
+                    <!-- 榮譽等級說明 -->
+                    <h5 class="mt-4">
+  <i class="fa-solid fa-trophy me-2"></i> 榮譽等級說明
+</h5>
+<ul class="list-unstyled ps-4">
+  <li class="mb-3">
+    <span class="mini-pennant vip1">VIP1</span>
+    <strong>VIP1：</strong> 只要有進行捐款，即可獲得此榮譽等級（捐款金額：無門檻）。
+  </li>
+  <li class="mb-3">
+    <span class="mini-pennant vip2">VIP2</span>
+    <strong>VIP2：</strong> 捐款金額達 1,000 元以上者，將獲得此榮譽等級。
+  </li>
+  <li class="mb-3">
+    <span class="mini-pennant vip3">VIP3</span>
+    <strong>VIP3：</strong> 捐款金額達 5,000 元以上者，將獲得此榮譽等級。
+  </li>
+  <li class="mb-3">
+    <span class="mini-pennant vip4">VIP4</span>
+    <strong>VIP4：</strong> 捐款金額達 10,000 元以上者，將獲得此榮譽等級。
+  </li>
+  <li class="mb-3">
+    <span class="mini-pennant vip5">VIP5</span>
+    <strong>VIP5：</strong> 捐款金額總數排名前 10 名者，將獲得此榮譽等級。
+  </li>
+</ul>
                 </div>
             </div>
         </div>
     </div>
+
 
 </body>
 
