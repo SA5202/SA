@@ -170,6 +170,12 @@ $row_user = $result_user->fetch_assoc();
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .table-responsive:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .table th {
@@ -182,13 +188,16 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .table {
-            width: 100%;
-            border-radius: 25px;
-            border: 2px solid #dee2e6;
-            border-collapse: separate;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 20px;
             overflow: hidden;
-            border-spacing: 0;
         }
+
+        .table:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
 
         .table th,
         .table td {
