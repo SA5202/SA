@@ -131,9 +131,15 @@ if ($result) {
 </div>
 
 <script>
-    setTimeout(() => {
+    setTimeout(function () {
         const alert = document.querySelector('.alert');
-        if (alert) alert.classList.remove('show');
+        if (alert) {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+            setTimeout(() => {
+                alert.remove(); // 真正從 DOM 中移除元素
+            }, 500); // 等淡出動畫完成（Bootstrap 預設約 0.15~0.3 秒）
+        }
     }, 3000);
 </script>
 </body>

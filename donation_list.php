@@ -102,6 +102,13 @@ $result = $link->query($sql);
 <div class="container">
     <h2>捐款紀錄總覽（管理員）</h2>
 
+    <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            捐款紀錄已成功更新！
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <!-- 篩選表單 -->
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-3">
@@ -177,6 +184,18 @@ $result = $link->query($sql);
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
+</script>
+<script>
+    setTimeout(function () {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+            setTimeout(() => {
+                alert.remove(); // 真正從 DOM 中移除元素
+            }, 500); // 等淡出動畫完成（Bootstrap 預設約 0.15~0.3 秒）
+        }
+    }, 3000);
 </script>
 </body>
 </html>
