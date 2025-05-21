@@ -474,30 +474,30 @@ if (!$suggestion_result) {
                     
                     <!-- 榮譽等級說明 -->
                     <h5 class="mt-4">
-  <i class="fa-solid fa-trophy me-2"></i> 榮譽等級說明
-</h5>
-<ul class="list-unstyled ps-4">
-  <li class="mb-3">
-    <span class="mini-pennant vip1">VIP1</span>
-    <strong>VIP1：</strong> 只要有進行捐款，即可獲得此榮譽等級（捐款金額：無門檻）。
-  </li>
-  <li class="mb-3">
-    <span class="mini-pennant vip2">VIP2</span>
-    <strong>VIP2：</strong> 捐款金額達 1,000 元以上者，將獲得此榮譽等級。
-  </li>
-  <li class="mb-3">
-    <span class="mini-pennant vip3">VIP3</span>
-    <strong>VIP3：</strong> 捐款金額達 5,000 元以上者，將獲得此榮譽等級。
-  </li>
-  <li class="mb-3">
-    <span class="mini-pennant vip4">VIP4</span>
-    <strong>VIP4：</strong> 捐款金額達 10,000 元以上者，將獲得此榮譽等級。
-  </li>
-  <li class="mb-3">
-    <span class="mini-pennant vip5">VIP5</span>
-    <strong>VIP5：</strong> 捐款金額總數排名前 10 名者，將獲得此榮譽等級。
-  </li>
-</ul>
+                    <i class="fa-solid fa-trophy me-2"></i> 榮譽等級說明
+                    </h5>
+                    <ul class="list-unstyled ps-4">
+                    <li class="mb-3">
+                        <span class="mini-pennant vip1">VIP1</span>
+                        <strong>VIP1：</strong> 只要有進行捐款，即可獲得此榮譽等級（捐款金額：無門檻）。
+                    </li>
+                    <li class="mb-3">
+                        <span class="mini-pennant vip2">VIP2</span>
+                        <strong>VIP2：</strong> 捐款金額達 1,000 元以上者，將獲得此榮譽等級。
+                    </li>
+                    <li class="mb-3">
+                        <span class="mini-pennant vip3">VIP3</span>
+                        <strong>VIP3：</strong> 捐款金額達 5,000 元以上者，將獲得此榮譽等級。
+                    </li>
+                    <li class="mb-3">
+                        <span class="mini-pennant vip4">VIP4</span>
+                        <strong>VIP4：</strong> 捐款金額達 10,000 元以上者，將獲得此榮譽等級。
+                    </li>
+                    <li class="mb-3">
+                        <span class="mini-pennant vip5">VIP5</span>
+                        <strong>VIP5：</strong> 捐款金額總數排名前 10 名者，將獲得此榮譽等級。
+                    </li>
+                    </ul>
                 </div>
             </div>
         </div>
