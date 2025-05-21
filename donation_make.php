@@ -44,9 +44,15 @@ if ($result) {
         <h2 class="mb-4">愛校捐款</h2>
 
         <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
-            <div class="alert alert-success">捐款成功，感謝您的支持！</div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>捐款成功！</strong> 感謝您的支持，我們已收到您的捐款。
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php elseif (isset($_GET['error'])): ?>
-            <div class="alert alert-danger"><?= htmlspecialchars($_GET['error']) ?></div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>錯誤：</strong> <?= htmlspecialchars($_GET['error']) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php endif; ?>
 
         <form method="POST" action="donate_process.php">
@@ -92,5 +98,14 @@ if ($result) {
             <button type="submit" class="btn btn-primary">提交捐款</button>
         </form>
     </div>
+    <script>
+        setTimeout(function() {
+            let alertBox = document.querySelector('.alert');
+            if (alertBox) {
+                alertBox.classList.remove('show');
+                alertBox.classList.add('fade');
+            }
+        }, 3000); // 3 秒後關閉
+    </script>
 </body>
 </html>
