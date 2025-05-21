@@ -368,6 +368,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span></a>
             <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-cogs"></i><span> 管理建言進度</span></a>
             <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-money-check-alt"></i><span> 手動捐款</span></a>
+            <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span></a>
             <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-donate"></i><span> 管理募款建言</span></a>
             <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span></a>
         <?php else: ?>

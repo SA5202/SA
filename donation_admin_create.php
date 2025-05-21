@@ -121,16 +121,6 @@ if ($result) {
 
         <input type="hidden" name="method_id" value="7"> <!-- 固定為現金 -->
 
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="anonymous" id="anonymous">
-            <label class="form-check-label" for="anonymous">匿名</label>
-        </div>
-
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="receipt" id="receipt">
-            <label class="form-check-label" for="receipt">需要收據</label>
-        </div>
-
         <div class="mb-3">
             <label for="note" class="form-label">備註（可輸入管理員留言）</label>
             <textarea class="form-control" name="note" id="note" rows="2" maxlength="100"></textarea>
