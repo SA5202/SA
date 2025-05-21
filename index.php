@@ -376,6 +376,7 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-bell"></i><span> 公告</span></a>
             <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-scroll"></i><span> 建言總覽</span></a>
             <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-comment-dots"></i><span> 提出建言</span></a>
+            <a href="donation_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-money-check-alt"></i><span> 捐款</span></a>
             <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span> 捐款進度</span></a>
             <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-medal"></i><span> 榮譽機制</span></a>
             <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-phone-alt"></i><span> 聯絡我們</span></a>
