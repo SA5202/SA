@@ -1,15 +1,9 @@
 <?php
 session_start();
-
-// 連線資料庫
-require_once 'db_connect.php'; // ✅ 一定要在使用 $conn 之前
-
-// 如果尚未登入，導回登入頁
 if (!isset($_SESSION['User_Name'])) {
     header("Location: login.php");
     exit();
 }
-
 
 $link = new mysqli('localhost', 'root', '', 'sa');
 if ($link->connect_error) {
@@ -180,9 +174,10 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .table-responsive:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
+
 
         .table th {
             background-color: #f1f3f5;
@@ -194,21 +189,22 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .table {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 20px;
+            overflow: hidden;
             width: 100%;
             border-radius: 25px;
             border: 2px solid #dee2e6;
             border-collapse: separate;
             overflow: hidden;
             border-spacing: 0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-radius: 20px;
-            overflow: hidden;
         }
 
         .table:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
+
 
         .table th,
         .table td {
@@ -271,93 +267,6 @@ $row_user = $result_user->fetch_assoc();
         .table td.highlight-title {
             color: #003153;
             font-weight: bold;
-        }
-
-        /* 外層 ul 加一點陰影和圓角 */
-        .custom-pagination {
-            display: flex;
-            gap: 10px;
-            padding: 0;
-            background-color: rgba(227, 235, 239, 0.42);
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 5px 16px;
-            user-select: none;
-        }
-
-        /* 各個 li */
-        .custom-pagination .page-item {
-            list-style: none;
-        }
-
-        /* 連結外觀 */
-        .custom-pagination .page-link {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 8px 14px;
-            font-weight: 600;
-            font-size: 16px;
-            color: rgb(65, 93, 124);
-            background-color: white;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            min-width: 40px;
-            font-size: 0.75rem;
-            /* 字體變小 */
-            padding: 0.25rem 0.5rem;
-            /* 內距變小，按鈕變小 */
-            min-width: 30px;
-            /* 按鈕寬度變小 */
-            height: 30px;
-            /* 按鈕高度變小 */
-            line-height: 30px;
-            /* 讓文字垂直置中 */
-            border-radius: 4px;
-            /* 圓角 */
-        }
-
-        /* 滑鼠移上去的效果 */
-        .custom-pagination .page-link:hover:not(.disabled) {
-            background-color: rgb(156, 185, 218);
-            color: white;
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
-
-        }
-
-        /* 當前頁面樣式 */
-        .custom-pagination .page-item.active .page-link {
-            background-color: rgb(96, 133, 174);
-            color: white;
-            font-weight: 700;
-
-            cursor: default;
-        }
-
-        /* 禁用狀態 */
-        .custom-pagination .page-item.disabled .page-link {
-            color: #aaa;
-            cursor: not-allowed;
-            background-color: rgb(218, 220, 221);
-            box-shadow: none;
-        }
-
-        /* 讓上一頁下一頁的按鈕大小稍微不同 */
-        .custom-pagination .page-item:first-child .page-link,
-        .custom-pagination .page-item:last-child .page-link {
-            font-weight: 700;
-            color: rgb(65, 93, 124);
-        }
-
-        /* 手機或窄版視窗下自動縮放 */
-        @media (max-width: 480px) {
-            .custom-pagination .page-link {
-                padding: 6px 10px;
-                font-size: 14px;
-                min-width: 32px;
-            }
         }
     </style>
 
@@ -438,18 +347,132 @@ $row_user = $result_user->fetch_assoc();
     <?php else: ?>
         <h3><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄</h3>
     <?php endif; ?>
-    <!-- 建言紀錄容器 -->
-    <div id="donation-record-container"></div>
 
+    <table class="table">
+        <thead class="table-primary">
+            <tr>
+                <th class="fw-bold">建言標題</th>
+                <th class="fw-bold text-center">更新時間</th>
+                <th class="fw-bold text-center">獲得愛心數</th>
+                <th class="fw-bold text-center">編輯建言</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td>
+                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </td>
+                        <td class="text-center update-time">
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span>
+                        </td>
+                        <td class="text-center like-count">
+                            <span class="custom-badge">
+                                <?= ($row['LikeCount'] >= 10000)
+                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️'
+                                    : $row['LikeCount'] . ' ❤️'; ?>
+                            </span>
+                        </td>
+                        <td class="text-center edit-action">
+                            <?php if ($row['User_ID'] == $sessionUserID): ?>
+                                <!-- 本人：只顯示編輯按鈕（編輯頁中包含刪除功能） -->
+                                <form action="suggestion_update.php" method="get" style="display:inline;">
+                                    <input type="hidden" name="Suggestion_ID" value="<?= $row['Suggestion_ID'] ?>">
+                                    <button type="submit" class="pretty-btn">
+                                        <i class="fas fa-pen-to-square"></i> 修改
+                                    </button>
+                                </form>
+                            <?php elseif ($sessionUserType === 'admin'): ?>
+                                <!-- 管理員：只能刪除 -->
+                                <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('管理員確定要刪除這個建言嗎？');" style="display:inline;">
+                                    <input type="hidden" name="suggestion_id" value="<?= $row['Suggestion_ID'] ?>">
+                                    <button type="submit" class="pretty-btn">
+                                        <i class="fas fa-pen-to-square"></i> 刪除
+                                    </button>
+                                </form>
+                            <?php endif; ?>
+                        </td>
+
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="4" class="text-muted">目前沒有建言紀錄。</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <?php
+    // 撈取使用者按讚過的建言
+    $sql_likes = "
+    SELECT s.Suggestion_ID, s.Title, s.Updated_At,
+       (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
+FROM Upvote u
+JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
+WHERE u.User_ID = ? AND u.Is_Upvoted = 1
+ORDER BY s.Updated_At DESC
+";
+
+    $stmt_likes = $link->prepare($sql_likes);
+    if (!$stmt_likes) {
+        die("按讚查詢準備失敗: " . $link->error);
+    }
+
+    $stmt_likes->bind_param("i", $viewUserID);
+    $stmt_likes->execute();
+    $likes_result = $stmt_likes->get_result();
+    ?>
 
     <?php if ($sessionUserType == 'admin'): ?>
         <h3><i class="icon fas fa-clipboard-list"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的按讚記錄</h3>
     <?php else: ?>
         <h3><i class="icon fas fa-clipboard-list"></i> 我的按讚紀錄</h3>
     <?php endif; ?>
-    <div id="liked-records">
-        <!-- AJAX 會在這裡載入表格與分頁按鈕 -->
-    </div>
+
+    <table class="table">
+        <thead class="table-primary">
+            <tr>
+                <th class="fw-bold">建言標題</th>
+                <th class="fw-bold text-center">更新時間</th>
+                <th class="fw-bold text-center">獲得愛心數</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($likes_result->num_rows > 0): ?>
+                <?php while ($row = $likes_result->fetch_assoc()): ?>
+                    <tr>
+                        <td>
+                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </td>
+                        <td class="text-center update-time">
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span>
+                        </td>
+                        <td class="text-center like-count">
+                            <span class="custom-badge">
+                                <?= ($row['LikeCount'] >= 10000)
+                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️'
+                                    : $row['LikeCount'] . ' ❤️'; ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="3" class="text-muted">目前沒有按讚紀錄。</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <?php
+    $stmt_likes->close();
+    ?>
 
 
     <?php
@@ -516,7 +539,9 @@ $row_user = $result_user->fetch_assoc();
                     $funding_status_class = 'funding-status-' . preg_replace('/\s+/', '', $row['Funding_Status']);
                 ?>
                     <tr>
-                        <td class="highlight-title"><?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?></td>
+                        <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                            <?= htmlspecialchars($row["Title"]) ?>
+                        </a>
                         <td>$<?= number_format($row['Donation_Amount'], 0) ?></td>
                         <td><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
                         <td>
@@ -566,99 +591,7 @@ $row_user = $result_user->fetch_assoc();
             passwordDisplay.style.color = '#555';
         }
     </script>
-    <!-- AJAX 載入表格與分頁 -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function loadDonationPage(page = 1) {
-            $.ajax({
-                url: 'load_donations.php',
-                type: 'GET',
-                data: {
-                    page: page
-                },
-                success: function(response) {
-                    $('#donation-record-container').html(response);
-                },
-                error: function() {
-                    $('#donation-record-container').html('<div class="text-danger">無法載入資料，請稍後再試。</div>');
-                }
-            });
-        }
 
-        $(document).ready(function() {
-            loadDonationPage(); // 預設載入第一頁
-
-            // 綁定動態分頁按鈕點擊事件
-            $(document).on('click', '.donation-page-link', function(e) {
-                e.preventDefault();
-                const page = $(this).data('page');
-                loadDonationPage(page);
-            });
-        });
-    </script>
-    <script>
-        function loadLikes(page = 1) {
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "load_likes.php?page=" + page, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    document.getElementById("likes-table-body").innerHTML = xhr.responseText;
-                }
-            };
-            xhr.send();
-        }
-
-        // 初始化：載入第一頁
-        document.addEventListener("DOMContentLoaded", function() {
-            loadLikes(1);
-        });
-    </script>
-    <script>
-        function loadLikes(page = 1) {
-            const xhr = new XMLHttpRequest();
-            xhr.open("GET", "load_likes.php?page=" + page, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    document.getElementById("likes-table-body").innerHTML = xhr.responseText;
-                }
-            };
-            xhr.send();
-        }
-
-        // 初始化：載入第一頁
-        document.addEventListener("DOMContentLoaded", function() {
-            loadLikes(1);
-        });
-    </script>
-    <script>
-        function loadLikedSuggestions(page = 1) {
-            $.ajax({
-                url: 'liked_suggestions_data.php',
-                type: 'GET',
-                data: {
-                    page
-                },
-                success: function(data) {
-                    $('#liked-records').html(data);
-                },
-                error: function() {
-                    $('#liked-records').html('<p>載入失敗，請稍後再試。</p>');
-                }
-            });
-        }
-
-        // 初始載入
-        $(document).ready(function() {
-            loadLikedSuggestions();
-
-            // 分頁點擊事件（使用事件代理）
-            $('#liked-records').on('click', '.like-page-link', function(e) {
-                e.preventDefault();
-                const page = $(this).data('page');
-                loadLikedSuggestions(page);
-            });
-        });
-    </script>
 
 </body>
 
