@@ -341,6 +341,51 @@ if (!$suggestion_result) {
                 box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255,255,255,1); 
             }
         }
+
+
+        /* 放大旗幟 */
+        .mini-pennant.vip1.large {
+            background: #ffeb3b; /* 純黃色 */
+            color: #b8860b; /* 文字深金色 */
+            transform: scale(1.5); /* 放大1.5倍 */
+        }
+
+        .mini-pennant.vip2.large {
+            background: #ffeb3b; /* 純黃色 */
+            color: #b8860b; /* 文字深金色 */
+            transform: scale(1.5); /* 放大1.5倍 */
+        }
+
+        .mini-pennant.vip3.large {
+            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
+            transform: scale(1.5); /* 放大1.5倍 */
+        }
+
+        .mini-pennant.vip4.large {
+            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
+            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
+            transform: scale(1.5); /* 放大1.5倍 */
+        }
+
+        .mini-pennant.vip5.large {
+            background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
+            animation: glow 2s infinite alternate;
+            transform: scale(1.5); /* 放大1.5倍 */
+        }
+
+        /* 防止輪播按鈕重疊文字 */
+        #vipCarousel .carousel-inner {
+            padding-right: 50px; /* 右側留出空間給輪播按鈕 */
+            padding-left: 50px;  /* 左側留出空間給輪播按鈕 */
+        }
+
+        #vipCarousel .carousel-control-prev,
+        #vipCarousel .carousel-control-next {
+            z-index: 10; /* 確保按鈕位於文字區域的前面 */
+        }
+
+        
     </style>
 </head>
 <body>
@@ -498,11 +543,62 @@ if (!$suggestion_result) {
                         <strong>VIP5：</strong> 捐款金額總數排名前 10 名者，將獲得此榮譽等級。
                     </li>
                     </ul>
+
+                    <!-- 輪播區域開始 -->
+                    <h5 class="mt-4">
+                        <i class="fa-solid fa-gift me-2"></i> 每個VIP等級詳細介紹
+                    </h5>
+
+                    <div id="vipCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="text-center">
+                                    <span class="mini-pennant vip1 large">VIP1</span>
+                                    <p class="mt-3"><strong>VIP1</strong>: 此等級會有.........的福利</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <span class="mini-pennant vip2 large">VIP2</span>
+                                    <p class="mt-3"><strong>VIP2</strong>: 尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <span class="mini-pennant vip3 large">VIP3</span>
+                                    <p class="mt-3"><strong>VIP3</strong>: 捐款金額達 5,000 元以上者，將獲得此榮譽等級。</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <span class="mini-pennant vip4 large">VIP4</span>
+                                    <p class="mt-3"><strong>VIP4</strong>: 捐款金額達 10,000 元以上者，將獲得此榮譽等級。</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="text-center">
+                                    <span class="mini-pennant vip5 large">VIP5</span>
+                                    <p class="mt-3"><strong>VIP5</strong>: 捐款金額總數排名前 10 名者，將獲得此榮譽等級。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 輪播控制 -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#vipCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#vipCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </div>
-
 
 </body>
 
