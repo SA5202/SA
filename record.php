@@ -174,8 +174,8 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .table-responsive:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         }
 
         .table th {
@@ -188,16 +188,21 @@ $row_user = $result_user->fetch_assoc();
         }
 
         .table {
+            width: 100%;
+            border-radius: 25px;
+            border: 2px solid #dee2e6;
+            border-collapse: separate;
+            overflow: hidden;
+            border-spacing: 0;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border-radius: 20px;
             overflow: hidden;
         }
 
         .table:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
-
 
         .table th,
         .table td {
