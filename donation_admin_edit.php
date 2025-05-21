@@ -54,6 +54,7 @@ while ($row = $m_result->fetch_assoc()) {
         body {
             padding: 40px;
             font-family: "Noto Serif TC", serif;
+            background-color: transparent !important;  /* 透明背景 */
         }
         .card {
             max-width: 800px;
@@ -103,13 +104,8 @@ while ($row = $m_result->fetch_assoc()) {
 
         <div class="mb-3">
             <label for="method_id" class="form-label">付款方式</label>
-            <select class="form-select" id="method_id" name="method_id" required>
-                <?php foreach ($methods as $m): ?>
-                    <option value="<?= $m['Method_ID'] ?>" <?= $donation['Method_ID'] == $m['Method_ID'] ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($m['Method_Name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <input type="text" class="form-control" value="現金" disabled>
+            <input type="hidden" name="method_id" value="7">
         </div>
 
         <div class="mb-3">

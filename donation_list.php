@@ -13,7 +13,6 @@ if ($link->connect_error) {
     die("資料庫連接失敗：" . $link->connect_error);
 }
 
-// 接收 GET 參數
 $keyword = $_GET['keyword'] ?? '';
 $method_id = $_GET['method_id'] ?? '';
 $sort = $_GET['sort'] ?? 'date_desc';
@@ -39,18 +38,15 @@ $sql = "
     WHERE 1=1
 ";
 
-// 關鍵字查詢（User_Name 或 Status 中的留言）
 if (!empty($keyword)) {
     $escaped = $link->real_escape_string($keyword);
     $sql .= " AND (ua.User_Name LIKE '%$escaped%' OR d.Status LIKE '%$escaped%')";
 }
 
-// 篩選付款方式
 if (!empty($method_id)) {
     $sql .= " AND d.Method_ID = " . intval($method_id);
 }
 
-// 排序
 switch ($sort) {
     case 'amount_asc':
         $sql .= " ORDER BY d.Donation_Amount ASC";
@@ -79,11 +75,15 @@ $result = $link->query($sql);
         body {
             padding: 30px;
             font-family: "Noto Serif TC", serif;
+            background-color: transparent !important;
         }
         h2 {
             font-weight: bold;
             text-align: center;
             margin-bottom: 30px;
+            font-size: 1.75rem;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
         }
         table {
             background-color: white;
@@ -95,6 +95,10 @@ $result = $link->query($sql);
         }
         .form-select, .form-control {
             border-radius: 10px;
+        }
+        .tooltip-wrapper {
+            display: inline-block;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -109,7 +113,6 @@ $result = $link->query($sql);
         </div>
     <?php endif; ?>
 
-    <!-- 篩選表單 -->
     <form method="GET" class="row g-3 mb-4">
         <div class="col-md-3">
             <label for="method_id" class="form-label">付款方式</label>
@@ -140,7 +143,6 @@ $result = $link->query($sql);
         </div>
     </form>
 
-    <!-- 資料表格 -->
     <table class="table table-bordered table-hover align-middle text-center">
         <thead>
         <tr>
@@ -166,11 +168,11 @@ $result = $link->query($sql);
                 <td><?= nl2br(htmlspecialchars($row['Status'])) ?></td>
                 <td>
                     <?php if ($row['Is_Manual']): ?>
-                        <a href="donation_admin_edit.php?id=<?= $row['Donation_ID'] ?>" class="btn btn-sm btn-outline-primary">
-                            編輯
-                        </a>
+                        <a href="donation_admin_edit.php?id=<?= $row['Donation_ID'] ?>" class="btn btn-sm btn-outline-primary">編輯</a>
                     <?php else: ?>
-                        <button class="btn btn-sm btn-secondary" disabled data-bs-toggle="tooltip" title="此筆為使用者透過網站捐款紀錄，為確保資料真實性，不可修改">無法編輯</button>
+                        <span class="tooltip-wrapper" data-bs-toggle="tooltip" title="此筆為使用者透過網站捐款紀錄，為確保資料真實性，不可修改">
+                            <button class="btn btn-sm btn-secondary" disabled>無法編輯</button>
+                        </span>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -178,22 +180,20 @@ $result = $link->query($sql);
         </tbody>
     </table>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltips.forEach(el => new bootstrap.Tooltip(el));
     });
-</script>
-<script>
-    setTimeout(function () {
+
+    setTimeout(() => {
         const alert = document.querySelector('.alert');
         if (alert) {
             alert.classList.remove('show');
             alert.classList.add('fade');
-            setTimeout(() => {
-                alert.remove(); // 真正從 DOM 中移除元素
-            }, 500); // 等淡出動畫完成（Bootstrap 預設約 0.15~0.3 秒）
+            setTimeout(() => alert.remove(), 500);
         }
     }, 3000);
 </script>
