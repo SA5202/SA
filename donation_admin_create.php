@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-// 確保是管理員登入
+// 僅限管理員存取
 if (!isset($_SESSION['User_Name']) || $_SESSION['User_Type'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -14,14 +14,12 @@ if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
 }
 
-// 撈取捐款項目（FundingSuggestion + Suggestion）
+// 撈取捐款項目
 $fundingOptions = [];
-$query = "
-    SELECT f.Funding_ID, s.Title 
-    FROM FundingSuggestion f
-    JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
-    WHERE f.Status = '進行中'
-";
+$query = "SELECT f.Funding_ID, s.Title 
+          FROM FundingSuggestion f
+          JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
+          WHERE f.Status = '進行中'";
 $result = $link->query($query);
 if ($result) {
     while ($row = $result->fetch_assoc()) {
@@ -37,9 +35,55 @@ if ($result) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>手動新增捐款紀錄</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: transparent;
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            padding: 30px;
+            color: #333;
+        }
+
+        .donation-form {
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .donation-form:hover {
+            transform: scale(1.015);
+        }
+
+        .form-control,
+        .form-select,
+        textarea {
+            border-radius: 10px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 25px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
+<div class="donation-form">
     <h2 class="mb-4 text-center fw-bold">管理員新增捐款紀錄</h2>
 
     <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
@@ -71,16 +115,11 @@ if ($result) {
         </div>
 
         <div class="mb-3">
-            <label for="method_id" class="form-label">付款方式</label>
-            <select class="form-select" name="method_id" id="method_id" required>
-                <option value="7" selected>現金</option>
-            </select>
-        </div>
-
-        <div class="mb-3">
             <label for="amount" class="form-label">金額（NTD）</label>
             <input type="number" class="form-control" name="amount" id="amount" required min="1">
         </div>
+
+        <input type="hidden" name="method_id" value="7"> <!-- 固定為現金 -->
 
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" name="anonymous" id="anonymous">
@@ -97,7 +136,7 @@ if ($result) {
             <textarea class="form-control" name="note" id="note" rows="2" maxlength="100"></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">新增捐款紀錄</button>
+        <button type="submit" class="btn btn-success w-100">新增捐款紀錄</button>
     </form>
 </div>
 

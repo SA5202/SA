@@ -130,7 +130,9 @@ if ($result) {
                 <select class="form-select" id="method" name="method_id" required>
                     <option value="">請選擇付款方式</option>
                     <?php foreach ($paymentMethods as $method): ?>
-                        <option value="<?= $method['Method_ID'] ?>"><?= htmlspecialchars($method['Method_Name']) ?></option>
+                        <?php if ($method['Method_ID'] != 7): // 隱藏現金選項 ?>
+                            <option value="<?= $method['Method_ID'] ?>"><?= htmlspecialchars($method['Method_Name']) ?></option>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </select>
             </div>
