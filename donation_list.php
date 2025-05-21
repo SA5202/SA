@@ -125,7 +125,7 @@ $result = $link->query($sql);
             </select>
         </div>
         <div class="col-md-4">
-            <label for="keyword" class="form-label">關鍵字（帳號或留言）</label>
+            <label for="keyword" class="form-label">關鍵字（帳號或留言/備註）</label>
             <input type="text" name="keyword" id="keyword" class="form-control" value="<?= htmlspecialchars($keyword) ?>" placeholder="輸入帳號或備註關鍵字">
         </div>
         <div class="col-md-2 align-self-end">
@@ -158,12 +158,25 @@ $result = $link->query($sql);
                 <td><?= date('Y-m-d', strtotime($row['Donation_Date'])) ?></td>
                 <td><?= nl2br(htmlspecialchars($row['Status'])) ?></td>
                 <td>
-                    <a href="donation_admin_edit.php?id=<?= $row['Donation_ID'] ?>" class="btn btn-sm btn-outline-primary">編輯</a>
+                    <?php if ($row['Is_Manual']): ?>
+                        <a href="donation_admin_edit.php?id=<?= $row['Donation_ID'] ?>" class="btn btn-sm btn-outline-primary">
+                            編輯
+                        </a>
+                    <?php else: ?>
+                        <button class="btn btn-sm btn-secondary" disabled data-bs-toggle="tooltip" title="此筆為使用者透過網站捐款紀錄，為確保資料真實性，不可修改">無法編輯</button>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endwhile; ?>
         </tbody>
     </table>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
 </body>
 </html>
