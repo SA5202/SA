@@ -22,6 +22,8 @@ if (isset($_GET['id'])) {
     $viewUserID = $sessionUserID;
 }
 
+
+
 $sql = "
 SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
        f.Facility_Type, b.Building_Name,
@@ -164,18 +166,11 @@ $row_user = $result_user->fetch_assoc();
         .table-responsive {
             background-color: rgba(255, 255, 255, 0.9);
             padding: 20px 20px;
-            border-radius: 40px;
+            border-radius: 30px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
-            transition: transform 0.2s ease-in-out;
         }
-
-        .table-responsive:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
 
         .table th {
             background-color: #f1f3f5;
@@ -188,18 +183,11 @@ $row_user = $result_user->fetch_assoc();
 
         .table {
             width: 100%;
-            border-radius: 30px;
+            border-radius: 25px;
             border: 2px solid #dee2e6;
             border-collapse: separate;
             overflow: hidden;
             border-spacing: 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .table:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .table th,
@@ -403,6 +391,75 @@ $row_user = $result_user->fetch_assoc();
     </table>
 
     <?php
+    // 撈取使用者按讚過的建言
+    $sql_likes = "
+    SELECT s.Suggestion_ID, s.Title, s.Updated_At,
+       (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
+FROM Upvote u
+JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
+WHERE u.User_ID = ? AND u.Is_Upvoted = 1
+ORDER BY s.Updated_At DESC
+";
+
+    $stmt_likes = $link->prepare($sql_likes);
+    if (!$stmt_likes) {
+        die("按讚查詢準備失敗: " . $link->error);
+    }
+
+    $stmt_likes->bind_param("i", $viewUserID);
+    $stmt_likes->execute();
+    $likes_result = $stmt_likes->get_result();
+    ?>
+
+    <?php if ($sessionUserType == 'admin'): ?>
+        <h3><i class="icon fas fa-clipboard-list"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的按讚記錄</h3>
+    <?php else: ?>
+        <h3><i class="icon fas fa-clipboard-list"></i> 我的按讚紀錄</h3>
+    <?php endif; ?>
+
+    <table class="table">
+        <thead class="table-primary">
+            <tr>
+                <th class="fw-bold">建言標題</th>
+                <th class="fw-bold text-center">更新時間</th>
+                <th class="fw-bold text-center">獲得愛心數</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($likes_result->num_rows > 0): ?>
+                <?php while ($row = $likes_result->fetch_assoc()): ?>
+                    <tr>
+                        <td>
+                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars($row["Title"]) ?>
+                            </a>
+                        </td>
+                        <td class="text-center update-time">
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Updated_At'])) ?></span>
+                        </td>
+                        <td class="text-center like-count">
+                            <span class="custom-badge">
+                                <?= ($row['LikeCount'] >= 10000)
+                                    ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️'
+                                    : $row['LikeCount'] . ' ❤️'; ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="3" class="text-muted">目前沒有按讚紀錄。</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <?php
+    $stmt_likes->close();
+    ?>
+
+
+    <?php
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -487,7 +544,7 @@ $row_user = $result_user->fetch_assoc();
             <?php endif; ?>
         </tbody>
     </table>
-    <h3><i class="icon fas fa-medal"></i> 我的榮譽等級</h3>
+
 
     <?php
     $stmt->close();
@@ -519,3 +576,5 @@ $row_user = $result_user->fetch_assoc();
 
 
 </body>
+
+</html>
