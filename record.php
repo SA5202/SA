@@ -539,7 +539,9 @@ ORDER BY s.Updated_At DESC
                     $funding_status_class = 'funding-status-' . preg_replace('/\s+/', '', $row['Funding_Status']);
                 ?>
                     <tr>
-                        <td class="highlight-title"><?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?></td>
+                        <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                            <?= htmlspecialchars($row["Title"]) ?>
+                        </a>
                         <td>$<?= number_format($row['Donation_Amount'], 0) ?></td>
                         <td><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
                         <td>
