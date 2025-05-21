@@ -344,6 +344,31 @@ if (!$suggestion_result) {
 
 
         /* 放大旗幟 */
+        /* 頂部橫條 */
+        .mini-pennant.large::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 15px;
+        background: currentColor;
+        opacity: 0.6;
+        }
+
+        /* 底部流蘇 */
+        .mini-pennant.large::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 8px;
+        background: repeating-linear-gradient(
+            to right,
+            rgba(255,255,255,0.7) 0 3px,
+            rgba(0,0,0,0.1) 3px 6px
+        );
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
+        }
         .mini-pennant.vip1.large {
             background: #ffeb3b; /* 純黃色 */
             color: #b8860b; /* 文字深金色 */
