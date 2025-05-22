@@ -70,15 +70,19 @@ if ($result) {
             color: #555;
         }
 
-        .btn-primary {
-            background-color: #007bff;
+        .btn-success {
+            background-color: #4CAF50;
             font-weight: bold;
             font-size: 1.1rem;
             border-radius: 25px;
         }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
+        .btn-success:hover {
+            background-color: #3a9741;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -98,9 +102,9 @@ if ($result) {
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="donation_admin_process.php">
+    <form method="POST" action="donation_admin_process.php" onsubmit="return validateEmailIfNeeded()">
         <div class="mb-3">
-            <label for="donor_name" class="form-label">捐款者姓名（選填）</label>
+            <label for="donor_name" class="form-label">捐款者帳號（選填）</label>
             <input type="text" class="form-control" name="donor_name" id="donor_name" maxlength="50">
         </div>
 
@@ -121,6 +125,16 @@ if ($result) {
 
         <input type="hidden" name="method_id" value="7"> <!-- 固定為現金 -->
 
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" name="receipt" id="receipt" onchange="toggleEmailField()">
+            <label class="form-check-label" for="receipt">需要收據（電子）</label>
+        </div>
+
+        <div class="mb-3 hidden" id="emailRow">
+            <label for="donor_email" class="form-label">收據接收 Email</label>
+            <input type="email" class="form-control" name="donor_email" id="donor_email" placeholder="example@mail.com">
+        </div>
+
         <div class="mb-3">
             <label for="note" class="form-label">備註（可輸入管理員留言）</label>
             <textarea class="form-control" name="note" id="note" rows="2" maxlength="100"></textarea>
@@ -131,14 +145,28 @@ if ($result) {
 </div>
 
 <script>
-    setTimeout(function () {
+    function toggleEmailField() {
+        const emailRow = document.getElementById('emailRow');
+        const receiptChecked = document.getElementById('receipt').checked;
+        emailRow.classList.toggle('hidden', !receiptChecked);
+    }
+
+    function validateEmailIfNeeded() {
+        const receiptChecked = document.getElementById('receipt').checked;
+        const email = document.getElementById('donor_email').value.trim();
+        if (receiptChecked && email === '') {
+            alert('需要收據時，請輸入有效的電子郵件');
+            return false;
+        }
+        return true;
+    }
+
+    setTimeout(() => {
         const alert = document.querySelector('.alert');
         if (alert) {
             alert.classList.remove('show');
             alert.classList.add('fade');
-            setTimeout(() => {
-                alert.remove(); // 真正從 DOM 中移除元素
-            }, 500); // 等淡出動畫完成（Bootstrap 預設約 0.15~0.3 秒）
+            setTimeout(() => alert.remove(), 500);
         }
     }, 3000);
 </script>

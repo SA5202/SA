@@ -1,5 +1,4 @@
 <?php
-// 必須放在最頂部，不能有空格或換行
 session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
@@ -19,11 +18,13 @@ $message = $_POST['message'] ?? '';
 $status = '已捐款';
 $date = date('Y-m-d');
 
+// 建立資料庫連線
 $link = new mysqli('localhost', 'root', '', 'sa');
 if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
 }
 
+// 查詢使用者 ID
 $user_query = $link->prepare("SELECT User_ID FROM UserAccount WHERE User_Name = ?");
 $user_query->bind_param("s", $user_name);
 $user_query->execute();
@@ -35,6 +36,7 @@ if ($user_result->num_rows === 0) {
 }
 $user_id = $user_result->fetch_assoc()['User_ID'];
 
+// 狀態備註（不影響匿名顯示邏輯）
 $notes = [];
 if ($is_anonymous) $notes[] = '匿名';
 if ($needs_receipt) $notes[] = '收據';
@@ -43,11 +45,16 @@ if (!empty($notes)) {
     $status .= '（' . implode('，', $notes) . '）';
 }
 
-$insert = $link->prepare("INSERT INTO Donation (User_ID, Funding_ID, Method_ID, Donation_Amount, Status, Donation_Date) VALUES (?, ?, ?, ?, ?, ?)");
-$insert->bind_param("iiiiss", $user_id, $funding_id, $method_id, $amount, $status, $date);
+// 寫入資料（加入 Is_Anonymous 與 Needs_Receipt）
+$insert = $link->prepare("
+    INSERT INTO Donation (
+        User_ID, Funding_ID, Method_ID, Donation_Amount,
+        Status, Donation_Date, Is_Anonymous, Needs_Receipt
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+");
+$insert->bind_param("iiiissii", $user_id, $funding_id, $method_id, $amount, $status, $date, $is_anonymous, $needs_receipt);
 
 if ($insert->execute()) {
-    // 使用 JavaScript 導回避免 header() 錯誤
     echo "<script>alert('捐款成功！'); window.location.href='donation_make.php?success=1';</script>";
     exit();
 } else {
