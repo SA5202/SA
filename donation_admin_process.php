@@ -34,12 +34,12 @@ $donor_email = trim($_POST['donor_email'] ?? '');
 $funding_id = $_POST['funding_id'] ?? '';
 $amount = $_POST['amount'] ?? '';
 $method_id = 7; // 現金
-$is_anonymous = isset($_POST['anonymous']) ? 1 : 0;
 $needs_receipt = isset($_POST['receipt']) ? 1 : 0;
 $note = trim($_POST['note'] ?? '');
 $status = '已捐款';
 $date = date('Y-m-d');
 $is_manual = 1;
+$is_anonymous = 0;
 
 // 如果需要收據但沒填 email，阻擋送出
 if ($needs_receipt && empty($donor_email)) {
@@ -50,18 +50,24 @@ if ($needs_receipt && empty($donor_email)) {
 // 判斷是否指定使用者（若沒填則為 NULL 且匿名）
 $user_id = null;
 if (!empty($donor_name)) {
-    $user_stmt = $link->prepare("SELECT User_ID FROM UserAccount WHERE User_Name = ?");
+    $user_stmt = $link->prepare("SELECT User_ID, Email FROM UserAccount WHERE User_Name = ?");
     $user_stmt->bind_param("s", $donor_name);
     $user_stmt->execute();
     $user_result = $user_stmt->get_result();
     if ($user_result->num_rows > 0) {
-        $user_id = $user_result->fetch_assoc()['User_ID'];
+        $user_data = $user_result->fetch_assoc();
+        $user_id = $user_data['User_ID'];
+        if (empty($donor_email)) {
+            $donor_email = $user_data['Email'];
+        }
+    } else {
+        $is_anonymous = 1;
     }
 } else {
-    $is_anonymous = 1; // 若沒填帳號，自動設為匿名
+    $is_anonymous = 1;
 }
 
-// 狀態描述組合
+// 狀態描述
 $notes = [];
 if ($is_anonymous) $notes[] = '匿名';
 if ($needs_receipt) $notes[] = '收據';
@@ -70,7 +76,14 @@ if (!empty($notes)) {
     $status .= '（' . implode('，', $notes) . '）';
 }
 
-// 寫入資料（含 Email、Is_Anonymous、Needs_Receipt）
+// 撈取項目名稱（寄信用）
+$project_stmt = $link->prepare("SELECT s.Title FROM Suggestion s JOIN FundingSuggestion f ON f.Suggestion_ID = s.Suggestion_ID WHERE f.Funding_ID = ?");
+$project_stmt->bind_param("i", $funding_id);
+$project_stmt->execute();
+$project_result = $project_stmt->get_result();
+$project_title = $project_result->num_rows > 0 ? $project_result->fetch_assoc()['Title'] : '不明項目';
+
+// 寫入資料
 $insert = $link->prepare("
     INSERT INTO Donation 
     (User_ID, Funding_ID, Method_ID, Donation_Amount, Status, Donation_Date, 
@@ -84,10 +97,19 @@ $insert->bind_param(
 );
 
 if ($insert->execute()) {
+    if ($needs_receipt && filter_var($donor_email, FILTER_VALIDATE_EMAIL)) {
+        require_once __DIR__ . '/send_receipt.php';
+        $name_for_email = $is_anonymous ? '匿名' : $donor_name;
+        send_receipt_email($donor_email, [
+            'name' => $name_for_email,
+            'amount' => $amount,
+            'date' => $date,
+            'project' => $project_title
+        ]);
+    }
     header("Location: donation_admin_create.php?success=1");
 } else {
     $error = $link->error;
     header("Location: donation_admin_create.php?error=" . urlencode("新增失敗: $error"));
 }
 exit();
-?>

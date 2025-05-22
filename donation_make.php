@@ -13,7 +13,7 @@ if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
 }
 
-// 撈取捐款項目（FundingSuggestion + Suggestion）
+// 撈取捐款項目
 $fundingOptions = [];
 $query = "
     SELECT f.Funding_ID, s.Title 
@@ -35,6 +35,14 @@ if ($result) {
     while ($row = $result->fetch_assoc()) {
         $paymentMethods[] = $row;
     }
+}
+
+// 撈取使用者電子信箱（為了寄送收據）
+$email = '';
+$user_name = $_SESSION['User_Name'];
+$email_result = $link->query("SELECT Email FROM UserAccount WHERE User_Name = '" . $link->real_escape_string($user_name) . "'");
+if ($email_result && $email_result->num_rows > 0) {
+    $email = $email_result->fetch_assoc()['Email'];
 }
 ?>
 
@@ -59,30 +67,16 @@ if ($result) {
 
         .donation-form {
             border: 2px solid #ccc;
-            /* 加上灰色邊框 */
             border-radius: 25px;
-            /* 圓角效果 */
             padding: 20px;
-            /* 內距 */
             background-color: #fff;
-            /* 背景白色 */
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
-            --bs-card-border-color: var(--bs-border-color-translucent);
-            border: 1px solid var(--bs-card-border-color);
-            /* 加這行才會顯示框線 */
-
-            /* 加入浮動效果所需的過渡設定 */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .donation-form:hover {
             transform: scale(1.02);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-
-        .donation-form:hover {
-            transform: scale(1.015);
         }
 
         .form-control,
@@ -111,7 +105,6 @@ if ($result) {
 
 <body>
     <div class="donation-form">
-       
         <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>捐款成功！</strong> 感謝您的支持，我們已收到您的捐款。
@@ -145,8 +138,7 @@ if ($result) {
                 <select class="form-select" id="method" name="method_id" required>
                     <option value="">請選擇付款方式</option>
                     <?php foreach ($paymentMethods as $method): ?>
-                        <?php if ($method['Method_ID'] != 7): // 隱藏現金選項 
-                        ?>
+                        <?php if ($method['Method_ID'] != 7): ?>
                             <option value="<?= $method['Method_ID'] ?>"><?= htmlspecialchars($method['Method_Name']) ?></option>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -160,27 +152,27 @@ if ($result) {
 
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="receipt" name="receipt">
-                <label class="form-check-label" for="receipt">需要收據</label>
+                <label class="form-check-label" for="receipt">需要收據（電子）</label>
             </div>
 
             <div class="mb-3">
-                <label for="message" class="form-label">留言 (可留下一句話)</label>
+                <label for="message" class="form-label">留言 (100 字以內)</label>
                 <textarea class="form-control" id="message" name="message" rows="2" maxlength="100"></textarea>
             </div>
+
+            <input type="hidden" name="donor_email" value="<?= htmlspecialchars($email) ?>">
 
             <button type="submit" class="btn btn-success w-100">立即捐款</button>
         </form>
     </div>
 
     <script>
-        setTimeout(function() {
+        setTimeout(function () {
             const alert = document.querySelector('.alert');
             if (alert) {
                 alert.classList.remove('show');
                 alert.classList.add('fade');
-                setTimeout(() => {
-                    alert.remove(); // 真正從 DOM 中移除元素
-                }, 500); // 等淡出動畫完成（Bootstrap 預設約 0.15~0.3 秒）
+                setTimeout(() => alert.remove(), 500);
             }
         }, 3000);
     </script>

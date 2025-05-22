@@ -1,0 +1,13 @@
+{
+    "name": "group2/sa-donation-system",
+    "description": "FJU 校園捐款系統寄信功能",
+    "require": {
+        "phpmailer/phpmailer": "^6.10"
+    },
+    "authors": [
+        {
+            "name": "Chen-Chia Chiu",
+            "email": "alex2531566666@gmail.com"
+        }
+    ]
+}
