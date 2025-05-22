@@ -27,7 +27,6 @@ if ($result) {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -123,7 +122,7 @@ if ($result) {
             <input type="number" class="form-control" name="amount" id="amount" required min="1">
         </div>
 
-        <input type="hidden" name="method_id" value="7"> <!-- 固定為現金 -->
+        <input type="hidden" name="method_id" value="7"> <!-- 現金 -->
 
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" name="receipt" id="receipt" onchange="toggleEmailField()">
@@ -148,7 +147,30 @@ if ($result) {
     function toggleEmailField() {
         const emailRow = document.getElementById('emailRow');
         const receiptChecked = document.getElementById('receipt').checked;
+        const donorName = document.getElementById('donor_name').value.trim();
+        const emailInput = document.getElementById('donor_email');
+
         emailRow.classList.toggle('hidden', !receiptChecked);
+
+        if (receiptChecked && donorName) {
+            fetch(`get_user_email.php?username=${encodeURIComponent(donorName)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.email) {
+                        emailInput.value = data.email;
+                        emailInput.readOnly = true;
+                    } else {
+                        emailInput.value = '';
+                        emailInput.readOnly = false;
+                    }
+                }).catch(() => {
+                    emailInput.value = '';
+                    emailInput.readOnly = false;
+                });
+        } else {
+            emailInput.value = '';
+            emailInput.readOnly = false;
+        }
     }
 
     function validateEmailIfNeeded() {
