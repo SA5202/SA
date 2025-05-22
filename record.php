@@ -482,30 +482,31 @@ ORDER BY s.Updated_At DESC
 
     require_once __DIR__ . '/db_connect.php'; // 使用 $link
 
-    if (!isset($_SESSION['User_ID'])) {
-        echo "請先登入以查看您的捐款紀錄。";
+    if (!isset($viewUserID)) {
+        echo "找不到要查看的使用者。";
         exit;
     }
 
-    $user_id = $_SESSION['User_ID'];
+    $user_id = $viewUserID;
+
 
     $sql = "SELECT 
     d.Donation_Amount,
     d.Status AS Donation_Status,
     d.Donation_Date,
+    s.Suggestion_ID,
     s.Title AS Funding_Title,
     pm.Method_Name AS Payment_Method,
     fs.Required_Amount,
     fs.Raised_Amount,
     fs.Status AS Funding_Status,
     fs.Updated_At
-    FROM Donation d
-    LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
-    LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
-    LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
-    WHERE d.User_ID = ?
-    ORDER BY d.Donation_Date DESC";
-
+FROM Donation d
+LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
+LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
+LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
+WHERE d.User_ID = ?
+ORDER BY d.Donation_Date DESC";
 
     $stmt = $link->prepare($sql);
     if (!$stmt) {
@@ -539,9 +540,12 @@ ORDER BY s.Updated_At DESC
                     $funding_status_class = 'funding-status-' . preg_replace('/\s+/', '', $row['Funding_Status']);
                 ?>
                     <tr>
-                        <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
-                            <?= htmlspecialchars($row["Title"]) ?>
-                        </a>
+                        <td class="highlight-title">
+                            <a class="title" href="suggestion_detail.php?id=<?= htmlspecialchars($row['Suggestion_ID']) ?>">
+                                <?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?>
+                            </a>
+                        </td>
+
                         <td>$<?= number_format($row['Donation_Amount'], 0) ?></td>
                         <td><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
                         <td>
@@ -562,7 +566,6 @@ ORDER BY s.Updated_At DESC
             <?php endif; ?>
         </tbody>
     </table>
-
 
     <?php
     $stmt->close();

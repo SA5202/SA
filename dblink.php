@@ -22,12 +22,12 @@ if ($method === 'update_avatar') {
             }
 
             $tmpName = $_FILES['Avatar']['tmp_name'];
-            $ext = strtolower(pathinfo($_FILES['Avatar']['name'], PATHINFO_EXTENSION)); // 小寫副檔名
+            $ext = strtolower(pathinfo($_FILES['Avatar']['name'], PATHINFO_EXTENSION));
             $newFileName = uniqid('avatar_') . '.' . $ext;
             $destination = $uploadDir . $newFileName;
 
             if (move_uploaded_file($tmpName, $destination)) {
-                $avatarPath = $destination; // 相對於網站根目錄的路徑
+                $avatarPath = $destination;
             } else {
                 die("頭像上傳失敗");
             }
@@ -48,20 +48,22 @@ if ($method === 'update_avatar') {
         if (mysqli_query($link, $sql)) {
             $_SESSION['Nickname'] = $Nickname;
             if ($avatarPath !== null) {
-                $_SESSION['Avatar'] = $avatarPath; // 寫入 session
+                $_SESSION['Avatar'] = $avatarPath;
             }
 
-            echo "<script>
-    alert('更新成功');
-    if (window.top && window.top.document) {
-        const avatarImg = window.top.document.querySelector('.avatar');
-        if (avatarImg) {
-            avatarImg.src = '" . $avatarPath . "?t=' + new Date().getTime(); // 加上時間戳避免快取
-        }
-    }
-    window.location.href='record.php';
-</script>";
+            // ✅ 根據使用者身分決定跳轉頁面
+            $redirectPage = (isset($_SESSION['User_Name']) && $_SESSION['User_Name'] === 'admin') ? 'record_admin.php' : 'record.php';
 
+            echo "<script>
+                alert('更新成功');
+                if (window.top && window.top.document) {
+                    const avatarImg = window.top.document.querySelector('.avatar');
+                    if (avatarImg) {
+                        avatarImg.src = '" . $avatarPath . "?t=' + new Date().getTime();
+                    }
+                }
+                window.location.href='" . $redirectPage . "';
+            </script>";
             exit;
         } else {
             die("更新失敗: " . mysqli_error($link));

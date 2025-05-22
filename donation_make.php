@@ -40,6 +40,7 @@ if ($result) {
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -52,19 +53,33 @@ if ($result) {
             font-size: 1.1rem;
             line-height: 1.8;
             margin: 0;
-            padding: 30px;
+            padding: 200px;
             color: #333;
         }
 
         .donation-form {
-            max-width: 650px;
-            margin: 30px auto;
-            padding: 40px;
-            background-color: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ccc;
+            /* 加上灰色邊框 */
             border-radius: 25px;
-            box-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease-in-out;
+            /* 圓角效果 */
+            padding: 20px;
+            /* 內距 */
+            background-color: #fff;
+            /* 背景白色 */
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
+
+            /* 加入浮動效果所需的過渡設定 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .donation-form:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
 
         .donation-form:hover {
             transform: scale(1.015);
@@ -82,21 +97,21 @@ if ($result) {
         }
 
         .btn-success {
-            background-color: #4CAF50;
+            background-color: rgb(99, 160, 101);
             font-weight: bold;
             font-size: 1.1rem;
-            border-radius: 25px;
+            border-radius: 50px;
         }
 
         .btn-success:hover {
-            background-color: #3a9741;
+            background-color: rgb(66, 107, 70);
         }
     </style>
 </head>
+
 <body>
     <div class="donation-form">
-        <h2 class="mb-4 text-center fw-bold">愛校捐款</h2>
-
+       
         <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>捐款成功！</strong> 感謝您的支持，我們已收到您的捐款。
@@ -130,7 +145,8 @@ if ($result) {
                 <select class="form-select" id="method" name="method_id" required>
                     <option value="">請選擇付款方式</option>
                     <?php foreach ($paymentMethods as $method): ?>
-                        <?php if ($method['Method_ID'] != 7): // 隱藏現金選項 ?>
+                        <?php if ($method['Method_ID'] != 7): // 隱藏現金選項 
+                        ?>
                             <option value="<?= $method['Method_ID'] ?>"><?= htmlspecialchars($method['Method_Name']) ?></option>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -157,7 +173,7 @@ if ($result) {
     </div>
 
     <script>
-        setTimeout(function () {
+        setTimeout(function() {
             const alert = document.querySelector('.alert');
             if (alert) {
                 alert.classList.remove('show');
@@ -169,4 +185,5 @@ if ($result) {
         }, 3000);
     </script>
 </body>
+
 </html>
