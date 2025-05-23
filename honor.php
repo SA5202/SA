@@ -272,17 +272,17 @@ if (!$donation_history_result) {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 56px;
+            width: 30px;
+            height: 45px;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
             position: relative;
-            margin-right: 8px;
+            margin-right: 20px;
             vertical-align: middle;
-            font-family: 'Microsoft JhengHei', sans-serif;
-            font-size: 12px;
+            font-family: "Noto Serif TC", serif;
+            font-size: 0.9rem;
             font-weight: bold;
             color: #c00;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         /* 頂部橫條 */
@@ -291,7 +291,7 @@ if (!$donation_history_result) {
             position: absolute;
             top: 0;
             width: 100%;
-            height: 4px;
+            height: 5px;
             background: currentColor;
             opacity: 0.6;
         }
@@ -350,12 +350,29 @@ if (!$donation_history_result) {
 
         /* 放大旗幟 */
         /* 頂部橫條 */
+        .mini-pennant.large {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 90px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            position: relative;
+            margin-right: 8px;
+            vertical-align: middle;
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #c00;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
         .mini-pennant.large::before {
             content: "";
             position: absolute;
             top: 0;
             width: 100%;
-            height: 15px;
+            height: 10px;
             background: currentColor;
             opacity: 0.6;
         }
@@ -378,31 +395,55 @@ if (!$donation_history_result) {
         .mini-pennant.vip1.large {
             background: #ffeb3b; /* 純黃色 */
             color: #b8860b; /* 文字深金色 */
-            transform: scale(1.5); /* 放大1.5倍 */
         }
 
         .mini-pennant.vip2.large {
             background: #ffeb3b; /* 純黃色 */
             color: #b8860b; /* 文字深金色 */
-            transform: scale(1.5); /* 放大1.5倍 */
         }
 
         .mini-pennant.vip3.large {
             background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
-            transform: scale(1.5); /* 放大1.5倍 */
         }
 
         .mini-pennant.vip4.large {
             background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
             box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
-            transform: scale(1.5); /* 放大1.5倍 */
         }
 
         .mini-pennant.vip5.large {
             background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
             box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
             animation: glow 2s infinite alternate;
-            transform: scale(1.5); /* 放大1.5倍 */
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            top: 50%;
+            margin: 0 1rem;
+            transform: translateY(-50%);
+            width: 60px;              /* 調整按鈕寬度 */
+            height: 60px;             /* 調整按鈕高度 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-control-prev span,
+        .carousel-control-next span {
+            font-size: 1.3rem;  /* 字體大小 */
+            font-weight: bold;
+            color: black;     /* 文字顏色 */
+        }
+
+        .carousel-control-prev {
+            left: -40px;  /* 調整與輪播邊界的距離，可依需要調 */
+        }
+
+        .carousel-control-next {
+            right: -40px;
         }
 
         /* 防止輪播按鈕重疊文字 */
@@ -581,19 +622,19 @@ if (!$donation_history_result) {
                             <div class="carousel-item active">
                                 <div class="text-center">
                                     <span class="mini-pennant vip1 large">I</span>
-                                    <p class="mt-4">獲得此榮譽等級者，個人主頁將展示專屬榮譽等級徽章</p>
+                                    <p class="mt-4 mb-4">獲得此榮譽等級者，個人主頁將展示專屬榮譽等級徽章</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip2 large">II</span>
-                                    <p class="mt-4">獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，可享有每月電子報與限時活動優先通知</p>
+                                    <p class="mt-4 mb-4">獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，可享有每月電子報與限時活動優先通知</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip3 large">III</span>
-                                    <p class="mt-4">
+                                    <p class="mt-4 mb-4">
                                         獲得此榮譽等級者，除獲得上述獎勵外，
                                         額外獲得年度紀念禮包、捐款紀錄優先查詢權限
                                     </p>
@@ -602,25 +643,23 @@ if (!$donation_history_result) {
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip4 large">IV</span>
-                                    <p class="mt-4">此等級會有.........的福利</p>
+                                    <p class="mt-4 mb-4">尊榮會員！獲得此榮譽等級者，除獲得上述獎勵外，擁有線上榮譽榜曝光權、專屬客服聯繫窗口</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip5 large">V</span>
-                                    <p class="mt-4">此等級會有.........的福利</p>
+                                    <p class="mt-4 mb-4">無私的貢獻者！獲得此榮譽等級者，除獲得上述獎勵外，享有最高榮譽勳章與年度感謝盛會邀請</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 輪播控制 -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#vipCarousel" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
+                            <span>◀</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#vipCarousel" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
+                            <span>▶</span>
                         </button>
                     </div>
 

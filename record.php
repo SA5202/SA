@@ -280,46 +280,47 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
         /* 共用迷你錦旗基底 */
         .mini-pennant {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 100px;
-        height: 156px;
-        clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
-        position: relative;
-        margin-right: 80px;
-        vertical-align: middle;
-        font-family: "Noto Serif TC", serif;
-        font-size: 30px;
-        font-weight: bold;
-        color: #c00;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            margin: 20px 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 150px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            position: relative;
+            margin-right: 80px;
+            vertical-align: middle;
+            font-family: "Noto Serif TC", serif;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #c00;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         /* 頂部橫條 */
         .mini-pennant::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 12px;
-        background: currentColor;
-        opacity: 0.6;
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 12px;
+            background: currentColor;
+            opacity: 0.6;
         }
 
         /* 底部流蘇 */
         .mini-pennant::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 20px;
-        background: repeating-linear-gradient(
-            to right,
-            rgba(255,255,255,0.7) 0 3px,
-            rgba(0,0,0,0.1) 3px 6px
-        );
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(255,255,255,0.7) 0 3px,
+                rgba(0,0,0,0.1) 3px 6px
+            );
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
         /* 各等級變化 */
@@ -359,64 +360,41 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         }
 
         .vip-pennant-wrapper {
-        min-width: 60px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
+            min-width: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .vip-floating-tooltip {
             position: fixed;
             visibility: hidden;
-            width: 220px;  /* 最大寬度 */
-            max-width: 220px;  /* 限制最大寬度 */
+            max-width: 100%;  /* 限制最大寬度 */
             border-radius: 10px;
             box-shadow: 0 6px 15px rgba(0, 0, 80, 0.15);
-            font-size: 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
             color: #1a1a1a;
             pointer-events: none;
             z-index: 9999;
             opacity: 0;
             transform: scale(0);
-            transition: opacity 1.2s ease, transform 1.2s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
             word-wrap: break-word; /* 使文字自動換行 */
             word-break: break-word; /* 防止過長的單詞溢出 */
         }
 
-        .vip-floating-tooltip .tooltip-header {
-            background-color: rgba(85, 164, 186, 0.8);
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            height: 15px;
-        }
-
         .vip-floating-tooltip .tooltip-content {
-            background-color: #f5f6f7;  /* 淺灰白 */
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            padding: 0 16px;
+            background-color: rgba(204, 204, 204, 0.7);
+            border-radius: 10px;
+            padding: 0 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             white-space: normal; /* 允許換行 */
             position: relative;
-            min-height: 50px;  /* 設定最小高度為原來的大小 */
+            min-height: 40px;  /* 設定最小高度為原來的大小 */
             height: auto;  /* 高度根據內容自動調整 */
-            line-height: 1.4;  /* 設定行高，避免文字過於擁擠 */
-        }
-
-        .vip-floating-tooltip .tooltip-content::before {
-            content: "★";
-            color: #f5b942;
-            font-size: 16px;
-            margin-right: 8px;
-        }
-
-        .vip-floating-tooltip .tooltip-content::after {
-            content: "★";
-            color: #f5b942;
-            font-size: 16px;
-            margin-left: 8px;
         }
 
         /* 顯示動畫 */
@@ -500,7 +478,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                 </table>
             </div>
 
-            <!-- 右邊：VIP 錦旗 -->
+            <!-- 右側 VIP 錦旗 -->
             <div class="vip-pennant-wrapper" style="margin-top: 30px;">
                 <span class="mini-pennant <?= $vipInfo['class'] ?> vip-hover-trigger"
                     data-tooltip="<?= htmlspecialchars($vipInfo['tooltip']) ?>">
@@ -512,19 +490,20 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             document.addEventListener('DOMContentLoaded', function () {
                 const tooltip = document.createElement('div');
                 tooltip.className = 'vip-floating-tooltip';
-
-                // 加蓋子 + 內容區塊
-                tooltip.innerHTML = `
-                    <div class="tooltip-header"></div>
-                    <div class="tooltip-content"></div>
-                `;
+                tooltip.innerHTML = `<div class="tooltip-content"></div>`;
                 document.body.appendChild(tooltip);
 
                 document.querySelectorAll('.vip-hover-trigger').forEach(el => {
-                    el.addEventListener('mousemove', e => {
+                    el.addEventListener('mouseenter', () => {
                         tooltip.querySelector('.tooltip-content').textContent = el.getAttribute('data-tooltip');
-                        tooltip.style.left = e.pageX + 15 + 'px';
-                        tooltip.style.top = e.pageY + 15 + 'px';
+
+                        const rect = el.getBoundingClientRect();
+                        const scrollY = window.scrollY || window.pageYOffset;
+                        const scrollX = window.scrollX || window.pageXOffset;
+
+                        // 固定顯示在元素上方中間
+                        tooltip.style.left = (rect.left + rect.width / 2 + scrollX - tooltip.offsetWidth / 2) + 'px';
+                        tooltip.style.top = (rect.bottom + scrollY + 15) + 'px'; // 向下偏移 10px，可調整
                         tooltip.classList.add('show');
                     });
 
@@ -533,9 +512,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                     });
                 });
             });
-
             </script>
-
 
         </div>
     </div>
