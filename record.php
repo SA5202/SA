@@ -5,6 +5,7 @@ if (!isset($_SESSION['User_Name'])) {
     exit();
 }
 
+// 連接資料庫
 $link = new mysqli('localhost', 'root', '', 'sa');
 if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
@@ -13,8 +14,13 @@ if ($link->connect_error) {
 $sessionUserID = $_SESSION['User_ID'];
 $sessionUserType = $_SESSION['User_Type'];
 
+// 引入 honor_helper.php
+include_once 'honor_helper.php';  // 引入這個檔案
+
+// 取得要查看的用戶 ID
 if (isset($_GET['id'])) {
     $viewUserID = intval($_GET['id']);
+    // 確保只有當前用戶或管理員才能查看
     if ($viewUserID !== $sessionUserID && $sessionUserType !== 'admin') {
         die('無權限查看此使用者資訊。');
     }
@@ -22,8 +28,7 @@ if (isset($_GET['id'])) {
     $viewUserID = $sessionUserID;
 }
 
-
-
+// 查詢建議內容
 $sql = "
 SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
        f.Facility_Type, b.Building_Name,
@@ -37,18 +42,21 @@ WHERE s.User_ID = ?
 ORDER BY s.Updated_At DESC
 ";
 
-
 $stmt = $link->prepare($sql);
 $stmt->bind_param("i", $viewUserID);
 $stmt->execute();
 $result = $stmt->get_result();
 
+// 查詢用戶資訊
 $sql_user = "SELECT * FROM useraccount WHERE User_ID = ?";
 $stmt_user = $link->prepare($sql_user);
 $stmt_user->bind_param("i", $viewUserID);
 $stmt_user->execute();
 $result_user = $stmt_user->get_result();
 $row_user = $result_user->fetch_assoc();
+
+// 獲取使用者的 VIP 資訊
+$vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 ?>
 
 <!DOCTYPE html>
@@ -268,6 +276,94 @@ $row_user = $result_user->fetch_assoc();
             color: #003153;
             font-weight: bold;
         }
+
+
+        /* 共用迷你錦旗基底 */
+        .mini-pennant {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 56px;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+        position: relative;
+        margin-right: 8px;
+        vertical-align: middle;
+        font-family: 'Microsoft JhengHei', sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        color: #c00;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* 頂部橫條 */
+        .mini-pennant::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 4px;
+        background: currentColor;
+        opacity: 0.6;
+        }
+
+        /* 底部流蘇 */
+        .mini-pennant::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background: repeating-linear-gradient(
+            to right,
+            rgba(255,255,255,0.7) 0 3px,
+            rgba(0,0,0,0.1) 3px 6px
+        );
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
+        }
+
+        /* 各等級變化 */
+        .mini-pennant.vip1 {
+            background: #ffeb3b;          /* 純黃色 */
+            color: #b8860b;              /* 文字深金色 */
+        }
+
+        .mini-pennant.vip2 {
+            background: #ffeb3b;         /* 純黃色 */
+            color: #b8860b;              /* 文字深金色 */
+        }
+
+        .mini-pennant.vip3 {
+            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
+        }
+
+        .mini-pennant.vip4 {
+            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
+            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
+        }
+
+        .mini-pennant.vip5 {
+            background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
+            animation: glow 2s infinite alternate;
+        }
+
+        /* 閃爍動畫 */
+        @keyframes glow {
+            from { 
+                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7); 
+            }
+            to { 
+                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255,255,255,1); 
+            }
+        }
+
+        .vip-pennant-wrapper {
+        min-width: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        }
     </style>
 
 
@@ -275,71 +371,78 @@ $row_user = $result_user->fetch_assoc();
 
 <body>
     <?php if ($sessionUserType == 'admin'): ?>
-        <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的基本資訊</h3>
+    <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的基本資訊</h3>
     <?php else: ?>
         <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
     <?php endif; ?>
+
     <div class="table-responsive">
-        <table>
-            <tbody>
-                <?php if ($row_user): ?>
-                    <tr>
-                        <?php
-                        $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+        <!-- 加入一層 flex 容器 -->
+        <div class="d-flex justify-content-between align-items-start flex-wrap" style="gap: 30px;">
+            <!-- 左邊：資料表格 -->
+            <div class="user-table" style="flex: 1;">
+                <table>
+                    <tbody>
+                        <?php if ($row_user): ?>
+                            <tr>
+                                <?php
+                                    $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+                                    $avatar_url = !empty($row_user['Avatar']) ? htmlspecialchars($row_user['Avatar']) : $default_avatar;
+                                    $avatar_url .= '?t=' . time();
+                                ?>
+                                <td rowspan='6'>
+                                    <img src="<?= $avatar_url ?>"
+                                        onerror="this.src='<?= $default_avatar ?>'"
+                                        style='border-radius: 50%; width: 200px; height: 200px; margin: 20px 50px;'>
+                                </td>
+                                <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
+                            </tr>
+                            <tr>
+                                <td class='left'>暱稱： <?= htmlspecialchars($row_user['Nickname']) ?></td>
+                            </tr>
+                            <tr>
+                                <td class='left'>使用者 ID： 0000000000<?= $row_user['User_ID'] ?></td>
+                            </tr>
+                            <tr>
+                                <td class='left'>Email： <?= htmlspecialchars($row_user['Email']) ?></td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <div class="d-flex align-items-center" style="gap: 10px;">
+                                        <span>密碼： </span>
+                                        <div class="password-display-wrapper">
+                                            <input type="text" id="passwordDisplay" value="••••••••••" readonly>
+                                            <button type="button" id="togglePassword" onclick="togglePassword()">
+                                                <i id="eyeIcon" class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
 
-                        $avatar_url = !empty($row_user['Avatar'])
-                            ? htmlspecialchars($row_user['Avatar'])
-                            : $default_avatar;
+                            <?php if ($viewUserID === $sessionUserID): ?>
+                                <tr>
+                                    <td colspan='2' class='left'>
+                                        <a href='update.php?method=update&User_Name=<?= urlencode($row_user['User_Name']) ?>' class='custom-btn'>
+                                            <i class='fas fa-pen-to-square'></i> 編輯個人檔案
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan='2' align='center'>找不到使用者資料</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
 
-                        // 加上時間戳防止快取
-                        $avatar_url .= '?t=' . time();
-                        ?>
-                        <td rowspan='6'>
-                            <img src="<?= $avatar_url ?>"
-                                onerror="this.src='<?= $default_avatar ?>'"
-                                style='border-radius: 50%; width: 200px; height: 200px; margin: 20px 50px;'>
-                        </td>
-
-                        <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
-                    </tr>
-                    <tr>
-                        <td class='left'>暱稱： <?= htmlspecialchars($row_user['Nickname']) ?></td>
-                    </tr>
-                    <tr>
-                        <td class='left'>使用者 ID： 0000000000<?= $row_user['User_ID'] ?></td>
-                    </tr>
-                    <tr>
-                        <td class='left'>Email： <?= htmlspecialchars($row_user['Email']) ?></td>
-                    </tr>
-                    <tr>
-                        <td class="left">
-                            <div class="d-flex align-items-center" style="gap: 10px;">
-                                <span>密碼： </span>
-                                <div class="password-display-wrapper">
-                                    <input type="text" id="passwordDisplay" value="••••••••••" readonly>
-                                    <button type="button" id="togglePassword" onclick="togglePassword()">
-                                        <i id="eyeIcon" class="fa fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php if ($viewUserID === $sessionUserID): ?>
-                        <tr>
-                            <td colspan='2' class='left'>
-                                <a href='update.php?method=update&User_Name=<?= urlencode($row_user['User_Name']) ?>' class='custom-btn'>
-                                    <i class='fas fa-pen-to-square'></i> 編輯個人檔案
-                                </a>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan='2' align='center'>找不到使用者資料</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+            <!-- 右邊：VIP 錦旗 -->
+            <div class="vip-pennant-wrapper" style="margin-top: 30px;">
+                <span class="mini-pennant <?= $vipInfo['class'] ?>"><?= $vipInfo['label'] ?></span>
+            </div>
+        </div>
     </div>
 
     <?php if ($sessionUserType == 'admin'): ?>
@@ -411,11 +514,11 @@ $row_user = $result_user->fetch_assoc();
     $sql_likes = "
     SELECT s.Suggestion_ID, s.Title, s.Updated_At,
        (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
-FROM Upvote u
-JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
-WHERE u.User_ID = ? AND u.Is_Upvoted = 1
-ORDER BY s.Updated_At DESC
-";
+    FROM Upvote u
+    JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
+    WHERE u.User_ID = ? AND u.Is_Upvoted = 1
+    ORDER BY s.Updated_At DESC
+    ";
 
     $stmt_likes = $link->prepare($sql_likes);
     if (!$stmt_likes) {
