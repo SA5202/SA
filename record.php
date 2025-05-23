@@ -364,6 +364,23 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         justify-content: center;
         align-items: flex-start;
         }
+
+        /* 原樣不動，只加這段 */
+.vip-floating-tooltip {
+    position: fixed;
+    display: none;
+    padding: 8px 12px;
+    background-color: rgba(50, 50, 50, 0.95);
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    white-space: pre-line;
+    z-index: 9999;
+    pointer-events: none;
+    transition: opacity 0.1s ease-in-out;
+    max-width: 250px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
     </style>
 
 
@@ -440,7 +457,10 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
             <!-- 右邊：VIP 錦旗 -->
             <div class="vip-pennant-wrapper" style="margin-top: 30px;">
-                <span class="mini-pennant <?= $vipInfo['class'] ?>"><?= $vipInfo['label'] ?></span>
+                <span class="mini-pennant <?= $vipInfo['class'] ?> vip-hover-trigger"
+                    data-tooltip="<?= htmlspecialchars($vipInfo['tooltip']) ?>">
+                    <?= $vipInfo['label'] ?>
+                </span>
             </div>
         </div>
     </div>
@@ -700,5 +720,23 @@ ORDER BY d.Donation_Date DESC";
 
 
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'vip-floating-tooltip';
+    document.body.appendChild(tooltip);
 
+    document.querySelectorAll('.vip-hover-trigger').forEach(el => {
+        el.addEventListener('mousemove', e => {
+            tooltip.textContent = el.getAttribute('data-tooltip');
+            tooltip.style.left = e.pageX + 15 + 'px';
+            tooltip.style.top = e.pageY + 15 + 'px';
+            tooltip.style.display = 'block';
+        });
+        el.addEventListener('mouseleave', () => {
+            tooltip.style.display = 'none';
+        });
+    });
+});
+</script>
 </html>

@@ -14,21 +14,25 @@ function getVipLevel($link, $User_ID) {
     // 預設等級與樣式
     $class = '';
     $label = '';
+    $to_next = null;
 
     if ($total > 0) {
         if ($total >= 10000) {
-            // 先預設為 VIP4，因為金額已經 >= 10,000
             $class = 'vip4';
             $label = 'VIP4';
+            $to_next = 0; // 預設為 VIP4，等下可能升 VIP5
         } elseif ($total >= 5000) {
             $class = 'vip3';
             $label = 'VIP3';
+            $to_next = 10000 - $total;
         } elseif ($total >= 1000) {
             $class = 'vip2';
             $label = 'VIP2';
+            $to_next = 5000 - $total;
         } else {
             $class = 'vip1';
             $label = 'VIP1';
+            $to_next = 1000 - $total;
         }
 
         // 查詢前 10 名用戶的 ID
@@ -37,7 +41,7 @@ function getVipLevel($link, $User_ID) {
         $top_result = mysqli_query($link, $top_sql);
 
         // 檢查用戶是否是前 10 名之一，且捐款金額大於等於 10,000
-        $isTop10 = false; // 假設用戶不是前 10 名
+        $isTop10 = false;
         while ($top_row = mysqli_fetch_assoc($top_result)) {
             if ($top_row['User_ID'] === $User_ID && $total >= 10000) {
                 $isTop10 = true;
@@ -45,18 +49,24 @@ function getVipLevel($link, $User_ID) {
             }
         }
 
-        // 如果是前 10 名且捐款金額 >= 10,000，將等級設為 VIP5
+        // 如果是前 10 名且捐款金額 >= 10,000，升為 VIP5
         if ($isTop10) {
             $class = 'vip5';
             $label = 'VIP5';
+            $to_next = 0; // 最高等級，無需升級
         }
     }
-
 
     return [
         'class' => $class,
         'label' => $label,
-        'amount' => $total
+        'amount' => $total,
+        'to_next' => $to_next,
+        'tooltip' => match ($label) {
+            'VIP5' => '已經到達最高等級',
+            'VIP4' => '若你為本系統捐款前10名即可晉升為 VIP5（隱藏等級）',
+            default => '再 ' . $to_next . ' 元可升級'
+        }
     ];
 }
 ?>
