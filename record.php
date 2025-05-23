@@ -289,8 +289,8 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         position: relative;
         margin-right: 80px;
         vertical-align: middle;
-        font-family: 'Microsoft JhengHei', sans-serif;
-        font-size: 12px;
+        font-family: "Noto Serif TC", serif;
+        font-size: 30px;
         font-weight: bold;
         color: #c00;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
@@ -365,22 +365,67 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         align-items: flex-start;
         }
 
-        /* 原樣不動，只加這段 */
-.vip-floating-tooltip {
-    position: fixed;
-    display: none;
-    padding: 8px 12px;
-    background-color: rgba(50, 50, 50, 0.95);
-    color: #fff;
-    font-size: 14px;
-    border-radius: 5px;
-    white-space: pre-line;
-    z-index: 9999;
-    pointer-events: none;
-    transition: opacity 0.1s ease-in-out;
-    max-width: 250px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
+        .vip-floating-tooltip {
+            position: fixed;
+            visibility: hidden;
+            width: 220px;  /* 最大寬度 */
+            max-width: 220px;  /* 限制最大寬度 */
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 80, 0.15);
+            font-size: 14px;
+            color: #1a1a1a;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 1.2s ease, transform 1.2s ease;
+            word-wrap: break-word; /* 使文字自動換行 */
+            word-break: break-word; /* 防止過長的單詞溢出 */
+        }
+
+        .vip-floating-tooltip .tooltip-header {
+            background-color: rgba(85, 164, 186, 0.8);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            height: 15px;
+        }
+
+        .vip-floating-tooltip .tooltip-content {
+            background-color: #f5f6f7;  /* 淺灰白 */
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: normal; /* 允許換行 */
+            position: relative;
+            min-height: 50px;  /* 設定最小高度為原來的大小 */
+            height: auto;  /* 高度根據內容自動調整 */
+            line-height: 1.4;  /* 設定行高，避免文字過於擁擠 */
+        }
+
+        .vip-floating-tooltip .tooltip-content::before {
+            content: "★";
+            color: #f5b942;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        .vip-floating-tooltip .tooltip-content::after {
+            content: "★";
+            color: #f5b942;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+
+        /* 顯示動畫 */
+        .vip-floating-tooltip.show {
+            visibility: visible;
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
     </style>
 
 
@@ -462,6 +507,36 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                     <?= $vipInfo['label'] ?>
                 </span>
             </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'vip-floating-tooltip';
+
+                // 加蓋子 + 內容區塊
+                tooltip.innerHTML = `
+                    <div class="tooltip-header"></div>
+                    <div class="tooltip-content"></div>
+                `;
+                document.body.appendChild(tooltip);
+
+                document.querySelectorAll('.vip-hover-trigger').forEach(el => {
+                    el.addEventListener('mousemove', e => {
+                        tooltip.querySelector('.tooltip-content').textContent = el.getAttribute('data-tooltip');
+                        tooltip.style.left = e.pageX + 15 + 'px';
+                        tooltip.style.top = e.pageY + 15 + 'px';
+                        tooltip.classList.add('show');
+                    });
+
+                    el.addEventListener('mouseleave', () => {
+                        tooltip.classList.remove('show');
+                    });
+                });
+            });
+
+            </script>
+
+
         </div>
     </div>
 
@@ -720,23 +795,4 @@ ORDER BY d.Donation_Date DESC";
 
 
 </body>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const tooltip = document.createElement('div');
-    tooltip.className = 'vip-floating-tooltip';
-    document.body.appendChild(tooltip);
-
-    document.querySelectorAll('.vip-hover-trigger').forEach(el => {
-        el.addEventListener('mousemove', e => {
-            tooltip.textContent = el.getAttribute('data-tooltip');
-            tooltip.style.left = e.pageX + 15 + 'px';
-            tooltip.style.top = e.pageY + 15 + 'px';
-            tooltip.style.display = 'block';
-        });
-        el.addEventListener('mouseleave', () => {
-            tooltip.style.display = 'none';
-        });
-    });
-});
-</script>
 </html>
