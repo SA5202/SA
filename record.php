@@ -283,11 +283,11 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 56px;
+        width: 100px;
+        height: 156px;
         clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
         position: relative;
-        margin-right: 8px;
+        margin-right: 80px;
         vertical-align: middle;
         font-family: 'Microsoft JhengHei', sans-serif;
         font-size: 12px;
@@ -302,7 +302,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         position: absolute;
         top: 0;
         width: 100%;
-        height: 4px;
+        height: 12px;
         background: currentColor;
         opacity: 0.6;
         }
@@ -313,7 +313,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         position: absolute;
         bottom: 0;
         width: 100%;
-        height: 6px;
+        height: 20px;
         background: repeating-linear-gradient(
             to right,
             rgba(255,255,255,0.7) 0 3px,
