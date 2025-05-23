@@ -17,6 +17,7 @@ function getVipLevel($link, $User_ID) {
 
     if ($total > 0) {
         if ($total >= 10000) {
+            // 先預設為 VIP4，因為金額已經 >= 10,000
             $class = 'vip4';
             $label = 'VIP4';
         } elseif ($total >= 5000) {
@@ -35,14 +36,22 @@ function getVipLevel($link, $User_ID) {
                     GROUP BY User_ID ORDER BY total DESC LIMIT 10";
         $top_result = mysqli_query($link, $top_sql);
 
+        // 檢查用戶是否是前 10 名之一，且捐款金額大於等於 10,000
+        $isTop10 = false; // 假設用戶不是前 10 名
         while ($top_row = mysqli_fetch_assoc($top_result)) {
-            if ($top_row['User_ID'] === $User_ID) {
-                $class = 'vip5';
-                $label = 'VIP5';
+            if ($top_row['User_ID'] === $User_ID && $total >= 10000) {
+                $isTop10 = true;
                 break;
             }
         }
+
+        // 如果是前 10 名且捐款金額 >= 10,000，將等級設為 VIP5
+        if ($isTop10) {
+            $class = 'vip5';
+            $label = 'VIP5';
+        }
     }
+
 
     return [
         'class' => $class,
