@@ -392,78 +392,93 @@ $popular_result = $link->query($popular_sql);
         </div>
     </div>
     <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3> 
-<div class="honor-wrapper">
-    <div class="row justify-content-center">
-        <?php
-        // 連接資料庫
-        require_once "db_connect.php";
+    <div class="honor-wrapper">
+        <div class="row justify-content-center">
+            <?php
+            // 連接資料庫
+            require_once "db_connect.php";
 
-        // 設定預設圖片
-        $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+            // 設定預設圖片
+            $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
 
-        // 查詢捐款金額最多的前三名用戶，改為選擇 Nickname 和 Avatar
-        $ranking_sql = "
-            SELECT u.Nickname, u.Avatar, SUM(d.Donation_Amount) AS total_donation
-            FROM Donation d
-            JOIN UserAccount u ON d.User_ID = u.User_ID
-            WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE()) AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
-            GROUP BY u.User_ID
-            ORDER BY total_donation DESC
-            LIMIT 3;
-        ";
+            // 查詢捐款金額最多的前三名用戶，改為選擇 Nickname 和 Avatar
+            $ranking_sql = "
+                SELECT u.Nickname, u.Avatar, SUM(d.Donation_Amount) AS total_donation
+                FROM Donation d
+                JOIN UserAccount u ON d.User_ID = u.User_ID
+                WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE()) AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
+                GROUP BY u.User_ID
+                ORDER BY total_donation DESC
+                LIMIT 3;
+            ";
 
-        // 執行查詢
-        $ranking_result = $link->query($ranking_sql);
+            // 執行查詢
+            $ranking_result = $link->query($ranking_sql);
 
-        // 顯示順序設定 (2, 1, 3)
-        $display_order = [1, 0, 2]; // 排序：第二名、第一名、第三名
+            // 檢查並顯示結果
+            if ($ranking_result && $ranking_result->num_rows > 0) {
+                // 儲存所有排名資料
+                $rankings = [];
+                while ($row = $ranking_result->fetch_assoc()) {
+                    $rankings[] = $row;
+                }
 
-        // 檢查並顯示結果
-        if ($ranking_result && $ranking_result->num_rows > 0) {
-            // 儲存所有排名資料
-            $rankings = [];
-            while ($row = $ranking_result->fetch_assoc()) {
-                $rankings[] = $row;
-            }
+                // 設定顯示的排名順序：第二名、第一名、第三名
+                $display_order = [1, 0, 2];
 
-            foreach ($display_order as $rank_index) {
-                $nickname = $rankings[$rank_index]['Nickname'];
-                $avatar = $rankings[$rank_index]['Avatar'] ?: $default_avatar;  // 若 Avatar 沒有設置，使用預設圖片
-                $donation_amount = $rankings[$rank_index]['total_donation'];
-                $rank = $rank_index + 1; // 排名從 1 開始
+                // 根據顯示順序動態顯示排名
+                foreach ($display_order as $rank_index) {
+                    if (isset($rankings[$rank_index])) {
+                        // 如果有捐款者，顯示他的資料
+                        $nickname = $rankings[$rank_index]['Nickname'];
+                        $avatar = $rankings[$rank_index]['Avatar'] ?: $default_avatar;  // 若 Avatar 沒有設置，使用預設圖片
+                        $donation_amount = $rankings[$rank_index]['total_donation'];
+                        $rank = $rank_index + 1; // 排名從 1 開始
 
-                // 動態填充每個排名的資料
-                echo "<div class='col-md-4 text-center'>
-                        <div class='rank-card rank-{$rank}'>
-                            <div class='avatar-wrapper avatar-{$rank}'>
-                                <img src='{$avatar}' alt='User {$rank}' class='avatar'>
+                        echo "<div class='col-md-4 text-center'>
+                                <div class='rank-card rank-{$rank}'>
+                                    <div class='avatar-wrapper avatar-{$rank}'>
+                                        <img src='{$avatar}' alt='User {$rank}' class='avatar'>
+                                    </div>
+                                    <h5 class='user-name'>{$nickname}</h5>
+                                    <p class='user-score'>捐贈金額：{$donation_amount}</p>
+                                    <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
+                                </div>
+                            </div>";
+                    } else {
+                        // 若該名次無捐款者，顯示預設資訊
+                        $rank = $rank_index + 1; // 排名從 1 開始
+                        echo "<div class='col-md-4 text-center'>
+                                <div class='rank-card rank-{$rank}'>
+                                    <div class='avatar-wrapper avatar-{$rank}'>
+                                        <img src='{$default_avatar}' alt='No Donations' class='avatar'>
+                                    </div>
+                                    <h5 class='user-name'>尚未有人捐款</h5>
+                                    <p class='user-score'>尚未有人捐款</p>
+                                    <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
+                                </div>
+                            </div>";
+                    }
+                }
+            } else {
+                // 若無任何捐款者，顯示全部 3 名 "尚未有人捐款"
+                for ($i = 0; $i < 3; $i++) {
+                    $rank = $i + 1; // 排名從 1 開始
+                    echo "<div class='col-md-4 text-center'>
+                            <div class='rank-card rank-{$rank}'>
+                                <div class='avatar-wrapper avatar-{$rank}'>
+                                    <img src='{$default_avatar}' alt='No Donations' class='avatar'>
+                                </div>
+                                <h5 class='user-name'>尚未有人捐款</h5>
+                                <p class='user-score'>尚未有人捐款</p>
+                                <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
                             </div>
-                            <h5 class='user-name'>{$nickname}</h5>
-                            <p class='user-score'>捐贈金額：{$donation_amount}</p>
-                            <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
-                        </div>
-                    </div>";
+                        </div>";
+                }
             }
-        } else {
-            // 尚未有人捐款的情況
-            for ($i = 0; $i < 3; $i++) {
-                $rank = $display_order[$i] + 1; // 使用顯示順序中的排名
-                echo "<div class='col-md-4 text-center'>
-                        <div class='rank-card rank-{$rank}'>
-                            <div class='avatar-wrapper avatar-{$rank}'>
-                                <img src='{$default_avatar}' alt='No Donations' class='avatar'>
-                            </div>
-                            <h5 class='user-name'>尚未有人捐款</h5>
-                            <p class='user-score'>尚未有人捐款</p>
-                            <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
-                        </div>
-                    </div>";
-            }
-        }
-        ?>
+            ?>
+        </div>
     </div>
-</div>
-
 
 
 </body>
