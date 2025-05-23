@@ -236,7 +236,7 @@ if (!$donation_history_result) {
             background: linear-gradient(135deg, #55a4ba, #3793c1);
             color: white;
             border-bottom: none;
-            padding: 1.5rem 2.5rem;
+            padding: 1.5rem 3rem;
         }
 
         .modal-header .modal-title {
@@ -246,15 +246,20 @@ if (!$donation_history_result) {
 
         /* Modal 內容區內推與圓角 */
         .modal-body {
-            padding: 1.5rem 2.5rem;
+            padding: 1rem 3rem;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
             flex-grow: 1; /* 自動擴展並填滿剩餘空間 */
             overflow-y: auto; /* 內容區可以垂直滾動 */
         }
 
+        .modal-body h6 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 2rem 0;
+        }
+
         .modal-body p {
-            font-size: 1.05rem;
-            margin-bottom: 1rem;
+            font-size: 1rem;
         }
 
         .modal-body li {
@@ -544,67 +549,66 @@ if (!$donation_history_result) {
                     </p>-->
                     
                     <!-- 榮譽等級說明 -->
-                    <h5 class="mt-4">
-                    <i class="fa-solid fa-trophy me-2"></i> 榮譽等級說明
-                    </h5>
+                    <h6 class="mt-4"><i class="fa-solid fa-trophy me-2"></i> 榮譽等級取得條件</h6>
                     <ul class="list-unstyled ps-4">
-                    <li class="mb-3">
-                        <span class="mini-pennant vip1">VIP1</span>
-                        <strong>VIP1：</strong> 只要有進行捐款，即可獲得此榮譽等級（捐款金額：無門檻）。
-                    </li>
-                    <li class="mb-3">
-                        <span class="mini-pennant vip2">VIP2</span>
-                        <strong>VIP2：</strong> 捐款金額達 1,000 元以上者，將獲得此榮譽等級。
-                    </li>
-                    <li class="mb-3">
-                        <span class="mini-pennant vip3">VIP3</span>
-                        <strong>VIP3：</strong> 捐款金額達 5,000 元以上者，將獲得此榮譽等級。
-                    </li>
-                    <li class="mb-3">
-                        <span class="mini-pennant vip4">VIP4</span>
-                        <strong>VIP4：</strong> 捐款金額達 10,000 元以上者，將獲得此榮譽等級。
-                    </li>
-                    <li class="mb-3">
-                        <span class="mini-pennant vip5">VIP5</span>
-                        <strong>VIP5：</strong> 捐款金額總數排名前 10 名者，將獲得此榮譽等級。
-                    </li>
+                        <li class="mb-3">
+                            <span class="mini-pennant vip1">I</span>
+                            <strong>VIP 1：</strong> 只要進行捐款，即可獲得此榮譽等級（捐款金額：無門檻）。
+                        </li>
+                        <li class="mb-3">
+                            <span class="mini-pennant vip2">II</span>
+                            <strong>VIP 2：</strong> 累計捐款金額達 NT$ 1,000 元以上的用戶，將獲得此榮譽等級。
+                        </li>
+                        <li class="mb-3">
+                            <span class="mini-pennant vip3">III</span>
+                            <strong>VIP 3：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶，將獲得此榮譽等級。
+                        </li>
+                        <li class="mb-3">
+                            <span class="mini-pennant vip4">IV</span>
+                            <strong>VIP 4：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶，將獲得此榮譽等級。
+                        </li>
+                        <li class="mb-3">
+                            <span class="mini-pennant vip5">V</span>
+                            <strong>VIP 5：</strong> 累計捐款金額總數排名前三名的用戶，將獲得此榮譽等級。
+                        </li>
                     </ul>
 
                     <!-- 輪播區域開始 -->
-                    <h5 class="mt-4">
-                        <i class="fa-solid fa-gift me-2"></i> 每個VIP等級詳細介紹
-                    </h5>
+                    <h6 class="mt-4"><i class="fa-solid fa-gift me-2"></i> 榮譽等級對應獎勵</h6>
 
                     <div id="vipCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="text-center">
-                                    <span class="mini-pennant vip1 large">VIP1</span>
-                                    <p class="mt-3"><strong>VIP1</strong>: 此等級會有.........的福利</p>
+                                    <span class="mini-pennant vip1 large">I</span>
+                                    <p class="mt-4">獲得此榮譽等級者，個人主頁將展示專屬榮譽等級徽章</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
-                                    <span class="mini-pennant vip2 large">VIP2</span>
-                                    <p class="mt-3"><strong>VIP2</strong>: 尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中尚在思考中</p>
+                                    <span class="mini-pennant vip2 large">II</span>
+                                    <p class="mt-4">獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，可享有每月電子報與限時活動優先通知</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
-                                    <span class="mini-pennant vip3 large">VIP3</span>
-                                    <p class="mt-3"><strong>VIP3</strong>: 捐款金額達 5,000 元以上者，將獲得此榮譽等級。</p>
+                                    <span class="mini-pennant vip3 large">III</span>
+                                    <p class="mt-4">
+                                        獲得此榮譽等級者，除獲得上述獎勵外，
+                                        額外獲得年度紀念禮包、捐款紀錄優先查詢權限
+                                    </p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
-                                    <span class="mini-pennant vip4 large">VIP4</span>
-                                    <p class="mt-3"><strong>VIP4</strong>: 捐款金額達 10,000 元以上者，將獲得此榮譽等級。</p>
+                                    <span class="mini-pennant vip4 large">IV</span>
+                                    <p class="mt-4">此等級會有.........的福利</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
-                                    <span class="mini-pennant vip5 large">VIP5</span>
-                                    <p class="mt-3"><strong>VIP5</strong>: 捐款金額總數排名前 10 名者，將獲得此榮譽等級。</p>
+                                    <span class="mini-pennant vip5 large">V</span>
+                                    <p class="mt-4">此等級會有.........的福利</p>
                                 </div>
                             </div>
                         </div>

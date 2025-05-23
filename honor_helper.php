@@ -19,19 +19,19 @@ function getVipLevel($link, $User_ID) {
     if ($total > 0) {
         if ($total >= 10000) {
             $class = 'vip4';
-            $label = 'VIP4';
+            $label = 'IV';
             $to_next = 0; // 預設為 VIP4，等下可能升 VIP5
         } elseif ($total >= 5000) {
             $class = 'vip3';
-            $label = 'VIP3';
+            $label = 'III';
             $to_next = 10000 - $total;
         } elseif ($total >= 1000) {
             $class = 'vip2';
-            $label = 'VIP2';
+            $label = 'II';
             $to_next = 5000 - $total;
         } else {
             $class = 'vip1';
-            $label = 'VIP1';
+            $label = 'I';
             $to_next = 1000 - $total;
         }
 
@@ -52,7 +52,7 @@ function getVipLevel($link, $User_ID) {
         // 如果是前 10 名且捐款金額 >= 10,000，升為 VIP5
         if ($isTop10) {
             $class = 'vip5';
-            $label = 'VIP5';
+            $label = 'V';
             $to_next = 0; // 最高等級，無需升級
         }
     }
