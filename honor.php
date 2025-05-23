@@ -16,7 +16,6 @@ $donation_month_sql = "
       AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
     GROUP BY ua.Nickname
     ORDER BY total_donation DESC
-    LIMIT 10
 ";
 $donation_month_result = $conn->query($donation_month_sql);
 if (!$donation_month_result) {
@@ -30,7 +29,6 @@ $donation_history_sql = "
     JOIN useraccount ua ON d.User_ID = ua.User_ID
     GROUP BY ua.Nickname
     ORDER BY total_donation DESC
-    LIMIT 10
 ";
 $donation_history_result = $conn->query($donation_history_sql);
 if (!$donation_history_result) {
