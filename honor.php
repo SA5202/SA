@@ -8,7 +8,23 @@ if (!isset($_SESSION['User_Name'])) {
 require_once "dblink3.php";
 
 // 捐款排行榜
-$donation_sql = "
+$donation_month_sql = "
+    SELECT ua.Nickname, ua.Avatar, SUM(d.Donation_Amount) AS total_donation
+    FROM donation d
+    JOIN useraccount ua ON d.User_ID = ua.User_ID
+    WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE())
+      AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
+    GROUP BY ua.Nickname
+    ORDER BY total_donation DESC
+    LIMIT 10
+";
+$donation_month_result = $conn->query($donation_month_sql);
+if (!$donation_month_result) {
+    die("本月捐款排名查詢錯誤: " . $conn->error);
+}
+
+// 歷史捐款排行榜
+$donation_history_sql = "
     SELECT ua.Nickname, ua.Avatar, SUM(d.Donation_Amount) AS total_donation
     FROM donation d
     JOIN useraccount ua ON d.User_ID = ua.User_ID
@@ -16,25 +32,12 @@ $donation_sql = "
     ORDER BY total_donation DESC
     LIMIT 10
 ";
-$donation_result = $conn->query($donation_sql);
-if (!$donation_result) {
-    die("捐款查詢錯誤: " . $conn->error);
-}
-
-// 建言排行榜
-$suggestion_sql = "
-    SELECT ua.Nickname, ua.Avatar, COUNT(*) AS suggestion_count
-    FROM suggestion s
-    JOIN useraccount ua ON s.User_ID = ua.User_ID
-    GROUP BY ua.Nickname
-    ORDER BY suggestion_count DESC
-    LIMIT 10
-";
-$suggestion_result = $conn->query($suggestion_sql);
-if (!$suggestion_result) {
-    die("建言查詢錯誤: " . $conn->error);
+$donation_history_result = $conn->query($donation_history_sql);
+if (!$donation_history_result) {
+    die("歷史捐款排名查詢錯誤: " . $conn->error);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -44,7 +47,7 @@ if (!$suggestion_result) {
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <style>
         body {
-            max-width: 85%;
+            max-width: 90%;
             margin: 0 auto;
             padding: 30px;
             font-family: "Noto Serif TC", serif;
@@ -88,7 +91,7 @@ if (!$suggestion_result) {
         .nav-link {
             color: #777;
             background-color: #f0f8ff;
-            padding: 0.5rem 30px;
+            padding: 0.5rem 40px;
             font-size: 1rem;
             font-weight: bold;
             border: 1px solid #dee2e6 !important;
@@ -211,7 +214,8 @@ if (!$suggestion_result) {
 
         /* Modal 外框 */
         .modal-dialog {
-            max-width: 75%;
+            height: 85%; /* 確保內容區塊高度填滿 */
+            max-width: 80%;
             top: 30px;
             --bs-card-border-color: var(--bs-border-color-translucent);
             border: 1px solid var(--bs-card-border-color);
@@ -224,7 +228,6 @@ if (!$suggestion_result) {
         /* Modal 內容區模糊 */
         .modal-content {
             height: 100%; /* 確保內容區塊高度填滿 */
-            background-color: #fff;
             backdrop-filter: blur(15px);
             border-radius: 25px;
             border: none;
@@ -235,7 +238,7 @@ if (!$suggestion_result) {
             background: linear-gradient(135deg, #55a4ba, #3793c1);
             color: white;
             border-bottom: none;
-            padding: 1.5rem 2rem;
+            padding: 1.5rem 2.5rem;
         }
 
         .modal-header .modal-title {
@@ -245,8 +248,7 @@ if (!$suggestion_result) {
 
         /* Modal 內容區內推與圓角 */
         .modal-body {
-            padding: 1.5rem 2rem;
-            border-radius: 25px;
+            padding: 1.5rem 2.5rem;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
             flex-grow: 1; /* 自動擴展並填滿剩餘空間 */
             overflow-y: auto; /* 內容區可以垂直滾動 */
@@ -264,46 +266,46 @@ if (!$suggestion_result) {
 
         /* 共用迷你錦旗基底 */
         .mini-pennant {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 56px;
-        clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
-        position: relative;
-        margin-right: 8px;
-        vertical-align: middle;
-        font-family: 'Microsoft JhengHei', sans-serif;
-        font-size: 12px;
-        font-weight: bold;
-        color: #c00;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 56px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            position: relative;
+            margin-right: 8px;
+            vertical-align: middle;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            color: #c00;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         /* 頂部橫條 */
         .mini-pennant::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 4px;
-        background: currentColor;
-        opacity: 0.6;
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: currentColor;
+            opacity: 0.6;
         }
 
         /* 底部流蘇 */
         .mini-pennant::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 6px;
-        background: repeating-linear-gradient(
-            to right,
-            rgba(255,255,255,0.7) 0 3px,
-            rgba(0,0,0,0.1) 3px 6px
-        );
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 6px;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(255,255,255,0.7) 0 3px,
+                rgba(0,0,0,0.1) 3px 6px
+            );
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
         /* 各等級變化 */
@@ -346,29 +348,30 @@ if (!$suggestion_result) {
         /* 放大旗幟 */
         /* 頂部橫條 */
         .mini-pennant.large::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 100%;
-        height: 15px;
-        background: currentColor;
-        opacity: 0.6;
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 15px;
+            background: currentColor;
+            opacity: 0.6;
         }
 
         /* 底部流蘇 */
         .mini-pennant.large::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 8px;
-        background: repeating-linear-gradient(
-            to right,
-            rgba(255,255,255,0.7) 0 3px,
-            rgba(0,0,0,0.1) 3px 6px
-        );
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 8px;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(255,255,255,0.7) 0 3px,
+                rgba(0,0,0,0.1) 3px 6px
+            );
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
+
         .mini-pennant.vip1.large {
             background: #ffeb3b; /* 純黃色 */
             color: #b8860b; /* 文字深金色 */
@@ -409,8 +412,6 @@ if (!$suggestion_result) {
         #vipCarousel .carousel-control-next {
             z-index: 10; /* 確保按鈕位於文字區域的前面 */
         }
-
-        
     </style>
 </head>
 <body>
@@ -424,19 +425,20 @@ if (!$suggestion_result) {
 
         <ul class="nav nav-tabs" id="rankingTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link active" id="donation-tab" data-bs-toggle="tab" href="#donation" role="tab" aria-controls="donation" aria-selected="true">
-                    捐款金額排行榜
+                <a class="nav-link active" id="donation-month-tab" data-bs-toggle="tab" href="#donation-month" role="tab" aria-controls="donation-month" aria-selected="true">
+                    本月捐款金額排名
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="suggestion-tab" data-bs-toggle="tab" href="#suggestion" role="tab" aria-controls="suggestion" aria-selected="false">
-                    建言發布數排行榜
+                <a class="nav-link" id="donation-history-tab" data-bs-toggle="tab" href="#donation-history" role="tab" aria-controls="donation-history" aria-selected="false">
+                    歷史捐款金額排名
                 </a>
             </li>
         </ul>
 
         <div class="tab-content" id="rankingTabContent">
-            <div class="tab-pane fade show active" id="donation" role="tabpanel" aria-labelledby="donation-tab">
+            <!-- 本月捐款排行榜 -->
+            <div class="tab-pane fade show active" id="donation-month" role="tabpanel" aria-labelledby="donation-month-tab">
                 <table class="table table-bordered">
                     <colgroup>
                         <col style="width: 30%;">
@@ -447,11 +449,11 @@ if (!$suggestion_result) {
                         <tr>
                             <th>名次</th>
                             <th>用戶</th>
-                            <th>累積捐款金額 (NT$)</th>
+                            <th>本月捐款金額 (NT$)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $rank = 1; while ($row = $donation_result->fetch_assoc()): ?>
+                        <?php $rank = 1; while ($row = $donation_month_result->fetch_assoc()): ?>
                         <tr>
                             <td>
                                 <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
@@ -460,14 +462,15 @@ if (!$suggestion_result) {
                                 <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
                                 <?= htmlspecialchars($row['Nickname']) ?>
                             </td>
-                            <td><?= number_format($row['total_donation']) ?></td>
+                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
                         </tr>
                         <?php $rank++; endwhile; ?>
                     </tbody>
                 </table>
             </div>
 
-            <div class="tab-pane fade" id="suggestion" role="tabpanel" aria-labelledby="suggestion-tab">
+            <!-- 歷史捐款排行榜 -->
+            <div class="tab-pane fade" id="donation-history" role="tabpanel" aria-labelledby="donation-history-tab">
                 <table class="table table-bordered">
                     <colgroup>
                         <col style="width: 30%;">
@@ -478,11 +481,11 @@ if (!$suggestion_result) {
                         <tr>
                             <th>名次</th>
                             <th>用戶</th>
-                            <th>建言發布數</th>
+                            <th>累計捐款金額 (NT$)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $rank = 1; while ($row = $suggestion_result->fetch_assoc()): ?>
+                        <?php $rank = 1; while ($row = $donation_history_result->fetch_assoc()): ?>
                         <tr>
                             <td>
                                 <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
@@ -491,7 +494,7 @@ if (!$suggestion_result) {
                                 <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
                                 <?= htmlspecialchars($row['Nickname']) ?>
                             </td>
-                            <td><?= $row['suggestion_count'] ?></td>
+                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
                         </tr>
                         <?php $rank++; endwhile; ?>
                     </tbody>
