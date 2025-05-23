@@ -204,15 +204,24 @@ $popular_result = $link->query($popular_sql);
         }
 
 
-       /* 榮譽標章容器 */
+        /* 榮譽標章容器 */
+        h4 {
+            margin: 20px 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
         /* 榮譽榜容器樣式 */
         .honor-wrapper {
-            padding: 40px;
+            padding: 30px 100px;
+            margin: 30px 0;
             background-color: rgba(255, 255, 255, 0.95); /* 淺色背景區別於白色 */
-            border-radius: 20px;
+            border-radius: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
             position: relative;
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
         }
 
         /* 排名卡片的樣式 */
@@ -225,7 +234,7 @@ $popular_result = $link->query($popular_sql);
 
         /* 卡片的懸浮效果 */
         .rank-card:hover {
-            transform: scale(1.05);
+            transform: scale(1.07);
         }
 
         /* 圖片內部的間隔 */
@@ -258,6 +267,7 @@ $popular_result = $link->query($popular_sql);
 
         /* 用戶得分樣式 */
         .user-score {
+            font-weight: bold;
             font-size: 1rem;
             color: #888;
         }
@@ -391,8 +401,9 @@ $popular_result = $link->query($popular_sql);
             </div>
         </div>
     </div>
-    <h3><i class="icon fas fa-medal"></i> 本月榮譽榜</h3> 
+
     <div class="honor-wrapper">
+        <h4><i class="icon fas fa-medal"></i> 本月榮譽榜</h4> 
         <div class="row justify-content-center">
             <?php
             // 連接資料庫
@@ -432,9 +443,9 @@ $popular_result = $link->query($popular_sql);
 
             // 預設資料 (尚未有人捐款)
             $default_ranking = [
-                'Nickname' => '尚未有人捐款',
+                'Nickname' => '虛位以待',
                 'Avatar' => $default_avatar,
-                'total_donation' => '尚未有人捐款'
+                'total_donation' => '0'
             ];
 
             // 根據顯示順序動態顯示排名
@@ -453,8 +464,8 @@ $popular_result = $link->query($popular_sql);
                                 <img src='{$avatar}' alt='User {$rank}' class='avatar'>
                             </div>
                             <h5 class='user-name'>{$nickname}</h5>
-                            <p class='user-score'>捐贈金額：{$donation_amount}</p>
-                            <p class='rank-label rank-label-{$rank}'>第{$rank}名</p>
+                            <p class='user-score'>捐贈金額： NT$ {$donation_amount}</p>
+                            <p class='rank-label rank-label-{$rank}'>第 {$rank} 名</p>
                         </div>
                     </div>";
             }

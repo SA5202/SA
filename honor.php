@@ -619,7 +619,7 @@ if (!$donation_history_result) {
                     </ul>
 
                     <!-- 輪播區域開始 -->
-                    <h6 class="mt-4"><i class="fa-solid fa-gift me-2"></i> 榮譽等級對應獎勵</h6>
+                    <h6 class="mt-5"><i class="fa-solid fa-gift me-2"></i> 榮譽等級對應獎勵</h6>
 
                     <div id="vipCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -632,14 +632,17 @@ if (!$donation_history_result) {
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip2 large">II</span>
-                                    <p class="mt-4 mb-4">獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，可享有每月電子報與限時活動優先通知</p>
+                                    <p class="mt-4 mb-4">
+                                        獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，<br>
+                                        可享有每月電子報與限時活動優先通知
+                                    </p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip3 large">III</span>
                                     <p class="mt-4 mb-4">
-                                        獲得此榮譽等級者，除獲得上述獎勵外，
+                                        獲得此榮譽等級者，除獲得上述獎勵外，<br>
                                         額外獲得年度紀念禮包、捐款紀錄優先查詢權限
                                     </p>
                                 </div>
@@ -647,13 +650,19 @@ if (!$donation_history_result) {
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip4 large">IV</span>
-                                    <p class="mt-4 mb-4">尊榮會員！獲得此榮譽等級者，除獲得上述獎勵外，擁有線上榮譽榜曝光權、專屬客服聯繫窗口</p>
+                                    <p class="mt-4 mb-4">
+                                        尊榮會員！獲得此榮譽等級者，除獲得上述獎勵外，<br>
+                                        擁有線上榮譽榜曝光權、專屬客服聯繫窗口
+                                    </p>
                                 </div>
                             </div>
                             <div class="carousel-item">
                                 <div class="text-center">
                                     <span class="mini-pennant vip5 large">V</span>
-                                    <p class="mt-4 mb-4">無私的貢獻者！獲得此榮譽等級者，除獲得上述獎勵外，享有最高榮譽勳章與年度感謝盛會邀請</p>
+                                    <p class="mt-4 mb-4">
+                                        無私的貢獻者！獲得此榮譽等級者，除獲得上述獎勵外，<br>
+                                        享有最高榮譽勳章與年度感謝盛會邀請
+                                    </p>
                                 </div>
                             </div>
                         </div>
