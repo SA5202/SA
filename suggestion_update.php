@@ -176,7 +176,7 @@
     $stmt2->close();
 
     // 是否鎖定
-    $is_locked = in_array($status, ['審核中', '處理中', '已完成']);
+    $is_locked = in_array($status, ['處理中', '已完成']);
 
 
     $stmt->close();
