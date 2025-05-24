@@ -4,6 +4,9 @@ require_once "db_connect.php";
 
 $is_logged_in = isset($_SESSION['User_Name']);
 
+// 取得登入者資訊
+$user_id = $_SESSION['User_ID'] ?? 0;
+$admin_type = $_SESSION['admin_type'] ?? '';
 
 $keyword = $_GET['keyword'] ?? '';
 $facility = $_GET['facility'] ?? '';
@@ -11,7 +14,16 @@ $building = $_GET['building'] ?? '';
 $college = isset($_GET['college']) ? mysqli_real_escape_string($link, $_GET['college']) : '';
 $sort = $_GET['sort'] ?? 'latest';
 
-// SQL 加 Priority_Level
+$dept_college_id = null;
+if ($admin_type === 'department' && $user_id > 0) {
+    $scope_sql = "SELECT College_ID FROM DepartmentAdminScope WHERE User_ID = $user_id";
+    $scope_result = $link->query($scope_sql);
+    if ($scope_result && $row = $scope_result->fetch_assoc()) {
+        $dept_college_id = (int)$row['College_ID'];
+    }
+}
+
+// SQL 查詢（建言 + 設施 + 建築 + 學院 + 優先級 + 喜歡數 + 狀態）
 $sql = "
     SELECT 
         s.Suggestion_ID, 
@@ -39,8 +51,14 @@ $sql = "
     JOIN Building b ON s.Building_ID = b.Building_ID
     JOIN College c ON b.College_ID = c.College_ID
     WHERE 1=1
-    ";
+";
 
+// 👉 限制 Department Admin 只能看到自己學院
+if ($admin_type === 'department' && $dept_college_id !== null) {
+    $sql .= " AND c.College_ID = $dept_college_id";
+}
+
+// 過濾條件
 $progress_enum = [
     'all' => '所有進度',
     'unprocessed' => '未受理',
@@ -63,7 +81,6 @@ if (!empty($progress) && $progress !== 'all' && isset($progress_enum[$progress])
     ";
 }
 
-
 if (!empty($keyword)) {
     $sql .= " AND (s.Title LIKE '%$keyword%' OR s.Description LIKE '%$keyword%')";
 }
@@ -77,19 +94,18 @@ if (!empty($college)) {
     $sql .= " AND c.College_Name = '$college'";
 }
 
-
-// 根據選擇的排序條件修改 SQL 查詢
+// 排序條件
 if ($sort == 'oldest') {
-    $sql .= " ORDER BY s.Updated_At ASC";  // 由舊到新
+    $sql .= " ORDER BY s.Updated_At ASC";
 } elseif ($sort == 'likes') {
-    $sql .= " ORDER BY LikeCount DESC";  // 最多人點讚
+    $sql .= " ORDER BY LikeCount DESC";
 } else {
-    $sql .= " ORDER BY s.Updated_At DESC";  // 由新到舊（預設排序）
+    $sql .= " ORDER BY s.Updated_At DESC";
 }
 
 $result = $link->query($sql);
 
-// 取得學院、建築與設施選單
+// 取得學院、建築、設施選項（下拉選單）
 $colleges = $link->query("SELECT DISTINCT College_Name FROM College ORDER BY College_ID");
 $buildings = $link->query("
     SELECT DISTINCT Building_Name 
