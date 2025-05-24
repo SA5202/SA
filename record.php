@@ -418,6 +418,23 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             opacity: 1;
             transform: scale(1.2);
         }
+
+        .title2 {
+            color: #003153;
+            font-weight: bold;
+            text-decoration: none;
+            overflow: hidden;
+            /* 確保文字不會超出 */
+            text-overflow: ellipsis;
+            /* 使用省略號來處理過長的文字 */
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* 限制顯示行數 */
+            -webkit-box-orient: vertical;
+            margin-bottom: 1em;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
     </style>
 
 
@@ -565,8 +582,8 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
                         <td>
-                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
-                                <?= htmlspecialchars($row["Title"]) ?>
+                            <a class="title2" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Title']), 0, 10, "⋯")) ?>
                             </a>
                         </td>
                         <td class="text-center update-time">
@@ -657,7 +674,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                     <tr>
                         <td>
                             <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
-                                <?= htmlspecialchars($row["Title"]) ?>
+                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Title']), 0, 10, "⋯")) ?>
                             </a>
                         </td>
                         <td class="text-center update-time">
@@ -766,7 +783,7 @@ LIMIT 5
                     <tr>
                         <td class="highlight-title">
                             <a class="title" href="suggestion_detail.php?id=<?= htmlspecialchars($row['Suggestion_ID']) ?>">
-                                <?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?>
+                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Funding_Title']), 0, 10, "⋯")) ?>
                             </a>
                         </td>
 

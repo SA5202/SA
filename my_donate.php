@@ -478,7 +478,7 @@ ORDER BY d.Donation_Date DESC";
                     <tr>
                         <td class="highlight-title">
                             <a class="title" href="suggestion_detail.php?id=<?= htmlspecialchars($row['Suggestion_ID']) ?>">
-                                <?= htmlspecialchars($row['Funding_Title'] ?? '無標題') ?>
+                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Funding_Title']), 0, 10, "⋯")) ?>
                             </a>
                         </td>
 
