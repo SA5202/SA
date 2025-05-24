@@ -1,12 +1,17 @@
 <?php
 session_start();
 
+require_once 'honor_helper.php'; // 建議放在 session_start() 下方
+
+// 基本登入狀態判斷
 $is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+$user_type = $_SESSION['User_Type'] ?? ''; // 抓 user type: admin / general / department
 
-require_once 'honor_helper.php'; // 加這行在 session_start(); 下面
+// 連接資料庫
 $link = new mysqli('localhost', 'root', '', 'SA');
 
+// 處理 VIP 等級
 $vipInfo = null;
 $userVipLevel = 0; // 預設 0 表示沒VIP或未登入
 if (isset($_SESSION['User_ID'])) {
@@ -451,26 +456,93 @@ if (isset($_SESSION['User_ID'])) {
             <h1>FJU I-Money</h1>
         </a>
         <?php if ($is_admin): ?>
-            <!-- 管理者的側邊欄 -->
-            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-home"></i><span> 首頁</span></a>
-            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-wrench"></i><span> 管理公告</span></a>
-            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span></a>
-            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-cogs"></i><span> 管理建言進度</span></a>
-            <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-money-check-alt"></i><span> 手動捐款</span></a>
-            <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span></a>
-            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-donate"></i><span> 管理募款建言</span></a>
-            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span></a>
-        <?php else: ?>
+        <?php
+            $admin_type = $_SESSION['admin_type'] ?? '';
+        ?>
 
+        <!-- 首頁一定都有 -->
+        <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+            <i class="icon fas fa-home"></i><span> 首頁</span>
+        </a>
+
+        <?php if ($admin_type === 'super'): ?>
+            <!-- Super Admin：全部功能 -->
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-wrench"></i><span> 管理公告</span>
+            </a>
+            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
+            </a>
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
+            </a>
+            <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-money-check-alt"></i><span> 手動捐款</span>
+            </a>
+            <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
+            </a>
+            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-donate"></i><span> 管理募款建言</span>
+            </a>
+            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
+            </a>
+
+        <?php elseif ($admin_type === 'general'): ?>
+            <!-- General Admin：公告與捐款相關功能 -->
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-wrench"></i><span> 管理公告</span>
+            </a>
+            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
+            </a>
+            <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-money-check-alt"></i><span> 手動捐款</span>
+            </a>
+            <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
+            </a>
+
+        <?php elseif ($admin_type === 'department'): ?>
+            <!-- Department Admin：建言與募款功能 -->
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
+            </a>
+            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-donate"></i><span> 管理募款建言</span>
+            </a>
+            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
+            </a>
+        <?php endif; ?>
+
+        <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
-            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-home"></i><span> 首頁</span></a>
-            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fa-solid fa-bell"></i><span> 公告</span></a>
-            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-scroll"></i><span> 建言總覽</span></a>
-            <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-comment-dots"></i><span> 提出建言</span></a>
-            <a href="donation_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-money-check-alt"></i><span> 捐款</span></a>
-            <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-hand-holding-usd"></i><span> 捐款進度</span></a>
-            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-medal"></i><span> 榮譽機制</span></a>
-            <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)"><i class="icon fas fa-phone-alt"></i><span> 聯絡我們</span></a>
+            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-home"></i><span> 首頁</span>
+            </a>
+            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fa-solid fa-bell"></i><span> 公告</span>
+            </a>
+            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-scroll"></i><span> 建言總覽</span>
+            </a>
+            <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-comment-dots"></i><span> 提出建言</span>
+            </a>
+            <a href="donation_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-money-check-alt"></i><span> 捐款</span>
+            </a>
+            <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-hand-holding-usd"></i><span> 捐款進度</span>
+            </a>
+            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-medal"></i><span> 榮譽機制</span>
+            </a>
+            <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-phone-alt"></i><span> 聯絡我們</span>
+            </a>
         <?php endif; ?>
     </div>
 
