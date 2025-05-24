@@ -623,142 +623,162 @@ if (isset($_SESSION['User_ID'])) {
 
     <script>
     (() => {
-    if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
-        // 等級不足，彩帶和彈窗不顯示
-        document.getElementById('confettiCanvas').style.display = 'none';
-        document.getElementById('welcomeModal').style.display = 'none';
-        return;
-    }
-
-    const modal = document.getElementById('welcomeModal');
-    const closeBtn = document.getElementById('closeModalBtn');
-    const canvas = document.getElementById('confettiCanvas');
-    const ctx = canvas.getContext('2d');
-    let W, H;
-    let animationFrameId = null;
-
-    function showModal() {
-        modal.style.opacity = '1';
-        modal.style.pointerEvents = 'auto';
-    }
-
-    function hideModal() {
-        modal.style.opacity = '0';
-        modal.style.pointerEvents = 'none';
-
-        // 停止動畫並清除畫面
-        if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
+        if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
+            document.getElementById('confettiCanvas').style.display = 'none';
+            document.getElementById('welcomeModal').style.display = 'none';
+            return;
         }
-        ctx.clearRect(0, 0, W, H);
-        canvas.style.display = 'none'; // 隱藏畫布
-    }
 
-    closeBtn.addEventListener('click', hideModal);
+        const modal = document.getElementById('welcomeModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+        let animationFrameId = null;
+        let autoCloseTimer = null;
+        let modalClosed = false;
 
-    window.addEventListener('load', () => {
-        setTimeout(showModal, 500);
-    });
+        function showModal() {
+            modal.style.opacity = '1';
+            modal.style.pointerEvents = 'auto';
 
-    function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
+            // 自動 10 秒後關閉
+            autoCloseTimer = setTimeout(() => {
+                hideModal();
+            }, 10000);
 
-    const confettiCountStart = 300;
-    let confetti = [];
-
-    function randomRange(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-    class Confetto {
-        constructor() {
-        this.reset();
+            // 點擊任意地方就關閉
+            document.addEventListener('click', onUserClick, { once: true, capture: true });
         }
-        reset() {
-        this.x = randomRange(0, W);
-        this.y = randomRange(-H, 0);
-        this.size = randomRange(7, 12);
-        this.speedY = randomRange(1, 3);
-        this.speedX = randomRange(-0.5, 0.5);
-        this.rotation = randomRange(0, 2 * Math.PI);
-        this.rotationSpeed = randomRange(-0.05, 0.05);
-        const colors = [
-            'hsl(0, 100%, 70%)',
-            'hsl(30, 100%, 70%)',
-            'hsl(60, 100%, 70%)',
-            'hsl(120, 80%, 70%)',
-            'hsl(200, 100%, 70%)',
-            'hsl(270, 100%, 70%)',
-            'hsl(330, 100%, 70%)'
-        ];
-        this.color = colors[Math.floor(randomRange(0, colors.length))];
-        this.alpha = 1;
+
+        function onUserClick() {
+            hideModal();
+            clearTimeout(autoCloseTimer);
         }
-        update() {
-        this.y += this.speedY;
-        this.x += this.speedX;
-        this.rotation += this.rotationSpeed;
 
-        if (this.y > H) {
-            this.y = randomRange(-20, 0);
-            this.x = randomRange(0, W);
+        function hideModal() {
+            if (modalClosed) return;
+            modalClosed = true;
+
+            modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none';
+
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            ctx.clearRect(0, 0, W, H);
+            canvas.style.display = 'none';
         }
-        if (this.x > W) this.x = 0;
-        else if (this.x < 0) this.x = W;
-        }
-        draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.alpha;
-        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
-        ctx.restore();
-        ctx.globalAlpha = 1;
-        }
-    }
 
-    for (let i = 0; i < confettiCountStart; i++) {
-        confetti.push(new Confetto());
-    }
-
-    let startTime = null;
-    const totalDuration = 10000;
-
-    function loop(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-
-        ctx.clearRect(0, 0, W, H);
-
-        let ratio = 1 - elapsed / totalDuration;
-        if (ratio < 0) ratio = 0;
-        const currentCount = Math.floor(confettiCountStart * ratio);
-
-        confetti = confetti.slice(0, currentCount);
-
-        confetti.forEach(c => {
-        c.update();
-        c.draw(ctx);
+        closeBtn.addEventListener('click', () => {
+            clearTimeout(autoCloseTimer);
+            hideModal();
         });
 
-        if (elapsed < totalDuration && confetti.length > 0) {
-        animationFrameId = requestAnimationFrame(loop);
-        } else {
-        ctx.clearRect(0, 0, W, H);
-        animationFrameId = null;
+        window.addEventListener('load', () => {
+            setTimeout(showModal, 500);
+        });
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
         }
-    }
+        window.addEventListener('resize', resize);
+        resize();
 
-    animationFrameId = requestAnimationFrame(loop);
+        const confettiCountStart = 300;
+        let confetti = [];
+
+        function randomRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        class Confetto {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = randomRange(0, W);
+                this.y = randomRange(-H, 0);
+                this.size = randomRange(7, 12);
+                this.speedY = randomRange(1, 3);
+                this.speedX = randomRange(-0.5, 0.5);
+                this.rotation = randomRange(0, 2 * Math.PI);
+                this.rotationSpeed = randomRange(-0.05, 0.05);
+                const colors = [
+                    'hsl(0, 100%, 70%)',
+                    'hsl(30, 100%, 70%)',
+                    'hsl(60, 100%, 70%)',
+                    'hsl(120, 80%, 70%)',
+                    'hsl(200, 100%, 70%)',
+                    'hsl(270, 100%, 70%)',
+                    'hsl(330, 100%, 70%)'
+                ];
+                this.color = colors[Math.floor(randomRange(0, colors.length))];
+                this.alpha = 1;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotationSpeed;
+
+                if (this.y > H) {
+                    this.y = randomRange(-20, 0);
+                    this.x = randomRange(0, W);
+                }
+                if (this.x > W) this.x = 0;
+                else if (this.x < 0) this.x = W;
+            }
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
+                ctx.restore();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        for (let i = 0; i < confettiCountStart; i++) {
+            confetti.push(new Confetto());
+        }
+
+        let startTime = null;
+        const totalDuration = 10000;
+
+        function loop(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+
+            ctx.clearRect(0, 0, W, H);
+
+            let ratio = 1 - elapsed / totalDuration;
+            if (ratio < 0) ratio = 0;
+            const currentCount = Math.floor(confettiCountStart * ratio);
+
+            confetti = confetti.slice(0, currentCount);
+
+            confetti.forEach(c => {
+                c.update();
+                c.draw(ctx);
+            });
+
+            if (elapsed < totalDuration && confetti.length > 0) {
+                animationFrameId = requestAnimationFrame(loop);
+            } else {
+                ctx.clearRect(0, 0, W, H);
+                animationFrameId = null;
+            }
+        }
+
+        animationFrameId = requestAnimationFrame(loop);
     })();
-
     </script>
+
+
 
 
 
