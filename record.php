@@ -382,8 +382,8 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             /* 限制最大寬度 */
             border-radius: 10px;
             box-shadow: 0 6px 15px rgba(0, 0, 80, 0.15);
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.7rem;
+            font-weight: bold;
             color: #1a1a1a;
             pointer-events: none;
             z-index: 9999;
@@ -406,7 +406,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             white-space: normal;
             /* 允許換行 */
             position: relative;
-            min-height: 40px;
+            min-height: 30px;
             /* 設定最小高度為原來的大小 */
             height: auto;
             /* 高度根據內容自動調整 */
@@ -560,7 +560,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         <h3>
             <i class="icon fas fa-clipboard-list"></i>我的建言紀錄&nbsp;
             <a href="my_suggestion.php" style="color:black">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="icon fa-solid fa-angle-right"></i>
             </a>
         </h3>
     <?php endif; ?>
@@ -653,7 +653,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         <h3>
             <i class="icon fas fa-clipboard-list"></i>我的按讚紀錄&nbsp;
             <a href="my_like.php" style="color:black">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="icon fa-solid fa-angle-right"></i>
             </a>
         </h3>
     <?php endif; ?>
@@ -757,7 +757,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         <h3>
             <i class="icon fas fa-donate"></i>我的捐款紀錄&nbsp;
             <a href="my_donate.php" style="color:black">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="icon fa-solid fa-angle-right"></i>
             </a>
         </h3>
     <?php endif; ?>
