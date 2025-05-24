@@ -498,9 +498,9 @@ ORDER BY d.Donation_Date DESC";
                             </a>
                         </td>
 
-                        <td>$<?= number_format($row['Donation_Amount'], 0) ?></td>
-                        <td><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
-                        <td>
+                        <td class="update">$<?= number_format($row['Donation_Amount'], 0) ?></td>
+                        <td class="update"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
+                        <td class="update">
                             <small class="funding-status-label <?= htmlspecialchars($funding_status_class) ?>">
                                 <?= htmlspecialchars($row['Funding_Status'] ?? '') ?>
                             </small>
