@@ -254,7 +254,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
         .funding-status-label {
             display: inline-block;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             padding: 0.3rem 1.2rem;
             border-radius: 12px;
             font-weight: bold;

@@ -433,6 +433,14 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             font-size: 1.05rem;
             line-height: 1.6;
         }
+
+        a.back {
+            display: inline-block;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+            text-decoration: none;
+            color: #3498db;
+        }
     </style>
 
 
@@ -497,6 +505,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             <?php endif; ?>
         </tbody>
     </table>
+    <a href="javascript:history.back()" class="back"><b>⬅ 回個人主頁</b></a>
 
 
 
