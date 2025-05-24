@@ -40,7 +40,9 @@ JOIN Building b ON s.Building_ID = b.Building_ID
 JOIN Useraccount u ON s.User_ID = u.User_ID
 WHERE s.User_ID = ?
 ORDER BY s.Updated_At DESC
+LIMIT 5
 ";
+
 
 $stmt = $link->prepare($sql);
 $stmt->bind_param("i", $viewUserID);
@@ -294,7 +296,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             font-size: 2rem;
             font-weight: bold;
             color: #c00;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         /* 頂部橫條 */
@@ -315,47 +317,54 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             bottom: 0;
             width: 100%;
             height: 20px;
-            background: repeating-linear-gradient(
-                to right,
-                rgba(255,255,255,0.7) 0 3px,
-                rgba(0,0,0,0.1) 3px 6px
-            );
+            background: repeating-linear-gradient(to right,
+                    rgba(255, 255, 255, 0.7) 0 3px,
+                    rgba(0, 0, 0, 0.1) 3px 6px);
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
         /* 各等級變化 */
         .mini-pennant.vip1 {
-            background: #ffeb3b;          /* 純黃色 */
-            color: #b8860b;              /* 文字深金色 */
+            background: #ffeb3b;
+            /* 純黃色 */
+            color: #b8860b;
+            /* 文字深金色 */
         }
 
         .mini-pennant.vip2 {
-            background: #ffeb3b;         /* 純黃色 */
-            color: #b8860b;              /* 文字深金色 */
+            background: #ffeb3b;
+            /* 純黃色 */
+            color: #b8860b;
+            /* 文字深金色 */
         }
 
         .mini-pennant.vip3 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
+            background: linear-gradient(to bottom, #ffe600, #ff6600);
+            /* 和 vip2 一樣的顏色 */
         }
 
         .mini-pennant.vip4 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
-            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
+            background: linear-gradient(to bottom, #ffe600, #ff6600);
+            /* 和 vip3 一樣的顏色 */
+            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.3);
+            /* 更柔和的陰影 */
         }
 
         .mini-pennant.vip5 {
-            background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
-            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
+            background: linear-gradient(to bottom, #ffec8b, #ff4500);
+            /* 現在不變 */
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
             animation: glow 2s infinite alternate;
         }
 
         /* 閃爍動畫 */
         @keyframes glow {
-            from { 
-                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7); 
+            from {
+                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
             }
-            to { 
-                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255,255,255,1); 
+
+            to {
+                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255, 255, 255, 1);
             }
         }
 
@@ -369,7 +378,8 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         .vip-floating-tooltip {
             position: fixed;
             visibility: hidden;
-            max-width: 100%;  /* 限制最大寬度 */
+            max-width: 100%;
+            /* 限制最大寬度 */
             border-radius: 10px;
             box-shadow: 0 6px 15px rgba(0, 0, 80, 0.15);
             font-size: 0.8rem;
@@ -380,8 +390,10 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             opacity: 0;
             transform: scale(0);
             transition: opacity 0.8s ease, transform 0.8s ease;
-            word-wrap: break-word; /* 使文字自動換行 */
-            word-break: break-word; /* 防止過長的單詞溢出 */
+            word-wrap: break-word;
+            /* 使文字自動換行 */
+            word-break: break-word;
+            /* 防止過長的單詞溢出 */
         }
 
         .vip-floating-tooltip .tooltip-content {
@@ -391,10 +403,13 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             display: flex;
             align-items: center;
             justify-content: center;
-            white-space: normal; /* 允許換行 */
+            white-space: normal;
+            /* 允許換行 */
             position: relative;
-            min-height: 40px;  /* 設定最小高度為原來的大小 */
-            height: auto;  /* 高度根據內容自動調整 */
+            min-height: 40px;
+            /* 設定最小高度為原來的大小 */
+            height: auto;
+            /* 高度根據內容自動調整 */
         }
 
         /* 顯示動畫 */
@@ -403,7 +418,6 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             opacity: 1;
             transform: scale(1.2);
         }
-
     </style>
 
 
@@ -411,7 +425,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
 <body>
     <?php if ($sessionUserType == 'admin'): ?>
-    <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的基本資訊</h3>
+        <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的基本資訊</h3>
     <?php else: ?>
         <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
     <?php endif; ?>
@@ -426,9 +440,9 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                         <?php if ($row_user): ?>
                             <tr>
                                 <?php
-                                    $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
-                                    $avatar_url = !empty($row_user['Avatar']) ? htmlspecialchars($row_user['Avatar']) : $default_avatar;
-                                    $avatar_url .= '?t=' . time();
+                                $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+                                $avatar_url = !empty($row_user['Avatar']) ? htmlspecialchars($row_user['Avatar']) : $default_avatar;
+                                $avatar_url .= '?t=' . time();
                                 ?>
                                 <td rowspan='6'>
                                     <img src="<?= $avatar_url ?>"
@@ -487,31 +501,31 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             </div>
 
             <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'vip-floating-tooltip';
-                tooltip.innerHTML = `<div class="tooltip-content"></div>`;
-                document.body.appendChild(tooltip);
+                document.addEventListener('DOMContentLoaded', function() {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'vip-floating-tooltip';
+                    tooltip.innerHTML = `<div class="tooltip-content"></div>`;
+                    document.body.appendChild(tooltip);
 
-                document.querySelectorAll('.vip-hover-trigger').forEach(el => {
-                    el.addEventListener('mouseenter', () => {
-                        tooltip.querySelector('.tooltip-content').textContent = el.getAttribute('data-tooltip');
+                    document.querySelectorAll('.vip-hover-trigger').forEach(el => {
+                        el.addEventListener('mouseenter', () => {
+                            tooltip.querySelector('.tooltip-content').textContent = el.getAttribute('data-tooltip');
 
-                        const rect = el.getBoundingClientRect();
-                        const scrollY = window.scrollY || window.pageYOffset;
-                        const scrollX = window.scrollX || window.pageXOffset;
+                            const rect = el.getBoundingClientRect();
+                            const scrollY = window.scrollY || window.pageYOffset;
+                            const scrollX = window.scrollX || window.pageXOffset;
 
-                        // 固定顯示在元素上方中間
-                        tooltip.style.left = (rect.left + rect.width / 2 + scrollX - tooltip.offsetWidth / 2) + 'px';
-                        tooltip.style.top = (rect.bottom + scrollY + 15) + 'px'; // 向下偏移 10px，可調整
-                        tooltip.classList.add('show');
-                    });
+                            // 固定顯示在元素上方中間
+                            tooltip.style.left = (rect.left + rect.width / 2 + scrollX - tooltip.offsetWidth / 2) + 'px';
+                            tooltip.style.top = (rect.bottom + scrollY + 15) + 'px'; // 向下偏移 10px，可調整
+                            tooltip.classList.add('show');
+                        });
 
-                    el.addEventListener('mouseleave', () => {
-                        tooltip.classList.remove('show');
+                        el.addEventListener('mouseleave', () => {
+                            tooltip.classList.remove('show');
+                        });
                     });
                 });
-            });
             </script>
 
         </div>
@@ -585,12 +599,14 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     // 撈取使用者按讚過的建言
     $sql_likes = "
     SELECT s.Suggestion_ID, s.Title, s.Updated_At,
-       (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
+           (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
     FROM Upvote u
     JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
     WHERE u.User_ID = ? AND u.Is_Upvoted = 1
     ORDER BY s.Updated_At DESC
-    ";
+    LIMIT 5
+";
+
 
     $stmt_likes = $link->prepare($sql_likes);
     if (!$stmt_likes) {
@@ -681,7 +697,9 @@ LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
 LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
 LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
 WHERE d.User_ID = ?
-ORDER BY d.Donation_Date DESC";
+ORDER BY d.Donation_Date DESC
+LIMIT 5
+";
 
     $stmt = $link->prepare($sql);
     if (!$stmt) {
@@ -772,4 +790,5 @@ ORDER BY d.Donation_Date DESC";
 
 
 </body>
+
 </html>
