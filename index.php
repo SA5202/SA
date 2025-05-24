@@ -169,6 +169,31 @@ if (isset($_SESSION['User_ID'])) {
             display: inline-block;
         }
 
+        .sidebar-link {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover {
+            background-color: #eee;
+        }
+
+        .arrow {
+            font-size: 1.5rem;
+            margin-left: auto;
+            transition: transform 0.5s ease;
+        }
+
+        .arrow.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .group-content {
+            display: none;
+        }
+
         /* Position the sidebar toggle button at the bottom of the sidebar */
         .toggle-btn {
             position: fixed;
@@ -460,34 +485,58 @@ if (isset($_SESSION['User_ID'])) {
             $admin_type = $_SESSION['admin_type'] ?? '';
         ?>
 
-        <!-- 首頁一定都有 -->
+        <!-- 共用首頁 -->
         <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
             <i class="icon fas fa-home"></i><span> 首頁</span>
         </a>
 
         <?php if ($admin_type === 'super'): ?>
             <!-- Super Admin：全部功能 -->
-            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fa-solid fa-wrench"></i><span> 管理公告</span>
+            <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
+                <i class="icon fa-solid fa-bullhorn"></i><span> 管理公告</span>
+                <span class="arrow">▾</span>
             </a>
-            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
+            <div class="group-content">
+                <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fa-solid fa-wrench"></i><span> 公告列表</span>
+                </a>
+                <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
+                </a>
+            </div>
+
+            <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
+                <i class="icon fas fa-list"></i><span> 建言管理</span>
+                <span class="arrow">▾</span>
             </a>
-            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
+            <div class="group-content">
+                <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
+                </a>
+                <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-donate"></i><span> 管理募款建言</span>
+                </a>
+                <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
+                </a>
+            </div>
+
+            <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
+                <i class="icon fa-solid fa-layer-group"></i><span> 捐款管理</span>
+                <span class="arrow">▾</span>
             </a>
-            <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-money-check-alt"></i><span> 手動捐款</span>
+            <div class="group-content">
+                <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-coins"></i><span> 手動捐款</span>
+                </a>
+                <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
+                </a>
+            </div>
+            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-medal"></i><span> 榮譽排名</span>
             </a>
-            <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
-            </a>
-            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-donate"></i><span> 管理募款建言</span>
-            </a>
-            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
-            </a>
+
 
         <?php elseif ($admin_type === 'general'): ?>
             <!-- General Admin：公告與捐款相關功能 -->
@@ -498,7 +547,7 @@ if (isset($_SESSION['User_ID'])) {
                 <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
             </a>
             <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-money-check-alt"></i><span> 手動捐款</span>
+                <i class="icon fas fa-coins"></i><span> 手動捐款</span>
             </a>
             <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                 <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
@@ -523,22 +572,19 @@ if (isset($_SESSION['User_ID'])) {
                 <i class="icon fas fa-home"></i><span> 首頁</span>
             </a>
             <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fa-solid fa-bell"></i><span> 公告</span>
+                <i class="icon fa-solid fa-bullhorn"></i><span> 公告</span>
             </a>
             <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-scroll"></i><span> 建言總覽</span>
+                <i class="icon fas fa-list"></i><span> 建言總覽</span>
             </a>
             <a href="suggestions_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                 <i class="icon fas fa-comment-dots"></i><span> 提出建言</span>
-            </a>
-            <a href="donation_make.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-money-check-alt"></i><span> 捐款</span>
             </a>
             <a href="donate.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                 <i class="icon fas fa-hand-holding-usd"></i><span> 捐款進度</span>
             </a>
             <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-medal"></i><span> 榮譽機制</span>
+                <i class="icon fas fa-medal"></i><span> 榮譽排名</span>
             </a>
             <a href="contact.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                 <i class="icon fas fa-phone-alt"></i><span> 聯絡我們</span>
@@ -617,6 +663,36 @@ if (isset($_SESSION['User_ID'])) {
     <div class="back-to-top" id="backToTopBtn">↑</div>
 
     <script>
+        function toggleGroup(element) {
+            const content = element.nextElementSibling;
+            const arrow = element.querySelector('.arrow');
+            
+            // 先關閉所有的內容區塊和箭頭
+            const allContents = document.querySelectorAll('.group-content');
+            const allArrows = document.querySelectorAll('.arrow');
+            
+            allContents.forEach((el) => {
+                if (el !== content) {
+                    el.style.display = 'none';
+                }
+            });
+            
+            allArrows.forEach((arrowElement) => {
+                if (arrowElement !== arrow) {
+                    arrowElement.textContent = '▾';  // 或根據需要更改箭頭符號
+                }
+            });
+
+            // 切換當前點擊的內容區塊
+            if (content && content.classList.contains('group-content')) {
+                const isOpen = content.style.display === 'block';
+                content.style.display = isOpen ? 'none' : 'block';
+                if (arrow) {
+                    arrow.textContent = isOpen ? '▾' : '▴';
+                }
+            }
+        }
+
         const backToTopBtn = document.getElementById('backToTopBtn');
         const iframe = document.querySelector('iframe[name="contentFrame"]');
 
@@ -688,173 +764,167 @@ if (isset($_SESSION['User_ID'])) {
 
     <!-- 視覺彈窗 -->
     <div id="welcomeModal">
-    <div class="modal-title">尊貴的貴賓，您好！</div>
+    <div class="modal-title">尊貴的用戶，您好！</div>
     <div class="modal-message">感謝您的蒞臨，祝您有個美好的一天！✨</div>
     <button id="closeModalBtn">關閉</button>
     </div>
 
     <script>
-    (() => {
-        if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
-            document.getElementById('confettiCanvas').style.display = 'none';
-            document.getElementById('welcomeModal').style.display = 'none';
-            return;
-        }
+        (() => {
+            if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
+                document.getElementById('confettiCanvas').style.display = 'none';
+                document.getElementById('welcomeModal').style.display = 'none';
+                return;
+            }
 
-        const modal = document.getElementById('welcomeModal');
-        const closeBtn = document.getElementById('closeModalBtn');
-        const canvas = document.getElementById('confettiCanvas');
-        const ctx = canvas.getContext('2d');
-        let W, H;
-        let animationFrameId = null;
-        let autoCloseTimer = null;
-        let modalClosed = false;
+            const modal = document.getElementById('welcomeModal');
+            const closeBtn = document.getElementById('closeModalBtn');
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            let W, H;
+            let animationFrameId = null;
+            let autoCloseTimer = null;
+            let modalClosed = false;
 
-        function showModal() {
-            modal.style.opacity = '1';
-            modal.style.pointerEvents = 'auto';
+            function showModal() {
+                modal.style.opacity = '1';
+                modal.style.pointerEvents = 'auto';
 
-            // 自動 10 秒後關閉
-            autoCloseTimer = setTimeout(() => {
+                // 自動 10 秒後關閉
+                autoCloseTimer = setTimeout(() => {
+                    hideModal();
+                }, 10000);
+
+                // 點擊任意地方就關閉
+                document.addEventListener('click', onUserClick, { once: true, capture: true });
+            }
+
+            function onUserClick() {
                 hideModal();
-            }, 10000);
-
-            // 點擊任意地方就關閉
-            document.addEventListener('click', onUserClick, { once: true, capture: true });
-        }
-
-        function onUserClick() {
-            hideModal();
-            clearTimeout(autoCloseTimer);
-        }
-
-        function hideModal() {
-            if (modalClosed) return;
-            modalClosed = true;
-
-            modal.style.opacity = '0';
-            modal.style.pointerEvents = 'none';
-
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
+                clearTimeout(autoCloseTimer);
             }
-            ctx.clearRect(0, 0, W, H);
-            canvas.style.display = 'none';
-        }
 
-        closeBtn.addEventListener('click', () => {
-            clearTimeout(autoCloseTimer);
-            hideModal();
-        });
+            function hideModal() {
+                if (modalClosed) return;
+                modalClosed = true;
 
-        window.addEventListener('load', () => {
-            setTimeout(showModal, 500);
-        });
+                modal.style.opacity = '0';
+                modal.style.pointerEvents = 'none';
 
-        function resize() {
-            W = canvas.width = window.innerWidth;
-            H = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        const confettiCountStart = 300;
-        let confetti = [];
-
-        function randomRange(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
-        class Confetto {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = randomRange(0, W);
-                this.y = randomRange(-H, 0);
-                this.size = randomRange(7, 12);
-                this.speedY = randomRange(1, 3);
-                this.speedX = randomRange(-0.5, 0.5);
-                this.rotation = randomRange(0, 2 * Math.PI);
-                this.rotationSpeed = randomRange(-0.05, 0.05);
-                const colors = [
-                    'hsl(0, 100%, 70%)',
-                    'hsl(30, 100%, 70%)',
-                    'hsl(60, 100%, 70%)',
-                    'hsl(120, 80%, 70%)',
-                    'hsl(200, 100%, 70%)',
-                    'hsl(270, 100%, 70%)',
-                    'hsl(330, 100%, 70%)'
-                ];
-                this.color = colors[Math.floor(randomRange(0, colors.length))];
-                this.alpha = 1;
-            }
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                this.rotation += this.rotationSpeed;
-
-                if (this.y > H) {
-                    this.y = randomRange(-20, 0);
-                    this.x = randomRange(0, W);
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
                 }
-                if (this.x > W) this.x = 0;
-                else if (this.x < 0) this.x = W;
+                ctx.clearRect(0, 0, W, H);
+                canvas.style.display = 'none';
             }
-            draw(ctx) {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.alpha;
-                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
-                ctx.restore();
-                ctx.globalAlpha = 1;
-            }
-        }
 
-        for (let i = 0; i < confettiCountStart; i++) {
-            confetti.push(new Confetto());
-        }
-
-        let startTime = null;
-        const totalDuration = 10000;
-
-        function loop(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const elapsed = timestamp - startTime;
-
-            ctx.clearRect(0, 0, W, H);
-
-            let ratio = 1 - elapsed / totalDuration;
-            if (ratio < 0) ratio = 0;
-            const currentCount = Math.floor(confettiCountStart * ratio);
-
-            confetti = confetti.slice(0, currentCount);
-
-            confetti.forEach(c => {
-                c.update();
-                c.draw(ctx);
+            closeBtn.addEventListener('click', () => {
+                clearTimeout(autoCloseTimer);
+                hideModal();
             });
 
-            if (elapsed < totalDuration && confetti.length > 0) {
-                animationFrameId = requestAnimationFrame(loop);
-            } else {
-                ctx.clearRect(0, 0, W, H);
-                animationFrameId = null;
+            window.addEventListener('load', () => {
+                setTimeout(showModal, 500);
+            });
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
             }
-        }
+            window.addEventListener('resize', resize);
+            resize();
 
-        animationFrameId = requestAnimationFrame(loop);
-    })();
+            const confettiCountStart = 300;
+            let confetti = [];
+
+            function randomRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            class Confetto {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = randomRange(0, W);
+                    this.y = randomRange(-H, 0);
+                    this.size = randomRange(7, 12);
+                    this.speedY = randomRange(1, 3);
+                    this.speedX = randomRange(-0.5, 0.5);
+                    this.rotation = randomRange(0, 2 * Math.PI);
+                    this.rotationSpeed = randomRange(-0.05, 0.05);
+                    const colors = [
+                        'hsl(0, 100%, 70%)',
+                        'hsl(30, 100%, 70%)',
+                        'hsl(60, 100%, 70%)',
+                        'hsl(120, 80%, 70%)',
+                        'hsl(200, 100%, 70%)',
+                        'hsl(270, 100%, 70%)',
+                        'hsl(330, 100%, 70%)'
+                    ];
+                    this.color = colors[Math.floor(randomRange(0, colors.length))];
+                    this.alpha = 1;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    this.rotation += this.rotationSpeed;
+
+                    if (this.y > H) {
+                        this.y = randomRange(-20, 0);
+                        this.x = randomRange(0, W);
+                    }
+                    if (this.x > W) this.x = 0;
+                    else if (this.x < 0) this.x = W;
+                }
+                draw(ctx) {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
+                    ctx.restore();
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            for (let i = 0; i < confettiCountStart; i++) {
+                confetti.push(new Confetto());
+            }
+
+            let startTime = null;
+            const totalDuration = 10000;
+
+            function loop(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const elapsed = timestamp - startTime;
+
+                ctx.clearRect(0, 0, W, H);
+
+                let ratio = 1 - elapsed / totalDuration;
+                if (ratio < 0) ratio = 0;
+                const currentCount = Math.floor(confettiCountStart * ratio);
+
+                confetti = confetti.slice(0, currentCount);
+
+                confetti.forEach(c => {
+                    c.update();
+                    c.draw(ctx);
+                });
+
+                if (elapsed < totalDuration && confetti.length > 0) {
+                    animationFrameId = requestAnimationFrame(loop);
+                } else {
+                    ctx.clearRect(0, 0, W, H);
+                    animationFrameId = null;
+                }
+            }
+
+            animationFrameId = requestAnimationFrame(loop);
+        })();
     </script>
-
-
-
-
-
-
 
 </body>
 
