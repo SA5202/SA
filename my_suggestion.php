@@ -462,8 +462,8 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
                         <td>
-                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
-                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Title']), 0, 10, "⋯")) ?>
+                            <a class="title2" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Title']), 0, 30, "⋯")) ?>
                             </a>
                         </td>
                         <td class="text-center update-time">
