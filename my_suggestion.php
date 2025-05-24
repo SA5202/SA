@@ -21,11 +21,11 @@ include_once 'honor_helper.php';  // 引入這個檔案
 if (isset($_GET['id'])) {
     $viewUserID = intval($_GET['id']);
     // 確保只有當前用戶或管理員才能查看
-    if ($viewUserID !== $sessionUserID && $sessionUserType !== 'admin') {
+    if ((int)$viewUserID !== (int)$sessionUserID && $sessionUserType !== 'admin') {
         die('無權限查看此使用者資訊。');
     }
 } else {
-    $viewUserID = $sessionUserID;
+    $viewUserID = isset($_GET['id']) ? (int)$_GET['id'] : (int)$sessionUserID;
 }
 
 // 查詢建議內容
@@ -294,7 +294,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             font-size: 2rem;
             font-weight: bold;
             color: #c00;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         /* 頂部橫條 */
@@ -315,47 +315,54 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             bottom: 0;
             width: 100%;
             height: 20px;
-            background: repeating-linear-gradient(
-                to right,
-                rgba(255,255,255,0.7) 0 3px,
-                rgba(0,0,0,0.1) 3px 6px
-            );
+            background: repeating-linear-gradient(to right,
+                    rgba(255, 255, 255, 0.7) 0 3px,
+                    rgba(0, 0, 0, 0.1) 3px 6px);
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
         /* 各等級變化 */
         .mini-pennant.vip1 {
-            background: #ffeb3b;          /* 純黃色 */
-            color: #b8860b;              /* 文字深金色 */
+            background: #ffeb3b;
+            /* 純黃色 */
+            color: #b8860b;
+            /* 文字深金色 */
         }
 
         .mini-pennant.vip2 {
-            background: #ffeb3b;         /* 純黃色 */
-            color: #b8860b;              /* 文字深金色 */
+            background: #ffeb3b;
+            /* 純黃色 */
+            color: #b8860b;
+            /* 文字深金色 */
         }
 
         .mini-pennant.vip3 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
+            background: linear-gradient(to bottom, #ffe600, #ff6600);
+            /* 和 vip2 一樣的顏色 */
         }
 
         .mini-pennant.vip4 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
-            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
+            background: linear-gradient(to bottom, #ffe600, #ff6600);
+            /* 和 vip3 一樣的顏色 */
+            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.3);
+            /* 更柔和的陰影 */
         }
 
         .mini-pennant.vip5 {
-            background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
-            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
+            background: linear-gradient(to bottom, #ffec8b, #ff4500);
+            /* 現在不變 */
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
             animation: glow 2s infinite alternate;
         }
 
         /* 閃爍動畫 */
         @keyframes glow {
-            from { 
-                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7); 
+            from {
+                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
             }
-            to { 
-                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255,255,255,1); 
+
+            to {
+                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255, 255, 255, 1);
             }
         }
 
@@ -369,7 +376,8 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         .vip-floating-tooltip {
             position: fixed;
             visibility: hidden;
-            max-width: 100%;  /* 限制最大寬度 */
+            max-width: 100%;
+            /* 限制最大寬度 */
             border-radius: 10px;
             box-shadow: 0 6px 15px rgba(0, 0, 80, 0.15);
             font-size: 0.8rem;
@@ -380,8 +388,10 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             opacity: 0;
             transform: scale(0);
             transition: opacity 0.8s ease, transform 0.8s ease;
-            word-wrap: break-word; /* 使文字自動換行 */
-            word-break: break-word; /* 防止過長的單詞溢出 */
+            word-wrap: break-word;
+            /* 使文字自動換行 */
+            word-break: break-word;
+            /* 防止過長的單詞溢出 */
         }
 
         .vip-floating-tooltip .tooltip-content {
@@ -391,10 +401,13 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             display: flex;
             align-items: center;
             justify-content: center;
-            white-space: normal; /* 允許換行 */
+            white-space: normal;
+            /* 允許換行 */
             position: relative;
-            min-height: 40px;  /* 設定最小高度為原來的大小 */
-            height: auto;  /* 高度根據內容自動調整 */
+            min-height: 40px;
+            /* 設定最小高度為原來的大小 */
+            height: auto;
+            /* 高度根據內容自動調整 */
         }
 
         /* 顯示動畫 */
@@ -403,7 +416,6 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             opacity: 1;
             transform: scale(1.2);
         }
-
     </style>
 
 
@@ -482,8 +494,9 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     $link->close();
     ?>
 
-    
+
 
 
 </body>
+
 </html>
