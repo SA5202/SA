@@ -3,7 +3,30 @@ session_start();
 
 $is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+
+require_once 'honor_helper.php'; // 加這行在 session_start(); 下面
+$link = new mysqli('localhost', 'root', '', 'SA');
+
+$vipInfo = null;
+$userVipLevel = 0; // 預設 0 表示沒VIP或未登入
+if (isset($_SESSION['User_ID'])) {
+    $vipInfo = getVipLevel($link, $_SESSION['User_ID']);
+    $vipClass = $vipInfo['class'] ?? '';
+
+    // vip 等級映射
+    $vipLevelMap = [
+        'vip1' => 1,
+        'vip2' => 2,
+        'vip3' => 3,
+        'vip4' => 4,
+        'vip5' => 5,
+    ];
+    $userVipLevel = $vipLevelMap[$vipClass] ?? 0;
+}
 ?>
+<script>
+  const userVipLevel = <?= intval($userVipLevel) ?>;
+</script>
 
 
 <!DOCTYPE html>
@@ -18,6 +41,8 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" href="https://www.design-thinking.tw/assets/images/school-logo/FJU.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.10.0/dist/fireworks.js"></script>
     <style>
         * {
             margin: 0;
@@ -353,6 +378,70 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
             color: rgb(1, 47, 92);
             /* 滑鼠懸停時的顏色，可自行調整 */
         }
+
+        /* 彩帶畫布 */
+        #confettiCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* 視覺彈窗 */
+        #welcomeModal {
+            position: fixed;
+            top: 0; /* 緊貼正上方 */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(74, 144, 226, 0.3); /* 淡藍色，透明度0.3 */
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
+            padding: 15px 40px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1.4rem;
+            color: black; /* 全黑字 */
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 10000;
+            max-width: 400px;
+            width: fit-content;
+            white-space: nowrap;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        #welcomeModal .modal-title {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        #welcomeModal .modal-message {
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+
+        /* 關閉按鈕 */
+        #closeModalBtn {
+            margin-top: 12px;
+            background: rgba(37, 93, 153, 0.6);
+            border: none;
+            color: #dceeff;
+            font-weight: 600;
+            padding: 4px 16px;        /* 內距改小 */
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;          /* 字體變小 */
+            transition: background-color 0.3s ease;
+        }
+        #closeModalBtn:hover {
+            background-color: rgba(27, 69, 110, 0.8);
+        }
     </style>
 </head>
 
@@ -521,6 +610,159 @@ $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
                 });
         });
     </script>
+
+    <!-- 彩帶畫布 -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- 視覺彈窗 -->
+<div id="welcomeModal">
+  <div class="modal-title">尊貴的貴賓，您好！</div>
+  <div class="modal-message">感謝您的蒞臨，祝您有個美好的一天！✨</div>
+  <button id="closeModalBtn">關閉</button>
+</div>
+
+<script>
+(() => {
+  if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
+    // 等級不足，彩帶和彈窗不顯示
+    document.getElementById('confettiCanvas').style.display = 'none';
+    document.getElementById('welcomeModal').style.display = 'none';
+    return;
+  }
+
+  const modal = document.getElementById('welcomeModal');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  let animationFrameId = null;
+
+  function showModal() {
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+  }
+
+  function hideModal() {
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+
+    // 停止動畫並清除畫面
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+    ctx.clearRect(0, 0, W, H);
+    canvas.style.display = 'none'; // 隱藏畫布
+  }
+
+  closeBtn.addEventListener('click', hideModal);
+
+  window.addEventListener('load', () => {
+    setTimeout(showModal, 500);
+  });
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const confettiCountStart = 300;
+  let confetti = [];
+
+  function randomRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  class Confetto {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = randomRange(0, W);
+      this.y = randomRange(-H, 0);
+      this.size = randomRange(7, 12);
+      this.speedY = randomRange(1, 3);
+      this.speedX = randomRange(-0.5, 0.5);
+      this.rotation = randomRange(0, 2 * Math.PI);
+      this.rotationSpeed = randomRange(-0.05, 0.05);
+      const colors = [
+        'hsl(0, 100%, 70%)',
+        'hsl(30, 100%, 70%)',
+        'hsl(60, 100%, 70%)',
+        'hsl(120, 80%, 70%)',
+        'hsl(200, 100%, 70%)',
+        'hsl(270, 100%, 70%)',
+        'hsl(330, 100%, 70%)'
+      ];
+      this.color = colors[Math.floor(randomRange(0, colors.length))];
+      this.alpha = 1;
+    }
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX;
+      this.rotation += this.rotationSpeed;
+
+      if (this.y > H) {
+        this.y = randomRange(-20, 0);
+        this.x = randomRange(0, W);
+      }
+      if (this.x > W) this.x = 0;
+      else if (this.x < 0) this.x = W;
+    }
+    draw(ctx) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.alpha;
+      ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
+      ctx.restore();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  for (let i = 0; i < confettiCountStart; i++) {
+    confetti.push(new Confetto());
+  }
+
+  let startTime = null;
+  const totalDuration = 10000;
+
+  function loop(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+
+    ctx.clearRect(0, 0, W, H);
+
+    let ratio = 1 - elapsed / totalDuration;
+    if (ratio < 0) ratio = 0;
+    const currentCount = Math.floor(confettiCountStart * ratio);
+
+    confetti = confetti.slice(0, currentCount);
+
+    confetti.forEach(c => {
+      c.update();
+      c.draw(ctx);
+    });
+
+    if (elapsed < totalDuration && confetti.length > 0) {
+      animationFrameId = requestAnimationFrame(loop);
+    } else {
+      ctx.clearRect(0, 0, W, H);
+      animationFrameId = null;
+    }
+  }
+
+  animationFrameId = requestAnimationFrame(loop);
+})();
+
+</script>
+
+
+
+
 
 </body>
 
