@@ -532,9 +532,21 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     </div>
 
     <?php if ($sessionUserType == 'admin'): ?>
-        <h3><i class="icon fas fa-clipboard-list"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的建言記錄&nbsp;<a href="my_suggestion.php" style="color:black"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></h3>
+    <h3>
+        <i class="icon fas fa-clipboard-list"></i>
+        <?= htmlspecialchars($row_user['User_Name']) ?> 的建言記錄&nbsp;
+        <a href="my_suggestion.php?id=<?= urlencode($row_user['User_ID']) ?>" style="color:black">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+    </h3>
     <?php else: ?>
-        <h3><i class="icon fas fa-clipboard-list"></i> 我的建言紀錄&nbsp;<a href="my_suggestion.php" style="color:black"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></h3>
+        <h3>
+            <i class="icon fas fa-clipboard-list"></i>
+            我的建言紀錄&nbsp;
+            <a href="my_suggestion.php" style="color:black">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </h3>
     <?php endif; ?>
 
     <table class="table">
@@ -619,9 +631,21 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     ?>
 
     <?php if ($sessionUserType == 'admin'): ?>
-        <h3><i class="icon fas fa-clipboard-list"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的按讚記錄&nbsp;<a href="my_like.php" style="color:black"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></h3>
+        <h3>
+            <i class="icon fas fa-clipboard-list"></i>
+            <?= htmlspecialchars($row_user['User_Name']) ?> 的按讚記錄&nbsp;
+            <a href="my_like.php?id=<?= urlencode($row_user['User_ID']) ?>" style="color:black">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </h3>
     <?php else: ?>
-        <h3><i class="icon fas fa-clipboard-list"></i> 我的按讚紀錄&nbsp;<a href="my_like.php" style="color:black"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></h3>
+        <h3>
+            <i class="icon fas fa-clipboard-list"></i>
+            我的按讚紀錄&nbsp;
+            <a href="my_like.php" style="color:black">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </h3>
     <?php endif; ?>
 
     <table class="table">
@@ -712,9 +736,21 @@ LIMIT 5
     ?>
 
     <?php if ($sessionUserType == 'admin'): ?>
-        <h3><i class="icon fas fa-donate"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的捐款紀錄 &nbsp; <a href="my_donate.php" style="color:black"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></h3>
+        <h3>
+            <i class="icon fas fa-donate"></i>
+            <?= htmlspecialchars($row_user['User_Name']) ?> 的捐款紀錄&nbsp;
+            <a href="my_donate.php?id=<?= urlencode($row_user['User_ID']) ?>" style="color:black">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </h3>
     <?php else: ?>
-        <h3><i class="icon fas fa-donate"></i> 我的捐款紀錄 &nbsp; <a href="my_donate.php" style="color:black"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></h3>
+        <h3>
+            <i class="icon fas fa-donate"></i>
+            我的捐款紀錄&nbsp;
+            <a href="my_donate.php" style="color:black">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+        </h3>
     <?php endif; ?>
 
     <table class="table">
