@@ -29,6 +29,7 @@ if ($result) {
 ?>
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,12 +51,18 @@ if ($result) {
             padding: 40px;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 25px;
-            box-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
+            --bs-card-border-color: var(--bs-border-color-translucent);
+            border: 1px solid var(--bs-card-border-color);
+            /* 加這行才會顯示框線 */
+
+            /* 加入浮動效果所需的過渡設定 */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .donation-form:hover {
-            transform: scale(1.015);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .form-control,
@@ -70,14 +77,14 @@ if ($result) {
         }
 
         .btn-success {
-            background-color: #4CAF50;
+            background-color: rgb(99, 160, 101);
             font-weight: bold;
             font-size: 1.1rem;
             border-radius: 25px;
         }
 
         .btn-success:hover {
-            background-color: #3a9741;
+            background-color: rgb(66, 107, 70);
         }
 
         .hidden {
@@ -85,112 +92,114 @@ if ($result) {
         }
     </style>
 </head>
+
 <body>
-<div class="donation-form">
-    <h2 class="mb-4 text-center fw-bold">管理員新增捐款紀錄</h2>
+    <div class="donation-form">
+        <h2 class="mb-4 text-center fw-bold">管理員新增捐款紀錄</h2>
 
-    <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>成功新增！</strong> 已建立一筆手動捐款紀錄。
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    <?php elseif (isset($_GET['error'])): ?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>錯誤：</strong> <?= htmlspecialchars($_GET['error']) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    <?php endif; ?>
+        <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>成功新增！</strong> 已建立一筆手動捐款紀錄。
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php elseif (isset($_GET['error'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>錯誤：</strong> <?= htmlspecialchars($_GET['error']) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <?php endif; ?>
 
-    <form method="POST" action="donation_admin_process.php" onsubmit="return validateEmailIfNeeded()">
-        <div class="mb-3">
-            <label for="donor_name" class="form-label">捐款者帳號（選填）</label>
-            <input type="text" class="form-control" name="donor_name" id="donor_name" maxlength="50">
-        </div>
+        <form method="POST" action="donation_admin_process.php" onsubmit="return validateEmailIfNeeded()">
+            <div class="mb-3">
+                <label for="donor_name" class="form-label">捐款者帳號（選填）</label>
+                <input type="text" class="form-control" name="donor_name" id="donor_name" maxlength="50">
+            </div>
 
-        <div class="mb-3">
-            <label for="funding_id" class="form-label">捐款項目</label>
-            <select class="form-select" name="funding_id" id="funding_id" required>
-                <option value="">請選擇項目</option>
-                <?php foreach ($fundingOptions as $item): ?>
-                    <option value="<?= $item['Funding_ID'] ?>"><?= htmlspecialchars($item['Title']) ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+            <div class="mb-3">
+                <label for="funding_id" class="form-label">捐款項目</label>
+                <select class="form-select" name="funding_id" id="funding_id" required>
+                    <option value="">請選擇項目</option>
+                    <?php foreach ($fundingOptions as $item): ?>
+                        <option value="<?= $item['Funding_ID'] ?>"><?= htmlspecialchars($item['Title']) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <div class="mb-3">
-            <label for="amount" class="form-label">金額（NTD）</label>
-            <input type="number" class="form-control" name="amount" id="amount" required min="1">
-        </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">金額（NTD）</label>
+                <input type="number" class="form-control" name="amount" id="amount" required min="1">
+            </div>
 
-        <input type="hidden" name="method_id" value="7"> <!-- 現金 -->
+            <input type="hidden" name="method_id" value="7"> <!-- 現金 -->
 
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" name="receipt" id="receipt" onchange="toggleEmailField()">
-            <label class="form-check-label" for="receipt">需要收據（電子）</label>
-        </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="receipt" id="receipt" onchange="toggleEmailField()">
+                <label class="form-check-label" for="receipt">需要收據（電子）</label>
+            </div>
 
-        <div class="mb-3 hidden" id="emailRow">
-            <label for="donor_email" class="form-label">收據接收 Email</label>
-            <input type="email" class="form-control" name="donor_email" id="donor_email" placeholder="example@mail.com">
-        </div>
+            <div class="mb-3 hidden" id="emailRow">
+                <label for="donor_email" class="form-label">收據接收 Email</label>
+                <input type="email" class="form-control" name="donor_email" id="donor_email" placeholder="example@mail.com">
+            </div>
 
-        <div class="mb-3">
-            <label for="note" class="form-label">備註（可輸入管理員留言）</label>
-            <textarea class="form-control" name="note" id="note" rows="2" maxlength="100"></textarea>
-        </div>
+            <div class="mb-3">
+                <label for="note" class="form-label">備註（可輸入管理員留言）</label>
+                <textarea class="form-control" name="note" id="note" rows="2" maxlength="100"></textarea>
+            </div>
 
-        <button type="submit" class="btn btn-success w-100">新增捐款紀錄</button>
-    </form>
-</div>
+            <button type="submit" class="btn btn-success w-100">新增捐款紀錄</button>
+        </form>
+    </div>
 
-<script>
-    function toggleEmailField() {
-        const emailRow = document.getElementById('emailRow');
-        const receiptChecked = document.getElementById('receipt').checked;
-        const donorName = document.getElementById('donor_name').value.trim();
-        const emailInput = document.getElementById('donor_email');
+    <script>
+        function toggleEmailField() {
+            const emailRow = document.getElementById('emailRow');
+            const receiptChecked = document.getElementById('receipt').checked;
+            const donorName = document.getElementById('donor_name').value.trim();
+            const emailInput = document.getElementById('donor_email');
 
-        emailRow.classList.toggle('hidden', !receiptChecked);
+            emailRow.classList.toggle('hidden', !receiptChecked);
 
-        if (receiptChecked && donorName) {
-            fetch(`get_user_email.php?username=${encodeURIComponent(donorName)}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success && data.email) {
-                        emailInput.value = data.email;
-                        emailInput.readOnly = true;
-                    } else {
+            if (receiptChecked && donorName) {
+                fetch(`get_user_email.php?username=${encodeURIComponent(donorName)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.email) {
+                            emailInput.value = data.email;
+                            emailInput.readOnly = true;
+                        } else {
+                            emailInput.value = '';
+                            emailInput.readOnly = false;
+                        }
+                    }).catch(() => {
                         emailInput.value = '';
                         emailInput.readOnly = false;
-                    }
-                }).catch(() => {
-                    emailInput.value = '';
-                    emailInput.readOnly = false;
-                });
-        } else {
-            emailInput.value = '';
-            emailInput.readOnly = false;
+                    });
+            } else {
+                emailInput.value = '';
+                emailInput.readOnly = false;
+            }
         }
-    }
 
-    function validateEmailIfNeeded() {
-        const receiptChecked = document.getElementById('receipt').checked;
-        const email = document.getElementById('donor_email').value.trim();
-        if (receiptChecked && email === '') {
-            alert('需要收據時，請輸入有效的電子郵件');
-            return false;
+        function validateEmailIfNeeded() {
+            const receiptChecked = document.getElementById('receipt').checked;
+            const email = document.getElementById('donor_email').value.trim();
+            if (receiptChecked && email === '') {
+                alert('需要收據時，請輸入有效的電子郵件');
+                return false;
+            }
+            return true;
         }
-        return true;
-    }
 
-    setTimeout(() => {
-        const alert = document.querySelector('.alert');
-        if (alert) {
-            alert.classList.remove('show');
-            alert.classList.add('fade');
-            setTimeout(() => alert.remove(), 500);
-        }
-    }, 3000);
-</script>
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(() => alert.remove(), 500);
+            }
+        }, 3000);
+    </script>
 </body>
+
 </html>

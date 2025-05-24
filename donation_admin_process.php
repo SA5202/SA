@@ -3,6 +3,9 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+// 設定時區為台北時間，避免時差問題
+date_default_timezone_set('Asia/Taipei');
+
 // 確保登入且為管理員
 if (!isset($_SESSION['User_Name']) || $_SESSION['User_Type'] !== 'admin') {
     header("Location: login.php");
@@ -37,7 +40,7 @@ $method_id = 7; // 現金
 $needs_receipt = isset($_POST['receipt']) ? 1 : 0;
 $note = trim($_POST['note'] ?? '');
 $status = '已捐款';
-$date = date('Y-m-d');
+$date = date('Y-m-d H:i'); // 取得台北時間
 $is_manual = 1;
 $is_anonymous = 0;
 
@@ -67,7 +70,7 @@ if (!empty($donor_name)) {
     $is_anonymous = 1;
 }
 
-// 狀態描述
+// 狀態描述組合
 $notes = [];
 if ($is_anonymous) $notes[] = '匿名';
 if ($needs_receipt) $notes[] = '收據';
@@ -83,7 +86,7 @@ $project_stmt->execute();
 $project_result = $project_stmt->get_result();
 $project_title = $project_result->num_rows > 0 ? $project_result->fetch_assoc()['Title'] : '不明項目';
 
-// 寫入資料
+// 寫入資料庫
 $insert = $link->prepare("
     INSERT INTO Donation 
     (User_ID, Funding_ID, Method_ID, Donation_Amount, Status, Donation_Date, 
@@ -92,11 +95,21 @@ $insert = $link->prepare("
 ");
 $insert->bind_param(
     "iiiissiiiis",
-    $user_id, $funding_id, $method_id, $amount, $status, $date,
-    $is_manual, $admin_id, $is_anonymous, $needs_receipt, $donor_email
+    $user_id,
+    $funding_id,
+    $method_id,
+    $amount,
+    $status,
+    $date,
+    $is_manual,
+    $admin_id,
+    $is_anonymous,
+    $needs_receipt,
+    $donor_email
 );
 
 if ($insert->execute()) {
+    // 如果需要收據且 email 格式正確，寄發收據信
     if ($needs_receipt && filter_var($donor_email, FILTER_VALIDATE_EMAIL)) {
         require_once __DIR__ . '/send_receipt.php';
         $name_for_email = $is_anonymous ? '匿名' : $donor_name;

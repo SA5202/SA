@@ -1,3 +1,50 @@
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+if (!isset($_SESSION['User_Name'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$link = new mysqli('localhost', 'root', '', 'sa');
+if ($link->connect_error) {
+    die('資料庫連接失敗: ' . $link->connect_error);
+}
+
+// 撈取進行中的募款建言（確認 Suggestion_ID 有對應建言）
+$fundingOptions = [];
+$query = "
+    SELECT f.Funding_ID, s.Title 
+    FROM FundingSuggestion f
+    JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
+    WHERE f.Status = '進行中'
+";
+$result = $link->query($query);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $fundingOptions[] = $row;
+    }
+}
+
+// 撈取付款方式
+$paymentMethods = [];
+$result = $link->query("SELECT Method_ID, Method_Name FROM PaymentMethod");
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $paymentMethods[] = $row;
+    }
+}
+
+// 撈取使用者 Email
+$email = '';
+$user_name = $_SESSION['User_Name'];
+$email_result = $link->query("SELECT Email FROM UserAccount WHERE User_Name = '" . $link->real_escape_string($user_name) . "'");
+if ($email_result && $email_result->num_rows > 0) {
+    $email = $email_result->fetch_assoc()['Email'];
+}
+?>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
@@ -6,180 +53,135 @@
     <title>捐款頁面</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* 設定全局顏色和樣式變數 */
-        :root {
-            --primary-color:rgb(94, 141, 192);
-            /* 主色：藍色 */
-            --secondary-color:rgb(140, 193, 97);
-            /* 副色：綠色 */
-            --card-bg-color: #ffffff;
-            /* 卡片背景顏色 */
-            --text-color: #333;
-            /* 文字顏色 */
-            --border-radius: 1rem;
-            /* 邊角圓角半徑 */
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            /* 卡片陰影顏色 */
-            --font-family: 'Arial', sans-serif;
-            /* 字型 */
-        }
-
-        /* 設定背景顏色和全局文字樣式 */
         body {
-            background-color: rgba(248, 249, 250, 0);
-            /* 透明背景 */
-            font-family: var(--font-family);
-            /* 設定字體 */
-            color: var(--text-color);
-            /* 設定文字顏色 */
+            background-color: transparent;
+            font-family: "Noto Serif TC", serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
             margin: 0;
-            padding: 0;
+            padding: 30px 20px;
+            color: #333;
         }
 
-        /* 容器樣式 */
-        .container {
-            padding: 50px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        .donation-form {
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        /* 卡片樣式 */
-        .donation-card {
-            width: 100%;
-            max-width: 600px;
-            background-color: var(--card-bg-color);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 8px var(--shadow-color);
-            overflow: hidden;
-            transition: transform 0.3s ease;
+        .donation-form:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
-        /* 當卡片懸停時的效果 */
-        .donation-card:hover {
-            transform: translateY(-10px);
+        .donation-form .form-control,
+        .donation-form .form-select,
+        .donation-form textarea {
+            border-radius: 10px;
+            max-width: 100%;
         }
 
-        /* 卡片標題樣式 */
-        .card-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-top-left-radius: var(--border-radius);
-            border-top-right-radius: var(--border-radius);
-        }
-
-        /* 表單欄位標籤樣式 */
         .form-label {
             font-weight: bold;
-            margin-bottom: 8px;
-            display: inline-block;
+            color: #555;
         }
 
-        /* 表單欄位樣式 */
-        .form-select,
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 0.5rem;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        /* 當欄位獲得焦點時改變邊框顏色 */
-        .form-select:focus,
-        .form-control:focus {
-            border-color: var(--primary-color);
-            outline: none;
-        }
-
-        /* 送出按鈕樣式 */
         .btn-success {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 18px;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            background-color: rgb(99, 160, 101);
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 50px;
         }
 
-        /* 按鈕懸停效果 */
         .btn-success:hover {
-            background-color:rgb(115, 181, 70);
-            transform: translateY(-3px);
-        }
-
-        /* 按鈕容器樣式 */
-        .d-grid {
-            display: grid;
-            justify-items: center;
-            margin-top: 20px;
-        }
-
-        /* 彈性盒子調整 */
-        .mb-3 {
-            margin-bottom: 1.5rem;
+            background-color: rgb(66, 107, 70);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <div class="card donation-card">
-            <div class="card-header">
-                <h4 class="mb-0">捐款頁面</h4>
+    <div class="donation-form">
+        <?php if (isset($_GET['success']) && $_GET['success'] === '1'): ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>捐款成功！</strong> 感謝您的支持，我們已收到您的捐款。
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="card-body">
-
-                <form>
-                    <!-- 建言種類 -->
-                    <div class="mb-3">
-                        <label for="suggestion_type" class="form-label">建言種類</label>
-                        <select class="form-select" id="suggestion_type" name="suggestion_type" required>
-                            <option value="">請選擇建言種類</option>
-                            <option value="校園環境">校園環境</option>
-                            <option value="設施改善">設施改善</option>
-                            <option value="教學設備">教學設備</option>
-                            <option value="活動支持">活動支持</option>
-                            <option value="其他">其他</option>
-                        </select>
-                    </div>
-
-                    <!-- 支付方式 -->
-                    <div class="mb-3">
-                        <label for="payment_method" class="form-label">支付方式</label>
-                        <select class="form-select" id="payment_method" name="payment_method" required>
-                            <option value="">請選擇支付方式</option>
-                            <option value="信用卡">信用卡</option>
-                            <option value="ATM轉帳">ATM轉帳</option>
-                            <option value="超商代碼">超商代碼</option>
-                        </select>
-                    </div>
-
-                    <!-- 金額 -->
-                    <div class="mb-3">
-                        <label for="amount" class="form-label">捐款金額（NT$）</label>
-                        <input type="number" class="form-control" id="amount" name="amount" placeholder="請輸入金額" required min="1">
-                    </div>
-
-                    <!-- 送出按鈕 -->
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success">確認捐款</button>
-                    </div>
-                </form>
-
+        <?php elseif (isset($_GET['error'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>錯誤：</strong> <?= htmlspecialchars($_GET['error']) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        </div>
+        <?php endif; ?>
+
+        <?php if (empty($fundingOptions)): ?>
+            <div class="alert alert-warning text-center">⚠ 目前沒有「進行中」的募款建言可供捐款。</div>
+        <?php else: ?>
+            <form method="POST" action="donate_process.php">
+                <div class="mb-3">
+                    <label for="funding_id" class="form-label">捐款項目</label>
+                    <select class="form-select" id="funding_id" name="funding_id" required>
+                        <option value="">請選擇項目</option>
+                        <?php foreach ($fundingOptions as $item): ?>
+                            <option value="<?= $item['Funding_ID'] ?>"><?= htmlspecialchars($item['Title']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="amount" class="form-label">捐款金額 (NTD)</label>
+                    <input type="number" class="form-control" id="amount" name="amount" required min="1">
+                </div>
+
+                <div class="mb-3">
+                    <label for="method" class="form-label">付款方式</label>
+                    <select class="form-select" id="method" name="method_id" required>
+                        <option value="">請選擇付款方式</option>
+                        <?php foreach ($paymentMethods as $method): ?>
+                            <?php if ($method['Method_ID'] != 7): ?>
+                                <option value="<?= $method['Method_ID'] ?>"><?= htmlspecialchars($method['Method_Name']) ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="anonymous" name="anonymous">
+                    <label class="form-check-label" for="anonymous">匿名捐款</label>
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="receipt" name="receipt">
+                    <label class="form-check-label" for="receipt">需要收據（電子）</label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="message" class="form-label">留言 (100 字以內)</label>
+                    <textarea class="form-control" id="message" name="message" rows="2" maxlength="100"></textarea>
+                </div>
+
+                <input type="hidden" name="donor_email" value="<?= htmlspecialchars($email) ?>">
+
+                <button type="submit" class="btn btn-success w-100">立即捐款</button>
+            </form>
+        <?php endif; ?>
     </div>
+
+    <script>
+        setTimeout(function() {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+                setTimeout(() => alert.remove(), 500);
+            }
+        }, 3000);
+    </script>
 
 </body>
 

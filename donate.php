@@ -408,7 +408,7 @@ if ($result->num_rows > 0) {
             </script>
         <?php }
         } else {
-            echo "<p class='text-center'>目前沒有已結束的建議。</p>";
+            echo "<p class='text-center'>目前沒有已結束的募款建言。</p>";
         } ?>
     </div>
 

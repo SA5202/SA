@@ -31,7 +31,7 @@ $user_query->execute();
 $user_result = $user_query->get_result();
 
 if ($user_result->num_rows === 0) {
-    echo "<script>alert('找不到使用者帳號'); window.location.href='donation_make.php?error=找不到使用者帳號';</script>";
+    echo "<script>alert('找不到使用者帳號'); window.location.href='donation_page.php?error=找不到使用者帳號';</script>";
     exit();
 }
 $user_data = $user_result->fetch_assoc();
@@ -59,16 +59,28 @@ if (!empty($notes)) {
     $status .= '（' . implode('，', $notes) . '）';
 }
 
-// 寫入資料
-$insert = $link->prepare("
+// 寫入捐款資料
+$sql = "
     INSERT INTO Donation (
         User_ID, Funding_ID, Method_ID, Donation_Amount, 
-        Status, Donation_Date, Is_Anonymous, Needs_Receipt
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-");
-$insert->bind_param("iiiissii", $user_id, $funding_id, $method_id, $amount, $status, $date, $is_anonymous, $needs_receipt);
+        Status, Donation_Date, Is_Anonymous, Needs_Receipt, Donor_Email
+    ) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?)
+";
+$insert = $link->prepare($sql);
+$insert->bind_param("iiiisiis", $user_id, $funding_id, $method_id, $amount, $status, $is_anonymous, $needs_receipt, $user_email);
+
 
 if ($insert->execute()) {
+    // 更新募款進度
+    $update = $link->prepare("
+        UPDATE FundingSuggestion 
+        SET Raised_Amount = IFNULL(Raised_Amount, 0) + ?, Updated_At = NOW()
+        WHERE Funding_ID = ?
+    ");
+    $update->bind_param("di", $amount, $funding_id);
+    $update->execute();
+    $update->close();
+
     // 若勾選收據，發送 email
     if ($needs_receipt && filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
         require 'send_receipt.php';
@@ -80,11 +92,10 @@ if ($insert->execute()) {
         ]);
     }
 
-    echo "<script>alert('捐款成功！'); window.location.href='donation_make.php?success=1';</script>";
+    echo "<script>alert('捐款成功！'); window.location.href='donate.php?success=1';</script>";
     exit();
 } else {
     $error = $link->error;
-    echo "<script>alert('資料庫錯誤：$error'); window.location.href='donation_make.php?error=資料庫錯誤';</script>";
+    echo "<script>alert('資料庫錯誤：$error'); window.location.href='donation_page.php?error=資料庫錯誤';</script>";
     exit();
 }
-?>
