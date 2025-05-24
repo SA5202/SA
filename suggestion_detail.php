@@ -4,11 +4,11 @@ require_once "db_connect.php";
 
 // 判斷登入與權限
 $is_logged_in = isset($_SESSION['User_Name']);
-$is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
-$admin_type = $_SESSION['admin_type'] ?? '';
+$is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin']; // 管理員
+$admin_type = $_SESSION['admin_type'] ?? ''; // super、department、空字串
 
-// ✅ 新增：同時為 super admin 或 department admin
-$is_admin_or_department = in_array($admin_type, ['super', 'department']);
+// 新增刪除權限判斷：管理員或學院管理員（super、department）皆可刪除
+$can_delete = $is_admin || in_array($admin_type, ['super', 'department']);
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "無效的建言 ID";
@@ -17,7 +17,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
-// ✅ 如果是 Department Admin，就檢查是否有權限查看這筆建言
+// 如果是 Department Admin，就檢查是否有權限查看這筆建言
 if ($admin_type === 'department') {
     $check_scope_sql = "
         SELECT 1
@@ -329,19 +329,39 @@ if ($user_id) {
             text-decoration: underline;
         }
 
+
+        .pretty-btn {
+            background: linear-gradient(to right, rgb(255, 144, 125), rgb(204, 51, 51));
+            text-decoration: none;
+            border: none;
+            color: white;
+            margin-left: 15px;
+            padding: 0.2rem 20px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 750;
+        }
+
+        .pretty-btn:hover {
+            opacity: 0.6;
+        }
+
+        .pretty-btn i {
+            margin-right: 6px;
+        }
     </style>
 </head>
 
 <body>
     <div class="card">
         <div class="content">
-            <?php if ($is_admin_or_department): ?>
+            <?php if ($can_delete): ?> <!-- 這裡改成 $can_delete -->
                 <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php else: ?>
                 <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php endif; ?>
 
-            <?php if ($is_admin_or_department): ?>
+            <?php if ($can_delete): ?> <!-- 這裡也改成 $can_delete -->
                 <div class="meta">
                     <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
                         <span>🔥 高優先建言</span><br>
@@ -378,17 +398,27 @@ if ($user_id) {
                             <i class="<?= $heartClass ?> fa-heart" id="heart-icon"></i>
                         </button>
                     <?php endif; ?>
-                        <span id="like-count">
-                            <?= ($row['LikeCount'] >= 10000) 
-                                ? number_format($row['LikeCount'] / 10000, 1) . ' 萬' 
-                                : $row['LikeCount'] . ' '; ?>人喜歡這則建言
-                        </span>
+                    <span id="like-count">
+                        <?= ($row['LikeCount'] >= 10000) 
+                            ? number_format($row['LikeCount'] / 10000, 1) . ' 萬' 
+                            : $row['LikeCount'] . ' '; ?>人喜歡這則建言
+                    </span>
                 </div>
             </div>
             <br>
-
             <a href="suggestions.php" class="back"><b>⬅ 回建言總覽</b></a>
+
+            <?php if ($can_delete): ?> <!-- 這裡也改成 $can_delete -->
+                <!-- 管理員或學院管理員（super 或 department）可以刪除 -->
+                <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('管理員確定要刪除這個建言嗎？');" style="display:inline;">
+                    <input type="hidden" name="suggestion_id" value="<?= $row['Suggestion_ID'] ?>">
+                    <button type="submit" class="pretty-btn">
+                        <i class="fas fa-pen-to-square"></i> 刪除
+                    </button>
+                </form>
+            <?php endif; ?>
         </div>
+
 
         <!-- 動態產生進度紀錄 Timeline -->
         <!-- 進度狀態時間軸（點擊進度直接更新） -->

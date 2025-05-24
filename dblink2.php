@@ -71,7 +71,7 @@
 
         if ($stmt->fetch()) {
             $stmt->close();
-            return in_array($status, ['審核中', '處理中', '已完成']);
+            return in_array($status, ['處理中', '已完成']);
         }
 
         $stmt->close();
