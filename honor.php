@@ -633,7 +633,7 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip2 large">II</span>
                                     <p class="mt-4 mb-4">
-                                        獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，<br>
+                                        獲得此榮譽等級者，除了獲得上述獎勵外，<br>
                                         可在登入時享有vip專屬的問候以及彩帶歡迎特效！
                                     </p>
                                 </div>
@@ -643,7 +643,7 @@ if (!$donation_history_result) {
                                     <span class="mini-pennant vip3 large">III</span>
                                     <p class="mt-4 mb-4">
                                         獲得此榮譽等級者，除獲得上述獎勵外，<br>
-                                        額外獲得年度紀念禮包、捐款紀錄優先查詢權限
+                                        可獲得(尚在施工中)特權!
                                     </p>
                                 </div>
                             </div>
@@ -652,7 +652,7 @@ if (!$donation_history_result) {
                                     <span class="mini-pennant vip4 large">IV</span>
                                     <p class="mt-4 mb-4">
                                         尊榮會員！獲得此榮譽等級者，除獲得上述獎勵外，<br>
-                                        擁有線上榮譽榜曝光權、專屬客服聯繫窗口
+                                        擁有建言優先處理權，您發布的建言將最優先被處理！
                                     </p>
                                 </div>
                             </div>
@@ -661,7 +661,7 @@ if (!$donation_history_result) {
                                     <span class="mini-pennant vip5 large">V</span>
                                     <p class="mt-4 mb-4">
                                         無私的貢獻者！獲得此榮譽等級者，除獲得上述獎勵外，<br>
-                                        享有最高榮譽勳章與年度感謝盛會邀請
+                                        享有最高榮譽-首頁表揚外，還享有(尚在施工中)特權！
                                     </p>
                                 </div>
                             </div>
