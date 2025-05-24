@@ -141,8 +141,19 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         h3 {
             margin: 30px 0;
+            color: #2a4d69;
+            font-size: 1.6rem;
             font-weight: bold;
         }
+
+        .icon {
+            font-size: 1.6rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 15px;
+            display: inline-block;
+        }
+
         /* 玻璃感效果 */
         .glass-effect {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(245, 245, 245, 0.35));
@@ -386,17 +397,6 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             align-items: center;
             justify-content: flex-end;
         }
-        /* 高優先級 */
-        .high-priority-badge {
-            background-color: #e74c3c;
-            color: white;
-            font-weight: bold;
-            padding: 0.15rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            margin-left: 10px;
-            user-select: none;
-        }
     </style>
 </head>
 
@@ -481,13 +481,13 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     ?>
 
     <!-- 高優先建言區 -->
-    <h3><i class="fas fa-fire"></i> 高優先建言</h3>
+    <h3><i class="icon fas fa-chess-queen"></i> 置頂建言</h3>
     <div class="cards high-priority">
         <?php if (count($priority_suggestions) > 0): ?>
             <?php foreach ($priority_suggestions as $row): ?>
                 <div class="card">
                     <h4>
-                        <i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?>
+                        <i class="fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?>
                     </h4>
                     <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "⋯") ?></p>
                     <div class="meta">
@@ -505,18 +505,18 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>目前沒有高優先建言。</p>
+            <p>目前沒有任何置頂建言。</p>
         <?php endif; ?>
     </div>
 
     <!-- 普通建言區 -->
-    <h3><i class="icon fas fa-comment-dots"></i> 普通建言</h3>
+    <h3><i class="icon fas fa-chess"></i> 一般建言</h3>
     <div class="cards normal-priority">
         <?php if (count($normal_suggestions) > 0): ?>
             <?php foreach ($normal_suggestions as $row): ?>
                 <div class="card">
                     <h4>
-                        <i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?>
+                        <i class="fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?>
                     </h4>
                     <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "⋯") ?></p>
                     <div class="meta">
@@ -534,7 +534,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
-            <p>目前沒有普通建言。</p>
+            <p>目前沒有任何一般建言。</p>
         <?php endif; ?>
     </div>
 

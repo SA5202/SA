@@ -527,10 +527,10 @@ if (isset($_SESSION['User_ID'])) {
             </a>
             <div class="group-content">
                 <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                    <i class="icon fas fa-coins"></i><span> 手動捐款</span>
+                    <i class="icon fas fa-money-bill"></i><span> 手動捐款</span>
                 </a>
                 <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                    <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
+                    <i class="icon fas fa-folder"></i><span> 檢視捐款紀錄</span>
                 </a>
             </div>
             <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">

@@ -90,6 +90,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         }
 
         h3 {
+            color: #2a4d69;
             margin: 30px 0;
             font-weight: bold;
         }

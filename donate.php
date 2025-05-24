@@ -70,6 +70,7 @@ if ($result->num_rows > 0) {
         }
 
         h3 {
+            color: #2a4d69;
             margin-top: 20px 0;
             font-weight: bold;
         }

@@ -131,12 +131,16 @@ if (!$donation_history_result) {
             border-right: none;
         }
 
-        .table th,
+        .table th:nth-child(1),
+        .table th:nth-child(3),
+        .table th:nth-child(4),
         .table td:nth-child(1),
-        .table td:nth-child(3) {
+        .table td:nth-child(3),
+        .table td:nth-child(4) {
             text-align: center;
         }
 
+        .table th:nth-child(2),
         .table td:nth-child(2) {
             padding-left: 50px;
         }
@@ -145,13 +149,14 @@ if (!$donation_history_result) {
             background-color: rgba(85, 164, 186);
             color: white;
             font-size: 1rem;
+            font-weight: bold;
             padding: 0.8rem 1.5rem;
         }
 
         .table tbody td {
             color: #555;
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: bold;
             padding: 0.4rem 1.5rem;
         }
 
@@ -257,6 +262,15 @@ if (!$donation_history_result) {
             font-size: 1.2rem;
             font-weight: bold;
             margin: 2rem 0;
+        }
+
+        .icon {
+            font-size: 1.2rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 10px;
+            vertical-align: middle;
+            display: inline-block;
         }
 
         .modal-body p {
@@ -514,7 +528,7 @@ if (!$donation_history_result) {
                     <thead>
                         <tr>
                             <th>名次</th>
-                            <th>用戶</th>
+                            <th>用戶暱稱</th>
                             <th>本月捐款金額 (NT$)</th>
                             <th>榮譽等級</th>
                         </tr>
@@ -541,15 +555,17 @@ if (!$donation_history_result) {
             <div class="tab-pane fade" id="donation-history" role="tabpanel" aria-labelledby="donation-history-tab">
                 <table class="table table-bordered">
                     <colgroup>
+                        <col style="width: 20%;">
                         <col style="width: 30%;">
-                        <col style="width: 40%;">
                         <col style="width: 30%;">
+                        <col style="width: 20%;">
                     </colgroup>
                     <thead>
                         <tr>
                             <th>名次</th>
-                            <th>用戶</th>
+                            <th>用戶暱稱</th>
                             <th>累計捐款金額 (NT$)</th>
+                            <th>榮譽等級</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -562,6 +578,7 @@ if (!$donation_history_result) {
                                 <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
                                 <?= htmlspecialchars($row['Nickname']) ?>
                             </td>
+                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
                             <td>NT$ <?= number_format($row['total_donation']) ?></td>
                         </tr>
                         <?php $rank++; endwhile; ?>
@@ -587,59 +604,36 @@ if (!$donation_history_result) {
 
                 
                 <div class="modal-body">
-                    <!-- 用法 
-                    <p class="mb-3">🎉 歡迎使用 <strong>輔仁大學愛校建言捐款系統</strong> 的榮譽榜功能！以下是詳細說明：</p>
+                    <h6 class="mt-4"><i class="icon fa-solid fa-ranking-star me-2"></i> 榮譽排名規則</h6>
 
-                    <ul class="list-unstyled ps-4">
-                        <li class="mb-3">
-                            <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>
-                            <strong>捐款金額排行榜：</strong> 依照用戶累積捐款金額排序，顯示前 10 名。
-                        </li>
-                        <li class="mb-3">
-                            <i class="fa-solid fa-lightbulb text-warning me-2"></i>
-                            <strong>建言發布數排行榜：</strong> 依照用戶提交建言次數排序。
-                        </li>
-                        <li class="mb-3">
-                            <i class="fa-solid fa-user-circle text-primary me-2"></i>
-                            上傳的個人頭像會顯示在排行榜中。
-                        </li>
-                        <li class="mb-3">
-                            <i class="fa-solid fa-layer-group text-info me-2"></i>
-                            使用上方的「分頁」可以快速切換排行榜分類。
-                        </li>
-                    </ul>
-
-                    <p class="mt-4 text-info-emphasis">
-                        ✨ <strong>此功能旨在表揚積極參與的同學與校友，感謝您的熱情與支持！</strong>
-                    </p>-->
                     
                     <!-- 榮譽等級說明 -->
-                    <h6 class="mt-4"><i class="fa-solid fa-trophy me-2"></i> 榮譽等級取得條件</h6>
+                    <h6 class="mt-4"><i class="icon fa-solid fa-trophy me-2"></i> 榮譽等級取得條件</h6>
                     <ul class="list-unstyled ps-4">
                         <li class="mb-4">
                             <span class="mini-pennant vip1">I</span>
-                            <strong>VIP 1：</strong> 只要進行捐款，即可獲得此榮譽等級（捐款金額：無門檻）。
+                            <strong>VIP 1：</strong> 進行捐款即可獲得此榮譽等級（捐款金額：無門檻）。
                         </li>
                         <li class="mb-4">
                             <span class="mini-pennant vip2">II</span>
-                            <strong>VIP 2：</strong> 累計捐款金額達 NT$ 1,000 元以上的用戶，將獲得此榮譽等級。
+                            <strong>VIP 2：</strong> 累計捐款金額達 NT$ 1,000 元以上的用戶可獲得此榮譽等級。
                         </li>
                         <li class="mb-4">
                             <span class="mini-pennant vip3">III</span>
-                            <strong>VIP 3：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶，將獲得此榮譽等級。
+                            <strong>VIP 3：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-4">
                             <span class="mini-pennant vip4">IV</span>
-                            <strong>VIP 4：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶，將獲得此榮譽等級。
+                            <strong>VIP 4：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-4">
                             <span class="mini-pennant vip5">V</span>
-                            <strong>VIP 5：</strong> 累計捐款金額總數排名前三名的用戶，將獲得此榮譽等級。
+                            <strong>VIP 5：</strong> 累計捐款金額總數排名前三名的用戶可獲得此榮譽等級。
                         </li>
                     </ul>
 
                     <!-- 輪播區域開始 -->
-                    <h6 class="mt-5"><i class="fa-solid fa-gift me-2"></i> 榮譽等級對應獎勵</h6>
+                    <h6 class="mt-5"><i class="icon fa-solid fa-gift me-2"></i> 榮譽等級對應獎勵</h6>
 
                     <div id="vipCarousel" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
@@ -653,8 +647,8 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip2 large">II</span>
                                     <p class="mt-4 mb-4">
-                                        獲得此榮譽等級者，除了獲得上述獎勵外，<br>
-                                        可在登入時享有vip專屬的問候以及彩帶歡迎特效！
+                                        獲得此榮譽等級者，除上述獎勵外，<br>
+                                        登入時享有 VIP 專屬的問候訊息以及彩帶歡迎特效！
                                     </p>
                                 </div>
                             </div>
@@ -662,8 +656,8 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip3 large">III</span>
                                     <p class="mt-4 mb-4">
-                                        獲得此榮譽等級者，除獲得上述獎勵外，<br>
-                                        可獲得(尚在施工中)特權!
+                                        獲得此榮譽等級者，除上述獎勵外，<br>
+                                        可獲得(尚在施工中)特權！
                                     </p>
                                 </div>
                             </div>
@@ -671,8 +665,8 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip4 large">IV</span>
                                     <p class="mt-4 mb-4">
-                                        尊榮會員！獲得此榮譽等級者，除獲得上述獎勵外，<br>
-                                        擁有建言優先處理權，您發布的建言將最優先被處理！
+                                        尊榮用戶！獲得此榮譽等級者，除上述獎勵外，<br>
+                                        您發布的建言將被設置為置頂建言！
                                     </p>
                                 </div>
                             </div>
@@ -680,8 +674,8 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip5 large">V</span>
                                     <p class="mt-4 mb-4">
-                                        無私的貢獻者！獲得此榮譽等級者，除獲得上述獎勵外，<br>
-                                        享有最高榮譽-首頁表揚外，還享有(尚在施工中)特權！
+                                        無私的奉獻者！獲得此榮譽等級者，除上述獎勵外，<br>
+                                        將被列在首頁榮譽榜特別表揚，並享有(尚在施工中)特權！
                                     </p>
                                 </div>
                             </div>

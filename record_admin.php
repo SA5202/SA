@@ -80,6 +80,7 @@ $row_user = $result_user->fetch_assoc();
         }
 
         h3 {
+            color: #2a4d69;
             margin: 30px 0;
             font-weight: bold;
         }
