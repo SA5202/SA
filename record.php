@@ -673,7 +673,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                 <?php while ($row = $likes_result->fetch_assoc()): ?>
                     <tr>
                         <td>
-                            <a class="title" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
+                            <a class="title2" href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>">
                                 <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Title']), 0, 10, "⋯")) ?>
                             </a>
                         </td>
@@ -782,7 +782,7 @@ LIMIT 5
                 ?>
                     <tr>
                         <td class="highlight-title">
-                            <a class="title" href="suggestion_detail.php?id=<?= htmlspecialchars($row['Suggestion_ID']) ?>">
+                            <a class="title2" href="suggestion_detail.php?id=<?= htmlspecialchars($row['Suggestion_ID']) ?>">
                                 <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Funding_Title']), 0, 10, "⋯")) ?>
                             </a>
                         </td>

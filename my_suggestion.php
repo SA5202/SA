@@ -416,6 +416,23 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             opacity: 1;
             transform: scale(1.2);
         }
+
+        .title2 {
+            color: #003153;
+            font-weight: bold;
+            text-decoration: none;
+            overflow: hidden;
+            /* 確保文字不會超出 */
+            text-overflow: ellipsis;
+            /* 使用省略號來處理過長的文字 */
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* 限制顯示行數 */
+            -webkit-box-orient: vertical;
+            margin-bottom: 1em;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
     </style>
 
 
