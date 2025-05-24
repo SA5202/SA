@@ -435,7 +435,9 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                 <th class="fw-bold">建言標題</th>
                 <th class="fw-bold text-center">更新時間</th>
                 <th class="fw-bold text-center">獲得愛心數</th>
-                <th class="fw-bold text-center">編輯建言</th>
+                <?php if ($sessionUserType != 'admin'): ?>
+                    <th class="fw-bold text-center">編輯建言</th>
+                <?php endif; ?>
             </tr>
         </thead>
         <tbody>
@@ -457,31 +459,23 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                                     : $row['LikeCount'] . ' ❤️'; ?>
                             </span>
                         </td>
-                        <td class="text-center edit-action">
-                            <?php if ($row['User_ID'] == $sessionUserID): ?>
-                                <!-- 本人：只顯示編輯按鈕（編輯頁中包含刪除功能） -->
-                                <form action="suggestion_update.php" method="get" style="display:inline;">
-                                    <input type="hidden" name="Suggestion_ID" value="<?= $row['Suggestion_ID'] ?>">
-                                    <button type="submit" class="pretty-btn">
-                                        <i class="fas fa-pen-to-square"></i> 修改
-                                    </button>
-                                </form>
-                            <?php elseif ($sessionUserType === 'admin'): ?>
-                                <!-- 管理員：只能刪除 -->
-                                <form action="dblink2.php?method=delete" method="post" onsubmit="return confirm('管理員確定要刪除這個建言嗎？');" style="display:inline;">
-                                    <input type="hidden" name="suggestion_id" value="<?= $row['Suggestion_ID'] ?>">
-                                    <button type="submit" class="pretty-btn">
-                                        <i class="fas fa-pen-to-square"></i> 刪除
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                        </td>
-
+                        <?php if ($sessionUserType != 'admin'): ?>
+                            <td class="text-center edit-action">
+                                <?php if ($row['User_ID'] == $sessionUserID): ?>
+                                    <form action="suggestion_update.php" method="get" style="display:inline;">
+                                        <input type="hidden" name="Suggestion_ID" value="<?= $row['Suggestion_ID'] ?>">
+                                        <button type="submit" class="pretty-btn">
+                                            <i class="fas fa-pen-to-square"></i> 修改
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="4" class="text-muted">目前沒有建言紀錄。</td>
+                    <td colspan="<?= ($sessionUserType != 'admin') ? 4 : 3 ?>" class="text-muted">目前沒有建言紀錄。</td>
                 </tr>
             <?php endif; ?>
         </tbody>
