@@ -2,8 +2,13 @@
 session_start();
 require_once "db_connect.php";
 
+// 判斷登入與權限
 $is_logged_in = isset($_SESSION['User_Name']);
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+$admin_type = $_SESSION['admin_type'] ?? '';
+
+// ✅ 新增：同時為 super admin 或 department admin
+$is_admin_or_department = in_array($admin_type, ['super', 'department']);
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     echo "無效的建言 ID";
@@ -12,17 +17,42 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
+// ✅ 如果是 Department Admin，就檢查是否有權限查看這筆建言
+if ($admin_type === 'department') {
+    $check_scope_sql = "
+        SELECT 1
+        FROM Suggestion s
+        JOIN Building b ON s.Building_ID = b.Building_ID
+        JOIN College c ON b.College_ID = c.College_ID
+        JOIN DepartmentAdminScope das ON das.College_ID = c.College_ID
+        WHERE s.Suggestion_ID = ?
+          AND das.User_ID = ?
+        LIMIT 1
+    ";
+
+    $check_stmt = $link->prepare($check_scope_sql);
+    $check_stmt->bind_param("ii", $id, $_SESSION['User_ID']);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
+
+    if ($check_result->num_rows === 0) {
+        echo "您無權查看此建言";
+        exit;
+    }
+}
+
+// 🔍 查詢建言資料
 $sql = "
-SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
-       f.Facility_Type,
-       b.Building_Name,
-       s.Priority_Level,
-       (SELECT COUNT(*) FROM Upvote u WHERE u.Suggestion_ID = s.Suggestion_ID AND u.Is_Upvoted = 1) AS LikeCount
-FROM Suggestion s
-JOIN Facility f ON s.Facility_ID = f.Facility_ID
-JOIN Building b ON s.Building_ID = b.Building_ID
-JOIN Useraccount u ON s.User_ID = u.User_ID
-WHERE s.Suggestion_ID = ?
+    SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
+           f.Facility_Type,
+           b.Building_Name,
+           s.Priority_Level,
+           (SELECT COUNT(*) FROM Upvote u WHERE u.Suggestion_ID = s.Suggestion_ID AND u.Is_Upvoted = 1) AS LikeCount
+    FROM Suggestion s
+    JOIN Facility f ON s.Facility_ID = f.Facility_ID
+    JOIN Building b ON s.Building_ID = b.Building_ID
+    JOIN Useraccount u ON s.User_ID = u.User_ID
+    WHERE s.Suggestion_ID = ?
 ";
 
 $stmt = $link->prepare($sql);
@@ -36,6 +66,7 @@ if (!$row) {
     exit;
 }
 
+// 🔍 是否點過讚
 $user_id = $_SESSION['User_ID'] ?? null;
 $hasLiked = false;
 
@@ -47,8 +78,9 @@ if ($user_id) {
     $like_result = $like_stmt->get_result();
     $hasLiked = $like_result->num_rows > 0;
 }
-
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -303,12 +335,13 @@ if ($user_id) {
 <body>
     <div class="card">
         <div class="content">
-            <?php if ($is_admin): ?>
+            <?php if ($is_admin_or_department): ?>
                 <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php else: ?>
                 <h3><?= htmlspecialchars($row['Title']) ?></h3>
             <?php endif; ?>
-            <?php if ($is_admin): ?>
+
+            <?php if ($is_admin_or_department): ?>
                 <div class="meta">
                     <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
                         <span>🔥 高優先建言</span><br>
@@ -321,7 +354,7 @@ if ($user_id) {
             <?php else: ?>
                 <div class="meta">
                     <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
-                    <span>🔥 高優先建言🔥</span><br>
+                        <span>🔥 高優先建言🔥</span><br>
                     <?php endif; ?>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
