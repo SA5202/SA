@@ -769,10 +769,10 @@ LIMIT 5
         <thead class="table-primary">
             <tr>
                 <th class="fw-bold">捐款項目</th>
-                <th class="fw-bold">金額</th>
-                <th class="fw-bold">付款方式</th>
-                <th class="fw-bold">狀態</th>
-                <th class="fw-bold">日期</th>
+                <th class="fw-bold text-center">金額</th>
+                <th class="fw-bold text-center">付款方式</th>
+                <th class="fw-bold text-center">狀態</th>
+                <th class="fw-bold text-center">日期</th>
             </tr>
         </thead>
         <tbody>
@@ -787,10 +787,10 @@ LIMIT 5
                             </a>
                         </td>
 
-                        <td class="update">$<?= number_format($row['Donation_Amount'], 0) ?></td>
-                        <td class="update"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
-                        <td class="update">
-                            <small class="funding-status-label <?= htmlspecialchars($funding_status_class) ?>">
+                        <td class="update text-center">$<?= number_format($row['Donation_Amount'], 0) ?></td>
+                        <td class="update text-center"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
+                        <td class="update text-center">
+                            <small class="custom-badge <?= htmlspecialchars($funding_status_class) ?>">
                                 <?= htmlspecialchars($row['Funding_Status'] ?? '') ?>
                             </small>
                         </td>
