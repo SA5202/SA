@@ -626,7 +626,7 @@ if (!$donation_history_result) {
                             <div class="carousel-item active">
                                 <div class="text-center">
                                     <span class="mini-pennant vip1 large">I</span>
-                                    <p class="mt-4 mb-4">獲得此榮譽等級者，個人主頁將展示專屬榮譽等級徽章</p>
+                                    <p class="mt-4 mb-4">獲得此榮譽等級者，個人主頁將展示專屬榮譽等級徽章，以證明您的貢獻！</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
@@ -634,7 +634,7 @@ if (!$donation_history_result) {
                                     <span class="mini-pennant vip2 large">II</span>
                                     <p class="mt-4 mb-4">
                                         獲得此榮譽等級者，除個人主頁將展示專屬榮譽等級徽章外，<br>
-                                        可享有每月電子報與限時活動優先通知
+                                        可在登入時享有vip專屬的問候以及彩帶歡迎特效！
                                     </p>
                                 </div>
                             </div>

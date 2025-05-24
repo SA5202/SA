@@ -13,15 +13,16 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = intval($_GET['id']);
 
 $sql = "
-SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At,s.User_ID,u.User_Name,
+SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
        f.Facility_Type,
        b.Building_Name,
+       s.Priority_Level,
        (SELECT COUNT(*) FROM Upvote u WHERE u.Suggestion_ID = s.Suggestion_ID AND u.Is_Upvoted = 1) AS LikeCount
 FROM Suggestion s
 JOIN Facility f ON s.Facility_ID = f.Facility_ID
 JOIN Building b ON s.Building_ID = b.Building_ID
 JOIN Useraccount u ON s.User_ID = u.User_ID
-WHERE s.Suggestion_ID = ? 
+WHERE s.Suggestion_ID = ?
 ";
 
 $stmt = $link->prepare($sql);
@@ -295,6 +296,7 @@ if ($user_id) {
         .timeline li button:hover {
             text-decoration: underline;
         }
+
     </style>
 </head>
 
@@ -308,6 +310,9 @@ if ($user_id) {
             <?php endif; ?>
             <?php if ($is_admin): ?>
                 <div class="meta">
+                    <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
+                        <span>🔥 高優先建言</span><br>
+                    <?php endif; ?>
                     發布者： <a href="record.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
@@ -315,6 +320,9 @@ if ($user_id) {
                 </div>
             <?php else: ?>
                 <div class="meta">
+                    <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
+                    <span>🔥 高優先建言🔥</span><br>
+                    <?php endif; ?>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>

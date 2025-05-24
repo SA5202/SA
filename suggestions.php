@@ -11,34 +11,35 @@ $building = $_GET['building'] ?? '';
 $college = isset($_GET['college']) ? mysqli_real_escape_string($link, $_GET['college']) : '';
 $sort = $_GET['sort'] ?? 'latest';
 
+// SQL 加 Priority_Level
 $sql = "
-SELECT 
-    s.Suggestion_ID, 
-    s.Title, 
-    s.Description, 
-    s.Updated_At,
-    f.Facility_Type,
-    b.Building_Name,
-    (
-        SELECT COUNT(*) 
-        FROM Upvote u 
-        WHERE u.Suggestion_ID = s.Suggestion_ID 
-        AND u.Is_Upvoted = 1
-    ) AS LikeCount,
-    (
-        SELECT p1.Status
-        FROM Progress p1
-        WHERE p1.Suggestion_ID = s.Suggestion_ID
-        ORDER BY p1.Updated_At DESC
-        LIMIT 1
-    ) AS CurrentStatus
-FROM Suggestion s
-JOIN Facility f ON s.Facility_ID = f.Facility_ID
-JOIN Building b ON s.Building_ID = b.Building_ID
-JOIN College c ON b.College_ID = c.College_ID
-WHERE 1=1
-";
-
+    SELECT 
+        s.Suggestion_ID, 
+        s.Title, 
+        s.Description, 
+        s.Updated_At,
+        f.Facility_Type,
+        b.Building_Name,
+        s.Priority_Level,
+        (
+            SELECT COUNT(*) 
+            FROM Upvote u 
+            WHERE u.Suggestion_ID = s.Suggestion_ID 
+            AND u.Is_Upvoted = 1
+        ) AS LikeCount,
+        (
+            SELECT p1.Status
+            FROM Progress p1
+            WHERE p1.Suggestion_ID = s.Suggestion_ID
+            ORDER BY p1.Updated_At DESC
+            LIMIT 1
+        ) AS CurrentStatus
+    FROM Suggestion s
+    JOIN Facility f ON s.Facility_ID = f.Facility_ID
+    JOIN Building b ON s.Building_ID = b.Building_ID
+    JOIN College c ON b.College_ID = c.College_ID
+    WHERE 1=1
+    ";
 
 $progress_enum = [
     'all' => '所有進度',
@@ -122,6 +123,10 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             color: #333;
         }
 
+        h3 {
+            margin: 30px 0;
+            font-weight: bold;
+        }
         /* 玻璃感效果 */
         .glass-effect {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.55), rgba(245, 245, 245, 0.35));
@@ -365,6 +370,17 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
             align-items: center;
             justify-content: flex-end;
         }
+        /* 高優先級 */
+        .high-priority-badge {
+            background-color: #e74c3c;
+            color: white;
+            font-weight: bold;
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-left: 10px;
+            user-select: none;
+        }
     </style>
 </head>
 
@@ -435,27 +451,77 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
         </div>
     </form>
 
-    <!-- 建言卡片 -->
-    <div class="cards">
-        <?php while ($row = $result->fetch_assoc()): ?>
-            <div class="card">
-                <h4><i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?></h4>
-                <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "⋯") ?></p>
-                <div class="meta">
-                    關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
-                    更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
+    <?php
+    $priority_suggestions = [];
+    $normal_suggestions = [];
+
+    while ($row = $result->fetch_assoc()) {
+        if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1) {
+            $priority_suggestions[] = $row;
+        } else {
+            $normal_suggestions[] = $row;
+        }
+    }
+    ?>
+
+    <!-- 高優先建言區 -->
+    <h3><i class="fas fa-fire"></i> 高優先建言</h3>
+    <div class="cards high-priority">
+        <?php if (count($priority_suggestions) > 0): ?>
+            <?php foreach ($priority_suggestions as $row): ?>
+                <div class="card">
+                    <h4>
+                        <i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?>
+                    </h4>
+                    <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "⋯") ?></p>
+                    <div class="meta">
+                        關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
+                        更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
+                    </div>
+                    <div class="actions">
+                        <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
+                        <span class="likes">
+                            <?= ($row['LikeCount'] >= 10000) 
+                                ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
+                                : $row['LikeCount'] . ' ❤️'; ?>
+                        </span>
+                    </div>
                 </div>
-                <div class="actions">
-                    <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
-                    <span class="likes">
-                        <?= ($row['LikeCount'] >= 10000) 
-                            ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
-                            : $row['LikeCount'] . ' ❤️'; ?>
-                    </span>
-                </div>
-            </div>
-        <?php endwhile; ?>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>目前沒有高優先建言。</p>
+        <?php endif; ?>
     </div>
+
+    <!-- 普通建言區 -->
+    <h3><i class="icon fas fa-comment-dots"></i> 普通建言</h3>
+    <div class="cards normal-priority">
+        <?php if (count($normal_suggestions) > 0): ?>
+            <?php foreach ($normal_suggestions as $row): ?>
+                <div class="card">
+                    <h4>
+                        <i class="icon fas fa-list"></i> <?= htmlspecialchars($row['Title']) ?>
+                    </h4>
+                    <p class="card-description"><?= mb_strimwidth(strip_tags($row['Description']), 0, 130, "⋯") ?></p>
+                    <div class="meta">
+                        關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?> ｜ 關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
+                        更新時間： <?= date('Y-m-d H:i', strtotime($row['Updated_At'])) ?>
+                    </div>
+                    <div class="actions">
+                        <a href="suggestion_detail.php?id=<?= $row['Suggestion_ID'] ?>" class="btn">查看完整建言</a>
+                        <span class="likes">
+                            <?= ($row['LikeCount'] >= 10000) 
+                                ? number_format($row['LikeCount'] / 10000, 1) . ' 萬 ❤️' 
+                                : $row['LikeCount'] . ' ❤️'; ?>
+                        </span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>目前沒有普通建言。</p>
+        <?php endif; ?>
+    </div>
+
 </body>
 
 </html>

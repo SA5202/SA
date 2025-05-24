@@ -8,13 +8,15 @@ if (!isset($_SESSION['User_Name'])) {
 $success = null;
 $errorMessages = [];
 
-// 建立資料庫連線
 $link = new mysqli('localhost', 'root', '', 'sa');
 if ($link->connect_error) {
     die('資料庫連接失敗: ' . $link->connect_error);
 }
 
-// 取得設施與建築物資料
+// 引入 VIP 等級判斷
+require_once('honor_helper.php');
+
+// 取得設施與建築資料
 $facilities = [];
 $buildings = [];
 
@@ -32,7 +34,6 @@ if ($buildingResult) {
     }
 }
 
-// 表單送出時處理資料
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'] ?? '';
     $facility = isset($_POST['facility']) ? (int) $_POST['facility'] : 0;
@@ -40,48 +41,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = $_POST['description'] ?? '';
     $userID = $_SESSION['User_ID'] ?? null;
 
-    if (empty($title)) {
-        $errorMessages[] = "請輸入標題";
-    }
-    if ($facility === 0) {
-        $errorMessages[] = "請選擇設施";
-    }
-    if ($building === 0) {
-        $errorMessages[] = "請選擇建築物";
-    }
-    if (empty($description)) {
-        $errorMessages[] = "請輸入建議內容";
-    }
-    if (empty($userID)) {
-        $errorMessages[] = "使用者未登入";
-    }
+    if (empty($title)) $errorMessages[] = "請輸入標題";
+    if ($facility === 0) $errorMessages[] = "請選擇設施";
+    if ($building === 0) $errorMessages[] = "請選擇建築物";
+    if (empty($description)) $errorMessages[] = "請輸入建議內容";
+    if (empty($userID)) $errorMessages[] = "使用者未登入";
 
     if (!empty($errorMessages)) {
         $success = false;
-
-        echo "<pre>";
-        var_dump($_POST);
-        echo "</pre>";
-
-        echo "<div style='color: red;'><ul>";
-        foreach ($errorMessages as $msg) {
-            echo "<li>$msg</li>";
-        }
-        echo "</ul></div>";
     } else {
-        $updatedAt = new DateTime('now', new DateTimeZone('UTC'));
-        $updatedAt->setTimezone(new DateTimeZone('Asia/Taipei'));
+        $updatedAt = new DateTime('now', new DateTimeZone('Asia/Taipei'));
         $updatedAt = $updatedAt->format('Y-m-d H:i:s');
-
         $upvotedAmount = 0;
 
-        $stmt = $link->prepare("INSERT INTO suggestion (title, facility_id, building_id, description, updated_at, upvoted_amount, User_ID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // 判斷 VIP 等級
+        $vipData = getVipLevel($link, $userID);
+        $priorityLevel = in_array($vipData['label'], ['IV', 'V']) ? 1 : 0;
+        $default_status = $priorityLevel ? '審核中' : '未受理';
+
+        // 插入 Suggestion
+        $stmt = $link->prepare("
+            INSERT INTO suggestion 
+            (title, facility_id, building_id, description, updated_at, upvoted_amount, User_ID, Priority_Level)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ");
         if ($stmt === false) {
             die('準備語句失敗: ' . $link->error);
         }
 
-        $stmt->bind_param("siisssi", $title, $facility, $building, $description, $updatedAt, $upvotedAmount, $userID);
-
+        $stmt->bind_param("siisssii", $title, $facility, $building, $description, $updatedAt, $upvotedAmount, $userID, $priorityLevel);
         if (!$stmt->execute()) {
             die('資料插入失敗: ' . $stmt->error);
         }
@@ -89,8 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $suggestion_id = $stmt->insert_id;
         $stmt->close();
 
-        // 自動插入預設進度紀錄
-        $default_status = '未受理';
+        // 插入進度紀錄
         $progress_stmt = $link->prepare("INSERT INTO Progress (Suggestion_ID, Status, Updated_At) VALUES (?, ?, ?)");
         if ($progress_stmt) {
             $progress_stmt->bind_param("iss", $suggestion_id, $default_status, $updatedAt);
