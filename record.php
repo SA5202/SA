@@ -254,11 +254,10 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
         .funding-status-label {
             display: inline-block;
-            padding: 0.5em 1.3em;
+            font-size: 0.9rem;
+            padding: 0.3rem 1.2rem;
             border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 4px;
+            font-weight: bold;
             color: white;
         }
 
@@ -558,8 +557,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         </h3>
     <?php else: ?>
         <h3>
-            <i class="icon fas fa-clipboard-list"></i>
-            我的建言紀錄&nbsp;
+            <i class="icon fas fa-clipboard-list"></i>我的建言紀錄&nbsp;
             <a href="my_suggestion.php" style="color:black">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
@@ -622,14 +620,14 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     <?php
     // 撈取使用者按讚過的建言
     $sql_likes = "
-    SELECT s.Suggestion_ID, s.Title, s.Updated_At,
-           (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
-    FROM Upvote u
-    JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
-    WHERE u.User_ID = ? AND u.Is_Upvoted = 1
-    ORDER BY s.Updated_At DESC
-    LIMIT 5
-";
+        SELECT s.Suggestion_ID, s.Title, s.Updated_At,
+            (SELECT COUNT(*) FROM Upvote u2 WHERE u2.Suggestion_ID = s.Suggestion_ID AND u2.Is_Upvoted = 1) AS LikeCount
+        FROM Upvote u
+        JOIN Suggestion s ON u.Suggestion_ID = s.Suggestion_ID
+        WHERE u.User_ID = ? AND u.Is_Upvoted = 1
+        ORDER BY s.Updated_At DESC
+        LIMIT 5
+    ";
 
 
     $stmt_likes = $link->prepare($sql_likes);
@@ -652,8 +650,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         </h3>
     <?php else: ?>
         <h3>
-            <i class="icon fas fa-clipboard-list"></i>
-            我的按讚紀錄&nbsp;
+            <i class="icon fas fa-clipboard-list"></i>我的按讚紀錄&nbsp;
             <a href="my_like.php" style="color:black">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
@@ -718,24 +715,24 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
 
     $sql = "SELECT 
-    d.Donation_Amount,
-    d.Status AS Donation_Status,
-    d.Donation_Date,
-    s.Suggestion_ID,
-    s.Title AS Funding_Title,
-    pm.Method_Name AS Payment_Method,
-    fs.Required_Amount,
-    fs.Raised_Amount,
-    fs.Status AS Funding_Status,
-    fs.Updated_At
-FROM Donation d
-LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
-LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
-LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
-WHERE d.User_ID = ?
-ORDER BY d.Donation_Date DESC
-LIMIT 5
-";
+        d.Donation_Amount,
+        d.Status AS Donation_Status,
+        d.Donation_Date,
+        s.Suggestion_ID,
+        s.Title AS Funding_Title,
+        pm.Method_Name AS Payment_Method,
+        fs.Required_Amount,
+        fs.Raised_Amount,
+        fs.Status AS Funding_Status,
+        fs.Updated_At
+        FROM Donation d
+        LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
+        LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
+        LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
+        WHERE d.User_ID = ?
+        ORDER BY d.Donation_Date DESC
+        LIMIT 5
+    ";
 
     $stmt = $link->prepare($sql);
     if (!$stmt) {
@@ -757,8 +754,7 @@ LIMIT 5
         </h3>
     <?php else: ?>
         <h3>
-            <i class="icon fas fa-donate"></i>
-            我的捐款紀錄&nbsp;
+            <i class="icon fas fa-donate"></i>我的捐款紀錄&nbsp;
             <a href="my_donate.php" style="color:black">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
@@ -783,20 +779,21 @@ LIMIT 5
                     <tr>
                         <td class="highlight-title">
                             <a class="title2" href="suggestion_detail.php?id=<?= htmlspecialchars($row['Suggestion_ID']) ?>">
-                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Funding_Title']), 0, 30, "⋯")) ?>
+                                <?= htmlspecialchars(mb_strimwidth(strip_tags($row['Funding_Title']), 0, 20, "⋯")) ?>
                             </a>
                         </td>
 
-                        <td class="update text-center">$<?= number_format($row['Donation_Amount'], 0) ?></td>
-                        <td class="update text-center"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
-                        <td class="update text-center">
-                            <small class="custom-badge <?= htmlspecialchars($funding_status_class) ?>">
+                        <td class="text-center"><span class="update">NT$ <?= number_format($row['Donation_Amount'], 0) ?></span></td>
+                        <td class="text-center"><span class="update"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></span></td>
+                        <td class="text-center">
+                            <span class="funding-status-label <?= htmlspecialchars($funding_status_class) ?>">
                                 <?= htmlspecialchars($row['Funding_Status'] ?? '') ?>
-                            </small>
+                            </span>
                         </td>
-                        <td class="update">
-                            <?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
+                        <td class="text-center">
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
                             <small class="update-date">更新於：<?= date('Y-m-d', strtotime($row['Updated_At'])) ?></small>
+                            </span>
                         </td>
                     </tr>
                 <?php endwhile; ?>

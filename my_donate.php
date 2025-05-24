@@ -252,11 +252,10 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
         .funding-status-label {
             display: inline-block;
-            padding: 0.5em 1.3em;
-            border-radius: 12px;
             font-size: 0.8rem;
-            font-weight: 600;
-            margin-top: 4px;
+            padding: 0.3rem 1.2rem;
+            border-radius: 12px;
+            font-weight: bold;
             color: white;
         }
 
@@ -443,22 +442,23 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
 
     $sql = "SELECT 
-    d.Donation_Amount,
-    d.Status AS Donation_Status,
-    d.Donation_Date,
-    s.Suggestion_ID,
-    s.Title AS Funding_Title,
-    pm.Method_Name AS Payment_Method,
-    fs.Required_Amount,
-    fs.Raised_Amount,
-    fs.Status AS Funding_Status,
-    fs.Updated_At
-FROM Donation d
-LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
-LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
-LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
-WHERE d.User_ID = ?
-ORDER BY d.Donation_Date DESC";
+        d.Donation_Amount,
+        d.Status AS Donation_Status,
+        d.Donation_Date,
+        s.Suggestion_ID,
+        s.Title AS Funding_Title,
+        pm.Method_Name AS Payment_Method,
+        fs.Required_Amount,
+        fs.Raised_Amount,
+        fs.Status AS Funding_Status,
+        fs.Updated_At
+        FROM Donation d
+        LEFT JOIN FundingSuggestion fs ON d.Funding_ID = fs.Funding_ID
+        LEFT JOIN Suggestion s ON fs.Suggestion_ID = s.Suggestion_ID
+        LEFT JOIN PaymentMethod pm ON d.Method_ID = pm.Method_ID
+        WHERE d.User_ID = ?
+        ORDER BY d.Donation_Date DESC
+    ";
 
     $stmt = $link->prepare($sql);
     if (!$stmt) {
@@ -498,16 +498,17 @@ ORDER BY d.Donation_Date DESC";
                             </a>
                         </td>
 
-                        <td class="update text-center">$<?= number_format($row['Donation_Amount'], 0) ?></td>
-                        <td class="update text-center"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></td>
-                        <td class="update text-center">
-                            <small class="custom-badge <?= htmlspecialchars($funding_status_class) ?>">
+                        <td class="text-center"><span class="update">NT$ <?= number_format($row['Donation_Amount'], 0) ?></span></td>
+                        <td class="text-center"><span class="update"><?= htmlspecialchars($row['Payment_Method'] ?? '未知') ?></span></td>
+                        <td class="text-center">
+                            <span class="funding-status-label <?= htmlspecialchars($funding_status_class) ?>">
                                 <?= htmlspecialchars($row['Funding_Status'] ?? '') ?>
-                            </small>
+                            </span>
                         </td>
-                        <td>
-                            <?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
+                        <td class="text-center">
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
                             <small class="update-date">更新於：<?= date('Y-m-d', strtotime($row['Updated_At'])) ?></small>
+                            </span>
                         </td>
                     </tr>
                 <?php endwhile; ?>
@@ -518,7 +519,7 @@ ORDER BY d.Donation_Date DESC";
             <?php endif; ?>
         </tbody>
     </table>
-
+    
     <?php
     $stmt->close();
     $link->close();
