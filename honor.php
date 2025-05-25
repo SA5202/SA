@@ -38,6 +38,7 @@ if (!$donation_history_result) {
 
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <title>榮譽榜 | 輔仁大學愛校建言捐款系統</title>
@@ -56,7 +57,8 @@ if (!$donation_history_result) {
         }
 
         .ranking-wrapper {
-            position: relative; /* 加這行讓子元素可絕對定位 */
+            position: relative;
+            /* 加這行讓子元素可絕對定位 */
             max-width: 100%;
             margin: 60px auto;
             background: white;
@@ -100,12 +102,12 @@ if (!$donation_history_result) {
         }
 
         .nav-link.active {
-            background-color: rgba(85, 164, 186)!important;
+            background-color: rgba(85, 164, 186) !important;
             color: #fff !important;
         }
 
         .nav-link:hover {
-            background-color:rgb(77, 112, 128);
+            background-color: rgb(77, 112, 128);
             color: #fff;
         }
 
@@ -217,7 +219,8 @@ if (!$donation_history_result) {
 
         /* Modal 外框 */
         .modal-dialog {
-            height: 85%; /* 確保內容區塊高度填滿 */
+            height: 85%;
+            /* 確保內容區塊高度填滿 */
             max-width: 70%;
             top: 30px;
             --bs-card-border-color: var(--bs-border-color-translucent);
@@ -230,7 +233,8 @@ if (!$donation_history_result) {
 
         /* Modal 內容區模糊 */
         .modal-content {
-            height: 100%; /* 確保內容區塊高度填滿 */
+            height: 100%;
+            /* 確保內容區塊高度填滿 */
             backdrop-filter: blur(15px);
             border-radius: 25px;
             border: none;
@@ -253,8 +257,10 @@ if (!$donation_history_result) {
         .modal-body {
             padding: 1rem 3rem;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-            flex-grow: 1; /* 自動擴展並填滿剩餘空間 */
-            overflow-y: auto; /* 內容區可以垂直滾動 */
+            flex-grow: 1;
+            /* 自動擴展並填滿剩餘空間 */
+            overflow-y: auto;
+            /* 內容區可以垂直滾動 */
         }
 
         .modal-body h6 {
@@ -285,7 +291,7 @@ if (!$donation_history_result) {
             font-weight: 600;
         }
 
-        /* 共用迷你錦旗基底 */
+        /* 共用錦旗設定 */
         .mini-pennant {
             display: inline-flex;
             align-items: center;
@@ -299,7 +305,6 @@ if (!$donation_history_result) {
             font-family: "Noto Serif TC", serif;
             font-size: 0.9rem;
             font-weight: bold;
-            color: #c00;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
@@ -321,49 +326,53 @@ if (!$donation_history_result) {
             bottom: 0;
             width: 100%;
             height: 6px;
-            background: repeating-linear-gradient(
-                to right,
-                rgba(255,255,255,0.7) 0 3px,
-                rgba(0,0,0,0.1) 3px 6px
-            );
+            background: repeating-linear-gradient(to right,
+                    rgba(255, 255, 255, 0.7) 0 3px,
+                    rgba(0, 0, 0, 0.1) 3px 6px);
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
-        /* 各等級變化 */
+        /* VIP 等級藍綠色＋強漸層風格 */
         .mini-pennant.vip1 {
-            background: #ffeb3b;          /* 純黃色 */
-            color: #b8860b;              /* 文字深金色 */
+            background: linear-gradient(135deg, #d4f9f9, #a0e9eb);
+            color: #007777;
         }
 
         .mini-pennant.vip2 {
-            background: #ffeb3b;         /* 純黃色 */
-            color: #b8860b;              /* 文字深金色 */
+            background: linear-gradient(135deg, #a0e9eb, #5ed9d1);
+            color: #006666;
         }
 
         .mini-pennant.vip3 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
+            background: linear-gradient(135deg, #72e2dc, #34c9c2, #1fb3ac);
+            color: #ffffff;
+            box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3);
         }
 
         .mini-pennant.vip4 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
-            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
+            background: linear-gradient(135deg, #4bd2cb, #1fa49c, #007c75);
+            color: #e0ffff;
+            box-shadow: 0 2px 6px rgba(0, 120, 120, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
         .mini-pennant.vip5 {
-            background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
-            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
-            animation: glow 2s infinite alternate;
+            background: linear-gradient(135deg, #3ccac2, #009a94, #005e58);
+            color: #f0ffff;
+            box-shadow: 0 2px 10px rgba(0, 128, 128, 0.9), inset 0 0 14px rgba(255, 255, 255, 0.8);
+            animation: glow-strong-teal 2s infinite alternate;
         }
 
-        /* 閃爍動畫 */
-        @keyframes glow {
-            from { 
-                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7); 
+        /* 強光暈動畫 */
+        @keyframes glow-strong-teal {
+            from {
+                box-shadow: 0 2px 10px rgba(0, 128, 128, 0.8), inset 0 0 14px rgba(255, 255, 255, 0.6);
             }
-            to { 
-                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255,255,255,1); 
+
+            to {
+                box-shadow: 0 2px 14px rgba(0, 200, 200, 1), inset 0 0 18px rgba(255, 255, 255, 1);
             }
         }
+
 
 
         /* 放大旗幟 */
@@ -402,36 +411,42 @@ if (!$donation_history_result) {
             bottom: 0;
             width: 100%;
             height: 8px;
-            background: repeating-linear-gradient(
-                to right,
-                rgba(255,255,255,0.7) 0 3px,
-                rgba(0,0,0,0.1) 3px 6px
-            );
+            background: repeating-linear-gradient(to right,
+                    rgba(255, 255, 255, 0.7) 0 3px,
+                    rgba(0, 0, 0, 0.1) 3px 6px);
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
         .mini-pennant.vip1.large {
-            background: #ffeb3b; /* 純黃色 */
-            color: #b8860b; /* 文字深金色 */
+            background: #ffeb3b;
+            /* 純黃色 */
+            color: #b8860b;
+            /* 文字深金色 */
         }
 
         .mini-pennant.vip2.large {
-            background: #ffeb3b; /* 純黃色 */
-            color: #b8860b; /* 文字深金色 */
+            background: #ffeb3b;
+            /* 純黃色 */
+            color: #b8860b;
+            /* 文字深金色 */
         }
 
         .mini-pennant.vip3.large {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip2 一樣的顏色 */
+            background: linear-gradient(to bottom, #ffe600, #ff6600);
+            /* 和 vip2 一樣的顏色 */
         }
 
         .mini-pennant.vip4.large {
-            background: linear-gradient(to bottom, #ffe600, #ff6600); /* 和 vip3 一樣的顏色 */
-            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255,255,255,0.3); /* 更柔和的陰影 */
+            background: linear-gradient(to bottom, #ffe600, #ff6600);
+            /* 和 vip3 一樣的顏色 */
+            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.3);
+            /* 更柔和的陰影 */
         }
 
         .mini-pennant.vip5.large {
-            background: linear-gradient(to bottom, #ffec8b, #ff4500); /* 現在不變 */
-            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255,255,255,0.7);
+            background: linear-gradient(to bottom, #ffec8b, #ff4500);
+            /* 現在不變 */
+            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
             animation: glow 2s infinite alternate;
         }
 
@@ -457,8 +472,10 @@ if (!$donation_history_result) {
             top: 50%;
             margin: 0 1rem;
             transform: translateY(-50%);
-            width: 60px;              /* 調整按鈕寬度 */
-            height: 60px;             /* 調整按鈕高度 */
+            width: 60px;
+            /* 調整按鈕寬度 */
+            height: 60px;
+            /* 調整按鈕高度 */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -468,13 +485,16 @@ if (!$donation_history_result) {
 
         .carousel-control-prev span,
         .carousel-control-next span {
-            font-size: 1.1rem;  /* 字體大小 */
+            font-size: 1.1rem;
+            /* 字體大小 */
             font-weight: bold;
-            color: black;     /* 文字顏色 */
+            color: black;
+            /* 文字顏色 */
         }
 
         .carousel-control-prev {
-            left: -40px;  /* 調整與輪播邊界的距離，可依需要調 */
+            left: -40px;
+            /* 調整與輪播邊界的距離，可依需要調 */
         }
 
         .carousel-control-next {
@@ -483,16 +503,20 @@ if (!$donation_history_result) {
 
         /* 防止輪播按鈕重疊文字 */
         #vipCarousel .carousel-inner {
-            padding-right: 50px; /* 右側留出空間給輪播按鈕 */
-            padding-left: 50px;  /* 左側留出空間給輪播按鈕 */
+            padding-right: 50px;
+            /* 右側留出空間給輪播按鈕 */
+            padding-left: 50px;
+            /* 左側留出空間給輪播按鈕 */
         }
 
         #vipCarousel .carousel-control-prev,
         #vipCarousel .carousel-control-next {
-            z-index: 10; /* 確保按鈕位於文字區域的前面 */
+            z-index: 10;
+            /* 確保按鈕位於文字區域的前面 */
         }
     </style>
 </head>
+
 <body>
 
     <div class="ranking-wrapper">
@@ -534,19 +558,21 @@ if (!$donation_history_result) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $rank = 1; while ($row = $donation_month_result->fetch_assoc()): ?>
-                        <tr>
-                            <td>
-                                <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
-                            </td>
-                            <td class="d-flex align-items-center">
-                                <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
-                                <?= htmlspecialchars($row['Nickname']) ?>
-                            </td>
-                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
-                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
-                        </tr>
-                        <?php $rank++; endwhile; ?>
+                        <?php $rank = 1;
+                        while ($row = $donation_month_result->fetch_assoc()): ?>
+                            <tr>
+                                <td>
+                                    <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
+                                </td>
+                                <td class="d-flex align-items-center">
+                                    <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
+                                    <?= htmlspecialchars($row['Nickname']) ?>
+                                </td>
+                                <td>NT$ <?= number_format($row['total_donation']) ?></td>
+                                <td>NT$ <?= number_format($row['total_donation']) ?></td>
+                            </tr>
+                        <?php $rank++;
+                        endwhile; ?>
                     </tbody>
                 </table>
             </div>
@@ -569,19 +595,21 @@ if (!$donation_history_result) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $rank = 1; while ($row = $donation_history_result->fetch_assoc()): ?>
-                        <tr>
-                            <td>
-                                <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
-                            </td>
-                            <td class="d-flex align-items-center">
-                                <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
-                                <?= htmlspecialchars($row['Nickname']) ?>
-                            </td>
-                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
-                            <td>NT$ <?= number_format($row['total_donation']) ?></td>
-                        </tr>
-                        <?php $rank++; endwhile; ?>
+                        <?php $rank = 1;
+                        while ($row = $donation_history_result->fetch_assoc()): ?>
+                            <tr>
+                                <td>
+                                    <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
+                                </td>
+                                <td class="d-flex align-items-center">
+                                    <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
+                                    <?= htmlspecialchars($row['Nickname']) ?>
+                                </td>
+                                <td>NT$ <?= number_format($row['total_donation']) ?></td>
+                                <td>NT$ <?= number_format($row['total_donation']) ?></td>
+                            </tr>
+                        <?php $rank++;
+                        endwhile; ?>
                     </tbody>
                 </table>
             </div>
@@ -602,7 +630,7 @@ if (!$donation_history_result) {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                
+
                 <div class="modal-body">
                     <h6 class="mt-4"><i class="icon fa-solid fa-ranking-star me-2"></i> 榮譽排名規則</h6>
                     <ul class="list-unstyled ps-4">
@@ -615,7 +643,7 @@ if (!$donation_history_result) {
                         </li>
                     </ul>
 
-                    
+
                     <!-- 榮譽等級說明 -->
                     <h6 class="mt-5"><i class="icon fa-solid fa-trophy me-2"></i> 榮譽等級取得條件</h6>
                     <ul class="list-unstyled ps-4">
