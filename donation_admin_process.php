@@ -108,6 +108,60 @@ $insert->bind_param(
     $donor_email
 );
 
+// 查詢該募款項目的 Required_Amount 和 Raised_Amount
+$funding_stmt = $link->prepare("SELECT Required_Amount, Raised_Amount FROM FundingSuggestion WHERE Funding_ID = ?");
+$funding_stmt->bind_param("i", $funding_id);
+$funding_stmt->execute();
+$funding_result = $funding_stmt->get_result();
+
+if ($funding_result->num_rows > 0) {
+    $funding_data = $funding_result->fetch_assoc();
+    $required_amount = $funding_data['Required_Amount'];
+    $raised_amount = $funding_data['Raised_Amount'];
+
+    // 計算剩餘的募款金額
+    $remaining_amount = $required_amount - $raised_amount;
+
+    // 檢查捐款金額是否超過剩餘金額
+    if ($amount > $remaining_amount) {
+        // 如果超過，顯示錯誤並停止執行
+        header("Location: donation_admin_create.php?error=" . urlencode("捐款金額不能超過剩餘金額 ($remaining_amount)"));
+        exit();
+    }
+
+    // 更新募款金額
+    $new_raised_amount = $raised_amount + $amount;
+    $update_stmt = $link->prepare("UPDATE FundingSuggestion SET Raised_Amount = ? WHERE Funding_ID = ?");
+    $update_stmt->bind_param("di", $new_raised_amount, $funding_id);
+    $update_stmt->execute();
+} else {
+    // 如果未找到對應的 Funding_ID，可以處理錯誤或提醒管理員
+    header("Location: donation_admin_create.php?error=" . urlencode("未找到對應的募款項目"));
+    exit();
+}
+
+// 寫入 Donation 表格
+$insert = $link->prepare("
+    INSERT INTO Donation 
+    (User_ID, Funding_ID, Method_ID, Donation_Amount, Status, Donation_Date, 
+     Is_Manual, Added_By_Admin_ID, Is_Anonymous, Needs_Receipt, Donor_Email) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+");
+$insert->bind_param(
+    "iiiissiiiis",
+    $user_id,
+    $funding_id,
+    $method_id,
+    $amount,
+    $status,
+    $date,
+    $is_manual,
+    $admin_id,
+    $is_anonymous,
+    $needs_receipt,
+    $donor_email
+);
+
 if ($insert->execute()) {
     // 如果需要收據且 email 格式正確，寄發收據信
     if ($needs_receipt && filter_var($donor_email, FILTER_VALIDATE_EMAIL)) {
@@ -126,3 +180,4 @@ if ($insert->execute()) {
     header("Location: donation_admin_create.php?error=" . urlencode("新增失敗: $error"));
 }
 exit();
+
