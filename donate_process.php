@@ -3,6 +3,9 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+// 設定時區為台北時間，避免時差問題
+date_default_timezone_set('Asia/Taipei');
+
 if (!isset($_SESSION['User_Name'])) {
     header("Location: login.php");
     exit();
@@ -16,7 +19,7 @@ $is_anonymous = isset($_POST['anonymous']) ? 1 : 0;
 $needs_receipt = isset($_POST['receipt']) ? 1 : 0;
 $message = $_POST['message'] ?? '';
 $status = '已捐款';
-$date = date('Y-m-d');
+$date = date('Y-m-d H:i');
 
 // 建立資料庫連線
 $link = new mysqli('localhost', 'root', '', 'sa');
