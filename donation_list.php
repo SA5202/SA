@@ -3,7 +3,8 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-if (!isset($_SESSION['User_Name']) || $_SESSION['User_Type'] !== 'admin') {
+// 僅限 super 和 general 存取
+if (!isset($_SESSION['User_Name']) || ($_SESSION['admin_type'] !== 'super' && $_SESSION['admin_type'] !== 'general')) {
     header("Location: login.php");
     exit();
 }
@@ -64,6 +65,7 @@ switch ($sort) {
 
 $result = $link->query($sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
