@@ -376,15 +376,12 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         }
 
         .vip-floating-tooltip {
-            position: fixed;
+            position: absolute;
             visibility: hidden;
             max-width: 100%;
             /* 限制最大寬度 */
             border-radius: 10px;
             box-shadow: 0 6px 15px rgba(0, 0, 80, 0.15);
-            font-size: 0.7rem;
-            font-weight: bold;
-            color: #1a1a1a;
             pointer-events: none;
             z-index: 9999;
             opacity: 0;
@@ -397,7 +394,10 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
         }
 
         .vip-floating-tooltip .tooltip-content {
-            background-color: rgba(204, 204, 204, 0.7);
+            background-color: rgba(90, 90, 90, 0.8);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: bold;
             border-radius: 10px;
             padding: 0 40px;
             display: flex;
@@ -442,7 +442,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
 <body>
     <?php if ($sessionUserType == 'admin'): ?>
-        <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['User_Name']) ?> 的基本資訊</h3>
+        <h3><i class="icon fas fa-user"></i> <?= htmlspecialchars($row_user['Nickname']) ?> 的基本資訊</h3>
     <?php else: ?>
         <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
     <?php endif; ?>
@@ -472,7 +472,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                                 <td class='left'>暱稱： <?= htmlspecialchars($row_user['Nickname']) ?></td>
                             </tr>
                             <tr>
-                                <td class='left'>使用者 ID： 0000000000<?= $row_user['User_ID'] ?></td>
+                                <td class='left'>使用者 ID： 00000000<?= $row_user['User_ID'] ?></td>
                             </tr>
                             <tr>
                                 <td class='left'>Email： <?= htmlspecialchars($row_user['Email']) ?></td>
@@ -520,7 +520,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             <?php endif; ?>
 
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function () {
                     const tooltip = document.createElement('div');
                     tooltip.className = 'vip-floating-tooltip';
                     tooltip.innerHTML = `<div class="tooltip-content"></div>`;
@@ -528,20 +528,34 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
 
                     document.querySelectorAll('.vip-hover-trigger').forEach(el => {
                         el.addEventListener('mouseenter', () => {
-                            tooltip.querySelector('.tooltip-content').textContent = el.getAttribute('data-tooltip');
+                            const text = el.getAttribute('data-tooltip');
+                            tooltip.querySelector('.tooltip-content').textContent = text;
 
-                            const rect = el.getBoundingClientRect();
-                            const scrollY = window.scrollY || window.pageYOffset;
-                            const scrollX = window.scrollX || window.pageXOffset;
+                            // 顯示 tooltip 以便計算尺寸
+                            tooltip.style.display = 'block';
 
-                            // 固定顯示在元素上方中間
-                            tooltip.style.left = (rect.left + rect.width / 2 + scrollX - tooltip.offsetWidth / 2) + 'px';
-                            tooltip.style.top = (rect.bottom + scrollY + 15) + 'px'; // 向下偏移 10px，可調整
-                            tooltip.classList.add('show');
+                            // 延遲到下一幀，確保 offsetWidth 可用
+                            requestAnimationFrame(() => {
+                                const rect = el.getBoundingClientRect();
+                                const scrollY = window.scrollY || window.pageYOffset;
+                                const scrollX = window.scrollX || window.pageXOffset;
+
+                                const tooltipWidth = tooltip.offsetWidth;
+
+                                // 定位在元素下方中央
+                                const left = rect.left + scrollX + rect.width / 2 - tooltipWidth / 2;
+                                const top = rect.bottom + scrollY + 15;
+
+                                tooltip.style.left = `${left}px`;
+                                tooltip.style.top = `${top}px`;
+
+                                tooltip.classList.add('show');
+                            });
                         });
 
                         el.addEventListener('mouseleave', () => {
                             tooltip.classList.remove('show');
+                            tooltip.style.display = 'none';
                         });
                     });
                 });
@@ -553,9 +567,9 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     <?php if ($sessionUserType == 'admin'): ?>
         <h3>
             <i class="icon fas fa-clipboard-list"></i>
-            <?= htmlspecialchars($row_user['User_Name']) ?> 的建言記錄&nbsp;
+            <?= htmlspecialchars($row_user['Nickname']) ?> 的建言記錄&nbsp;
             <a href="my_suggestion.php?id=<?= urlencode($row_user['User_ID']) ?>" style="color:black">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="icon fa-solid fa-angle-right"></i>
             </a>
         </h3>
     <?php else: ?>
@@ -646,9 +660,9 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     <?php if ($sessionUserType == 'admin'): ?>
         <h3>
             <i class="icon fas fa-clipboard-list"></i>
-            <?= htmlspecialchars($row_user['User_Name']) ?> 的按讚記錄&nbsp;
+            <?= htmlspecialchars($row_user['Nickname']) ?> 的按讚記錄&nbsp;
             <a href="my_like.php?id=<?= urlencode($row_user['User_ID']) ?>" style="color:black">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="icon fa-solid fa-angle-right"></i>
             </a>
         </h3>
     <?php else: ?>
@@ -750,9 +764,9 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
     <?php if ($sessionUserType == 'admin'): ?>
         <h3>
             <i class="icon fas fa-donate"></i>
-            <?= htmlspecialchars($row_user['User_Name']) ?> 的捐款紀錄&nbsp;
+            <?= htmlspecialchars($row_user['Nickname']) ?> 的捐款紀錄&nbsp;
             <a href="my_donate.php?id=<?= urlencode($row_user['User_ID']) ?>" style="color:black">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                <i class="icon fa-solid fa-angle-right"></i>
             </a>
         </h3>
     <?php else: ?>
