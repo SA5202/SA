@@ -39,6 +39,42 @@ if (!$is_manual) {
     die("非手動新增紀錄，禁止修改");
 }
 
+// 🔸 新增段落開始：檢查金額是否超過剩餘可捐金額
+// 先取得原始捐款資訊
+$stmt = $link->prepare("SELECT Funding_ID, Donation_Amount FROM Donation WHERE Donation_ID = ?");
+$stmt->bind_param("i", $donation_id);
+$stmt->execute();
+$stmt->bind_result($funding_id, $original_amount);
+if (!$stmt->fetch()) {
+    die("找不到原始捐款資料");
+}
+$stmt->close();
+
+// 撈出該募資項目需求與目前總募得金額
+$stmt2 = $link->prepare("
+    SELECT Required_Amount,
+           (SELECT IFNULL(SUM(Donation_Amount), 0) FROM Donation WHERE Funding_ID = ?) AS Raised_Amount
+    FROM FundingSuggestion WHERE Funding_ID = ?
+");
+$stmt2->bind_param("ii", $funding_id, $funding_id);
+$stmt2->execute();
+$stmt2->bind_result($required_amount, $raised_amount);
+if (!$stmt2->fetch()) {
+    die("找不到募資資料");
+}
+$stmt2->close();
+
+// 算剩餘可募資金額（不包含這筆原始金額）
+$remaining_amount = $required_amount - ($raised_amount - $original_amount);
+
+if ($amount > $remaining_amount) {
+    // 避免 XSS
+    $safe_error = urlencode("金額超過剩餘可募金額：{$remaining_amount} 元");
+    header("Location: donation_admin_edit.php?id={$donation_id}&error={$safe_error}");
+    exit();
+}
+// 🔸 新增段落結束
+
 // 判斷捐款日期
 if (empty($donation_date_input)) {
     $donation_date = date('Y-m-d H:i:s'); // 現在時間

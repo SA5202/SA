@@ -36,7 +36,93 @@ if ($admin_type === 'department') {
     $check_result = $check_stmt->get_result();
 
     if ($check_result->num_rows === 0) {
-        echo "您無權查看此建言";
+        echo '
+    <!DOCTYPE html>
+    <html lang="zh-Hant">
+    <head>
+        <meta charset="UTF-8">
+        <title>權限錯誤</title>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                background: transparent; /* 完全透明背景 */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: "Noto Sans TC", sans-serif;
+            }
+
+            .alert-card {
+                background-color: rgba(253, 253, 253, 0.9); /* 半透明卡片 */
+                border-left: 6px solid rgb(205, 89, 87);
+                padding: 20px 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                max-width: 400px;
+                width: 100%;
+                position: relative;
+                animation: slideFadeIn 0.4s ease;
+            }
+
+            .alert-title {
+                font-size: 20px;
+                font-weight: bold;
+                color:rgb(205, 89, 87);
+                margin-bottom: 10px;
+            }
+
+            .alert-message {
+                font-size: 16px;
+                color: #444;
+            }
+
+            .close-btn {
+                position: absolute;
+                top: 12px;
+                right: 15px;
+                background: none;
+                border: none;
+                font-size: 20px;
+                color: #888;
+                cursor: pointer;
+            }
+
+            .close-btn:hover {
+                color: #000;
+            }
+
+            @keyframes slideFadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="alert-card error">
+            <button class="close-btn" onclick="closeAlert()">×</button>
+            <div class="alert-title">權限錯誤！</div>
+            <div class="alert-message">您無權編輯此建言，將於 3 秒後返回主頁。</div>
+        </div>
+
+        <script>
+            function closeAlert() {
+                document.querySelector(\'.alert-card\').style.display = \'none\';
+            }
+
+            setTimeout(function () {
+                window.location.href = \'main.php\';
+            }, 3000);
+        </script>
+    </body>
+    </html>';
         exit;
     }
 }
@@ -399,8 +485,8 @@ if ($user_id) {
                         </button>
                     <?php endif; ?>
                     <span id="like-count">
-                        <?= ($row['LikeCount'] >= 10000) 
-                            ? number_format($row['LikeCount'] / 10000, 1) . ' 萬' 
+                        <?= ($row['LikeCount'] >= 10000)
+                            ? number_format($row['LikeCount'] / 10000, 1) . ' 萬'
                             : $row['LikeCount'] . ' '; ?>人喜歡這則建言
                     </span>
                 </div>

@@ -83,7 +83,7 @@ $donation_date_for_input = $dt->format("Y-m-d\TH:i");
         }
 
         .card:hover {
-             transform: scale(1.02);
+            transform: scale(1.02);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
@@ -138,6 +138,10 @@ $donation_date_for_input = $dt->format("Y-m-d\TH:i");
     <div class="card">
         <h4 class="text-center">編輯捐款紀錄</h4>
 
+        <!-- 錯誤訊息顯示區塊 -->
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger text-center"><?= htmlspecialchars($_GET['error']) ?></div>
+        <?php endif; ?>
         <form method="POST" action="donation_admin_update.php">
             <input type="hidden" name="donation_id" value="<?= $donation['Donation_ID'] ?>">
 
