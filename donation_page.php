@@ -146,7 +146,7 @@ if ($selectedFundingID) {
         <?php if (empty($fundingOptions)): ?>
             <div class="alert alert-warning text-center">⚠ 目前沒有「進行中」的募款建言可供捐款。</div>
         <?php else: ?>
-            <form method="POST" action="donate_process.php">
+            <form id="donationForm" method="POST" action="donate_process.php">
                 <div class="mb-3">
                     <label for="funding_id" class="form-label">捐款項目</label>
                     <input type="text" class="form-control" id="funding_id_display" value="<?= htmlspecialchars($selectedTitle) ?>" readonly>
@@ -192,6 +192,44 @@ if ($selectedFundingID) {
         <?php endif; ?>
     </div>
 
+
+
+
+
+    <!-- 信用卡付款彈跳視窗 -->
+    <!-- Modal -->
+    <div class="modal fade" id="creditCardModal" tabindex="-1" aria-labelledby="creditCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="creditCardModalLabel">信用卡付款資訊</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">卡號</label>
+                        <input type="text" class="form-control" id="cardNumber" maxlength="16" placeholder="XXXX XXXX XXXX XXXX">
+                    </div>
+                    <div class="mb-3">
+                        <label for="expiry" class="form-label">有效期限 (MM/YY)</label>
+                        <input type="text" class="form-control" id="expiry" placeholder="MM/YY">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cvv" class="form-label">CVV</label>
+                        <input type="text" class="form-control" id="cvv" maxlength="3" placeholder="123">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cardName" class="form-label">持卡人姓名</label>
+                        <input type="text" class="form-control" id="cardName" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="fakeSubmitBtn">送出付款</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         document.getElementById('method').addEventListener('change', function() {
             const selectedValue = parseInt(this.value);
@@ -212,43 +250,48 @@ if ($selectedFundingID) {
                 );
             }
         });
+
+        document.getElementById('fakeSubmitBtn').addEventListener('click', function() {
+            const cardNumber = document.getElementById('cardNumber').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const expiry = document.getElementById('expiry').value.trim();
+            const cvv = document.getElementById('cvv').value.trim();
+            const cardName = document.getElementById('cardName').value.trim();
+
+            if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+                alert("請輸入有效的捐款金額");
+                return;
+            }
+
+            if (!cardNumber || cardNumber.length !== 16 || isNaN(cardNumber)) {
+                alert("請輸入 16 位數字的信用卡號");
+                return;
+            }
+
+            if (!expiry || !/^\d{2}\/\d{2}$/.test(expiry)) {
+                alert("請輸入有效的到期日格式，例如 12/26");
+                return;
+            }
+
+            if (!cvv || cvv.length !== 3 || isNaN(cvv)) {
+                alert("請輸入 3 位數 CVV");
+                return;
+            }
+
+            if (!cardName) {
+                alert("請輸入持卡人姓名");
+                return;
+            }
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('creditCardModal'));
+            if (modal) modal.hide();
+
+            console.log("提交中...");
+            document.getElementById('donationForm').submit();
+        });
     </script>
 
-    <!-- 信用卡付款彈跳視窗 -->
-    <div class="modal fade" id="creditCardModal" tabindex="-1" aria-labelledby="creditCardModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form method="POST" action="credit_card_process.php">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="creditCardModalLabel">信用卡付款資訊</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="cardNumber" class="form-label">卡號</label>
-                            <input type="text" class="form-control" id="cardNumber" name="card_number" required pattern="\d{16}" maxlength="16">
-                        </div>
-                        <div class="mb-3">
-                            <label for="expiry" class="form-label">有效期限 (MM/YY)</label>
-                            <input type="text" class="form-control" id="expiry" name="expiry" required pattern="\d{2}/\d{2}" placeholder="MM/YY">
-                        </div>
-                        <div class="mb-3">
-                            <label for="cvv" class="form-label">CVV</label>
-                            <input type="text" class="form-control" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3">
-                        </div>
-                        <div class="mb-3">
-                            <label for="cardName" class="form-label">持卡人姓名</label>
-                            <input type="text" class="form-control" id="cardName" name="card_name" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary">送出付款</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
