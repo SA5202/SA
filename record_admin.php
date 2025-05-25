@@ -15,7 +15,7 @@ $sessionUserType = $_SESSION['User_Type'];
 
 if (isset($_GET['id'])) {
     $viewUserID = intval($_GET['id']);
-    if ($viewUserID !== $sessionUserID && $sessionUserType !== 'admin') {
+    if ($viewUserID !== $sessionUserID && !in_array($sessionUserType, ['super', 'general', 'department'])) {
         die('無權限查看此使用者資訊。');
     }
 } else {
@@ -257,7 +257,7 @@ $row_user = $result_user->fetch_assoc();
 </head>
 
 <body>
-    <?php if ($sessionUserType == 'admin'): ?>
+    <?php if (in_array($_SESSION['admin_type'], ['super', 'general', 'department'])): ?>
         <h3><i class="icon fas fa-user"></i> 帳戶基本資訊</h3>
     <?php endif; ?>
     <div class="table-responsive">

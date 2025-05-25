@@ -6,8 +6,8 @@ ini_set("display_errors", 1);
 // 設定時區為台北時間，避免時差問題
 date_default_timezone_set('Asia/Taipei');
 
-// 確保登入且為管理員
-if (!isset($_SESSION['User_Name']) || $_SESSION['User_Type'] !== 'admin') {
+// 僅限 super 和 general 存取
+if (!isset($_SESSION['User_Name']) || ($_SESSION['admin_type'] !== 'super' && $_SESSION['admin_type'] !== 'general')) {
     header("Location: login.php");
     exit();
 }
