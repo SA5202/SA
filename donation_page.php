@@ -125,6 +125,10 @@ if ($selectedFundingID) {
         .btn-success:hover {
             background-color: rgb(66, 107, 70);
         }
+
+        .modal-backdrop.show {
+            background-color: transparent !important;
+        }
     </style>
 </head>
 
