@@ -78,14 +78,14 @@ if ($selectedFundingID) {
         }
 
         .donation-form {
-            border: 2px solid #ccc;
-            border-radius: 25px;
-            padding: 30px;
+            border: 1px solid #ccc;
+            border-radius: 40px;
+            padding: 40px;
             background-color: #fff;
             box-shadow: 0 0px 15px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            max-width: 500px;
-            margin: 0 auto;
+            max-width: 70%;
+            margin: 30px auto;
         }
 
         .donation-form:hover {
@@ -103,6 +103,16 @@ if ($selectedFundingID) {
         .form-label {
             font-weight: bold;
             color: #555;
+        }
+
+        input[readonly] {
+            background-color: #eee;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgb(173, 231, 248);
+            box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
         }
 
         .btn-success {

@@ -107,6 +107,16 @@ if (isset($_GET['funding_id'])) {
             font-weight: bold;
         }
 
+        input[readonly] {
+            background-color: #eee;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: rgb(173, 231, 248);
+            box-shadow: 0 0 8px rgba(70, 117, 141, 0.88);
+        }
+
         .btn-block {
             width: 100%;
         }
