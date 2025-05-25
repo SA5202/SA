@@ -509,13 +509,15 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                 </table>
             </div>
 
-            <!-- 右側 VIP 錦旗 -->
-            <div class="vip-pennant-wrapper" style="margin-top: 30px;">
-                <span class="mini-pennant <?= $vipInfo['class'] ?> vip-hover-trigger"
-                    data-tooltip="<?= htmlspecialchars($vipInfo['tooltip']) ?>">
-                    <?= $vipInfo['label'] ?>
-                </span>
-            </div>
+            <?php if ($vipInfo['level'] != 0): ?>
+                <!-- 右側 VIP 錦旗 -->
+                <div class="vip-pennant-wrapper" style="margin-top: 30px;">
+                    <span class="mini-pennant <?= $vipInfo['class'] ?> vip-hover-trigger"
+                        data-tooltip="<?= htmlspecialchars($vipInfo['tooltip']) ?>">
+                        <?= $vipInfo['label'] ?>
+                    </span>
+                </div>
+            <?php endif; ?>
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
