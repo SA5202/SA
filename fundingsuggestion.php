@@ -1,6 +1,19 @@
 <?php
 session_start();
 
+// 檢查是否已登入
+if (!isset($_SESSION['User_Name'])) {
+    header("Location: login.php");  // 重新導向到登入頁面
+    exit();
+}
+
+// 用戶資訊
+$User_Name = $_SESSION['User_Name'];
+$User_Type = $_SESSION['User_Type'];
+$admin_type = $_SESSION['admin_type']; // 用戶角色類型
+$Nickname = $_SESSION['Nickname'];
+$is_admin = $_SESSION['is_admin'];
+
 // 資料庫連接
 $servername = "localhost";
 $username = "root";
@@ -48,6 +61,7 @@ $sql = "
     )
 ";
 $result = $conn->query($sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -132,6 +146,53 @@ $result = $conn->query($sql);
                     <select name="suggestion_id" id="suggestion_id" class="form-select" required>
                         <option value="">選擇建言</option>
                         <?php
+                        // 根據用戶角色來查詢建議
+                        if ($_SESSION['admin_type'] === 'super') {
+                            // 超級管理員：顯示所有未募款的建議
+                            $sql = "
+                                SELECT Suggestion_ID, Title 
+                                FROM Suggestion s
+                                WHERE NOT EXISTS (
+                                    SELECT 1 
+                                    FROM FundingSuggestion f
+                                    WHERE f.Suggestion_ID = s.Suggestion_ID
+                                )
+                            ";
+                        } elseif ($_SESSION['admin_type'] === 'department') {
+                            // 部門管理員：僅顯示該學院的未募款建議
+                            $user_id = $_SESSION['User_ID'];  // 當前登入用戶的 ID
+                            
+                            // 查詢該部門管理員所屬的學院 ID
+                            $scope_sql = "SELECT College_ID FROM DepartmentAdminScope WHERE User_ID = '$user_id'";
+                            $scope_result = $conn->query($scope_sql);
+                            if ($scope_result && $scope_result->num_rows > 0) {
+                                $scope_row = $scope_result->fetch_assoc();
+                                $college_id = $scope_row['College_ID'];  // 取得學院 ID
+
+                                // 查詢該學院的未募款建議
+                                $sql = "
+                                    SELECT Suggestion_ID, Title
+                                    FROM Suggestion s
+                                    WHERE s.Building_ID IN (SELECT Building_ID FROM Building WHERE College_ID = '$college_id')
+                                    AND NOT EXISTS (
+                                        SELECT 1
+                                        FROM FundingSuggestion f
+                                        WHERE f.Suggestion_ID = s.Suggestion_ID
+                                    )
+                                ";
+                            } else {
+                                // 如果部門管理員沒有設定學院範圍，則不顯示任何建議
+                                $sql = "SELECT Suggestion_ID, Title FROM Suggestion WHERE 1 = 0";  // 沒有符合條件的建議
+                            }
+                        } else {
+                            // 其他角色：不顯示任何建議
+                            $sql = "SELECT Suggestion_ID, Title FROM Suggestion WHERE 1 = 0";  // 沒有符合條件的建議
+                        }
+
+                        // 執行查詢
+                        $result = $conn->query($sql);
+
+                        // 顯示查詢結果
                         if ($result && $result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<option value='" . $row['Suggestion_ID'] . "'>" . htmlspecialchars($row['Title']) . "</option>";
@@ -154,6 +215,7 @@ $result = $conn->query($sql);
                 <button type="submit" class="btn btn-custom btn-block">確認新增</button>
             </form>
         </div>
+
     </div>
 
     <script>
@@ -166,8 +228,6 @@ $result = $conn->query($sql);
             }
         });
     </script>
-
-    <?php $conn->close(); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

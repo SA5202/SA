@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+// 檢查是否已登入
+if (!isset($_SESSION['User_ID'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$User_ID = $_SESSION['User_ID'];
+$admin_type = $_SESSION['admin_type'];  // 'super', 'general', 'department'
+
 // 資料庫連接
 $servername = "localhost";
 $username = "root";
@@ -13,14 +22,35 @@ if ($conn->connect_error) {
     die("資料庫連接失敗: " . $conn->connect_error);
 }
 
-// 查詢所有募款建議
-$sql = "
-    SELECT f.Funding_ID, s.Suggestion_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
-    FROM FundingSuggestion f
-    JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
-    WHERE f.Status != '已隱藏'  -- 排除已隱藏的建言
-    ORDER BY f.Updated_At DESC
-";
+// 根據用戶角色來設置查詢條件
+if ($admin_type === 'super') {
+    // `super` 管理員可以查看所有募款建議
+    $sql = "
+        SELECT f.Funding_ID, s.Suggestion_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
+        FROM FundingSuggestion f
+        JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
+        WHERE f.Status != '已隱藏'
+        ORDER BY f.Updated_At DESC
+    ";
+}  elseif ($admin_type === 'department') {
+    // `department` 管理員只能查看所屬學院的募款建議
+    $sql = "
+        SELECT f.Funding_ID, s.Suggestion_ID, s.Title, s.Description, f.Required_Amount, f.Raised_Amount, f.Status, f.Updated_At
+        FROM FundingSuggestion f
+        JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID
+        JOIN Building b ON s.Building_ID = b.Building_ID
+        JOIN DepartmentAdminScope das ON das.User_ID = $User_ID
+        WHERE f.Status != '已隱藏'
+        AND b.College_ID = das.College_ID  -- 只顯示所屬學院的建議
+        ORDER BY f.Updated_At DESC
+    ";
+} else {
+    // 普通用戶無法查看任何募款建議
+    echo "無權限查看募款建議";
+    exit();
+}
+
+// 執行查詢
 $result = $conn->query($sql);
 
 $ongoing = [];
@@ -47,6 +77,7 @@ if ($result->num_rows > 0) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="zh-Hant">
