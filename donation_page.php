@@ -230,12 +230,28 @@ if ($selectedFundingID) {
             </div>
         </div>
     </div>
+    <!-- LINE Pay / 街口支付圖片 Modal -->
+    <div class="modal fade" id="ewalletImageModal" tabindex="-1" aria-labelledby="ewalletImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ewalletImageModalLabel">行動支付說明</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="fake_linepay_qr.png" alt="行動支付 QR Code" class="img-fluid rounded shadow">
+                    <p class="mt-2">請使用 LINE Pay 或 街口支付 掃描上方 QR Code 完成付款後再提交表單。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         document.getElementById('method').addEventListener('change', function() {
             const selectedValue = parseInt(this.value);
 
             if (selectedValue === 1) {
-                // 顯示信用卡付款 modal
                 const creditCardModal = new bootstrap.Modal(document.getElementById('creditCardModal'));
                 creditCardModal.show();
             } else if (selectedValue === 2 || selectedValue === 6) {
@@ -248,8 +264,14 @@ if ($selectedFundingID) {
                     "⚠️ 請先完成匯款再提交捐款表單\n" +
                     "⚠️ 提交表單前記得在留言區回報帳號後五碼"
                 );
+            } else if (selectedValue === 3 || selectedValue === 4) {
+                // 顯示共用的行動支付圖片 modal
+                const ewalletModal = new bootstrap.Modal(document.getElementById('ewalletImageModal'));
+                ewalletModal.show();
             }
         });
+
+
 
         document.getElementById('fakeSubmitBtn').addEventListener('click', function() {
             const cardNumber = document.getElementById('cardNumber').value.trim();
