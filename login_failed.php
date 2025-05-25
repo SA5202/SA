@@ -17,7 +17,7 @@
          }
 
         .alert-card {
-            width: 70%;
+            width: 40%;
             background-color: #fff;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
