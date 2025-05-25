@@ -193,15 +193,64 @@ if ($selectedFundingID) {
     </div>
 
     <script>
-        setTimeout(function() {
-            const alert = document.querySelector('.alert');
-            if (alert) {
-                alert.classList.remove('show');
-                alert.classList.add('fade');
-                setTimeout(() => alert.remove(), 500);
+        document.getElementById('method').addEventListener('change', function() {
+            const selectedValue = parseInt(this.value);
+
+            if (selectedValue === 1) {
+                // 顯示信用卡付款 modal
+                const creditCardModal = new bootstrap.Modal(document.getElementById('creditCardModal'));
+                creditCardModal.show();
+            } else if (selectedValue === 2 || selectedValue === 6) {
+                alert(
+                    "📌 匯款資訊：\n" +
+                    "銀行名稱：台灣銀行（004）\n" +
+                    "分行名稱：輔大分行\n" +
+                    "帳戶名稱：愛校無限公司\n" +
+                    "銀行帳號：123-456-789012\n" +
+                    "⚠️ 請先完成匯款再提交捐款表單\n" +
+                    "⚠️ 提交表單前記得在留言區回報帳號後五碼"
+                );
             }
-        }, 3000);
+        });
     </script>
+
+    <!-- 信用卡付款彈跳視窗 -->
+    <div class="modal fade" id="creditCardModal" tabindex="-1" aria-labelledby="creditCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="credit_card_process.php">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="creditCardModalLabel">信用卡付款資訊</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">卡號</label>
+                            <input type="text" class="form-control" id="cardNumber" name="card_number" required pattern="\d{16}" maxlength="16">
+                        </div>
+                        <div class="mb-3">
+                            <label for="expiry" class="form-label">有效期限 (MM/YY)</label>
+                            <input type="text" class="form-control" id="expiry" name="expiry" required pattern="\d{2}/\d{2}" placeholder="MM/YY">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3">
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardName" class="form-label">持卡人姓名</label>
+                            <input type="text" class="form-control" id="cardName" name="card_name" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">送出付款</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 
