@@ -129,7 +129,7 @@ if ($admin_type === 'department') {
 
 // 🔍 查詢建言資料
 $sql = "
-    SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.User_Name,
+    SELECT s.Suggestion_ID, s.Title, s.Description, s.Updated_At, s.User_ID, u.Nickname,
            f.Facility_Type,
            b.Building_Name,
            s.Priority_Level,
@@ -214,6 +214,20 @@ if ($user_id) {
             color: #666;
             line-height: 1.5;
             margin-bottom: 1.5rem;
+        }
+
+        .priority-wrapper {
+            display: inline-block;
+            padding: 0.3rem 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
         .description {
@@ -422,10 +436,11 @@ if ($user_id) {
             border: none;
             color: white;
             margin-left: 15px;
-            padding: 0.2rem 20px;
-            border-radius: 12px;
+            padding: 0.4rem 20px;
+            border-radius: 10px;
             font-size: 0.9rem;
-            font-weight: 750;
+            font-weight: bold;
+            font-family: "Noto Serif TC", serif;
         }
 
         .pretty-btn:hover {
@@ -450,9 +465,9 @@ if ($user_id) {
             <?php if ($can_delete): ?> <!-- 這裡也改成 $can_delete -->
                 <div class="meta">
                     <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
-                        <span>🔥 高優先建言</span><br>
+                        <p><div class="priority-wrapper">置頂建言</div></p>
                     <?php endif; ?>
-                    發布者： <a href="record.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['User_Name']) ?></a><br>
+                    發布者： <a href="record.php?id=<?= $row['User_ID'] ?>" class="author-link"><?= htmlspecialchars($row['Nickname']) ?></a><br>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>
                     更新時間： <?= date("Y-m-d H:i", strtotime($row["Updated_At"])) ?>
@@ -460,7 +475,7 @@ if ($user_id) {
             <?php else: ?>
                 <div class="meta">
                     <?php if (!empty($row['Priority_Level']) && $row['Priority_Level'] == 1): ?>
-                        <span>🔥 高優先建言🔥</span><br>
+                        <p><div class="priority-wrapper">置頂建言</div></p>
                     <?php endif; ?>
                     關聯設施： <?= htmlspecialchars($row['Facility_Type']) ?><br>
                     關聯建築物： <?= htmlspecialchars($row['Building_Name']) ?><br>

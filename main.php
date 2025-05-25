@@ -312,9 +312,9 @@ $popular_result = $link->query($popular_sql);
             transform: translateY(-50%);
         }
 
-        #honorCarousel .carousel-control-prev-icon,
-        #honorCarousel .carousel-control-next-icon {
-            background-color: rgba(0, 0, 0, 0.4); /* 半透明深色箭頭 */
+        #honorCarousel .carousel-control-prev i,
+        #honorCarousel .carousel-control-next i {
+            color: #555;
             border-radius: 50%;
             background-size: 60% 60%;
             padding: 10px;
@@ -547,11 +547,11 @@ $popular_result = $link->query($popular_sql);
 
         <!-- 輪播控制按鈕 -->
         <button class="carousel-control-prev" type="button" data-bs-target="#honorCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span aria-hidden="true"><i class="fa-solid fa-angle-left fa-2x"></i></span>
             <span class="visually-hidden">上一頁</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#honorCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span aria-hidden="true"><i class="fa-solid fa-angle-right fa-2x"></i></span>
             <span class="visually-hidden">下一頁</span>
         </button>
     </div>

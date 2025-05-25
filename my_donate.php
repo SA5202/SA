@@ -514,9 +514,7 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                             </span>
                         </td>
                         <td class="text-center">
-                            <span class="update"><?= date('Y-m-d', strtotime($row['Donation_Date'])) ?><br>
-                            <small class="update-date">更新於：<?= date('Y-m-d', strtotime($row['Updated_At'])) ?></small>
-                            </span>
+                            <span class="update"><?= date('Y-m-d', strtotime($row['Donation_Date'])) ?></span>
                         </td>
                     </tr>
                 <?php endwhile; ?>

@@ -30,25 +30,25 @@ function getVipLevel($link, $User_ID) {
     $next_level = null;
 
     // 根據捐款金額決定等級
-    if ($total >= 10000) {
+    if ($total >= 50000) {
         $class = 'vip4';
         $label = 'IV';
         $to_next = 0;
         $next_level = 'VIP5';
-    } elseif ($total >= 5000) {
+    } elseif ($total >= 10000) {
         $class = 'vip3';
         $label = 'III';
-        $to_next = 10000 - $total;
+        $to_next = 50000 - $total;
         $next_level = 'VIP4';
-    } elseif ($total >= 1000) {
+    } elseif ($total >= 5000) {
         $class = 'vip2';
         $label = 'II';
-        $to_next = 5000 - $total;
+        $to_next = 10000 - $total;
         $next_level = 'VIP3';
     } else {
         $class = 'vip1';
         $label = 'I';
-        $to_next = 1000 - $total;
+        $to_next = 5000 - $total;
         $next_level = 'VIP2';
     }
 
@@ -59,13 +59,13 @@ function getVipLevel($link, $User_ID) {
 
     $isTop10 = false;
     while ($top_row = mysqli_fetch_assoc($top_result)) {
-        if ($top_row['User_ID'] === $User_ID && $total >= 10000) {
+        if ($top_row['User_ID'] === $User_ID && $total >= 50000) {
             $isTop10 = true;
             break;
         }
     }
 
-    // 如果是前10名，提升為VIP5
+    // 如果是前 10 名，提升為 VIP 5
     if ($isTop10) {
         $class = 'vip5';
         $label = 'V';
@@ -75,9 +75,9 @@ function getVipLevel($link, $User_ID) {
 
     // 設定 tooltip 顯示內容
     if ($label === 'V') {
-        $tooltip = 'VIP5 已為最高等級';
+        $tooltip = '當前已為最高等級';
     } elseif ($label === 'IV') {
-        $tooltip = '若您成為本系統總捐款金額「前10名」（目前為 NT$ ' . number_format($total) . '）即可晉升為 VIP5';
+        $tooltip = '累計總捐款金額排名「前 10 名」（目前為 NT$ ' . number_format($total) . '）即可晉升為 VIP 5';
     } else {
         $tooltip = 'NT$ '. number_format($total) . ' / NT$ ' . number_format($total + $to_next);
     }

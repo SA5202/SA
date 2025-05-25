@@ -323,48 +323,44 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
-        /* 各等級變化 */
+        /* VIP 等級藍綠色＋強漸層風格 */
         .mini-pennant.vip1 {
-            background: #ffeb3b;
-            /* 純黃色 */
-            color: #b8860b;
-            /* 文字深金色 */
+            background: linear-gradient(135deg, #d4f9f9, #a0e9eb);
+            color: #007777;
         }
 
         .mini-pennant.vip2 {
-            background: #ffeb3b;
-            /* 純黃色 */
-            color: #b8860b;
-            /* 文字深金色 */
+            background: linear-gradient(135deg, #a0e9eb, #5ed9d1);
+            color: #006666;
         }
 
         .mini-pennant.vip3 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600);
-            /* 和 vip2 一樣的顏色 */
+            background: linear-gradient(135deg, #72e2dc, #34c9c2, #1fb3ac);
+            color: #ffffff;
+            box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3);
         }
 
         .mini-pennant.vip4 {
-            background: linear-gradient(to bottom, #ffe600, #ff6600);
-            /* 和 vip3 一樣的顏色 */
-            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.3);
-            /* 更柔和的陰影 */
+            background: linear-gradient(135deg, #4bd2cb, #1fa49c, #007c75);
+            color: #e0ffff;
+            box-shadow: 0 2px 6px rgba(0, 120, 120, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
         .mini-pennant.vip5 {
-            background: linear-gradient(to bottom, #ffec8b, #ff4500);
-            /* 現在不變 */
-            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
-            animation: glow 2s infinite alternate;
+            background: linear-gradient(135deg, #3ccac2, #009a94, #005e58);
+            color: #f0ffff;
+            box-shadow: 0 2px 10px rgba(0, 128, 128, 0.9), inset 0 0 14px rgba(255, 255, 255, 0.8);
+            animation: glow-strong-teal 2s infinite alternate;
         }
 
-        /* 閃爍動畫 */
-        @keyframes glow {
+        /* 強光暈動畫 */
+        @keyframes glow-strong-teal {
             from {
-                box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
+                box-shadow: 0 2px 10px rgba(0, 128, 128, 0.8), inset 0 0 14px rgba(255, 255, 255, 0.6);
             }
 
             to {
-                box-shadow: 0 2px 12px rgba(255, 69, 0, 1), inset 0 0 16px rgba(255, 255, 255, 1);
+                box-shadow: 0 2px 14px rgba(0, 200, 200, 1), inset 0 0 18px rgba(255, 255, 255, 1);
             }
         }
 

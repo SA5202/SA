@@ -28,7 +28,21 @@ if (isset($_SESSION['User_ID'])) {
     ];
     $userVipLevel = $vipLevelMap[$vipClass] ?? 0;
 }
+
+// 查詢使用者暱稱
+$nickname = '使用者'; // 預設顯示
+if (isset($_SESSION['User_ID'])) {
+    $stmt = $link->prepare("SELECT Nickname FROM useraccount WHERE User_ID = ?");
+    $stmt->bind_param("i", $_SESSION['User_ID']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $nickname = $row['Nickname'];
+    }
+    $stmt->close();
+}
 ?>
+
 <script>
   const userVipLevel = <?= intval($userVipLevel) ?>;
 </script>
@@ -422,56 +436,66 @@ if (isset($_SESSION['User_ID'])) {
         /* 視覺彈窗 */
         #welcomeModal {
             position: fixed;
-            top: 0; /* 緊貼正上方 */
+            top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(74, 144, 226, 0.3); /* 淡藍色，透明度0.3 */
-            border-radius: 8px;
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.4);
-            padding: 15px 40px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 1.4rem;
-            color: black; /* 全黑字 */
+            background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
             text-align: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease;
-            z-index: 10000;
-            max-width: 400px;
-            width: fit-content;
-            white-space: nowrap;
+            transition: opacity 0.4s ease;
+            z-index: 1000;
+            max-width: 500px;
+            width: 90%;  /* 自適應寬度 */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
+            backdrop-filter: blur(4px);
         }
 
-        #welcomeModal .modal-title {
-            font-weight: 700;
-            white-space: nowrap;
+        /* 顯示效果 */
+        #welcomeModal.show {
+            opacity: 1;
+            pointer-events: auto;
         }
+
+        /* 標題文字 */
+        #welcomeModal .modal-title {
+            color: #2a2a2a;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* 副標或附加訊息（如果有） */
         #welcomeModal .modal-message {
             font-weight: 400;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            color: #555;
         }
 
         /* 關閉按鈕 */
         #closeModalBtn {
-            margin-top: 12px;
-            background: rgba(37, 93, 153, 0.6);
+            margin-top: 10px;
+            background-color: #4a90e2;
             border: none;
-            color: #dceeff;
-            font-weight: 600;
-            padding: 4px 16px;        /* 內距改小 */
-            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: bold;
+            padding: 4px 20px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;          /* 字體變小 */
             transition: background-color 0.3s ease;
         }
+
         #closeModalBtn:hover {
-            background-color: rgba(27, 69, 110, 0.8);
+            background-color: #3a7fd9;
         }
+
     </style>
 </head>
 
@@ -764,9 +788,8 @@ if (isset($_SESSION['User_ID'])) {
 
     <!-- 視覺彈窗 -->
     <div id="welcomeModal">
-    <div class="modal-title">尊貴的用戶，您好！</div>
-    <div class="modal-message">感謝您的蒞臨，祝您有個美好的一天！✨</div>
-    <button id="closeModalBtn">關閉</button>
+        <div class="modal-title">歡迎回來，<?php echo htmlspecialchars($nickname); ?>！</div>
+        <button id="closeModalBtn">關閉</button>
     </div>
 
     <script>

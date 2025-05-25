@@ -374,15 +374,14 @@ if (!$donation_history_result) {
         }
 
 
-
         /* 放大旗幟 */
         /* 頂部橫條 */
         .mini-pennant.large {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 60px;
-            height: 90px;
+            width: 90px;
+            height: 120px;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
             position: relative;
             margin-bottom: 10px;
@@ -390,7 +389,6 @@ if (!$donation_history_result) {
             font-family: "Noto Serif TC", serif;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #c00;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
@@ -410,44 +408,40 @@ if (!$donation_history_result) {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 8px;
+            height: 12px;
             background: repeating-linear-gradient(to right,
                     rgba(255, 255, 255, 0.7) 0 3px,
                     rgba(0, 0, 0, 0.1) 3px 6px);
             clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 50%, 0 100%);
         }
 
-        .mini-pennant.vip1.large {
-            background: #ffeb3b;
-            /* 純黃色 */
-            color: #b8860b;
-            /* 文字深金色 */
+        .mini-pennant.vip1 .large {
+            background: linear-gradient(135deg, #d4f9f9, #a0e9eb);
+            color: #007777;
         }
 
-        .mini-pennant.vip2.large {
-            background: #ffeb3b;
-            /* 純黃色 */
-            color: #b8860b;
-            /* 文字深金色 */
+        .mini-pennant.vip2 .large {
+            background: linear-gradient(135deg, #a0e9eb, #5ed9d1);
+            color: #006666;
         }
 
-        .mini-pennant.vip3.large {
-            background: linear-gradient(to bottom, #ffe600, #ff6600);
-            /* 和 vip2 一樣的顏色 */
+        .mini-pennant.vip3 .large {
+            background: linear-gradient(135deg, #72e2dc, #34c9c2, #1fb3ac);
+            color: #ffffff;
+            box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.3);
         }
 
-        .mini-pennant.vip4.large {
-            background: linear-gradient(to bottom, #ffe600, #ff6600);
-            /* 和 vip3 一樣的顏色 */
-            box-shadow: 0 2px 6px rgba(255, 140, 0, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.3);
-            /* 更柔和的陰影 */
+        .mini-pennant.vip4 .large {
+            background: linear-gradient(135deg, #4bd2cb, #1fa49c, #007c75);
+            color: #e0ffff;
+            box-shadow: 0 2px 6px rgba(0, 120, 120, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.4);
         }
 
-        .mini-pennant.vip5.large {
-            background: linear-gradient(to bottom, #ffec8b, #ff4500);
-            /* 現在不變 */
-            box-shadow: 0 2px 8px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(255, 255, 255, 0.7);
-            animation: glow 2s infinite alternate;
+        .mini-pennant.vip5 .large {
+            background: linear-gradient(135deg, #3ccac2, #009a94, #005e58);
+            color: #f0ffff;
+            box-shadow: 0 2px 10px rgba(0, 128, 128, 0.9), inset 0 0 14px rgba(255, 255, 255, 0.8);
+            animation: glow-strong-teal 2s infinite alternate;
         }
 
         #vipCarousel .carousel-inner {
@@ -485,11 +479,9 @@ if (!$donation_history_result) {
 
         .carousel-control-prev span,
         .carousel-control-next span {
-            font-size: 1.1rem;
-            /* 字體大小 */
+            font-size: 1rem;
             font-weight: bold;
-            color: black;
-            /* 文字顏色 */
+            color: #555;
         }
 
         .carousel-control-prev {
@@ -653,15 +645,15 @@ if (!$donation_history_result) {
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip2">II</span>
-                            <strong>VIP 2：</strong> 累計捐款金額達 NT$ 1,000 元以上的用戶可獲得此榮譽等級。
+                            <strong>VIP 2：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip3">III</span>
-                            <strong>VIP 3：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可將獲得此榮譽等級。
+                            <strong>VIP 3：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip4">IV</span>
-                            <strong>VIP 4：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
+                            <strong>VIP 4：</strong> 累計捐款金額達 NT$ 50,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip5">V</span>
@@ -720,10 +712,12 @@ if (!$donation_history_result) {
 
                         <!-- 輪播控制 -->
                         <button class="carousel-control-prev" type="button" data-bs-target="#vipCarousel" data-bs-slide="prev">
-                            <span>◀</span>
+                            <span aria-hidden="true"><i class="fa-solid fa-angle-left fa-2x"></i></span>
+                            <span class="visually-hidden">上一頁</span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#vipCarousel" data-bs-slide="next">
-                            <span>▶</span>
+                            <span aria-hidden="true"><i class="fa-solid fa-angle-right fa-2x"></i></span>
+                            <span class="visually-hidden">下一頁</span>
                         </button>
                     </div>
 
