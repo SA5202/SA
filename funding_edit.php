@@ -161,7 +161,7 @@ if (isset($_GET['funding_id'])) {
 
                 <div class="mb-3">
                     <label for="raised_amount" class="form-label">當前已募得金額：</label>
-                    <input type="number" class="form-control" id="raised_amount" name="raised_amount" value="<?= htmlspecialchars($row['Raised_Amount']) ?>" required>
+                    <input type="number" class="form-control" id="raised_amount" name="raised_amount" value="<?= htmlspecialchars($row['Raised_Amount']) ?>" readonly required>
                 </div>
 
                 <div class="mb-3">
