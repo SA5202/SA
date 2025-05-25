@@ -38,13 +38,24 @@ $user_data = $user_result->fetch_assoc();
 $user_id = $user_data['User_ID'];
 $user_email = $user_data['Email'];
 
+// 查詢 Funding_ID 是否存在
+$checkFundingQuery = $link->prepare("SELECT 1 FROM FundingSuggestion WHERE Funding_ID = ?");
+$checkFundingQuery->bind_param("i", $funding_id);
+$checkFundingQuery->execute();
+$checkFundingResult = $checkFundingQuery->get_result();
+
+if ($checkFundingResult->num_rows === 0) {
+    echo "<script>alert('錯誤：該募款項目不存在。'); window.location.href='donation_page.php?error=該募款項目不存在';</script>";
+    exit();
+}
+
 // 查詢項目名稱
 $title_query = $link->prepare("
     SELECT s.Title 
     FROM FundingSuggestion f 
     JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID 
-    WHERE f.Funding_ID = ?
-");
+    WHERE f.Funding_ID = ?"
+);
 $title_query->bind_param("i", $funding_id);
 $title_query->execute();
 $title_result = $title_query->get_result();
@@ -69,14 +80,12 @@ $sql = "
 $insert = $link->prepare($sql);
 $insert->bind_param("iiiisiis", $user_id, $funding_id, $method_id, $amount, $status, $is_anonymous, $needs_receipt, $user_email);
 
-
 if ($insert->execute()) {
     // 更新募款進度
     $update = $link->prepare("
         UPDATE FundingSuggestion 
         SET Raised_Amount = IFNULL(Raised_Amount, 0) + ?, Updated_At = NOW()
-        WHERE Funding_ID = ?
-    ");
+        WHERE Funding_ID = ?");
     $update->bind_param("di", $amount, $funding_id);
     $update->execute();
     $update->close();

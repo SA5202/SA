@@ -44,7 +44,21 @@ $email_result = $link->query("SELECT Email FROM UserAccount WHERE User_Name = '"
 if ($email_result && $email_result->num_rows > 0) {
     $email = $email_result->fetch_assoc()['Email'];
 }
+
+// 根據 URL 中的 funding_id 取得對應的標題
+$selectedFundingID = isset($_GET['funding_id']) ? $_GET['funding_id'] : null;
+$selectedTitle = '';
+if ($selectedFundingID) {
+    $query = "SELECT Title FROM FundingSuggestion f JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID WHERE f.Funding_ID = ?";
+    $stmt = $link->prepare($query);
+    $stmt->bind_param("i", $selectedFundingID);
+    $stmt->execute();
+    $stmt->bind_result($selectedTitle);
+    $stmt->fetch();
+    $stmt->close();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
@@ -125,12 +139,8 @@ if ($email_result && $email_result->num_rows > 0) {
             <form method="POST" action="donate_process.php">
                 <div class="mb-3">
                     <label for="funding_id" class="form-label">捐款項目</label>
-                    <select class="form-select" id="funding_id" name="funding_id" required>
-                        <option value="">請選擇項目</option>
-                        <?php foreach ($fundingOptions as $item): ?>
-                            <option value="<?= $item['Funding_ID'] ?>"><?= htmlspecialchars($item['Title']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <input type="text" class="form-control" id="funding_id_display" value="<?= htmlspecialchars($selectedTitle) ?>" readonly>
+                    <input type="hidden" name="funding_id" id="funding_id" value="<?= htmlspecialchars($selectedFundingID) ?>">
                 </div>
 
                 <div class="mb-3">
