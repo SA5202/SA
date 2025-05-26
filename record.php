@@ -119,7 +119,6 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: white; /* 中間背景，可改為其他色 */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -132,19 +131,35 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             object-fit: cover;
         }
 
+        /* 共用動畫：脈動光暈 */
+        @keyframes vip-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+            }
+        }
+
+        /* VIP3 - 冰藍 */
         .avatar-frame.vip3 {
-            background: linear-gradient(135deg, #6a11cb, #2575fc); /* 藍紫閃電風格 */
-            box-shadow: 0 0 15px rgba(101, 84, 192, 0.6);
+            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4); /* 淺冰藍漸層 */
+            animation: vip-glow 3s ease-in-out infinite; /* 較快的閃爍動畫 */
+            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5); /* 輕微的藍色光暈 */
         }
 
+        /* VIP4 - 紫粉 */
         .avatar-frame.vip4 {
-            background: linear-gradient(135deg, #ff5f6d, #ffc371); /* 粉橘朝陽風格 */
-            box-shadow: 0 0 15px rgba(255, 99, 71, 0.5);
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb); /* 淡紫色漸層 */
+            animation: vip-glow 3s ease-in-out infinite; /* 中等速度的閃爍動畫 */
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7); /* 紫色光暈 */
         }
 
+        /* VIP5 - 綠藍 */
         .avatar-frame.vip5 {
-            background: linear-gradient(135deg, #f7971e, #ffd200); /* 金黃王者風格 */
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d); /* 深藍 → 鮮亮藍 → 淺綠漸層 */
+            animation: vip-glow 3s ease-in-out infinite; /* 最慢的閃爍動畫 */
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9); /* 更強的藍光光暈 */
         }
 
         .password-display-wrapper {

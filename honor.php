@@ -49,6 +49,7 @@ if (!$donation_history_result) {
     <meta charset="UTF-8">
     <title>榮譽榜 | 輔仁大學愛校建言捐款系統</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/e19963bd49.js" crossorigin="anonymous"></script>
     <style>
         body {
@@ -306,7 +307,6 @@ if (!$donation_history_result) {
             height: 45px;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
             position: relative;
-            margin-right: 20px;
             vertical-align: middle;
             font-family: "Noto Serif TC", serif;
             font-size: 0.9rem;
@@ -658,23 +658,23 @@ if (!$donation_history_result) {
                     <h6 class="mt-5"><i class="icon fa-solid fa-trophy me-2"></i> 榮譽等級取得條件</h6>
                     <ul class="list-unstyled ps-4">
                         <li class="mb-3">
-                            <span class="mini-pennant vip1">I</span>
+                            <span class="mini-pennant vip1 mr-3">I</span>
                             <strong>VIP 1：</strong> 進行捐款即可獲得此榮譽等級（捐款金額：無門檻）。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip2">II</span>
+                            <span class="mini-pennant vip2 mr-3">II</span>
                             <strong>VIP 2：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip3">III</span>
+                            <span class="mini-pennant vip3 mr-3">III</span>
                             <strong>VIP 3：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip4">IV</span>
+                            <span class="mini-pennant vip4 mr-3">IV</span>
                             <strong>VIP 4：</strong> 累計捐款金額達 NT$ 50,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip5">V</span>
+                            <span class="mini-pennant vip5 mr-3">V</span>
                             <strong>VIP 5：</strong> 累計捐款金額總數排名前三名的用戶可獲得此榮譽等級。
                         </li>
                     </ul>
