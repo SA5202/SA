@@ -886,236 +886,282 @@ if (isset($_SESSION['User_ID'])) {
 
 
     <!-- 黑色遮罩層 -->
-    <div id="blackOverlay"></div>
+<div id="blackOverlay"></div>
+<canvas id="confettiCanvas"></canvas>
 
-    <canvas id="confettiCanvas"></canvas>
+<div id="welcomeModal">
+  <div class="modal-title" id="welcomeMessage"></div>
+  <button id="closeModalBtn">關閉</button>
+</div>
 
-    <div id="welcomeModal">
-    <div class="modal-title" id="welcomeMessage"></div>
-    <button id="closeModalBtn">關閉</button>
-    </div>
+<script>
+(() => {
+  let userVipLevel = <?php echo (int)$userVipLevel; ?>;
+  let nickname = "<?php echo htmlspecialchars($nickname, ENT_QUOTES); ?>";
 
-    <script>
-    (() => {
-    // 這裡用 PHP echo 實際帶入後端變數
-    let userVipLevel = <?php echo (int)$userVipLevel; ?>;
-    let nickname = "<?php echo htmlspecialchars($nickname, ENT_QUOTES); ?>";
+  if (!userVipLevel || userVipLevel < 2) {
+    document.getElementById('confettiCanvas').style.display = 'none';
+    document.getElementById('welcomeModal').style.display = 'none';
+    return;
+  }
 
-    if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
-        document.getElementById('confettiCanvas').style.display = 'none';
-        document.getElementById('welcomeModal').style.display = 'none';
-        return;
+  const canvas = document.getElementById('confettiCanvas');
+  const modal = document.getElementById('welcomeModal');
+  const welcomeMessage = document.getElementById('welcomeMessage');
+  const closeBtn = document.getElementById('closeModalBtn');
+  const blackOverlay = document.getElementById('blackOverlay');
+  const ctx = canvas.getContext('2d');
+  let W, H, animationFrameId = null;
+  let autoCloseTimer = null;
+  let modalClosed = false;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // 設定歡迎訊息與特效類型
+  let effectType = 'confetti'; // 預設彩帶
+  if (userVipLevel >= 5) {
+    const effects = ['meteor', 'firework'];
+    effectType = effects[Math.floor(Math.random() * effects.length)];
+    welcomeMessage.textContent = `歡迎回來，尊貴的 ${nickname} ！`;
+    modal.classList.add('upgraded');
+    blackOverlay.style.display = 'block';
+  } else {
+    welcomeMessage.textContent = `您好，${nickname}！`;
+    modal.classList.add('basic');
+    blackOverlay.style.display = 'none';
+  }
+
+  canvas.style.display = 'block';
+  modal.style.display = 'block';
+
+  // ----------- 特效類別 ------------
+
+  // 彩帶 (VIP 2~4)
+  class Confetto {
+    constructor(colors) {
+      this.colors = colors;
+      this.reset();
     }
-
-    const canvas = document.getElementById('confettiCanvas');
-    const modal = document.getElementById('welcomeModal');
-    const welcomeMessage = document.getElementById('welcomeMessage');
-    const closeBtn = document.getElementById('closeModalBtn');
-    const blackOverlay = document.getElementById('blackOverlay');
-    const ctx = canvas.getContext('2d');
-    let W, H;
-    let animationFrameId = null;
-    let autoCloseTimer = null;
-    let modalClosed = false;
-
-    function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * -H;
+      this.size = Math.random() * 5 + 7;
+      this.speedY = Math.random() * 2 + 1;
+      this.speedX = Math.random() - 0.5;
+      this.rotation = Math.random() * 2 * Math.PI;
+      this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+      this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+      this.alpha = 1;
     }
-    window.addEventListener('resize', resize);
-    resize();
-
-    // 設定視窗文字與樣式
-    if (userVipLevel >= 5) {
-        welcomeMessage.textContent = `歡迎回來，尊貴的 ${nickname} ！`;
-        modal.classList.add('upgraded');
-        modal.classList.remove('basic');
-        document.body.classList.add('meteor-active');
-        blackOverlay.style.display = 'block';  // 顯示黑色遮罩
-    } else if (userVipLevel >= 2 && userVipLevel <= 4) {
-        welcomeMessage.textContent = `您好，${nickname}！`;
-        modal.classList.add('basic');
-        modal.classList.remove('upgraded');
-        document.body.classList.remove('meteor-active');
-        blackOverlay.style.display = 'none';  // 隱藏黑色遮罩
-    } else {
-        // VIP 1 或以下不顯示
-        canvas.style.display = 'none';
-        modal.style.display = 'none';
-        blackOverlay.style.display = 'none';
-        document.body.classList.remove('meteor-active');
-        return;
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX;
+      this.rotation += this.rotationSpeed;
+      if (this.y > H) this.y = Math.random() * -20;
+      if (this.x > W) this.x = 0;
+      if (this.x < 0) this.x = W;
     }
-
-    canvas.style.display = 'block';
-    modal.style.display = 'block';
-
-    // 彩帶特效類別
-    class Confetto {
-        constructor(colors) {
-        this.colors = colors;
-        this.reset();
-        }
-        reset() {
-        this.x = Math.random() * W;
-        this.y = Math.random() * -H;
-        this.size = Math.random() * 5 + 7;
-        this.speedY = Math.random() * 2 + 1;
-        this.speedX = Math.random() - 0.5;
-        this.rotation = Math.random() * 2 * Math.PI;
-        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
-        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
-        this.alpha = 1;
-        }
-        update() {
-        this.y += this.speedY;
-        this.x += this.speedX;
-        this.rotation += this.rotationSpeed;
-        if (this.y > H) this.y = Math.random() * -20;
-        if (this.x > W) this.x = 0;
-        if (this.x < 0) this.x = W;
-        }
-        draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.alpha;
-        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*0.4);
-        ctx.restore();
-        ctx.globalAlpha = 1;
-        }
+    draw(ctx) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.alpha;
+      ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
+      ctx.restore();
+      ctx.globalAlpha = 1;
     }
+  }
 
-    // 流星特效類別
-    class Meteor {
-        constructor() {
-        this.reset();
-        }
-        reset() {
-        this.x = Math.random() * W;
-        this.y = Math.random() * H * 0.5;
-        this.len = Math.random() * 80 + 100;
-        this.speed = Math.random() * 10 + 10;
-        this.angle = Math.PI / 4;
-        this.opacity = 0;
-        this.opacitySpeed = 0.02;
-        this.active = true;
-        }
-        update() {
-        if (!this.active) return;
-        this.x += this.speed * Math.cos(this.angle);
-        this.y += this.speed * Math.sin(this.angle);
-        this.opacity += this.opacitySpeed;
-        if (this.opacity > 1) this.opacity = 1;
-        if (this.x > W + this.len || this.y > H + this.len) {
-            this.reset();
-        }
-        }
-        draw(ctx) {
-        if (!this.active) return;
-        ctx.save();
-        ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
-        ctx.lineWidth = 2;
-        ctx.shadowColor = `rgba(255,255,255,${this.opacity})`;
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x - this.len * Math.cos(this.angle), this.y - this.len * Math.sin(this.angle));
-        ctx.stroke();
-        ctx.restore();
-        }
+  // 流星雨 (VIP 5+)
+  class Meteor {
+    constructor() {
+      this.reset();
     }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H * 0.5;
+      this.len = Math.random() * 80 + 100;
+      this.speed = Math.random() * 10 + 10;
+      this.angle = Math.PI / 4;
+      this.opacity = 0;
+      this.opacitySpeed = 0.02;
+    }
+    update() {
+      this.x += this.speed * Math.cos(this.angle);
+      this.y += this.speed * Math.sin(this.angle);
+      this.opacity += this.opacitySpeed;
+      if (this.opacity > 1) this.opacity = 1;
+      if (this.x > W + this.len || this.y > H + this.len) this.reset();
+    }
+    draw(ctx) {
+      ctx.save();
+      ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
+      ctx.lineWidth = 2;
+      ctx.shadowColor = `rgba(255,255,255,${this.opacity})`;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(this.x, this.y);
+      ctx.lineTo(
+        this.x - this.len * Math.cos(this.angle),
+        this.y - this.len * Math.sin(this.angle)
+      );
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
 
-    // 初始化特效陣列與參數
-    let confetti = [];
-    let meteors = [];
-    const confettiCount = 300;
-    const meteorCount = 30;
-    const colorsBasic = [
-        'hsl(0, 100%, 70%)',
-        'hsl(30, 100%, 70%)',
-        'hsl(60, 100%, 70%)',
-        'hsl(120, 80%, 70%)',
-        'hsl(200, 100%, 70%)',
-        'hsl(270, 100%, 70%)',
-        'hsl(330, 100%, 70%)'
-    ];
-
-    if (userVipLevel >= 5) {
-        for(let i=0; i < meteorCount; i++) {
-        meteors.push(new Meteor());
+  // 煙火粒子 (VIP 5+ 煙火用)
+  class FireworkParticle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.radius = 2;
+      this.color = color;
+      this.angle = Math.random() * Math.PI * 2;
+      this.speed = Math.random() * 6 + 2;
+      this.alpha = 1;
+    }
+    update() {
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.speed *= 0.96;
+        this.alpha -= 0.008;  // 調小透明度減少速度，拖尾變長
+        if (this.alpha < 0) this.alpha = 0;
         }
-    } else {
-        for(let i=0; i < confettiCount; i++) {
-        confetti.push(new Confetto(colorsBasic));
+    draw(ctx) {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // 煙火 (VIP 5+)
+  class Firework {
+    constructor() {
+      this.x = Math.random() * W * 0.8 + W * 0.1;
+      this.y = Math.random() * H * 0.4 + H * 0.1;
+      this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+      this.particles = [];
+      for (let i = 0; i < 30; i++) {
+        this.particles.push(new FireworkParticle(this.x, this.y, this.color));
+      }
+      this.alive = true;
+    }
+    update() {
+      this.particles.forEach((p) => p.update());
+      if (this.particles.every((p) => p.alpha <= 0)) this.alive = false;
+    }
+    draw(ctx) {
+      this.particles.forEach((p) => p.draw(ctx));
+    }
+  }
+
+  // ---------- 初始化特效陣列 ----------
+  let particles = [];
+  let fireworkTimer = null;
+  const meteorCount = 30;
+  const confettiCount = 200;
+  const confettiColors = [
+    "hsl(0, 100%, 70%)",
+    "hsl(60, 100%, 70%)",
+    "hsl(120, 100%, 70%)",
+    "hsl(240, 100%, 70%)",
+  ];
+
+  if (userVipLevel >= 5) {
+    if (effectType === "meteor") {
+      for (let i = 0; i < meteorCount; i++) {
+        particles.push(new Meteor());
+      }
+    } else if (effectType === "firework") {
+      // 煙火定時器：每0.5秒同時放3~5個煙火，持續10秒
+      fireworkTimer = setInterval(() => {
+        const count = Math.floor(Math.random() * 5) + 3; // 3~5發
+        for (let i = 0; i < count; i++) {
+          particles.push(new Firework());
         }
+      }, 500);
+
+      setTimeout(() => {
+        clearInterval(fireworkTimer);
+      }, 10000);
     }
-
-    // 顯示視窗並設定自動關閉及點擊關閉
-    function showModal() {
-        modalClosed = false;
-        modal.style.opacity = '1';
-        modal.style.pointerEvents = 'auto';
-
-        autoCloseTimer = setTimeout(() => {
-        hideModal();
-        }, 10000);
-
-        document.addEventListener('click', onUserClick, { once: true, capture: true });
+  } else {
+    // VIP 2~4: 彩帶
+    for (let i = 0; i < confettiCount; i++) {
+      particles.push(new Confetto(confettiColors));
     }
+  }
 
-    function onUserClick() {
-        hideModal();
-        clearTimeout(autoCloseTimer);
-    }
+  // ------------ 顯示視窗與自動關閉 --------------
+  function showModal() {
+    modalClosed = false;
+    modal.style.opacity = "1";
+    modal.style.pointerEvents = "auto";
 
-    function hideModal() {
-        if (modalClosed) return;
-        modalClosed = true;
-        modal.style.opacity = '0';
-        modal.style.pointerEvents = 'none';
+    autoCloseTimer = setTimeout(() => {
+      hideModal();
+    }, 10000);
 
-        if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-        }
-        ctx.clearRect(0, 0, W, H);
-        canvas.style.display = 'none';
+    document.addEventListener("click", onUserClick, { once: true, capture: true });
+  }
 
-        blackOverlay.style.display = 'none'; // 隱藏黑色遮罩
-        document.body.classList.remove('meteor-active');
-    }
+  function hideModal() {
+    if (modalClosed) return;
+    modalClosed = true;
+    modal.style.opacity = "0";
+    modal.style.pointerEvents = "none";
 
-    closeBtn.addEventListener('click', () => {
-        clearTimeout(autoCloseTimer);
-        hideModal();
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    if (fireworkTimer) clearInterval(fireworkTimer);
+
+    ctx.clearRect(0, 0, W, H);
+    canvas.style.display = "none";
+    blackOverlay.style.display = "none";
+  }
+
+  function onUserClick() {
+    clearTimeout(autoCloseTimer);
+    hideModal();
+  }
+
+  closeBtn.addEventListener("click", () => {
+    clearTimeout(autoCloseTimer);
+    hideModal();
+  });
+
+  window.addEventListener("load", () => {
+    setTimeout(showModal, 500);
+  });
+
+  // ------------ 主動畫迴圈 ----------------
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p) => {
+      p.update();
+      p.draw(ctx);
     });
 
-    window.addEventListener('load', () => {
-        setTimeout(showModal, 500);
-    });
-
-    // 動畫主迴圈
-    function loop() {
-        ctx.clearRect(0, 0, W, H);
-        if (userVipLevel >= 5) {
-        meteors.forEach(m => {
-            m.update();
-            m.draw(ctx);
-        });
-        } else {
-        confetti.forEach(c => {
-            c.update();
-            c.draw(ctx);
-        });
-        }
-        animationFrameId = requestAnimationFrame(loop);
+    // 清除已結束煙火
+    if (effectType === "firework") {
+      particles = particles.filter((p) => p.alive !== false);
     }
+
     animationFrameId = requestAnimationFrame(loop);
-
-    })();
-    </script>
+  }
+  animationFrameId = requestAnimationFrame(loop);
+})();
+</script>
 
 
 
