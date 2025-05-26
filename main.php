@@ -227,7 +227,6 @@ $popular_result = $link->query($popular_sql);
             transform: scale(1.07);
         }
 
-        /* 圖片內部的間隔 */
         .avatar-wrapper {
             position: relative;
             display: inline-block;
@@ -237,15 +236,46 @@ $popular_result = $link->query($popular_sql);
             background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(200, 200, 200, 0.7)); /* 輕微白色漸層 */
             overflow: hidden;
             margin-bottom: 15px;
-            padding: 5px; /* 圖片和外框之間的間隔 */
+            padding: 5px;
         }
 
-        /* 外層容器新增一層包裹圖片 */
+        /* 內層圖片 */
         .avatar-wrapper img {
-            width: 100%; /* 保證圖片充滿容器 */
+            width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
+        }
+
+        /* 共用動畫：脈動光暈 */
+        @keyframes vip-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+            }
+        }
+
+        /* VIP3 - 冰藍 */
+        .avatar-wrapper.vip3 {
+            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4);
+            animation: vip-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5);
+        }
+
+        /* VIP4 - 紫粉 */
+        .avatar-wrapper.vip4 {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            animation: vip-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7);
+        }
+
+        /* VIP5 - 綠藍 */
+        .avatar-wrapper.vip5 {
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d);
+            animation: vip-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9);
         }
 
         /* 用戶名稱樣式 */
@@ -426,135 +456,168 @@ $popular_result = $link->query($popular_sql);
     </div>
 
     <div id="honorCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <!-- 本月前三 -->
-            <div class="carousel-item active">
-                <h4><i class="icon fas fa-medal"></i> 本月榮譽榜</h4>
-                <div class="row justify-content-center">
-                    <?php
-                        // 連接資料庫
-                        require_once "db_connect.php";
+    <div class="carousel-inner">
+        <!-- 本月前三 -->
+        <div class="carousel-item active">
+            <h4><i class="icon fas fa-medal"></i> 本月榮譽榜</h4>
+            <div class="row justify-content-center">
+                <?php
+                    require_once "db_connect.php";
+                    require_once "honor_helper.php";
 
-                        // 設定預設圖片
-                        $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+                    $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
 
-                        // 查詢本月捐款金額最多的前三名用戶
-                        $ranking_sql = "
-                            SELECT u.Nickname, u.Avatar, SUM(d.Donation_Amount) AS total_donation
-                            FROM Donation d
-                            JOIN UserAccount u ON d.User_ID = u.User_ID
-                            WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE()) AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
-                            GROUP BY u.User_ID
-                            ORDER BY total_donation DESC
-                            LIMIT 3;
-                        ";
+                    // 本月捐款前三 SQL（帶出 User_ID）
+                    $ranking_sql = "
+                        SELECT u.User_ID, u.Nickname, u.Avatar, SUM(d.Donation_Amount) AS total_donation
+                        FROM Donation d
+                        JOIN UserAccount u ON d.User_ID = u.User_ID
+                        WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE()) AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
+                        GROUP BY u.User_ID
+                        ORDER BY total_donation DESC
+                        LIMIT 3;
+                    ";
 
-                        $ranking_result = $link->query($ranking_sql);
+                    $ranking_result = $link->query($ranking_sql);
 
-                        $rankings = [];
-                        if ($ranking_result && $ranking_result->num_rows > 0) {
-                            while ($row = $ranking_result->fetch_assoc()) {
-                                if (empty($row['Avatar'])) {
-                                    $row['Avatar'] = $default_avatar;
-                                }
-                                $rankings[] = $row;
+                    $rankings = [];
+                    if ($ranking_result && $ranking_result->num_rows > 0) {
+                        while ($row = $ranking_result->fetch_assoc()) {
+                            if (empty($row['Avatar'])) {
+                                $row['Avatar'] = $default_avatar;
                             }
+                            $rankings[] = $row;
+                        }
+                    }
+
+                    $display_order = [1, 0, 2];
+
+                    $default_ranking = [
+                        'User_ID' => null,
+                        'Nickname' => '虛位以待',
+                        'Avatar' => $default_avatar,
+                        'total_donation' => '0'
+                    ];
+
+                    foreach ($display_order as $rank_index) {
+                        $ranking_data = isset($rankings[$rank_index]) ? $rankings[$rank_index] : $default_ranking;
+
+                        $User_ID = $ranking_data['User_ID'];
+                        $nickname = $ranking_data['Nickname'];
+                        $avatar = $ranking_data['Avatar'];
+                        $donation_amount = floatval($ranking_data['total_donation']);
+                        
+                        // 取得 VIP 等級資訊
+                        $vip_info = null;
+                        if ($User_ID) {
+                            $vip_info = getVipLevel($link, $User_ID);
                         }
 
-                        $display_order = [1, 0, 2];
+                        // VIP 標籤（獨立一行）
+                        $vip_label = "";
+                        if ($vip_info) {
+                            $vip_label = "<div class='vip-label {$vip_info['class']}'>VIP {$vip_info['label']}</div>";
+                        }
 
-                        $default_ranking = [
-                            'Nickname' => '虛位以待',
-                            'Avatar' => $default_avatar,
-                            'total_donation' => '0'
-                        ];
+                        $donation_amount_fmt = number_format($donation_amount);
+                        $rank = $rank_index + 1;
 
-                        foreach ($display_order as $rank_index) {
-                            $ranking_data = isset($rankings[$rank_index]) ? $rankings[$rank_index] : $default_ranking;
+                        $vip_class = ($vip_info && !empty($vip_info['class'])) ? $vip_info['class'] : '';
 
-                            $nickname = $ranking_data['Nickname'];
-                            $avatar = $ranking_data['Avatar'];
-                            $donation_amount = $ranking_data['total_donation'];
-                            $donation_amount = number_format($donation_amount);
-                            $rank = $rank_index + 1;
-
-                            echo "<div class='col-md-4 text-center'>
-                                    <div class='rank-card rank-{$rank}'>
-                                        <div class='avatar-wrapper avatar-{$rank}'>
-                                            <img src='{$avatar}' alt='User {$rank}' class='avatar'>
-                                        </div>
-                                        <h5 class='user-name'>{$nickname}</h5>
-                                        <p class='user-score'>捐贈金額： NT$ {$donation_amount}</p>
-                                        <p class='rank-label rank-label-{$rank}'>第 {$rank} 名</p>
+                        echo "<div class='col-md-4 text-center'>
+                                <div class='rank-card rank-{$rank}'>
+                                    <div class='avatar-wrapper avatar-{$rank} {$vip_class}'>
+                                        <img src='{$avatar}' alt='User {$rank}' class='avatar'>
                                     </div>
-                                </div>";
-                        }
-                    ?>
-                </div>
-            </div>
-
-            <!-- 歷史前三 -->
-            <div class="carousel-item">
-                <h4><i class="icon fas fa-medal"></i> 歷史榮譽榜</h4>
-                <div class="row justify-content-center">
-                    <?php
-                        // 查詢歷史捐款金額最多的前三名用戶
-                        $history_sql = "
-                            SELECT u.Nickname, u.Avatar, SUM(d.Donation_Amount) AS total_donation
-                            FROM Donation d
-                            JOIN UserAccount u ON d.User_ID = u.User_ID
-                            GROUP BY u.User_ID
-                            ORDER BY total_donation DESC
-                            LIMIT 3;
-                        ";
-
-                        $history_result = $link->query($history_sql);
-
-                        $history_rankings = [];
-                        if ($history_result && $history_result->num_rows > 0) {
-                            while ($row = $history_result->fetch_assoc()) {
-                                if (empty($row['Avatar'])) {
-                                    $row['Avatar'] = $default_avatar;
-                                }
-                                $history_rankings[] = $row;
-                            }
-                        }
-
-                        foreach ($display_order as $rank_index) {
-                            $ranking_data = isset($history_rankings[$rank_index]) ? $history_rankings[$rank_index] : $default_ranking;
-
-                            $nickname = $ranking_data['Nickname'];
-                            $avatar = $ranking_data['Avatar'];
-                            $donation_amount = $ranking_data['total_donation'];
-                            $donation_amount = number_format($donation_amount);
-                            $rank = $rank_index + 1;
-
-                            echo "<div class='col-md-4 text-center'>
-                                    <div class='rank-card rank-{$rank}'>
-                                        <div class='avatar-wrapper avatar-{$rank}'>
-                                            <img src='{$avatar}' alt='User {$rank}' class='avatar'>
-                                        </div>
-                                        <h5 class='user-name'>{$nickname}</h5>
-                                        <p class='user-score'>捐贈金額： NT$ {$donation_amount}</p>
-                                        <p class='rank-label rank-label-{$rank}'>第 {$rank} 名</p>
-                                    </div>
-                                </div>";
-                        }
-                    ?>
-                </div>
+                                    <h5 class='user-name'>{$nickname}</h5>
+                                    <p class='user-score'>捐贈金額： NT$ {$donation_amount_fmt}</p>
+                                    <p class='rank-label rank-label-{$rank}'>第 {$rank} 名</p>
+                                </div>
+                            </div>";
+                    }
+                ?>
             </div>
         </div>
 
-        <!-- 輪播控制按鈕 -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#honorCarousel" data-bs-slide="prev">
-            <span aria-hidden="true"><i class="fa-solid fa-angle-left fa-2x"></i></span>
-            <span class="visually-hidden">上一頁</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#honorCarousel" data-bs-slide="next">
-            <span aria-hidden="true"><i class="fa-solid fa-angle-right fa-2x"></i></span>
-            <span class="visually-hidden">下一頁</span>
-        </button>
+        <!-- 歷史前三 -->
+        <div class="carousel-item">
+            <h4><i class="icon fas fa-medal"></i> 歷史榮譽榜</h4>
+            <div class="row justify-content-center">
+                <?php
+                    // 歷史前三 SQL，帶 User_ID
+                    $history_sql = "
+                        SELECT u.User_ID, u.Nickname, u.Avatar, SUM(d.Donation_Amount) AS total_donation
+                        FROM Donation d
+                        JOIN UserAccount u ON d.User_ID = u.User_ID
+                        GROUP BY u.User_ID
+                        ORDER BY total_donation DESC
+                        LIMIT 3;
+                    ";
+
+                    $history_result = $link->query($history_sql);
+
+                    $history_rankings = [];
+                    if ($history_result && $history_result->num_rows > 0) {
+                        while ($row = $history_result->fetch_assoc()) {
+                            if (empty($row['Avatar'])) {
+                                $row['Avatar'] = $default_avatar;
+                            }
+                            $history_rankings[] = $row;
+                        }
+                    }
+
+                    foreach ($display_order as $rank_index) {
+                        $ranking_data = isset($history_rankings[$rank_index]) ? $history_rankings[$rank_index] : $default_ranking;
+
+                        $User_ID = $ranking_data['User_ID'];
+                        $nickname = $ranking_data['Nickname'];
+                        $avatar = $ranking_data['Avatar'];
+                        $donation_amount = floatval($ranking_data['total_donation']);
+                        
+                        $vip_info = null;
+                        if ($User_ID) {
+                            $vip_info = getVipLevel($link, $User_ID);
+                        }
+
+                        $vip_label = "";
+                        if ($vip_info) {
+                            $vip_label = "<div class='vip-label {$vip_info['class']}'>VIP {$vip_info['label']}</div>";
+                        }
+
+                        $donation_amount_fmt = number_format($donation_amount);
+                        $rank = $rank_index + 1;
+
+                        $vip_class = ($vip_info && !empty($vip_info['class'])) ? $vip_info['class'] : '';
+
+                        echo "<div class='col-md-4 text-center'>
+                                <div class='rank-card rank-{$rank}'>
+                                    <div class='avatar-wrapper avatar-{$rank} {$vip_class}'>
+                                        <img src='{$avatar}' alt='User {$rank}' class='avatar'>
+                                    </div>
+                                    <h5 class='user-name'>{$nickname}</h5>
+                                    <p class='user-score'>捐贈金額： NT$ {$donation_amount_fmt}</p>
+                                    <p class='rank-label rank-label-{$rank}'>第 {$rank} 名</p>
+                                </div>
+                            </div>";
+                    }
+                ?>
+            </div>
+        </div>
     </div>
+
+    <!-- 輪播控制按鈕 -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#honorCarousel" data-bs-slide="prev">
+        <span aria-hidden="true"><i class="fa-solid fa-angle-left fa-2x"></i></span>
+        <span class="visually-hidden">上一頁</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#honorCarousel" data-bs-slide="next">
+        <span aria-hidden="true"><i class="fa-solid fa-angle-right fa-2x"></i></span>
+        <span class="visually-hidden">下一頁</span>
+    </button>
+</div>
+
+
+
 
 
 </body>
