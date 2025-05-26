@@ -168,7 +168,7 @@
 
             if ($stmt4->execute()) {
                 echo "<div class='message'>建言已成功刪除！</div>";
-                echo "<meta http-equiv='refresh' content='2;url=record.php'>";
+                echo "<meta http-equiv='refresh' content='2;url=suggestions.php'>";
             } else {
                 echo "<div class='message'>刪除失敗：</div>" . $stmt4->error;
             }
