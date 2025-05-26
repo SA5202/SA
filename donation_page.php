@@ -254,7 +254,7 @@ if ($selectedFundingID) {
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="background: rgba(255, 255, 255, 0.95);">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="randomCodeModalLabel">🔐 超商繳費代碼</h5>
+                    <h5 class="modal-title" id="randomCodeModalLabel">超商繳費代碼</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
                 </div>
                 <div class="modal-body text-center">
