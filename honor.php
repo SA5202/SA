@@ -6,6 +6,11 @@ if (!isset($_SESSION['User_Name'])) {
 }
 
 require_once "dblink3.php";
+require_once "honor_helper.php"; // 加上這行
+
+// 取得 VIP 資訊（只取一次）
+$User_ID = $_SESSION['User_ID'];
+$vipInfo = getVipLevel($conn, $User_ID); // 使用 conn 作為 DB 連線物件
 
 // 捐款排行榜
 $donation_month_sql = "
@@ -35,6 +40,7 @@ if (!$donation_history_result) {
     die("歷史捐款排名查詢錯誤: " . $conn->error);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -561,7 +567,13 @@ if (!$donation_history_result) {
                                     <?= htmlspecialchars($row['Nickname']) ?>
                                 </td>
                                 <td>NT$ <?= number_format($row['total_donation']) ?></td>
-                                <td>NT$ <?= number_format($row['total_donation']) ?></td>
+                                <td>
+                                    <?php if ($vipInfo['level'] != 0): ?>
+                                        <span class="mini-pennant <?= $vipInfo['class'] ?>">
+                                            <?= $vipInfo['label'] ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php $rank++;
                         endwhile; ?>
@@ -598,7 +610,13 @@ if (!$donation_history_result) {
                                     <?= htmlspecialchars($row['Nickname']) ?>
                                 </td>
                                 <td>NT$ <?= number_format($row['total_donation']) ?></td>
-                                <td>NT$ <?= number_format($row['total_donation']) ?></td>
+                                <td>
+                                    <?php if ($vipInfo['level'] != 0): ?>
+                                        <span class="mini-pennant <?= $vipInfo['class'] ?>">
+                                            <?= $vipInfo['label'] ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php $rank++;
                         endwhile; ?>
