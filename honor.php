@@ -518,9 +518,6 @@ if (!$donation_history_result) {
             z-index: 10;
             /* 確保按鈕位於文字區域的前面 */
         }
-        strong{
-            margin-left: 20px;
-        }
     </style>
 </head>
 
@@ -680,23 +677,23 @@ if (!$donation_history_result) {
                     <ul class="list-unstyled ps-4">
                         <li class="mb-3">
                             <span class="mini-pennant vip1 mr-3">I</span>
-                            <strong>VIP 1：</strong> 進行捐款即可獲得此榮譽等級（捐款金額：無門檻）。
+                            <strong style="margin-left: 20px;">VIP 1：</strong> 進行捐款即可獲得此榮譽等級（捐款金額：無門檻）。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip2 mr-3">II</span>
-                            <strong>VIP 2：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可獲得此榮譽等級。
+                            <strong style="margin-left: 20px;">VIP 2：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip3 mr-3">III</span>
-                            <strong>VIP 3：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
+                            <strong style="margin-left: 20px;">VIP 3：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip4 mr-3">IV</span>
-                            <strong>VIP 4：</strong> 累計捐款金額達 NT$ 50,000 元以上的用戶可將獲得此榮譽等級。
+                            <strong style="margin-left: 20px;">VIP 4：</strong> 累計捐款金額達 NT$ 50,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip5 mr-3">V</span>
-                            <strong>VIP 5：</strong> 累計捐款金額總數排名前三名的用戶可獲得此榮譽等級。
+                            <strong style="margin-left: 20px;">VIP 5：</strong> 累計捐款金額總數排名前三名的用戶可獲得此榮譽等級。
                         </li>
                     </ul>
 
