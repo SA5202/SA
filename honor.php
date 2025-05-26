@@ -518,6 +518,68 @@ if (!$donation_history_result) {
             z-index: 10;
             /* 確保按鈕位於文字區域的前面 */
         }
+
+        .avatar-nickname-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* avatar 跟暱稱間距 */
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 40px;   /* 調整大小 */
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(200, 200, 200, 0.7));
+            overflow: hidden;
+            padding: 2px;
+        }
+
+        /* 內層圖片 */
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* VIP 動畫光暈 */
+        @keyframes vip-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+            }
+        }
+
+        /* VIP3 - 冰藍 */
+        .avatar-wrapper.vip3 {
+            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4);
+            animation: vip-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5);
+        }
+
+        /* VIP4 - 紫粉 */
+        .avatar-wrapper.vip4 {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            animation: vip-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7);
+        }
+
+        /* VIP5 - 綠藍 */
+        .avatar-wrapper.vip5 {
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d);
+            animation: vip-glow 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9);
+        }
+
+        /* 暱稱文字 */
+        .nickname {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #333;
+        }
     </style>
 </head>
 
@@ -573,9 +635,18 @@ if (!$donation_history_result) {
                                     <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
                                 </td>
                                 <td>
-                                    <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
-                                    <?= htmlspecialchars($row['Nickname']) ?>
+                                    <?php 
+                                        $avatar = !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png';
+                                        $vip_class = htmlspecialchars($vipInfo['class']);
+                                    ?>
+                                    <div class="avatar-nickname-wrapper" title="VIP 等級: <?= htmlspecialchars($vipInfo['label']) ?> - <?= htmlspecialchars($vipInfo['tooltip']) ?>">
+                                        <div class="avatar-wrapper <?= $vip_class ?>">
+                                            <img src="<?= $avatar ?>" alt="User <?= $rank ?>" class="avatar">
+                                        </div>
+                                        <span class="nickname"><?= htmlspecialchars($row['Nickname']) ?></span>
+                                    </div>
                                 </td>
+
                                 <td>NT$ <?= number_format($row['total_donation']) ?></td>
                                 <td>
                                     <?php if ($vipInfo['level'] != 0): ?>
@@ -612,18 +683,26 @@ if (!$donation_history_result) {
                     </thead>
                     <tbody>
                         <?php 
-                        $rank = 1;
-                        while ($row = $donation_history_result->fetch_assoc()):
-                            // 每位使用者個別取得 VIP 等級資訊
-                            $vipInfo = getVipLevel($conn, $row['User_ID']);
+                            $rank = 1;
+                            while ($row = $donation_history_result->fetch_assoc()):
+                                // 每位使用者個別取得 VIP 等級資訊
+                                $vipInfo = getVipLevel($conn, $row['User_ID']);
                         ?>
                             <tr>
                                 <td>
                                     <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
                                 </td>
                                 <td>
-                                    <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
-                                    <?= htmlspecialchars($row['Nickname']) ?>
+                                    <?php 
+                                        $avatar = !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png';
+                                        $vip_class = htmlspecialchars($vipInfo['class']);
+                                    ?>
+                                    <div class="avatar-nickname-wrapper" title="VIP 等級: <?= htmlspecialchars($vipInfo['label']) ?> - <?= htmlspecialchars($vipInfo['tooltip']) ?>">
+                                        <div class="avatar-wrapper <?= $vip_class ?>">
+                                            <img src="<?= $avatar ?>" alt="User <?= $rank ?>" class="avatar">
+                                        </div>
+                                        <span class="nickname"><?= htmlspecialchars($row['Nickname']) ?></span>
+                                    </div>
                                 </td>
                                 <td>NT$ <?= number_format($row['total_donation']) ?></td>
                                 <td>
@@ -634,10 +713,10 @@ if (!$donation_history_result) {
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php 
-                            $rank++;
-                        endwhile; 
-                        ?>
+                            <?php 
+                                $rank++;
+                            endwhile; 
+                            ?>
                     </tbody>
                 </table>
             </div>
