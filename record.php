@@ -104,6 +104,49 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
             color: #555;
         }
 
+        .avatar-frame {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 50px;
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: white; /* 中間背景，可改為其他色 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .avatar-frame.vip3 {
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* 藍紫閃電風格 */
+            box-shadow: 0 0 15px rgba(101, 84, 192, 0.6);
+        }
+
+        .avatar-frame.vip4 {
+            background: linear-gradient(135deg, #ff5f6d, #ffc371); /* 粉橘朝陽風格 */
+            box-shadow: 0 0 15px rgba(255, 99, 71, 0.5);
+        }
+
+        .avatar-frame.vip5 {
+            background: linear-gradient(135deg, #f7971e, #ffd200); /* 金黃王者風格 */
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
         .password-display-wrapper {
             position: relative;
             width: 200px;
@@ -458,9 +501,13 @@ $vipInfo = getVipLevel($link, $row_user['User_ID']);  // 獲取 VIP 等級資料
                                 $avatar_url .= '?t=' . time();
                                 ?>
                                 <td rowspan='6'>
-                                    <img src="<?= $avatar_url ?>"
-                                        onerror="this.src='<?= $default_avatar ?>'"
-                                        style='border-radius: 50%; width: 200px; height: 200px; margin: 20px 50px;'>
+                                    <div class="avatar-frame <?= $vipInfo['class'] ?>">
+                                        <div class="avatar-inner">
+                                            <img src="<?= $avatar_url ?>"
+                                                onerror="this.src='<?= $default_avatar ?>'"
+                                                class="avatar-img">
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class='left'>帳號： <?= htmlspecialchars($row_user['User_Name']) ?></td>
                             </tr>
