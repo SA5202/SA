@@ -112,7 +112,7 @@ if ($result) {
 
         <form method="POST" action="donation_admin_process.php" onsubmit="return validateEmailIfNeeded()">
             <div class="mb-3">
-                <label for="donor_name" class="form-label">捐款者帳號（選填）</label>
+                <label for="donor_name" class="form-label">捐款者帳號/名稱（選填）</label>
                 <input type="text" class="form-control" name="donor_name" id="donor_name" maxlength="50">
             </div>
 
