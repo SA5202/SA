@@ -130,7 +130,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
 
         body {
             max-width: 88%;
-            margin: 30px auto;
+            margin: 40px auto;
             padding: 30px;
             background-color: transparent;
             font-family: "Noto Serif TC", serif;
@@ -481,7 +481,7 @@ $facilities = $link->query("SELECT DISTINCT Facility_Type FROM Facility ORDER BY
     ?>
 
     <!-- 高優先建言區 -->
-    <h3><i class="icon fas fa-chess-queen"></i> 置頂建言</h3>
+    <h3><i class="icon fas fa-chess-queen"></i> 置頂建言 (VIP4 以上)</h3>
     <div class="cards high-priority">
         <?php if (count($priority_suggestions) > 0): ?>
             <?php foreach ($priority_suggestions as $row): ?>
