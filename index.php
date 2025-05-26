@@ -496,6 +496,149 @@ if (isset($_SESSION['User_ID'])) {
             background-color: #3a7fd9;
         }
 
+
+        /* 畫布和視窗基礎樣式 */
+        #confettiCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        #welcomeModal {
+            /* 定位相關 */
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 9999;
+
+            /* 美觀樣式 */
+            background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;  /* 自適應寬度 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+        }
+        /* 主視窗樣式 */
+        #welcomeModal {
+            /* 定位與淡入動畫 */
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 9999;
+
+            /* 視覺樣式 */
+            background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* 顯示效果 */
+        #welcomeModal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 標題文字 */
+        #welcomeModal .modal-title {
+            color: #2a2a2a;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* 副標或訊息 */
+        #welcomeModal .modal-message {
+            font-weight: 400;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* 關閉按鈕（統一樣式） */
+        #closeModalBtn {
+            margin-top: 10px;
+            background-color: #4a90e2;
+            border: none;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: bold;
+            padding: 4px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #closeModalBtn:hover {
+            background-color: #3a7fd9;
+        }
+
+        /* VIP5 以上升級版視窗（已移除金色暈影） */
+        #welcomeModal.upgraded {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            color: #111;
+            border-radius: 12px;
+            /* 移除 box-shadow 或換成中性陰影 */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* VIP2~4 基礎視窗 */
+        #welcomeModal.basic {
+            background: #fff;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            border: none;
+            box-shadow: none;
+        }
+
+        /* 流星背景黑底：這邊移除背景設定，改用遮罩層 */
+        body.meteor-active {
+            /* background-color: black !important; 這邊不用了 */
+            color: white; /* 可選：讓字色白色 */
+            overflow: hidden;
+        }
+
+        /* 全螢幕黑色遮罩 */
+        #blackOverlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9997; /* 低於 confettiCanvas (9998) 和 welcomeModal (9999) */
+            pointer-events: none;
+            display: none; /* 預設隱藏 */
+        }
     </style>
 </head>
 
@@ -783,171 +926,241 @@ if (isset($_SESSION['User_ID'])) {
         });
     </script>
 
-    <!-- 彩帶畫布 -->
+
+    <!-- 黑色遮罩層 -->
+    <div id="blackOverlay"></div>
+
     <canvas id="confettiCanvas"></canvas>
 
-    <!-- 視覺彈窗 -->
     <div id="welcomeModal">
-        <div class="modal-title">歡迎回來，<?php echo htmlspecialchars($nickname); ?>！</div>
-        <button id="closeModalBtn">關閉</button>
+    <div class="modal-title" id="welcomeMessage"></div>
+    <button id="closeModalBtn">關閉</button>
     </div>
 
     <script>
-        (() => {
-            if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
-                document.getElementById('confettiCanvas').style.display = 'none';
-                document.getElementById('welcomeModal').style.display = 'none';
-                return;
-            }
+    (() => {
+    // 這裡用 PHP echo 實際帶入後端變數
+    let userVipLevel = <?php echo (int)$userVipLevel; ?>;
+    let nickname = "<?php echo htmlspecialchars($nickname, ENT_QUOTES); ?>";
 
-            const modal = document.getElementById('welcomeModal');
-            const closeBtn = document.getElementById('closeModalBtn');
-            const canvas = document.getElementById('confettiCanvas');
-            const ctx = canvas.getContext('2d');
-            let W, H;
-            let animationFrameId = null;
-            let autoCloseTimer = null;
-            let modalClosed = false;
+    if (typeof userVipLevel === 'undefined' || userVipLevel < 2) {
+        document.getElementById('confettiCanvas').style.display = 'none';
+        document.getElementById('welcomeModal').style.display = 'none';
+        return;
+    }
 
-            function showModal() {
-                modal.style.opacity = '1';
-                modal.style.pointerEvents = 'auto';
+    const canvas = document.getElementById('confettiCanvas');
+    const modal = document.getElementById('welcomeModal');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const blackOverlay = document.getElementById('blackOverlay');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    let animationFrameId = null;
+    let autoCloseTimer = null;
+    let modalClosed = false;
 
-                // 自動 10 秒後關閉
-                autoCloseTimer = setTimeout(() => {
-                    hideModal();
-                }, 10000);
+    function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
 
-                // 點擊任意地方就關閉
-                document.addEventListener('click', onUserClick, { once: true, capture: true });
-            }
+    // 設定視窗文字與樣式
+    if (userVipLevel >= 5) {
+        welcomeMessage.textContent = `歡迎我們的至尊貴賓：${nickname} 的蒞臨！`;
+        modal.classList.add('upgraded');
+        modal.classList.remove('basic');
+        document.body.classList.add('meteor-active');
+        blackOverlay.style.display = 'block';  // 顯示黑色遮罩
+    } else if (userVipLevel >= 2 && userVipLevel <= 4) {
+        welcomeMessage.textContent = `歡迎回來，${nickname}！`;
+        modal.classList.add('basic');
+        modal.classList.remove('upgraded');
+        document.body.classList.remove('meteor-active');
+        blackOverlay.style.display = 'none';  // 隱藏黑色遮罩
+    } else {
+        // VIP 1 或以下不顯示
+        canvas.style.display = 'none';
+        modal.style.display = 'none';
+        blackOverlay.style.display = 'none';
+        document.body.classList.remove('meteor-active');
+        return;
+    }
 
-            function onUserClick() {
-                hideModal();
-                clearTimeout(autoCloseTimer);
-            }
+    canvas.style.display = 'block';
+    modal.style.display = 'block';
 
-            function hideModal() {
-                if (modalClosed) return;
-                modalClosed = true;
+    // 彩帶特效類別
+    class Confetto {
+        constructor(colors) {
+        this.colors = colors;
+        this.reset();
+        }
+        reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * -H;
+        this.size = Math.random() * 5 + 7;
+        this.speedY = Math.random() * 2 + 1;
+        this.speedX = Math.random() - 0.5;
+        this.rotation = Math.random() * 2 * Math.PI;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+        this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+        this.alpha = 1;
+        }
+        update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.rotation += this.rotationSpeed;
+        if (this.y > H) this.y = Math.random() * -20;
+        if (this.x > W) this.x = 0;
+        if (this.x < 0) this.x = W;
+        }
+        draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.alpha;
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*0.4);
+        ctx.restore();
+        ctx.globalAlpha = 1;
+        }
+    }
 
-                modal.style.opacity = '0';
-                modal.style.pointerEvents = 'none';
+    // 流星特效類別
+    class Meteor {
+        constructor() {
+        this.reset();
+        }
+        reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H * 0.5;
+        this.len = Math.random() * 80 + 100;
+        this.speed = Math.random() * 10 + 10;
+        this.angle = Math.PI / 4;
+        this.opacity = 0;
+        this.opacitySpeed = 0.02;
+        this.active = true;
+        }
+        update() {
+        if (!this.active) return;
+        this.x += this.speed * Math.cos(this.angle);
+        this.y += this.speed * Math.sin(this.angle);
+        this.opacity += this.opacitySpeed;
+        if (this.opacity > 1) this.opacity = 1;
+        if (this.x > W + this.len || this.y > H + this.len) {
+            this.reset();
+        }
+        }
+        draw(ctx) {
+        if (!this.active) return;
+        ctx.save();
+        ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = `rgba(255,255,255,${this.opacity})`;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x - this.len * Math.cos(this.angle), this.y - this.len * Math.sin(this.angle));
+        ctx.stroke();
+        ctx.restore();
+        }
+    }
 
-                if (animationFrameId) {
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }
-                ctx.clearRect(0, 0, W, H);
-                canvas.style.display = 'none';
-            }
+    // 初始化特效陣列與參數
+    let confetti = [];
+    let meteors = [];
+    const confettiCount = 300;
+    const meteorCount = 30;
+    const colorsBasic = [
+        'hsl(0, 100%, 70%)',
+        'hsl(30, 100%, 70%)',
+        'hsl(60, 100%, 70%)',
+        'hsl(120, 80%, 70%)',
+        'hsl(200, 100%, 70%)',
+        'hsl(270, 100%, 70%)',
+        'hsl(330, 100%, 70%)'
+    ];
 
-            closeBtn.addEventListener('click', () => {
-                clearTimeout(autoCloseTimer);
-                hideModal();
-            });
+    if (userVipLevel >= 5) {
+        for(let i=0; i < meteorCount; i++) {
+        meteors.push(new Meteor());
+        }
+    } else {
+        for(let i=0; i < confettiCount; i++) {
+        confetti.push(new Confetto(colorsBasic));
+        }
+    }
 
-            window.addEventListener('load', () => {
-                setTimeout(showModal, 500);
-            });
+    // 顯示視窗並設定自動關閉及點擊關閉
+    function showModal() {
+        modalClosed = false;
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'auto';
 
-            function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
+        autoCloseTimer = setTimeout(() => {
+        hideModal();
+        }, 10000);
 
-            const confettiCountStart = 300;
-            let confetti = [];
+        document.addEventListener('click', onUserClick, { once: true, capture: true });
+    }
 
-            function randomRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
+    function onUserClick() {
+        hideModal();
+        clearTimeout(autoCloseTimer);
+    }
 
-            class Confetto {
-                constructor() {
-                    this.reset();
-                }
-                reset() {
-                    this.x = randomRange(0, W);
-                    this.y = randomRange(-H, 0);
-                    this.size = randomRange(7, 12);
-                    this.speedY = randomRange(1, 3);
-                    this.speedX = randomRange(-0.5, 0.5);
-                    this.rotation = randomRange(0, 2 * Math.PI);
-                    this.rotationSpeed = randomRange(-0.05, 0.05);
-                    const colors = [
-                        'hsl(0, 100%, 70%)',
-                        'hsl(30, 100%, 70%)',
-                        'hsl(60, 100%, 70%)',
-                        'hsl(120, 80%, 70%)',
-                        'hsl(200, 100%, 70%)',
-                        'hsl(270, 100%, 70%)',
-                        'hsl(330, 100%, 70%)'
-                    ];
-                    this.color = colors[Math.floor(randomRange(0, colors.length))];
-                    this.alpha = 1;
-                }
-                update() {
-                    this.y += this.speedY;
-                    this.x += this.speedX;
-                    this.rotation += this.rotationSpeed;
+    function hideModal() {
+        if (modalClosed) return;
+        modalClosed = true;
+        modal.style.opacity = '0';
+        modal.style.pointerEvents = 'none';
 
-                    if (this.y > H) {
-                        this.y = randomRange(-20, 0);
-                        this.x = randomRange(0, W);
-                    }
-                    if (this.x > W) this.x = 0;
-                    else if (this.x < 0) this.x = W;
-                }
-                draw(ctx) {
-                    ctx.save();
-                    ctx.translate(this.x, this.y);
-                    ctx.rotate(this.rotation);
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = this.alpha;
-                    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
-                    ctx.restore();
-                    ctx.globalAlpha = 1;
-                }
-            }
+        if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+        }
+        ctx.clearRect(0, 0, W, H);
+        canvas.style.display = 'none';
 
-            for (let i = 0; i < confettiCountStart; i++) {
-                confetti.push(new Confetto());
-            }
+        blackOverlay.style.display = 'none'; // 隱藏黑色遮罩
+        document.body.classList.remove('meteor-active');
+    }
 
-            let startTime = null;
-            const totalDuration = 10000;
+    closeBtn.addEventListener('click', () => {
+        clearTimeout(autoCloseTimer);
+        hideModal();
+    });
 
-            function loop(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const elapsed = timestamp - startTime;
+    window.addEventListener('load', () => {
+        setTimeout(showModal, 500);
+    });
 
-                ctx.clearRect(0, 0, W, H);
+    // 動畫主迴圈
+    function loop() {
+        ctx.clearRect(0, 0, W, H);
+        if (userVipLevel >= 5) {
+        meteors.forEach(m => {
+            m.update();
+            m.draw(ctx);
+        });
+        } else {
+        confetti.forEach(c => {
+            c.update();
+            c.draw(ctx);
+        });
+        }
+        animationFrameId = requestAnimationFrame(loop);
+    }
+    animationFrameId = requestAnimationFrame(loop);
 
-                let ratio = 1 - elapsed / totalDuration;
-                if (ratio < 0) ratio = 0;
-                const currentCount = Math.floor(confettiCountStart * ratio);
-
-                confetti = confetti.slice(0, currentCount);
-
-                confetti.forEach(c => {
-                    c.update();
-                    c.draw(ctx);
-                });
-
-                if (elapsed < totalDuration && confetti.length > 0) {
-                    animationFrameId = requestAnimationFrame(loop);
-                } else {
-                    ctx.clearRect(0, 0, W, H);
-                    animationFrameId = null;
-                }
-            }
-
-            animationFrameId = requestAnimationFrame(loop);
-        })();
+    })();
     </script>
+
+
+
 
 </body>
 
