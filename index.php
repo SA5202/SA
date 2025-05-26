@@ -463,10 +463,11 @@ if (isset($_SESSION['User_ID'])) {
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 40px;
+            height: 40px;
+            margin: 0;
+            padding: 5px;
             border-radius: 50%;
-            object-fit: cover;
         }
 
         .nickname-link {
