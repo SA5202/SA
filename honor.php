@@ -532,7 +532,7 @@ if (!$donation_history_result) {
             border-radius: 50%;
             background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(200, 200, 200, 0.7));
             overflow: hidden;
-            padding: 2px;
+            padding: 0.2rem;
         }
 
         /* 內層圖片 */
@@ -755,24 +755,24 @@ if (!$donation_history_result) {
                     <h6 class="mt-5"><i class="icon fa-solid fa-trophy me-2"></i> 榮譽等級取得條件</h6>
                     <ul class="list-unstyled ps-4">
                         <li class="mb-3">
-                            <span class="mini-pennant vip1 mr-3">I</span>
+                            <span class="mini-pennant vip1">I</span>
                             <strong style="margin-left: 20px;">VIP 1：</strong> 進行捐款即可獲得此榮譽等級（捐款金額：無門檻）。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip2 mr-3">II</span>
+                            <span class="mini-pennant vip2">II</span>
                             <strong style="margin-left: 20px;">VIP 2：</strong> 累計捐款金額達 NT$ 5,000 元以上的用戶可獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip3 mr-3">III</span>
+                            <span class="mini-pennant vip3">III</span>
                             <strong style="margin-left: 20px;">VIP 3：</strong> 累計捐款金額達 NT$ 10,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip4 mr-3">IV</span>
+                            <span class="mini-pennant vip4">IV</span>
                             <strong style="margin-left: 20px;">VIP 4：</strong> 累計捐款金額達 NT$ 50,000 元以上的用戶可將獲得此榮譽等級。
                         </li>
                         <li class="mb-3">
-                            <span class="mini-pennant vip5 mr-3">V</span>
-                            <strong style="margin-left: 20px;">VIP 5：</strong> 累計捐款金額總數排名前三名的用戶可獲得此榮譽等級。
+                            <span class="mini-pennant vip5">V</span>
+                            <strong style="margin-left: 20px;">VIP 5：</strong> 累計捐款金額總數排名前 10 名的用戶將獲得此榮譽等級。
                         </li>
                     </ul>
 
@@ -792,7 +792,7 @@ if (!$donation_history_result) {
                                     <span class="mini-pennant vip2 large">II</span>
                                     <p class="mt-4 mb-4">
                                         獲得此榮譽等級者，除上述獎勵外，<br>
-                                        登入時享有 VIP 專屬的問候訊息以及彩帶歡迎特效！
+                                        登入時有 VIP2 以上專屬的問候訊息以及彩帶歡迎特效！
                                     </p>
                                 </div>
                             </div>
@@ -800,8 +800,7 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip3 large">III</span>
                                     <p class="mt-4 mb-4">
-                                        獲得此榮譽等級者，除上述獎勵外，<br>
-                                        可獲得(尚在施工中)特權！
+                                        獲得此榮譽等級者，除上述獎勵外，可獲得 VIP3 專屬頭像框！
                                     </p>
                                 </div>
                             </div>
@@ -809,8 +808,8 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip4 large">IV</span>
                                     <p class="mt-4 mb-4">
-                                        尊榮用戶！獲得此榮譽等級者，除上述獎勵外，<br>
-                                        您發布的建言將被設置為置頂建言！
+                                        獲得此榮譽等級者，除上述獎勵外，可獲得 VIP4 專屬頭像框；<br>
+                                        此外您發布的建言將被設置為置頂建言！
                                     </p>
                                 </div>
                             </div>
@@ -818,8 +817,8 @@ if (!$donation_history_result) {
                                 <div class="text-center">
                                     <span class="mini-pennant vip5 large">V</span>
                                     <p class="mt-4 mb-4">
-                                        無私的奉獻者！獲得此榮譽等級者，除上述獎勵外，<br>
-                                        將被列在首頁榮譽榜特別表揚，並享有(尚在施工中)特權！
+                                        獲得此榮譽等級者，除上述獎勵外，可獲得 VIP5 專屬頭像框；<br>
+                                        您發布的建言將被設置為置頂建言，且登入時會有特殊的驚喜入場畫面！
                                     </p>
                                 </div>
                             </div>
