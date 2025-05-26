@@ -249,6 +249,22 @@ if ($selectedFundingID) {
             </div>
         </div>
     </div>
+    <!-- 隨機代碼 Modal -->
+    <div class="modal fade" id="randomCodeModal" tabindex="-1" aria-labelledby="randomCodeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background: rgba(255, 255, 255, 0.95);">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="randomCodeModalLabel">🔐 超商繳費代碼</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p style="font-size: 1.5rem; font-weight: bold; letter-spacing: 2px;" id="randomCodeText">載入中...</p>
+                    <p class="text-muted">請記下這組代碼，完成後續繳費後再提交此表單。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <script>
@@ -258,6 +274,7 @@ if ($selectedFundingID) {
             if (selectedValue === 1) {
                 const creditCardModal = new bootstrap.Modal(document.getElementById('creditCardModal'));
                 creditCardModal.show();
+
             } else if (selectedValue === 2 || selectedValue === 6) {
                 alert(
                     "📌 匯款資訊：\n" +
@@ -268,12 +285,28 @@ if ($selectedFundingID) {
                     "⚠️ 請先完成匯款再提交捐款表單\n" +
                     "⚠️ 提交表單前記得在留言區回報帳號後五碼"
                 );
+
             } else if (selectedValue === 3 || selectedValue === 4) {
-                // 顯示共用的行動支付圖片 modal
                 const ewalletModal = new bootstrap.Modal(document.getElementById('ewalletImageModal'));
                 ewalletModal.show();
+
+            } else if (selectedValue === 5) {
+                // 產生 12 碼隨機英數字代碼
+                const randomCode = Array.from({
+                        length: 12
+                    }, () =>
+                    Math.random().toString(36).charAt(2).toUpperCase()
+                ).join('');
+
+                // 插入代碼到 modal 內容區
+                document.getElementById('randomCodeText').textContent = randomCode;
+
+                // 顯示 modal
+                const codeModal = new bootstrap.Modal(document.getElementById('randomCodeModal'));
+                codeModal.show();
             }
         });
+
 
 
 
