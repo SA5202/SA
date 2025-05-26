@@ -14,12 +14,12 @@ $vipInfo = getVipLevel($conn, $User_ID); // 使用 conn 作為 DB 連線物件
 
 // 捐款排行榜
 $donation_month_sql = "
-    SELECT ua.Nickname, ua.Avatar, SUM(d.Donation_Amount) AS total_donation
+    SELECT ua.User_ID, ua.Nickname, ua.Avatar, SUM(d.Donation_Amount) AS total_donation
     FROM donation d
     JOIN useraccount ua ON d.User_ID = ua.User_ID
     WHERE MONTH(d.Donation_Date) = MONTH(CURRENT_DATE())
       AND YEAR(d.Donation_Date) = YEAR(CURRENT_DATE())
-    GROUP BY ua.Nickname
+    GROUP BY ua.User_ID, ua.Nickname, ua.Avatar
     ORDER BY total_donation DESC
 ";
 $donation_month_result = $conn->query($donation_month_sql);
@@ -29,16 +29,17 @@ if (!$donation_month_result) {
 
 // 歷史捐款排行榜
 $donation_history_sql = "
-    SELECT ua.Nickname, ua.Avatar, SUM(d.Donation_Amount) AS total_donation
+    SELECT ua.User_ID, ua.Nickname, ua.Avatar, SUM(d.Donation_Amount) AS total_donation
     FROM donation d
     JOIN useraccount ua ON d.User_ID = ua.User_ID
-    GROUP BY ua.Nickname
+    GROUP BY ua.User_ID, ua.Nickname, ua.Avatar
     ORDER BY total_donation DESC
 ";
 $donation_history_result = $conn->query($donation_history_sql);
 if (!$donation_history_result) {
     die("歷史捐款排名查詢錯誤: " . $conn->error);
 }
+
 ?>
 
 
@@ -167,10 +168,10 @@ if (!$donation_history_result) {
             font-weight: bold;
             padding: 0.4rem 1.5rem;
         }
-
+        /*
         .table tbody tr:nth-child(even) {
             background-color: #e6f0f8;
-        }
+        }*/
 
         .table tbody tr:hover {
             background-color: #d0ecff;
@@ -188,7 +189,12 @@ if (!$donation_history_result) {
 
         .d-flex.align-items-center {
             display: flex;
-            align-items: center;
+            align-items: center;    /* 垂直置中 */
+            justify-content: flex-start;  /* 水平靠左 */
+        }
+        .table td, .table th {
+            vertical-align: middle;
+            text-align: center;
         }
 
         /* 問號圖示樣式 */
@@ -306,7 +312,6 @@ if (!$donation_history_result) {
             height: 45px;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
             position: relative;
-            margin-right: 20px;
             vertical-align: middle;
             font-family: "Noto Serif TC", serif;
             font-size: 0.9rem;
@@ -512,6 +517,9 @@ if (!$donation_history_result) {
             z-index: 10;
             /* 確保按鈕位於文字區域的前面 */
         }
+        strong{
+            margin-left: 20px;
+        }
     </style>
 </head>
 
@@ -556,13 +564,17 @@ if (!$donation_history_result) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $rank = 1;
-                        while ($row = $donation_month_result->fetch_assoc()): ?>
+                        <?php 
+                        $rank = 1;
+                        while ($row = $donation_month_result->fetch_assoc()):
+                            // 每個用戶取得自己的 VIP 資訊
+                            $vipInfo = getVipLevel($conn, $row['User_ID']);
+                        ?>
                             <tr>
                                 <td>
                                     <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
                                 </td>
-                                <td class="d-flex align-items-center">
+                                <td>
                                     <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
                                     <?= htmlspecialchars($row['Nickname']) ?>
                                 </td>
@@ -575,8 +587,10 @@ if (!$donation_history_result) {
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php $rank++;
-                        endwhile; ?>
+                        <?php 
+                            $rank++;
+                        endwhile; 
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -599,13 +613,17 @@ if (!$donation_history_result) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $rank = 1;
-                        while ($row = $donation_history_result->fetch_assoc()): ?>
+                        <?php 
+                        $rank = 1;
+                        while ($row = $donation_history_result->fetch_assoc()):
+                            // 每位使用者個別取得 VIP 等級資訊
+                            $vipInfo = getVipLevel($conn, $row['User_ID']);
+                        ?>
                             <tr>
                                 <td>
                                     <?= $rank == 1 ? '🥇' : ($rank == 2 ? '🥈' : ($rank == 3 ? '🥉' : $rank)) ?>
                                 </td>
-                                <td class="d-flex align-items-center">
+                                <td>
                                     <img src="<?= !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png' ?>" alt="User Avatar">
                                     <?= htmlspecialchars($row['Nickname']) ?>
                                 </td>
@@ -618,8 +636,10 @@ if (!$donation_history_result) {
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php $rank++;
-                        endwhile; ?>
+                        <?php 
+                            $rank++;
+                        endwhile; 
+                        ?>
                     </tbody>
                 </table>
             </div>
