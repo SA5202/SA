@@ -345,11 +345,70 @@ if (isset($_SESSION['User_ID'])) {
             font-weight: bold;
         }
 
-        .user-info-logout .avatar {
-            width: 30px;
-            height: 30px;
+        .user-info-logout .avatar-frame {
+            width: 40px;
+            height: 40px;
+            margin: 0;
+            padding: 5px;
+        }
+
+        .user-info-logout .avatar-img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .avatar-frame {
+            border-radius: 50%;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 50px;
+        }
+
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-img {
             border-radius: 50%;
             object-fit: cover;
+        }
+
+        /* 共用動畫：脈動光暈 */
+        @keyframes vip-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+            }
+        }
+
+        /* VIP3 - 冰藍 */
+        .avatar-frame.vip3 {
+            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4); /* 淺冰藍漸層 */
+            animation: vip-glow 3s ease-in-out infinite; /* 較快的閃爍動畫 */
+            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5); /* 輕微的藍色光暈 */
+        }
+
+        /* VIP4 - 紫粉 */
+        .avatar-frame.vip4 {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb); /* 淡紫色漸層 */
+            animation: vip-glow 3s ease-in-out infinite; /* 中等速度的閃爍動畫 */
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7); /* 紫色光暈 */
+        }
+
+        /* VIP5 - 綠藍 */
+        .avatar-frame.vip5 {
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d); /* 深藍 → 鮮亮藍 → 淺綠漸層 */
+            animation: vip-glow 3s ease-in-out infinite; /* 最慢的閃爍動畫 */
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9); /* 更強的藍光光暈 */
         }
 
         .user-info-logout .username {
@@ -423,80 +482,6 @@ if (isset($_SESSION['User_ID'])) {
             /* 滑鼠懸停時的顏色，可自行調整 */
         }
 
-        /* 彩帶畫布 */
-        #confettiCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        /* 視覺彈窗 */
-        #welcomeModal {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
-            border-radius: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px 30px;
-            text-align: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            z-index: 1000;
-            max-width: 500px;
-            width: 90%;  /* 自適應寬度 */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(4px);
-        }
-
-        /* 顯示效果 */
-        #welcomeModal.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* 標題文字 */
-        #welcomeModal .modal-title {
-            color: #2a2a2a;
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        /* 副標或附加訊息（如果有） */
-        #welcomeModal .modal-message {
-            font-weight: 400;
-            font-size: 1rem;
-            color: #555;
-        }
-
-        /* 關閉按鈕 */
-        #closeModalBtn {
-            margin-top: 10px;
-            background-color: #4a90e2;
-            border: none;
-            color: white;
-            font-size: 0.9rem;
-            font-weight: bold;
-            padding: 4px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #closeModalBtn:hover {
-            background-color: #3a7fd9;
-        }
-
-
         /* 畫布和視窗基礎樣式 */
         #confettiCanvas {
             position: fixed;
@@ -506,32 +491,7 @@ if (isset($_SESSION['User_ID'])) {
             pointer-events: none;
             z-index: 9998;
         }
-        #welcomeModal {
-            /* 定位相關 */
-            position: fixed;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            z-index: 9999;
 
-            /* 美觀樣式 */
-            background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
-            border-radius: 20px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px 30px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;  /* 自適應寬度 */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(4px);
-        }
         /* 主視窗樣式 */
         #welcomeModal {
             /* 定位與淡入動畫 */
@@ -548,10 +508,11 @@ if (isset($_SESSION['User_ID'])) {
             background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
             border-radius: 20px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            padding: 20px 30px;
+            padding: 30px;
             text-align: center;
-            max-width: 500px;
-            width: 90%;
+            max-width: 600px;
+            width: 100%;
+            height: 20%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -568,57 +529,47 @@ if (isset($_SESSION['User_ID'])) {
 
         /* 標題文字 */
         #welcomeModal .modal-title {
-            color: #2a2a2a;
+            color: #2a4d69;
             font-size: 1.3rem;
             font-weight: bold;
         }
 
-        /* 副標或訊息 */
-        #welcomeModal .modal-message {
-            font-weight: 400;
-            font-size: 1rem;
-            color: #555;
-        }
-
         /* 關閉按鈕（統一樣式） */
         #closeModalBtn {
-            margin-top: 10px;
-            background-color: #4a90e2;
+            margin-top: 30px;
+            background-color: #4da6ff;
             border: none;
             color: white;
-            font-size: 0.9rem;
-            font-weight: bold;
-            padding: 4px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.2rem 30px;
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         #closeModalBtn:hover {
-            background-color: #3a7fd9;
+            background-color: #1565c0;
         }
 
-        /* VIP5 以上升級版視窗（已移除金色暈影） */
+        /* VIP5 升級版視窗 */
         #welcomeModal.upgraded {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background: #fff;
             color: #111;
-            border-radius: 12px;
-            /* 移除 box-shadow 或換成中性陰影 */
+            border-radius: 20px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* VIP2~4 基礎視窗 */
+        /* VIP2-4 基礎視窗 */
         #welcomeModal.basic {
             background: #fff;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             color: #000;
-            border: none;
-            box-shadow: none;
         }
 
         /* 流星背景黑底：這邊移除背景設定，改用遮罩層 */
@@ -800,8 +751,14 @@ if (isset($_SESSION['User_ID'])) {
         <?php else: ?>
             <div class="user-info-logout btn-position">
                 <a href="record.php" target="contentFrame">
-                    <img src="<?= $avatarWithTimestamp ?>" alt="頭像" class="avatar" style="cursor:pointer;"
-                        onerror="this.src='<?= $defaultAvatar ?>';">
+                    <div class="avatar-frame <?= $vipInfo['class'] ?>" style="cursor:pointer;">
+                        <div class="avatar-inner">
+                            <img src="<?= $avatarWithTimestamp ?>" 
+                                alt="頭像" 
+                                class="avatar-img" 
+                                onerror="this.src='<?= $defaultAvatar ?>';">
+                        </div>
+                    </div>
                 </a>
                 <a href="record.php" target="contentFrame" class="nickname-link">
                     <span class="Nickname"><b><?= $nickname ?></b></span>
@@ -969,13 +926,13 @@ if (isset($_SESSION['User_ID'])) {
 
     // 設定視窗文字與樣式
     if (userVipLevel >= 5) {
-        welcomeMessage.textContent = `歡迎我們的至尊貴賓：${nickname} 的蒞臨！`;
+        welcomeMessage.textContent = `歡迎回來，尊貴的 ${nickname} ！`;
         modal.classList.add('upgraded');
         modal.classList.remove('basic');
         document.body.classList.add('meteor-active');
         blackOverlay.style.display = 'block';  // 顯示黑色遮罩
     } else if (userVipLevel >= 2 && userVipLevel <= 4) {
-        welcomeMessage.textContent = `歡迎回來，${nickname}！`;
+        welcomeMessage.textContent = `您好，${nickname}！`;
         modal.classList.add('basic');
         modal.classList.remove('upgraded');
         document.body.classList.remove('meteor-active');
