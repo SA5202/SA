@@ -636,12 +636,14 @@ if (!$donation_history_result) {
                                 </td>
                                 <td>
                                     <?php 
-                                        $avatar = !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png';
+                                        $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+                                        $avatar = !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : $default_avatar;
                                         $vip_class = htmlspecialchars($vipInfo['class']);
                                     ?>
                                     <div class="avatar-nickname-wrapper" title="VIP 等級: <?= htmlspecialchars($vipInfo['label']) ?> - <?= htmlspecialchars($vipInfo['tooltip']) ?>">
                                         <div class="avatar-wrapper <?= $vip_class ?>">
-                                            <img src="<?= $avatar ?>" alt="User <?= $rank ?>" class="avatar">
+                                            <img src="<?= $avatar ?>" alt="User <?= $rank ?>" class="avatar"
+                                                onerror="this.onerror=null;this.src='<?= $default_avatar ?>';">
                                         </div>
                                         <span class="nickname"><?= htmlspecialchars($row['Nickname']) ?></span>
                                     </div>
@@ -694,16 +696,19 @@ if (!$donation_history_result) {
                                 </td>
                                 <td>
                                     <?php 
-                                        $avatar = !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : 'images/default-avatar.png';
+                                        $default_avatar = 'https://i.pinimg.com/736x/15/46/d1/1546d15ce5dd2946573b3506df109d00.jpg';
+                                        $avatar = !empty($row['Avatar']) ? htmlspecialchars($row['Avatar']) : $default_avatar;
                                         $vip_class = htmlspecialchars($vipInfo['class']);
                                     ?>
                                     <div class="avatar-nickname-wrapper" title="VIP 等級: <?= htmlspecialchars($vipInfo['label']) ?> - <?= htmlspecialchars($vipInfo['tooltip']) ?>">
                                         <div class="avatar-wrapper <?= $vip_class ?>">
-                                            <img src="<?= $avatar ?>" alt="User <?= $rank ?>" class="avatar">
+                                            <img src="<?= $avatar ?>" alt="User <?= $rank ?>" class="avatar"
+                                                onerror="this.onerror=null;this.src='<?= $default_avatar ?>';">
                                         </div>
                                         <span class="nickname"><?= htmlspecialchars($row['Nickname']) ?></span>
                                     </div>
                                 </td>
+
                                 <td>NT$ <?= number_format($row['total_donation']) ?></td>
                                 <td>
                                     <?php if ($vipInfo['level'] != 0): ?>
