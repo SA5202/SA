@@ -44,7 +44,7 @@ if (isset($_SESSION['User_ID'])) {
 ?>
 
 <script>
-  const userVipLevel = <?= intval($userVipLevel) ?>;
+    const userVipLevel = <?= intval($userVipLevel) ?>;
 </script>
 
 
@@ -382,9 +382,12 @@ if (isset($_SESSION['User_ID'])) {
 
         /* 共用動畫：脈動光暈 */
         @keyframes vip-glow {
-            0%, 100% {
+
+            0%,
+            100% {
                 box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
             }
+
             70% {
                 box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
             }
@@ -392,23 +395,32 @@ if (isset($_SESSION['User_ID'])) {
 
         /* VIP3 - 冰藍 */
         .avatar-frame.vip3 {
-            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4); /* 淺冰藍漸層 */
-            animation: vip-glow 3s ease-in-out infinite; /* 較快的閃爍動畫 */
-            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5); /* 輕微的藍色光暈 */
+            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4);
+            /* 淺冰藍漸層 */
+            animation: vip-glow 3s ease-in-out infinite;
+            /* 較快的閃爍動畫 */
+            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5);
+            /* 輕微的藍色光暈 */
         }
 
         /* VIP4 - 紫粉 */
         .avatar-frame.vip4 {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb); /* 淡紫色漸層 */
-            animation: vip-glow 3s ease-in-out infinite; /* 中等速度的閃爍動畫 */
-            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7); /* 紫色光暈 */
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+            /* 淡紫色漸層 */
+            animation: vip-glow 3s ease-in-out infinite;
+            /* 中等速度的閃爍動畫 */
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7);
+            /* 紫色光暈 */
         }
 
         /* VIP5 - 綠藍 */
         .avatar-frame.vip5 {
-            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d); /* 深藍 → 鮮亮藍 → 淺綠漸層 */
-            animation: vip-glow 3s ease-in-out infinite; /* 最慢的閃爍動畫 */
-            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9); /* 更強的藍光光暈 */
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d);
+            /* 深藍 → 鮮亮藍 → 淺綠漸層 */
+            animation: vip-glow 3s ease-in-out infinite;
+            /* 最慢的閃爍動畫 */
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9);
+            /* 更強的藍光光暈 */
         }
 
         .user-info-logout .username {
@@ -486,7 +498,8 @@ if (isset($_SESSION['User_ID'])) {
         /* 畫布和視窗基礎樣式 */
         #confettiCanvas {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
@@ -506,7 +519,8 @@ if (isset($_SESSION['User_ID'])) {
             z-index: 9999;
 
             /* 視覺樣式 */
-            background: rgba(255, 255, 255, 0.9); /* 柔和白底 */
+            background: rgba(255, 255, 255, 0.9);
+            /* 柔和白底 */
             border-radius: 20px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
@@ -576,20 +590,24 @@ if (isset($_SESSION['User_ID'])) {
         /* 流星背景黑底：這邊移除背景設定，改用遮罩層 */
         body.meteor-active {
             /* background-color: black !important; 這邊不用了 */
-            color: white; /* 可選：讓字色白色 */
+            color: white;
+            /* 可選：讓字色白色 */
             overflow: hidden;
         }
 
         /* 全螢幕黑色遮罩 */
         #blackOverlay {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
             background-color: rgba(0, 0, 0, 0.8);
-            z-index: 9997; /* 低於 confettiCanvas (9998) 和 welcomeModal (9999) */
+            z-index: 9997;
+            /* 低於 confettiCanvas (9998) 和 welcomeModal (9999) */
             pointer-events: none;
-            display: none; /* 預設隱藏 */
+            display: none;
+            /* 預設隱藏 */
         }
     </style>
 </head>
@@ -600,35 +618,80 @@ if (isset($_SESSION['User_ID'])) {
             <h1>FJU I-Money</h1>
         </a>
         <?php if ($is_admin): ?>
-        <?php
+            <?php
             $admin_type = $_SESSION['admin_type'] ?? '';
-        ?>
+            ?>
 
-        <!-- 共用首頁 -->
-        <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-            <i class="icon fas fa-home"></i><span> 首頁</span>
-        </a>
-
-        <?php if ($admin_type === 'super'): ?>
-            <!-- Super Admin：全部功能 -->
-            <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
-                <i class="icon fa-solid fa-bullhorn"></i><span> 管理公告</span>
-                <span class="arrow">▾</span>
+            <!-- 共用首頁 -->
+            <a href="main.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                <i class="icon fas fa-home"></i><span> 首頁</span>
             </a>
-            <div class="group-content">
+
+            <?php if ($admin_type === 'super'): ?>
+                <!-- Super Admin：全部功能 -->
+                <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
+                    <i class="icon fa-solid fa-bullhorn"></i><span> 管理公告</span>
+                    <span class="arrow">▾</span>
+                </a>
+                <div class="group-content">
+                    <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fa-solid fa-wrench"></i><span> 公告列表</span>
+                    </a>
+                    <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
+                    </a>
+                </div>
+
+                <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
+                    <i class="icon fas fa-list"></i><span> 建言管理</span>
+                    <span class="arrow">▾</span>
+                </a>
+                <div class="group-content">
+                    <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
+                    </a>
+                    <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fas fa-donate"></i><span> 管理募款建言</span>
+                    </a>
+                    <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
+                    </a>
+                </div>
+
+                <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
+                    <i class="icon fa-solid fa-layer-group"></i><span> 捐款管理</span>
+                    <span class="arrow">▾</span>
+                </a>
+                <div class="group-content">
+                    <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fas fa-money-bill"></i><span> 手動捐款</span>
+                    </a>
+                    <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                        <i class="icon fas fa-folder"></i><span> 檢視捐款紀錄</span>
+                    </a>
+                </div>
+                <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-medal"></i><span> 榮譽排名</span>
+                </a>
+
+
+            <?php elseif ($admin_type === 'general'): ?>
+                <!-- General Admin：公告與捐款相關功能 -->
                 <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                    <i class="icon fa-solid fa-wrench"></i><span> 公告列表</span>
+                    <i class="icon fa-solid fa-wrench"></i><span> 管理公告</span>
                 </a>
                 <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                     <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
                 </a>
-            </div>
+                <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-coins"></i><span> 手動捐款</span>
+                </a>
+                <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
+                    <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
+                </a>
 
-            <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
-                <i class="icon fas fa-list"></i><span> 建言管理</span>
-                <span class="arrow">▾</span>
-            </a>
-            <div class="group-content">
+            <?php elseif ($admin_type === 'department'): ?>
+                <!-- Department Admin：建言與募款功能 -->
                 <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                     <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
                 </a>
@@ -638,52 +701,7 @@ if (isset($_SESSION['User_ID'])) {
                 <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
                     <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
                 </a>
-            </div>
-
-            <a href="javascript:void(0);" class="sidebar-link" onclick="toggleGroup(this)">
-                <i class="icon fa-solid fa-layer-group"></i><span> 捐款管理</span>
-                <span class="arrow">▾</span>
-            </a>
-            <div class="group-content">
-                <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                    <i class="icon fas fa-money-bill"></i><span> 手動捐款</span>
-                </a>
-                <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                    <i class="icon fas fa-folder"></i><span> 檢視捐款紀錄</span>
-                </a>
-            </div>
-            <a href="honor.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-medal"></i><span> 榮譽排名</span>
-            </a>
-
-
-        <?php elseif ($admin_type === 'general'): ?>
-            <!-- General Admin：公告與捐款相關功能 -->
-            <a href="news.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fa-solid fa-wrench"></i><span> 管理公告</span>
-            </a>
-            <a href="news_insert.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fa-solid fa-notes-medical"></i><span> 發布公告</span>
-            </a>
-            <a href="donation_admin_create.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-coins"></i><span> 手動捐款</span>
-            </a>
-            <a href="donation_list.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-clipboard-list"></i><span> 檢視捐款紀錄</span>
-            </a>
-
-        <?php elseif ($admin_type === 'department'): ?>
-            <!-- Department Admin：建言與募款功能 -->
-            <a href="suggestions.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-cogs"></i><span> 管理建言進度</span>
-            </a>
-            <a href="funding_detail.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-donate"></i><span> 管理募款建言</span>
-            </a>
-            <a href="fundingsuggestion.php" target="contentFrame" class="sidebar-link" onclick="setActive(this)">
-                <i class="icon fas fa-hand-holding-usd"></i><span> 新增募款建言</span>
-            </a>
-        <?php endif; ?>
+            <?php endif; ?>
 
         <?php else: ?>
             <!-- 一般使用者的側邊欄 -->
@@ -754,9 +772,9 @@ if (isset($_SESSION['User_ID'])) {
                 <a href="record.php" target="contentFrame">
                     <div class="avatar-frame <?= $vipInfo['class'] ?>" style="cursor:pointer;">
                         <div class="avatar-inner">
-                            <img src="<?= $avatarWithTimestamp ?>" 
-                                alt="頭像" 
-                                class="avatar-img" 
+                            <img src="<?= $avatarWithTimestamp ?>"
+                                alt="頭像"
+                                class="avatar-img"
                                 onerror="this.src='<?= $defaultAvatar ?>';">
                         </div>
                     </div>
@@ -791,20 +809,20 @@ if (isset($_SESSION['User_ID'])) {
         function toggleGroup(element) {
             const content = element.nextElementSibling;
             const arrow = element.querySelector('.arrow');
-            
+
             // 先關閉所有的內容區塊和箭頭
             const allContents = document.querySelectorAll('.group-content');
             const allArrows = document.querySelectorAll('.arrow');
-            
+
             allContents.forEach((el) => {
                 if (el !== content) {
                     el.style.display = 'none';
                 }
             });
-            
+
             allArrows.forEach((arrowElement) => {
                 if (arrowElement !== arrow) {
-                    arrowElement.textContent = '▾';  // 或根據需要更改箭頭符號
+                    arrowElement.textContent = '▾'; // 或根據需要更改箭頭符號
                 }
             });
 
@@ -886,282 +904,319 @@ if (isset($_SESSION['User_ID'])) {
 
 
     <!-- 黑色遮罩層 -->
-<div id="blackOverlay"></div>
-<canvas id="confettiCanvas"></canvas>
+    <div id="blackOverlay"></div>
+    <canvas id="confettiCanvas"></canvas>
 
-<div id="welcomeModal">
-  <div class="modal-title" id="welcomeMessage"></div>
-  <button id="closeModalBtn">關閉</button>
-</div>
+    <div id="welcomeModal">
+        <div class="modal-title" id="welcomeMessage"></div>
+        <button id="closeModalBtn">關閉</button>
+    </div>
 
-<script>
-(() => {
-  let userVipLevel = <?php echo (int)$userVipLevel; ?>;
-  let nickname = "<?php echo htmlspecialchars($nickname, ENT_QUOTES); ?>";
+    <script>
+        (() => {
+            let userVipLevel = <?php echo (int)$userVipLevel; ?>;
+            let nickname = "<?php echo htmlspecialchars($nickname, ENT_QUOTES); ?>";
 
-  if (!userVipLevel || userVipLevel < 2) {
-    document.getElementById('confettiCanvas').style.display = 'none';
-    document.getElementById('welcomeModal').style.display = 'none';
-    return;
-  }
+            if (!userVipLevel || userVipLevel < 2) {
+                document.getElementById('confettiCanvas').style.display = 'none';
+                document.getElementById('welcomeModal').style.display = 'none';
+                return;
+            }
 
-  const canvas = document.getElementById('confettiCanvas');
-  const modal = document.getElementById('welcomeModal');
-  const welcomeMessage = document.getElementById('welcomeMessage');
-  const closeBtn = document.getElementById('closeModalBtn');
-  const blackOverlay = document.getElementById('blackOverlay');
-  const ctx = canvas.getContext('2d');
-  let W, H, animationFrameId = null;
-  let autoCloseTimer = null;
-  let modalClosed = false;
+            const canvas = document.getElementById('confettiCanvas');
+            const modal = document.getElementById('welcomeModal');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            const closeBtn = document.getElementById('closeModalBtn');
+            const blackOverlay = document.getElementById('blackOverlay');
+            const ctx = canvas.getContext('2d');
+            let W, H, animationFrameId = null;
+            let autoCloseTimer = null;
+            let modalClosed = false;
 
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  window.addEventListener('resize', resize);
-  resize();
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
 
-  // 設定歡迎訊息與特效類型
-  let effectType = 'confetti'; // 預設彩帶
-  if (userVipLevel >= 5) {
-    const effects = ['meteor', 'firework'];
-    effectType = effects[Math.floor(Math.random() * effects.length)];
-    welcomeMessage.textContent = `歡迎回來，尊貴的 ${nickname} ！`;
-    modal.classList.add('upgraded');
-    blackOverlay.style.display = 'block';
-  } else {
-    welcomeMessage.textContent = `您好，${nickname}！`;
-    modal.classList.add('basic');
-    blackOverlay.style.display = 'none';
-  }
+            // 設定歡迎訊息與特效類型
+            let effectType = 'confetti'; // 預設彩帶
+            if (userVipLevel >= 5) {
+                const effects = ['meteor', 'firework'];
+                effectType = effects[Math.floor(Math.random() * effects.length)];
+                welcomeMessage.textContent = `歡迎回來，尊貴的 ${nickname} ！`;
+                modal.classList.add('upgraded');
+                blackOverlay.style.display = 'block';
+            } else {
+                welcomeMessage.textContent = `您好，${nickname}！`;
+                modal.classList.add('basic');
+                blackOverlay.style.display = 'none';
+            }
 
-  canvas.style.display = 'block';
-  modal.style.display = 'block';
+            canvas.style.display = 'block';
+            modal.style.display = 'block';
 
-  // ----------- 特效類別 ------------
+            // ----------- 特效類別 ------------
 
-  // 彩帶 (VIP 2~4)
-  class Confetto {
-    constructor(colors) {
-      this.colors = colors;
-      this.reset();
-    }
-    reset() {
-      this.x = Math.random() * W;
-      this.y = Math.random() * -H;
-      this.size = Math.random() * 5 + 7;
-      this.speedY = Math.random() * 2 + 1;
-      this.speedX = Math.random() - 0.5;
-      this.rotation = Math.random() * 2 * Math.PI;
-      this.rotationSpeed = (Math.random() - 0.5) * 0.1;
-      this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
-      this.alpha = 1;
-    }
-    update() {
-      this.y += this.speedY;
-      this.x += this.speedX;
-      this.rotation += this.rotationSpeed;
-      if (this.y > H) this.y = Math.random() * -20;
-      if (this.x > W) this.x = 0;
-      if (this.x < 0) this.x = W;
-    }
-    draw(ctx) {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rotation);
-      ctx.fillStyle = this.color;
-      ctx.globalAlpha = this.alpha;
-      ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
-      ctx.restore();
-      ctx.globalAlpha = 1;
-    }
-  }
+            // 彩帶 (VIP 2~4)
+            class Confetto {
+                constructor(colors) {
+                    this.colors = colors;
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * W;
+                    this.y = Math.random() * -H;
+                    this.size = Math.random() * 5 + 7;
+                    this.speedY = Math.random() * 2 + 1;
+                    this.speedX = Math.random() - 0.5;
+                    this.rotation = Math.random() * 2 * Math.PI;
+                    this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+                    this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+                    this.alpha = 1;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    this.rotation += this.rotationSpeed;
+                    if (this.y > H) this.y = Math.random() * -20;
+                    if (this.x > W) this.x = 0;
+                    if (this.x < 0) this.x = W;
+                }
+                draw(ctx) {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.4);
+                    ctx.restore();
+                    ctx.globalAlpha = 1;
+                }
+            }
 
-  // 流星雨 (VIP 5+)
-  class Meteor {
-    constructor() {
-      this.reset();
-    }
-    reset() {
-      this.x = Math.random() * W;
-      this.y = Math.random() * H * 0.5;
-      this.len = Math.random() * 80 + 100;
-      this.speed = Math.random() * 10 + 10;
-      this.angle = Math.PI / 4;
-      this.opacity = 0;
-      this.opacitySpeed = 0.02;
-    }
-    update() {
-      this.x += this.speed * Math.cos(this.angle);
-      this.y += this.speed * Math.sin(this.angle);
-      this.opacity += this.opacitySpeed;
-      if (this.opacity > 1) this.opacity = 1;
-      if (this.x > W + this.len || this.y > H + this.len) this.reset();
-    }
-    draw(ctx) {
-      ctx.save();
-      ctx.strokeStyle = `rgba(255,255,255,${this.opacity})`;
-      ctx.lineWidth = 2;
-      ctx.shadowColor = `rgba(255,255,255,${this.opacity})`;
-      ctx.shadowBlur = 10;
-      ctx.beginPath();
-      ctx.moveTo(this.x, this.y);
-      ctx.lineTo(
-        this.x - this.len * Math.cos(this.angle),
-        this.y - this.len * Math.sin(this.angle)
-      );
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
+            class Meteor {
+                constructor() {
+                    this.reset();
+                }
 
-  // 煙火粒子 (VIP 5+ 煙火用)
-  class FireworkParticle {
-    constructor(x, y, color) {
-      this.x = x;
-      this.y = y;
-      this.radius = 2;
-      this.color = color;
-      this.angle = Math.random() * Math.PI * 2;
-      this.speed = Math.random() * 6 + 2;
-      this.alpha = 1;
-    }
-    update() {
-        this.x += Math.cos(this.angle) * this.speed;
-        this.y += Math.sin(this.angle) * this.speed;
-        this.speed *= 0.96;
-        this.alpha -= 0.008;  // 調小透明度減少速度，拖尾變長
-        if (this.alpha < 0) this.alpha = 0;
-        }
-    draw(ctx) {
-      ctx.save();
-      ctx.globalAlpha = this.alpha;
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
+                reset() {
+                    this.x = Math.random() * W;
+                    this.y = Math.random() * H * 0.5;
+                    this.len = Math.random() * 100 + 150;
+                    this.speed = Math.random() * 12 + 12;
+                    this.angle = Math.PI / 4;
+                    this.opacity = 0;
+                    this.opacitySpeed = 0.03 + Math.random() * 0.02;
+                    this.tailColors = [
+                        'rgba(255,255,255,0.8)',
+                        'rgba(250, 250, 155, 0.6)',
+                        'rgba(249, 187, 121, 0.4)',
+                        'rgba(255,100,50,0.2)'
+                    ];
+                    this.sparkle = 0;
+                }
 
-  // 煙火 (VIP 5+)
-  class Firework {
-    constructor() {
-      this.x = Math.random() * W * 0.8 + W * 0.1;
-      this.y = Math.random() * H * 0.4 + H * 0.1;
-      this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-      this.particles = [];
-      for (let i = 0; i < 30; i++) {
-        this.particles.push(new FireworkParticle(this.x, this.y, this.color));
-      }
-      this.alive = true;
-    }
-    update() {
-      this.particles.forEach((p) => p.update());
-      if (this.particles.every((p) => p.alpha <= 0)) this.alive = false;
-    }
-    draw(ctx) {
-      this.particles.forEach((p) => p.draw(ctx));
-    }
-  }
+                update() {
+                    this.x += this.speed * Math.cos(this.angle);
+                    this.y += this.speed * Math.sin(this.angle);
 
-  // ---------- 初始化特效陣列 ----------
-  let particles = [];
-  let fireworkTimer = null;
-  const meteorCount = 30;
-  const confettiCount = 200;
-  const confettiColors = [
-    "hsl(0, 100%, 70%)",
-    "hsl(60, 100%, 70%)",
-    "hsl(120, 100%, 70%)",
-    "hsl(240, 100%, 70%)",
-  ];
+                    this.opacity += this.opacitySpeed;
+                    if (this.opacity > 1) this.opacity = 1;
 
-  if (userVipLevel >= 5) {
-    if (effectType === "meteor") {
-      for (let i = 0; i < meteorCount; i++) {
-        particles.push(new Meteor());
-      }
-    } else if (effectType === "firework") {
-      // 煙火定時器：每0.5秒同時放3~5個煙火，持續10秒
-      fireworkTimer = setInterval(() => {
-        const count = Math.floor(Math.random() * 5) + 3; // 3~5發
-        for (let i = 0; i < count; i++) {
-          particles.push(new Firework());
-        }
-      }, 500);
+                    // 閃爍效果：opacity微微波動
+                    this.sparkle += 0.1;
+                    this.opacity += Math.sin(this.sparkle) * 0.05;
+                    this.opacity = Math.min(Math.max(this.opacity, 0.5), 1);
 
-      setTimeout(() => {
-        clearInterval(fireworkTimer);
-      }, 10000);
-    }
-  } else {
-    // VIP 2~4: 彩帶
-    for (let i = 0; i < confettiCount; i++) {
-      particles.push(new Confetto(confettiColors));
-    }
-  }
+                    if (this.x > W + this.len || this.y > H + this.len) this.reset();
+                }
 
-  // ------------ 顯示視窗與自動關閉 --------------
-  function showModal() {
-    modalClosed = false;
-    modal.style.opacity = "1";
-    modal.style.pointerEvents = "auto";
+                draw(ctx) {
+                    ctx.save();
 
-    autoCloseTimer = setTimeout(() => {
-      hideModal();
-    }, 10000);
+                    // 多層光暈 (用 shadow)
+                    ctx.shadowColor = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.shadowBlur = 20;
 
-    document.addEventListener("click", onUserClick, { once: true, capture: true });
-  }
+                    // 逐段繪製尾巴漸變
+                    for (let i = 0; i < this.tailColors.length; i++) {
+                        ctx.strokeStyle = this.tailColors[i].replace(/[\d\.]+\)$/g, `${this.opacity * (1 - i * 0.25)})`);
+                        ctx.lineWidth = 4 - i; // 尾巴越遠越細
+                        ctx.beginPath();
+                        let startX = this.x - (this.len * i / this.tailColors.length) * Math.cos(this.angle);
+                        let startY = this.y - (this.len * i / this.tailColors.length) * Math.sin(this.angle);
+                        let endX = this.x - (this.len * (i + 1) / this.tailColors.length) * Math.cos(this.angle);
+                        let endY = this.y - (this.len * (i + 1) / this.tailColors.length) * Math.sin(this.angle);
+                        ctx.moveTo(startX, startY);
+                        ctx.lineTo(endX, endY);
+                        ctx.stroke();
+                    }
 
-  function hideModal() {
-    if (modalClosed) return;
-    modalClosed = true;
-    modal.style.opacity = "0";
-    modal.style.pointerEvents = "none";
+                    // 流星核心（亮點）
+                    let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 8);
+                    gradient.addColorStop(0, `rgba(255,255,255,${this.opacity})`);
+                    gradient.addColorStop(1, `rgba(255,255,255,0)`);
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+                    ctx.fill();
 
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    if (fireworkTimer) clearInterval(fireworkTimer);
+                    ctx.restore();
+                }
+            }
 
-    ctx.clearRect(0, 0, W, H);
-    canvas.style.display = "none";
-    blackOverlay.style.display = "none";
-  }
 
-  function onUserClick() {
-    clearTimeout(autoCloseTimer);
-    hideModal();
-  }
+            // 煙火粒子 (VIP 5+ 煙火用)
+            class FireworkParticle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = 2;
+                    this.color = color;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.speed = Math.random() * 6 + 2;
+                    this.alpha = 1;
+                }
+                update() {
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed;
+                    this.speed *= 0.96;
+                    this.alpha -= 0.008; // 調小透明度減少速度，拖尾變長
+                    if (this.alpha < 0) this.alpha = 0;
+                }
+                draw(ctx) {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
 
-  closeBtn.addEventListener("click", () => {
-    clearTimeout(autoCloseTimer);
-    hideModal();
-  });
+            // 煙火 (VIP 5+)
+            class Firework {
+                constructor() {
+                    this.x = Math.random() * W * 0.8 + W * 0.1;
+                    this.y = Math.random() * H * 0.4 + H * 0.1;
+                    this.color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+                    this.particles = [];
+                    for (let i = 0; i < 30; i++) {
+                        this.particles.push(new FireworkParticle(this.x, this.y, this.color));
+                    }
+                    this.alive = true;
+                }
+                update() {
+                    this.particles.forEach((p) => p.update());
+                    if (this.particles.every((p) => p.alpha <= 0)) this.alive = false;
+                }
+                draw(ctx) {
+                    this.particles.forEach((p) => p.draw(ctx));
+                }
+            }
 
-  window.addEventListener("load", () => {
-    setTimeout(showModal, 500);
-  });
+            // ---------- 初始化特效陣列 ----------
+            let particles = [];
+            let fireworkTimer = null;
+            const meteorCount = 30;
+            const confettiCount = 200;
+            const confettiColors = [
+                "hsl(0, 100%, 70%)",
+                "hsl(60, 100%, 70%)",
+                "hsl(120, 100%, 70%)",
+                "hsl(240, 100%, 70%)",
+            ];
 
-  // ------------ 主動畫迴圈 ----------------
-  function loop() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach((p) => {
-      p.update();
-      p.draw(ctx);
-    });
+            if (userVipLevel >= 5) {
+                if (effectType === "meteor") {
+                    for (let i = 0; i < meteorCount; i++) {
+                        particles.push(new Meteor());
+                    }
+                } else if (effectType === "firework") {
+                    // 煙火定時器：每0.5秒同時放3~5個煙火，持續10秒
+                    fireworkTimer = setInterval(() => {
+                        const count = Math.floor(Math.random() * 5) + 3; // 3~5發
+                        for (let i = 0; i < count; i++) {
+                            particles.push(new Firework());
+                        }
+                    }, 500);
 
-    // 清除已結束煙火
-    if (effectType === "firework") {
-      particles = particles.filter((p) => p.alive !== false);
-    }
+                    setTimeout(() => {
+                        clearInterval(fireworkTimer);
+                    }, 10000);
+                }
+            } else {
+                // VIP 2~4: 彩帶
+                for (let i = 0; i < confettiCount; i++) {
+                    particles.push(new Confetto(confettiColors));
+                }
+            }
 
-    animationFrameId = requestAnimationFrame(loop);
-  }
-  animationFrameId = requestAnimationFrame(loop);
-})();
-</script>
+            // ------------ 顯示視窗與自動關閉 --------------
+            function showModal() {
+                modalClosed = false;
+                modal.style.opacity = "1";
+                modal.style.pointerEvents = "auto";
+
+                autoCloseTimer = setTimeout(() => {
+                    hideModal();
+                }, 10000);
+
+                document.addEventListener("click", onUserClick, {
+                    once: true,
+                    capture: true
+                });
+            }
+
+            function hideModal() {
+                if (modalClosed) return;
+                modalClosed = true;
+                modal.style.opacity = "0";
+                modal.style.pointerEvents = "none";
+
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                if (fireworkTimer) clearInterval(fireworkTimer);
+
+                ctx.clearRect(0, 0, W, H);
+                canvas.style.display = "none";
+                blackOverlay.style.display = "none";
+            }
+
+            function onUserClick() {
+                clearTimeout(autoCloseTimer);
+                hideModal();
+            }
+
+            closeBtn.addEventListener("click", () => {
+                clearTimeout(autoCloseTimer);
+                hideModal();
+            });
+
+            window.addEventListener("load", () => {
+                setTimeout(showModal, 500);
+            });
+
+            // ------------ 主動畫迴圈 ----------------
+            function loop() {
+                ctx.clearRect(0, 0, W, H);
+                particles.forEach((p) => {
+                    p.update();
+                    p.draw(ctx);
+                });
+
+                // 清除已結束煙火
+                if (effectType === "firework") {
+                    particles = particles.filter((p) => p.alive !== false);
+                }
+
+                animationFrameId = requestAnimationFrame(loop);
+            }
+            animationFrameId = requestAnimationFrame(loop);
+        })();
+    </script>
 
 
 
