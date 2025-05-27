@@ -51,9 +51,31 @@ if ($checkFundingResult->num_rows === 0) {
     echo "<script>alert('錯誤：該募款項目不存在。'); window.location.href='donation_page.php?error=該募款項目不存在';</script>";
     exit();
 }
+// 查詢募款項目的總金額與已募金額
+$fundingQuery = $link->prepare("SELECT Required_Amount, IFNULL(Raised_Amount, 0) AS Raised_Amount FROM FundingSuggestion WHERE Funding_ID = ?");
+$fundingQuery->bind_param("i", $funding_id);
+$fundingQuery->execute();
+$fundingResult = $fundingQuery->get_result();
+
+if ($fundingResult->num_rows === 0) {
+    echo "<script>alert('錯誤：無法取得募款項目資料。'); window.location.href='donation_page.php?error=無法取得募款資料';</script>";
+    exit();
+}
+
+$fundingData = $fundingResult->fetch_assoc();
+$requiredAmount = (int)$fundingData['Required_Amount'];
+$raisedAmount = (int)$fundingData['Raised_Amount'];
+$remainingAmount = $requiredAmount - $raisedAmount;
+
+// 確認捐款金額不得超過剩餘金額
+if ((int)$amount > $remainingAmount) {
+    echo "<script>alert('捐款金額超過剩餘所需金額（剩餘：$remainingAmount 元），請重新輸入。'); window.location.href='donation_page.php?error=金額超過剩餘金額';</script>";
+    exit();
+}
 
 // 查詢項目名稱
-$title_query = $link->prepare("
+$title_query = $link->prepare(
+    "
     SELECT s.Title 
     FROM FundingSuggestion f 
     JOIN Suggestion s ON f.Suggestion_ID = s.Suggestion_ID 
