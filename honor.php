@@ -543,8 +543,33 @@ if (!$donation_history_result) {
             border-radius: 50%;
         }
 
-        /* VIP 動畫光暈 */
-        @keyframes vip-glow {
+        /* VIP3 - 冰藍 */
+        .avatar-wrapper.vip3 {
+            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4);
+            /* 淺冰藍漸層 */
+            animation: vip-glow 3s ease-in-out infinite;
+            /* 較快的閃爍動畫 */
+            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5);
+            /* 輕微的藍色光暈 */
+        }
+
+        /* VIP4 - 紫粉 */
+        @keyframes vip4-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(161, 140, 209, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(150, 90, 220, 0.8);
+            }
+        }
+        .avatar-wrapper.vip4 {
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb); /* 淡紫色漸層 */
+            animation: vip4-glow 3s ease-in-out infinite; /* 中等速度的閃爍動畫 */
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7); /* 紫色光暈 */
+        }
+
+        /* VIP5 - 綠藍 */
+        @keyframes vip5-glow {
             0%, 100% {
                 box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
             }
@@ -552,26 +577,10 @@ if (!$donation_history_result) {
                 box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
             }
         }
-
-        /* VIP3 - 冰藍 */
-        .avatar-wrapper.vip3 {
-            background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4);
-            animation: vip-glow 3s ease-in-out infinite;
-            box-shadow: 0 0 12px rgba(0, 191, 212, 0.5);
-        }
-
-        /* VIP4 - 紫粉 */
-        .avatar-wrapper.vip4 {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-            animation: vip-glow 3s ease-in-out infinite;
-            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7);
-        }
-
-        /* VIP5 - 綠藍 */
         .avatar-wrapper.vip5 {
-            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d);
-            animation: vip-glow 3s ease-in-out infinite;
-            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9);
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d); /* 深藍 → 鮮亮藍 → 淺綠漸層 */
+            animation: vip5-glow 3s ease-in-out infinite; /* 最慢的閃爍動畫 */
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9); /* 更強的藍光光暈 */
         }
 
         /* 暱稱文字 */
@@ -777,7 +786,7 @@ if (!$donation_history_result) {
                         </li>
                         <li class="mb-3">
                             <span class="mini-pennant vip5">V</span>
-                            <strong style="margin-left: 20px;">VIP 5：</strong> 累計捐款金額總數排名前 10 名的用戶將獲得此榮譽等級。
+                            <strong style="margin-left: 20px;">VIP 5：</strong> 累計捐款金額總數排名前 10% 的用戶將獲得此榮譽等級。
                         </li>
                     </ul>
 

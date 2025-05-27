@@ -380,19 +380,6 @@ if (isset($_SESSION['User_ID'])) {
             object-fit: cover;
         }
 
-        /* 共用動畫：脈動光暈 */
-        @keyframes vip-glow {
-
-            0%,
-            100% {
-                box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
-            }
-
-            70% {
-                box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
-            }
-        }
-
         /* VIP3 - 冰藍 */
         .avatar-frame.vip3 {
             background: linear-gradient(135deg, #ffffff, #00e5ff, #00bcd4);
@@ -404,23 +391,33 @@ if (isset($_SESSION['User_ID'])) {
         }
 
         /* VIP4 - 紫粉 */
+        @keyframes vip4-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(161, 140, 209, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(150, 90, 220, 0.8);
+            }
+        }
         .avatar-frame.vip4 {
-            background: linear-gradient(135deg, #a18cd1, #fbc2eb);
-            /* 淡紫色漸層 */
-            animation: vip-glow 3s ease-in-out infinite;
-            /* 中等速度的閃爍動畫 */
-            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7);
-            /* 紫色光暈 */
+            background: linear-gradient(135deg, #a18cd1, #fbc2eb); /* 淡紫色漸層 */
+            animation: vip4-glow 3s ease-in-out infinite; /* 中等速度的閃爍動畫 */
+            box-shadow: 0 0 15px rgba(150, 90, 220, 0.7); /* 紫色光暈 */
         }
 
         /* VIP5 - 綠藍 */
+        @keyframes vip5-glow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 30px rgba(0, 204, 255, 0.8);
+            }
+        }
         .avatar-frame.vip5 {
-            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d);
-            /* 深藍 → 鮮亮藍 → 淺綠漸層 */
-            animation: vip-glow 3s ease-in-out infinite;
-            /* 最慢的閃爍動畫 */
-            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9);
-            /* 更強的藍光光暈 */
+            background: linear-gradient(135deg, #003366, #00c9ff, #92fe9d); /* 深藍 → 鮮亮藍 → 淺綠漸層 */
+            animation: vip5-glow 3s ease-in-out infinite; /* 最慢的閃爍動畫 */
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.9); /* 更強的藍光光暈 */
         }
 
         .user-info-logout .username {

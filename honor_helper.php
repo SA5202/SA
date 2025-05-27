@@ -52,21 +52,33 @@ function getVipLevel($link, $User_ID) {
         $next_level = 'VIP2';
     }
 
-    // 查詢前 10 名用戶
+    // 先查出用戶總數
+    $count_sql = "SELECT COUNT(DISTINCT User_ID) AS user_count FROM Donation";
+    $count_result = mysqli_query($link, $count_sql);
+    $count_row = mysqli_fetch_assoc($count_result);
+    $user_count = (int)$count_row['user_count'];
+
+    // 計算前 10% 名單數量（至少 1 名）
+    $top_percentage = 0.1;
+    $top_limit = max(1, ceil($user_count * $top_percentage));
+
+    // 查詢前 10% 用戶
     $top_sql = "SELECT User_ID, SUM(Donation_Amount) AS total FROM Donation 
-                GROUP BY User_ID ORDER BY total DESC LIMIT 10";
+                GROUP BY User_ID 
+                ORDER BY total DESC 
+                LIMIT $top_limit";
     $top_result = mysqli_query($link, $top_sql);
 
-    $isTop10 = false;
+    $isTopPercentage = false;
     while ($top_row = mysqli_fetch_assoc($top_result)) {
-        if ($top_row['User_ID'] === $User_ID && $total >= 50000) {
-            $isTop10 = true;
+        if ($top_row['User_ID'] === $User_ID && $top_row['total'] >= 50000) {
+            $isTopPercentage = true;
             break;
         }
     }
 
-    // 如果是前 10 名，提升為 VIP 5
-    if ($isTop10) {
+    // 如果是前 10%，提升為 VIP 5
+    if ($isTopPercentage) {
         $class = 'vip5';
         $label = 'V';
         $to_next = 0;
@@ -77,7 +89,7 @@ function getVipLevel($link, $User_ID) {
     if ($label === 'V') {
         $tooltip = '當前已為最高等級';
     } elseif ($label === 'IV') {
-        $tooltip = '累計總捐款金額排名「前 10 名」（目前為 NT$ ' . number_format($total) . '）即可晉升為 VIP 5';
+        $tooltip = '累計總捐款金額排名前 10%（目前為 NT$ ' . number_format($total) . '）即可晉升為 VIP 5';
     } else {
         $tooltip = 'NT$ '. number_format($total) . ' / NT$ ' . number_format($total + $to_next);
     }
