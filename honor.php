@@ -6,7 +6,7 @@ if (!isset($_SESSION['User_Name'])) {
 }
 
 require_once "dblink3.php";
-require_once "honor_helper.php"; // 加上這行
+require_once "honor_helper.php"; // 加上這行111
 
 // 取得 VIP 資訊（只取一次）
 $User_ID = $_SESSION['User_ID'];
